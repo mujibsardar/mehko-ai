@@ -1,44 +1,34 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import {DataProvider} from "/src/providers/DataProvider"
-import {LanguageProvider} from "/src/providers/LanguageProvider"
-import {ThemeProvider} from "/src/providers/ThemeProvider"
-import {GlobalStateProvider} from "/src/providers/GlobalStateProvider"
-import {FeedbacksProvider} from "/src/providers/FeedbacksProvider"
-import {WindowProvider} from "/src/providers/WindowProvider"
-import App from "/src/components/App.jsx"
-import Preloader from "/src/components/Preloader.jsx"
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+
+import { DataProvider } from "./providers/DataProvider";
+import { FeedbacksProvider } from "./providers/FeedbacksProvider";
+import { WindowProvider } from "./providers/WindowProvider";
+
+import App from "./App.jsx";
+import Preloader from "./components/Preloader.jsx";
+
+console.log("main.jsx loaded");
 
 const AppProviders = ({ children }) => (
-    <DataProvider>
-        <LanguageProvider>
-            <FeedbacksProvider>
-                <WindowProvider>
-                    <ThemeProvider>
-                        <GlobalStateProvider>
-                            {children}
-                        </GlobalStateProvider>
-                    </ThemeProvider>
-                </WindowProvider>
-            </FeedbacksProvider>
-        </LanguageProvider>
-    </DataProvider>
-)
+  <DataProvider>
+    <FeedbacksProvider>
+      <WindowProvider>{children}</WindowProvider>
+    </FeedbacksProvider>
+  </DataProvider>
+);
 
-let container = null
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed");
+  const container = document.getElementById("root");
+  if (!container) return;
+  console.log("Container found, rendering app");
 
-document.addEventListener('DOMContentLoaded', function(event) {
-    if(container)
-        return
-
-    container = document.getElementById('root')
-    createRoot(document.getElementById('root')).render(
-        <StrictMode>
-            <Preloader>
-                <AppProviders>
-                    <App/>
-                </AppProviders>
-            </Preloader>
-        </StrictMode>
-    )
-})
+  createRoot(container).render(
+    <StrictMode>
+      <Preloader>
+        <App />
+      </Preloader>
+    </StrictMode>
+  );
+});

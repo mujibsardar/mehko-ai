@@ -1,0 +1,23 @@
+.county-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #ddd, 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 1.5rem;
+
+  &:hover {
+    box-shadow: 0 0 0 1px #0077ff, 0 4px 12px rgba(0, 119, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+}

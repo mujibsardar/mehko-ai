@@ -1,91 +1,21 @@
-import React, {createContext, useContext, useEffect, useState} from 'react'
-import {useData} from "/src/providers/DataProvider.jsx"
+import React, { createContext, useContext } from "react";
 
-const LanguageContext = createContext(null)
-export const useLanguage = () => useContext(LanguageContext)
+const LanguageContext = createContext({
+  getString: (key) => key,
+  getTranslation: (obj, key, fallback = false) => obj?.[key] || key,
+  canChangeLanguage: false,
+});
 
-export const LanguageProvider = ({children}) => {
-    const {getSettings, getStrings} = useData()
+export const useLanguage = () => useContext(LanguageContext);
 
-    const settings = getSettings()
-    const strings = getStrings()
-    const allLanguages = settings['supportedLanguages'] || []
-    const localStorageName = 'language-preferences'
-    const canChangeLanguage = allLanguages.length >= 2
-
-    const [defaultLanguageId, setDefaultLanguageId] = useState(null)
-    const [selectedLanguageId, setSelectedLanguageId] = useState(null)
-
-    /** On configurations loaded... **/
-    useEffect(() => {
-        const defaultLanguage = allLanguages.find(language => language.default) || allLanguages[0]
-        setDefaultLanguageId(defaultLanguage.id)
-
-        const localStorageItem = window.localStorage.getItem(localStorageName)
-        const savedLanguage = allLanguages.find(language => language.id === localStorageItem)
-        if(savedLanguage) {
-            setSelectedLanguage(savedLanguage)
-            return
-        }
-
-        const detectedLanguage = allLanguages.find(language => navigator.language.includes(language['id'])) || defaultLanguage
-        setSelectedLanguage(detectedLanguage)
-    }, [])
-
-    const setSelectedLanguage = (language) => {
-        if(language) {
-            setSelectedLanguageId(language.id)
-            window.localStorage.setItem(localStorageName, language.id.toString())
-        }
-    }
-
-    const getSelectedLanguage = () => {
-        return allLanguages.find(language => language.id === selectedLanguageId)
-    }
-
-    const getAvailableLanguages = () => {
-        if(!allLanguages)
-            return []
-
-        return allLanguages.filter(language => language.id !== selectedLanguageId)
-    }
-
-    const getTranslation = (locales, key, shouldReturnNullIfNotFound) => {
-        if(!selectedLanguageId || !locales)
-            return "locale:" + key
-
-        const selectedLanguageTranslations = locales[selectedLanguageId]
-        if(selectedLanguageTranslations && selectedLanguageTranslations[key]) {
-            return selectedLanguageTranslations[key]
-        }
-
-        const defaultLanguageTranslations = locales[defaultLanguageId]
-        if(defaultLanguageTranslations && defaultLanguageTranslations[key]) {
-            return defaultLanguageTranslations[key]
-        }
-
-        return !shouldReturnNullIfNotFound ?
-            "locale:" + key :
-            null
-    }
-
-    const getString = (key) => {
-        return getTranslation(strings['locales'], key)
-    }
-
-    return (
-        <LanguageContext.Provider value={{
-            selectedLanguageId,
-            canChangeLanguage,
-            setSelectedLanguage,
-            getSelectedLanguage,
-            getAvailableLanguages,
-            getTranslation,
-            getString
-        }}>
-            {selectedLanguageId && (
-                <>{children}</>
-            )}
-        </LanguageContext.Provider>
-    )
-}
+export const LanguageProvider = ({ children }) => (
+  <LanguageContext.Provider
+    value={{
+      getString: (key) => key,
+      getTranslation: (obj, key, fallback = false) => obj?.[key] || key,
+      canChangeLanguage: false,
+    }}
+  >
+    {children}
+  </LanguageContext.Provider>
+);

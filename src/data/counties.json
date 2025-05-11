@@ -1,0 +1,10 @@
+[
+  { "id": "alameda", "name": "Alameda County" },
+  { "id": "los_angeles", "name": "Los Angeles County" },
+  { "id": "san_diego", "name": "San Diego County" },
+  { "id": "santa_clara", "name": "Santa Clara County" },
+  { "id": "riverside", "name": "Riverside County" },
+  { "id": "sonoma", "name": "Sonoma County" },
+  { "id": "imperial", "name": "Imperial County" },
+  { "id": "lake", "name": "Lake County" }
+]
