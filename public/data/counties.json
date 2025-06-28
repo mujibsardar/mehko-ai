@@ -1,0 +1,94 @@
+[
+  {
+    "id": "riverside",
+    "name": "Riverside County",
+    "status": "active",
+    "description": "First county in California to approve MEHKOs. Permit required.",
+    "phone": "(888) 722-4234",
+    "email": "dehfood@rivco.org",
+    "website": "https://rivcoeh.org/Programs/homebased_kitchen_operations",
+    "subsidyAvailable": false,
+    "steps": [
+      "Download and complete MEHKO application and SOP",
+      "Obtain Food Protection Manager Certification",
+      "Submit paperwork and pay fees",
+      "Schedule inspection with Environmental Health",
+      "Receive operating permit"
+    ],
+    "requirements": [
+      "Must be your primary residence",
+      "Only 1 full-time employee allowed",
+      "Serve ≤ 90 meals/week, ≤ 30/day",
+      "Gross sales ≤ $100,000/year"
+    ],
+    "forms": [
+      {
+        "label": "Riverside MEHKO Application",
+        "fileUrl": "/forms/riverside/mehko_application.pdf"
+      },
+      {
+        "label": "SOP Template",
+        "fileUrl": "/forms/riverside/sop_template.pdf"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "How much does it cost?",
+        "answer": "Initial fee is around $651; renewal fee is approx. $391."
+      },
+      {
+        "question": "Is delivery allowed?",
+        "answer": "Only by the operator or their employee; no third-party delivery."
+      }
+    ],
+    "hasAiSupport": true,
+    "hasCommentThread": true,
+    "formsEditable": true
+  },
+  {
+    "id": "los-angeles",
+    "name": "Los Angeles County",
+    "status": "pilot",
+    "description": "MEHKO pilot program is active (Pasadena, Long Beach, Vernon excluded).",
+    "phone": "(888) 700-9995",
+    "email": "mehko@ph.lacounty.gov",
+    "website": "https://publichealth.lacounty.gov/eh/microenterprise-home-kitchen-operations.htm",
+    "subsidyAvailable": false,
+    "steps": [
+      "Complete MEHKO application and SOP",
+      "Provide Food Protection Manager Certificate",
+      "Submit menu and required forms",
+      "Schedule and pass inspection",
+      "Receive permit under pilot program"
+    ],
+    "requirements": [
+      "Operate from primary residence",
+      "Serve ≤ 90 meals/week, ≤ 30/day",
+      "No more than 1 full-time employee",
+      "Gross revenue ≤ $100,000/year"
+    ],
+    "forms": [
+      {
+        "label": "LA County MEHKO Application",
+        "fileUrl": "/forms/los-angeles/mehko_application.pdf"
+      },
+      {
+        "label": "SOP Template",
+        "fileUrl": "/forms/los-angeles/sop_template.pdf"
+      }
+    ],
+    "faqs": [
+      {
+        "question": "Can I participate from Long Beach?",
+        "answer": "No. Long Beach, Pasadena, and Vernon are not included in the county pilot."
+      },
+      {
+        "question": "Is the program permanent?",
+        "answer": "No, this is a pilot program authorized under AB 377 until 2026."
+      }
+    ],
+    "hasAiSupport": true,
+    "hasCommentThread": true,
+    "formsEditable": true
+  }
+]

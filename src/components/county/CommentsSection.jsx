@@ -15,6 +15,7 @@ const initialComments = [
 ];
 
 const CommunityComments = ({ county }) => {
+  if (!county) return null;
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
 

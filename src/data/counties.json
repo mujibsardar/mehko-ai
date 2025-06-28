@@ -1,6 +1,41 @@
 [
   { "id": "alameda", "name": "Alameda County" },
-  { "id": "los_angeles", "name": "Los Angeles County" },
+  {
+    "id": "los_angeles",
+    "name": "Los Angeles County",
+    "description": "Apply for a MEHKO permit in LA County (excluding Pasadena, Long Beach, and Vernon). Active since Nov 1, 2024.",
+    "formsEditable": true,
+    "hasAiSupport": true,
+    "hasCommentThread": true,
+    "steps": [
+      "Review LA County MEHKO requirements and determine eligibility.",
+      "Complete the Standard Operating Procedure (SOP) & Menu form.",
+      "Obtain required documentation: food safety certification, handler cards, water test (if needed).",
+      "Fill out the Public Health Permit Application.",
+      "Submit application and pay fees (or apply for a subsidy).",
+      "Schedule and pass home kitchen inspection.",
+      "Start operations and stay compliant with revenue and meal limits."
+    ],
+    "requirements": [
+      "Certified Food Protection Manager certificate",
+      "Valid government-issued ID",
+      "Food Handler Card (for all staff)",
+      "Standard Operating Procedure & Menu Form",
+      "Public Health Permit Application",
+      "Potable water test (if on a private well)",
+      "Business license and tax registration (as needed)"
+    ],
+    "forms": [
+      {
+        "label": "MEHKO SOP & Menu",
+        "fileUrl": "/forms/los_angeles/MEHKO_PublicHealthPermitApplication-ENG.pdf"
+      },
+      {
+        "label": "Public Health Permit Application",
+        "fileUrl": "/forms/los_angeles/MEHKO_SOP-English.pdf"
+      }
+    ]
+  },
   { "id": "san_diego", "name": "San Diego County" },
   { "id": "santa_clara", "name": "Santa Clara County" },
   { "id": "riverside", "name": "Riverside County" },

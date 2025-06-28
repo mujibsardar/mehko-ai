@@ -5,7 +5,7 @@ const Sidebar = ({ counties, activeCountyId, onSelect, onRemove }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <h3>Your Counties</h3>
+        <h3>Your Applications</h3>
       </div>
 
       <div className="sidebar-list">

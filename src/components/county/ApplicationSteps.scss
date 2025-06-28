@@ -1,0 +1,18 @@
+.application-steps {
+  margin-bottom: 2rem;
+
+  h3, h4 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .steps-list,
+  .requirements-list {
+    padding-left: 1.5rem;
+
+    li {
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+  }
+}

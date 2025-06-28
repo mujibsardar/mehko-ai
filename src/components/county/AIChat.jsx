@@ -1,67 +1,96 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./AIChat.scss";
 
-const AIChat = ({ county }) => {
-  const [messages, setMessages] = useState([]);
+function AIChat({ county }) {
+  const [messages, setMessages] = useState([
+    {
+      sender: "ai",
+      text: `Hi! I'm your assistant for ${county.name}. Ask me anything about the application process.`,
+      timestamp: new Date(),
+    },
+  ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const chatEndRef = useRef(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    // Scroll to latest message
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { role: "user", content: input };
+    const userMessage = { sender: "user", text: input, timestamp: new Date() };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
     try {
-      const res = await fetch("/api/ai-chat", {
+      // Simulate AI response or connect to API
+      const res = await fetch("http://localhost:3000/api/ai-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [...messages, userMessage],
-          countyId: county.id,
-        }),
+        body: JSON.stringify({ message: input, countyId: county.id }),
       });
+
       const data = await res.json();
-      const botReply = {
-        role: "assistant",
-        content: data.reply || "Sorry, try again.",
+
+      const aiMessage = {
+        sender: "ai",
+        text: data.reply || "Sorry, I don't have a response right now.",
+        timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, botReply]);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: "ai",
+          text: "Oops, something went wrong.",
+          timestamp: new Date(),
+        },
+      ]);
+    }
+
+    setLoading(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
 
   return (
     <div className="ai-chat">
-      <h3>Ask MEHKO AI</h3>
-      <div className="chat-box">
-        {messages.map((msg, i) => (
-          <div key={i} className={`chat-msg ${msg.role}`}>
-            {msg.content}
+      <div className="chat-history">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`chat-msg ${msg.sender}`}>
+            <div className="chat-bubble">{msg.text}</div>
+            <div className="timestamp">
+              {msg.timestamp.toLocaleTimeString()}
+            </div>
           </div>
         ))}
-        {loading && <div className="chat-msg assistant">Thinking…</div>}
+        <div ref={chatEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="chat-form">
-        <input
-          type="text"
-          placeholder={`Ask about ${county.name}...`}
+      <div className="chat-input">
+        <textarea
+          placeholder="Ask something..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={loading}
         />
-        <button type="submit" disabled={loading}>
-          Send
+        <button onClick={handleSend} disabled={!input.trim() || loading}>
+          {loading ? "..." : "Send"}
         </button>
-      </form>
+      </div>
     </div>
   );
-};
+}
 
 export default AIChat;
