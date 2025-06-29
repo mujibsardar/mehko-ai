@@ -25,3 +25,10 @@ dist-ssr
 # .env files
 .env
 .env.*
+
+# Compressed files
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
