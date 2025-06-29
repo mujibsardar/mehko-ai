@@ -5,6 +5,8 @@ import { DataProvider } from "./providers/DataProvider";
 import { FeedbacksProvider } from "./providers/FeedbacksProvider";
 import { WindowProvider } from "./providers/WindowProvider";
 
+import { AuthProvider } from "./hooks/useAuth";
+
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
 
@@ -26,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createRoot(container).render(
     <StrictMode>
-      <Preloader>
-        <App />
-      </Preloader>
+      <AuthProvider>
+        <Preloader>
+          <App />
+        </Preloader>
+      </AuthProvider>
     </StrictMode>
   );
 });

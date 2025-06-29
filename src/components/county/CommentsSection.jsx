@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useAuth from "../../hooks/useAuth";
 import "./CommentsSection.scss";
 
 const initialComments = [
@@ -16,6 +17,7 @@ const initialComments = [
 
 const CommunityComments = ({ county }) => {
   if (!county) return null;
+  const { user } = useAuth();
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
 
@@ -33,6 +35,7 @@ const CommunityComments = ({ county }) => {
     setNewComment("");
   };
 
+  if (!user) return <p>Please log in to use this feature.</p>;
   return (
     <div className="community-comments">
       <h3>Community Comments ({county.name})</h3>

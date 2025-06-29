@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
 export default function DynamicForm({ countyId, formName }) {
+  const { user } = useAuth();
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
 
@@ -54,6 +56,7 @@ export default function DynamicForm({ countyId, formName }) {
     }
   };
 
+  if (!user) return <p>Please log in to use this feature.</p>;
   return (
     <form onSubmit={handleSubmit}>
       {fieldNames.map((fieldName) => (

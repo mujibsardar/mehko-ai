@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./AIChat.scss";
+import useAuth from "../../hooks/useAuth";
 
 function AIChat({ county }) {
+  const { user } = useAuth();
   const [messages, setMessages] = useState([
     {
       sender: "ai",
@@ -63,6 +65,7 @@ function AIChat({ county }) {
     }
   };
 
+  if (!user) return <p>Please log in to use this feature.</p>;
   return (
     <div className="ai-chat">
       <div className="chat-history">

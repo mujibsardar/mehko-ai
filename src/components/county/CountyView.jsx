@@ -25,7 +25,7 @@ function CountyView({ county }) {
         formName="MEHKO_SOP-English.pdf"
         onSubmit={handlePdfSubmit}
       />
-      ;{county.hasAiSupport && <AIChat county={county} />}
+      {county.hasAiSupport && <AIChat county={county} />}
       {county.hasCommentThread && <CommentsSection county={county} />}
     </div>
   );

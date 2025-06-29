@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import CountyCardGrid from "./components/layout/CountyCardGrid";
 import CountyView from "./components/county/CountyView";
+import Header from "./components/layout/Header";
 
 import "./styles/app.scss";
 
@@ -33,21 +34,24 @@ function App() {
   const activeCounty = selectedCounties.find((c) => c.id === activeCountyId);
 
   return (
-    <div className="app-wrapper">
-      <Sidebar
-        counties={selectedCounties}
-        activeCountyId={activeCountyId}
-        onSelect={handleCountySwitch}
-        onRemove={handleCountyRemove}
-      />
-      <main className="main-content">
-        {activeCounty ? (
-          <CountyView county={activeCounty} />
-        ) : (
-          <CountyCardGrid onCountySelect={handleCountySelect} />
-        )}
-      </main>
-    </div>
+    <>
+      <Header />
+      <div className="app-wrapper">
+        <Sidebar
+          counties={selectedCounties}
+          activeCountyId={activeCountyId}
+          onSelect={handleCountySwitch}
+          onRemove={handleCountyRemove}
+        />
+        <main className="main-content">
+          {activeCounty ? (
+            <CountyView county={activeCounty} />
+          ) : (
+            <CountyCardGrid onCountySelect={handleCountySelect} />
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 
