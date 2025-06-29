@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 
-export default function DynamicForm({ countyId, formName }) {
+export default function DynamicForm({ applicationId, formName }) {
   const { user } = useAuth();
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
@@ -10,7 +10,7 @@ export default function DynamicForm({ countyId, formName }) {
     const fetchFieldNames = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/form-fields?countyId=${countyId}&formName=${formName}`
+          `http://localhost:3000/api/form-fields?applicationId=${applicationId}&formName=${formName}`
         );
         const data = await res.json();
         setFieldNames(data.fields || []);
@@ -20,7 +20,7 @@ export default function DynamicForm({ countyId, formName }) {
     };
 
     fetchFieldNames();
-  }, [countyId, formName]);
+  }, [applicationId, formName]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -35,7 +35,7 @@ export default function DynamicForm({ countyId, formName }) {
       const res = await fetch("http://localhost:3000/api/fill-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ countyId, formName, formData }),
+        body: JSON.stringify({ applicationId, formName, formData }),
       });
 
       if (!res.ok) {

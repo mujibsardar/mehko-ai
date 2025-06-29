@@ -1,53 +1,59 @@
 import React, { useState } from "react";
 import Sidebar from "./components/layout/Sidebar";
-import CountyCardGrid from "./components/layout/CountyCardGrid";
-import CountyView from "./components/county/CountyView";
+import ApplicationCardGrid from "./components/layout/ApplicationCardGrid";
+import ApplicationView from "./components/applications/ApplicationView";
 import Header from "./components/layout/Header";
 
 import "./styles/app.scss";
 
 function App() {
   console.log("App loaded");
-  const [selectedCounties, setSelectedCounties] = useState([]);
-  const [activeCountyId, setActiveCountyId] = useState(null);
+  const [selectedApplications, setSelectedApplications] = useState([]);
+  const [activeApplicationId, setActiveApplicationId] = useState(null);
 
-  const handleCountySelect = (county) => {
-    const alreadyAdded = selectedCounties.find((c) => c.id === county.id);
+  const handleApplicationSelect = (application) => {
+    const alreadyAdded = selectedApplications.find(
+      (c) => c.id === application.id
+    );
     if (!alreadyAdded) {
-      setSelectedCounties([...selectedCounties, county]);
+      setSelectedApplications([...selectedApplications, application]);
     }
-    setActiveCountyId(county.id);
+    setActiveApplicationId(application.id);
   };
 
-  const handleCountySwitch = (countyId) => {
-    setActiveCountyId(countyId);
+  const handleApplicationSwitch = (applicationId) => {
+    setActiveApplicationId(applicationId);
   };
 
-  const handleCountyRemove = (countyId) => {
-    const updated = selectedCounties.filter((c) => c.id !== countyId);
-    setSelectedCounties(updated);
-    if (activeCountyId === countyId) {
-      setActiveCountyId(updated.length > 0 ? updated[0].id : null);
+  const handleApplicationRemove = (applicationId) => {
+    const updated = selectedApplications.filter((c) => c.id !== applicationId);
+    setSelectedApplications(updated);
+    if (activeApplicationId === applicationId) {
+      setActiveApplicationId(updated.length > 0 ? updated[0].id : null);
     }
   };
 
-  const activeCounty = selectedCounties.find((c) => c.id === activeCountyId);
+  const activeApplication = selectedApplications.find(
+    (c) => c.id === activeApplicationId
+  );
 
   return (
     <>
       <Header />
       <div className="app-wrapper">
         <Sidebar
-          counties={selectedCounties}
-          activeCountyId={activeCountyId}
-          onSelect={handleCountySwitch}
-          onRemove={handleCountyRemove}
+          applications={selectedApplications}
+          activeApplicationId={activeApplicationId}
+          onSelect={handleApplicationSwitch}
+          onRemove={handleApplicationRemove}
         />
         <main className="main-content">
-          {activeCounty ? (
-            <CountyView county={activeCounty} />
+          {activeApplication ? (
+            <ApplicationView application={activeApplication} />
           ) : (
-            <CountyCardGrid onCountySelect={handleCountySelect} />
+            <ApplicationCardGrid
+              onApplicationSelect={handleApplicationSelect}
+            />
           )}
         </main>
       </div>

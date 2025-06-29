@@ -17,14 +17,14 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/ai-chat", async (req, res) => {
-  const { messages = [], countyId = "unknown" } = req.body;
+  const { messages = [], applicationId = "unknown" } = req.body;
 
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: "Invalid messages format" });
   }
 
   try {
-    const systemPrompt = `You are an AI assistant helping users fill out a MEHKO permit application for ${countyId}. Be clear, accurate, and helpful.`;
+    const systemPrompt = `You are an AI assistant helping users fill out a MEHKO permit application for ${applicationId}. Be clear, accurate, and helpful.`;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
@@ -41,23 +41,23 @@ app.post("/api/ai-chat", async (req, res) => {
 
 app.post("/api/save-progress", async (req, res) => {
   const userId = req.headers["x-user-id"] || "guest";
-  const { countyId, formData } = req.body;
+  const { applicationId, formData } = req.body;
 
   console.log(`Saving progress for user: ${userId}`);
-  console.log(`County: ${countyId}`);
+  console.log(`: ${applicationId}`);
   console.log("Form Data:", formData);
 
   // TODO: Save to database or file storage later
-  res.status(200).json({ success: true, userId, countyId });
+  res.status(200).json({ success: true, userId, applicationId });
 });
 
 app.get("/api/form-fields", async (req, res) => {
-  const { countyId, formName } = req.query;
-  if (!countyId || !formName) {
-    return res.status(400).json({ error: "Missing countyId or formName" });
+  const { applicationId, formName } = req.query;
+  if (!applicationId || !formName) {
+    return res.status(400).json({ error: "Missing applicationId or formName" });
   }
 
-  const pdfPath = path.resolve("src/data/forms", countyId, formName);
+  const pdfPath = path.resolve("src/data/forms", applicationId, formName);
   if (!fs.existsSync(pdfPath)) {
     return res.status(404).json({ error: "PDF not found" });
   }
@@ -76,8 +76,8 @@ app.get("/api/form-fields", async (req, res) => {
 });
 
 app.post("/api/fill-pdf", async (req, res) => {
-  const { countyId, formName, formData } = req.body;
-  const filePath = path.resolve("src/data/forms", countyId, formName);
+  const { applicationId, formName, formData } = req.body;
+  const filePath = path.resolve("src/data/forms", applicationId, formName);
 
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ error: "PDF form not found" });

@@ -1,4 +1,4 @@
-export async function saveProgress(countyId, formData, userId = null) {
+export async function saveProgress(applicationId, formData, userId = null) {
   try {
     const res = await fetch("/api/save-progress", {
       method: "POST",
@@ -6,7 +6,7 @@ export async function saveProgress(countyId, formData, userId = null) {
         "Content-Type": "application/json",
         ...(userId && { "x-user-id": userId }),
       },
-      body: JSON.stringify({ countyId, formData }),
+      body: JSON.stringify({ applicationId, formData }),
     });
 
     if (!res.ok) {

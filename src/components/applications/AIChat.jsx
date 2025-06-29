@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import "./AIChat.scss";
 import useAuth from "../../hooks/useAuth";
 
-function AIChat({ county }) {
+function AIChat({ application }) {
   const { user } = useAuth();
   const [messages, setMessages] = useState([
     {
       sender: "ai",
-      text: `Hi! I'm your assistant for ${county.name}. Ask me anything about the application process.`,
+      text: `Hi! I'm your assistant for ${application.title}. Ask me anything about the application process.`,
       timestamp: new Date(),
     },
   ]);
@@ -33,7 +33,7 @@ function AIChat({ county }) {
       const res = await fetch("http://localhost:3000/api/ai-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input, countyId: county.id }),
+        body: JSON.stringify({ message: input, applicationId: application.id }),
       });
 
       const data = await res.json();

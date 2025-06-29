@@ -1,0 +1,24 @@
+{
+  "los_angeles_mehko": {
+    "id": "los_angeles_mehko",
+    "title": "Los Angeles MEHKO",
+    "description": "Apply for a Microenterprise Home Kitchen Operation permit in Los Angeles County (excluding Pasadena, Long Beach, and Vernon).",
+    "pdfForms": [
+      {
+        "name": "Public Health Permit Application",
+        "file": "MEHKO_PublicHealthPermitApplication-ENG.pdf"
+      },
+      {
+        "name": "Standard Operating Procedure (SOP) & Menu",
+        "file": "MEHKO_SOP-English.pdf"
+      }
+    ],
+    "formFolder": "src/data/forms/los_angeles",
+    "aiEnabled": true,
+    "commentsEnabled": true,
+    "notes": [
+      "Excludes Pasadena, Long Beach, and Vernon",
+      "Must submit a sample menu and SOP with the application"
+    ]
+  }
+}

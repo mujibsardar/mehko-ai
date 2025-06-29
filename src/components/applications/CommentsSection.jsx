@@ -15,8 +15,8 @@ const initialComments = [
   },
 ];
 
-const CommunityComments = ({ county }) => {
-  if (!county) return null;
+const CommunityComments = ({ application }) => {
+  if (!application) return null;
   const { user } = useAuth();
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -38,7 +38,7 @@ const CommunityComments = ({ county }) => {
   if (!user) return <p>Please log in to use this feature.</p>;
   return (
     <div className="community-comments">
-      <h3>Community Comments ({county.name})</h3>
+      <h3>Community Comments ({application.title})</h3>
 
       <form onSubmit={handleSubmit} className="comment-form">
         <textarea

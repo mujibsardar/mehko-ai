@@ -1,7 +1,7 @@
 import React from "react";
 import "./Sidebar.scss";
 
-const Sidebar = ({ counties, activeCountyId, onSelect, onRemove }) => {
+const Sidebar = ({ applications, activeApplicationId, onSelect, onRemove }) => {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
@@ -9,20 +9,20 @@ const Sidebar = ({ counties, activeCountyId, onSelect, onRemove }) => {
       </div>
 
       <div className="sidebar-list">
-        {counties.map((county) => (
+        {applications.map((application) => (
           <div
-            key={county.id}
+            key={application.id}
             className={`sidebar-item ${
-              county.id === activeCountyId ? "active" : ""
+              application.id === activeApplicationId ? "active" : ""
             }`}
-            onClick={() => onSelect(county.id)}
+            onClick={() => onSelect(application.id)}
           >
-            <span>{county.name}</span>
+            <span>{application.title}</span>
             <button
               className="remove-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                onRemove(county.id);
+                onRemove(application.id);
               }}
               title="Remove"
             >
@@ -31,8 +31,8 @@ const Sidebar = ({ counties, activeCountyId, onSelect, onRemove }) => {
           </div>
         ))}
 
-        {counties.length === 0 && (
-          <div className="sidebar-placeholder">No counties selected</div>
+        {applications.length === 0 && (
+          <div className="sidebar-placeholder">No applications selected</div>
         )}
       </div>
     </aside>
