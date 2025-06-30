@@ -1,64 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchComments, addComment } from "../../firebase/comments";
 import useAuth from "../../hooks/useAuth";
-import "./CommentsSection.scss";
 
-const initialComments = [
-  {
-    id: 1,
-    author: "Sabrina from Santa Clara",
-    text: "The inspection in my county was super fast — just 3 days!",
-  },
-  {
-    id: 2,
-    author: "Kevin in Lake County",
-    text: "Be sure to include the SOP with your application.",
-  },
-];
+import "./CommentsSection.scss"; // Assuming you have some CSS for styling
 
-const CommunityComments = ({ application }) => {
-  if (!application) return null;
+function CommentsSection({ application }) {
+  const [comments, setComments] = useState([]);
+  const [text, setText] = useState("");
   const { user } = useAuth();
-  const [comments, setComments] = useState(initialComments);
-  const [newComment, setNewComment] = useState("");
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (!application?.id) return;
+    fetchComments(application.id).then(setComments);
+  }, [application?.id]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return;
+    if (!text.trim()) return;
 
-    const nextComment = {
-      id: Date.now(),
-      author: "You",
-      text: newComment.trim(),
-    };
+    await addComment(application.id, {
+      text,
+      userId: user?.uid || "anon",
+      displayName: user?.displayName || "Anonymous",
+    });
 
-    setComments([nextComment, ...comments]);
-    setNewComment("");
+    setText("");
+    fetchComments(application.id).then(setComments);
   };
 
-  if (!user) return <p>Please log in to use this feature.</p>;
   return (
-    <div className="community-comments">
-      <h3>Community Comments ({application.title})</h3>
+    <div className="comments-section">
+      <h3 className="comments-title">Community Comments</h3>
 
-      <form onSubmit={handleSubmit} className="comment-form">
-        <textarea
-          value={newComment}
-          placeholder="Share your experience, advice, or question..."
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button type="submit">Post</button>
-      </form>
+      {user ? (
+        <form className="comment-form" onSubmit={handleSubmit}>
+          <textarea
+            className="comment-textarea"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Leave a comment..."
+          />
+          <button type="submit" disabled={!text.trim()} className="submit-btn">
+            Submit
+          </button>
+        </form>
+      ) : (
+        <p className="comments-login-msg">Please log in to leave a comment.</p>
+      )}
 
-      <div className="comment-list">
-        {comments.map((comment) => (
-          <div key={comment.id} className="comment-item">
-            <strong>{comment.author}</strong>
-            <p>{comment.text}</p>
-          </div>
+      <ul className="comment-list">
+        {comments.map((c) => (
+          <li key={c.id} className="comment-item">
+            <span className="comment-author">{c.displayName}</span>
+            <p className="comment-text">{c.text}</p>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
-};
+}
 
-export default CommunityComments;
+export default CommentsSection;

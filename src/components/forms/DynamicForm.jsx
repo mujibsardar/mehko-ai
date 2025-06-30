@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import "./DynamicForm.scss"; // Assuming you have some CSS for styling
 
 export default function DynamicForm({ applicationId, formName }) {
   const { user } = useAuth();
@@ -58,9 +59,9 @@ export default function DynamicForm({ applicationId, formName }) {
 
   if (!user) return <p>Please log in to use this feature.</p>;
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="dynamic-form" onSubmit={handleSubmit}>
       {fieldNames.map((fieldName) => (
-        <div key={fieldName} style={{ marginBottom: "1rem" }}>
+        <div key={fieldName} className="dynamic-form-field">
           <label>{fieldName}</label>
           <input
             type="text"
