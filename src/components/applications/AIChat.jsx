@@ -1,22 +1,34 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./AIChat.scss";
 import useAuth from "../../hooks/useAuth";
+import { saveChatMessages, loadChatMessages } from "../../firebase/userData";
 
 function AIChat({ application }) {
   const { user } = useAuth();
-  const [messages, setMessages] = useState([
-    {
-      sender: "ai",
-      text: `Hi! I'm your assistant for ${application.title}. Ask me anything about the application process.`,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to latest message
+    if (!user || !application?.id) return;
+
+    loadChatMessages(user.uid, application.id).then((msgs) => {
+      if (msgs?.length) {
+        setMessages(msgs);
+      } else {
+        setMessages([
+          {
+            sender: "ai",
+            text: `Hi! I'm your assistant for ${application.title}. Ask me anything about the application process.`,
+            timestamp: new Date(),
+          },
+        ]);
+      }
+    });
+  }, [user?.uid, application?.id]);
+
+  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -24,26 +36,35 @@ function AIChat({ application }) {
     if (!input.trim()) return;
 
     const userMessage = { sender: "user", text: input, timestamp: new Date() };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+
+    setMessages(newMessages);
     setInput("");
     setLoading(true);
 
     try {
-      // Simulate AI response or connect to API
       const res = await fetch("http://localhost:3000/api/ai-chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input, applicationId: application.id }),
+        body: JSON.stringify({
+          messages: newMessages.map((m) => ({
+            role: m.sender === "ai" ? "assistant" : "user",
+            content: m.text,
+          })),
+          applicationId: application.id,
+        }),
       });
 
       const data = await res.json();
-
       const aiMessage = {
         sender: "ai",
         text: data.reply || "Sorry, I don't have a response right now.",
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, aiMessage]);
+
+      const updatedMessages = [...newMessages, aiMessage];
+      setMessages(updatedMessages);
+      await saveChatMessages(user.uid, application.id, updatedMessages);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
@@ -66,6 +87,7 @@ function AIChat({ application }) {
   };
 
   if (!user) return <p>Please log in to use this feature.</p>;
+
   return (
     <div className="ai-chat">
       <div className="chat-history">
@@ -73,7 +95,9 @@ function AIChat({ application }) {
           <div key={idx} className={`chat-msg ${msg.sender}`}>
             <div className="chat-bubble">{msg.text}</div>
             <div className="timestamp">
-              {msg.timestamp.toLocaleTimeString()}
+              {(
+                msg.timestamp.toDate?.() || new Date(msg.timestamp)
+              ).toLocaleTimeString()}
             </div>
           </div>
         ))}

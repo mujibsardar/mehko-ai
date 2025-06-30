@@ -1,53 +1,80 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import "./DynamicForm.scss"; // Assuming you have some CSS for styling
+import { saveFormData, loadFormData } from "../../firebase/userData";
+import "./DynamicForm.scss";
 
-export default function DynamicForm({ applicationId, formName, label }) {
+export default function DynamicForm({ applicationId, formName }) {
   const { user } = useAuth();
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
+  const [status, setStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
 
   useEffect(() => {
-    const fetchFieldNames = async () => {
+    const fetchFieldNamesAndData = async () => {
       try {
         const res = await fetch(
           `http://localhost:3000/api/form-fields?applicationId=${applicationId}&formName=${formName}`
         );
         const data = await res.json();
         setFieldNames(data.fields || []);
+
+        if (user) {
+          const savedData = await loadFormData(
+            user.uid,
+            applicationId,
+            formName
+          );
+          setFormData(savedData || {});
+        }
       } catch (err) {
-        console.error("Failed to fetch field names", err);
+        console.error("Error fetching fields or saved form data", err);
       }
     };
 
-    fetchFieldNames();
-  }, [applicationId, formName]);
+    fetchFieldNamesAndData();
+  }, [applicationId, formName, user]);
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
+  const handleChange = async (e) => {
+    const newData = {
+      ...formData,
       [e.target.name]: e.target.value,
-    }));
+    };
+
+    setFormData(newData);
+    setStatus("saving");
+
+    if (user) {
+      try {
+        await saveFormData(user.uid, applicationId, formName, newData);
+        setStatus("saved");
+        setTimeout(() => setStatus("idle"), 1500);
+      } catch (err) {
+        console.error("Failed to save form data", err);
+        setStatus("error");
+      }
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleReset = () => {
+    setFormData({});
+    setStatus("idle");
+  };
+
+  const handleDownload = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/fill-pdf", {
+      const res = await fetch("/api/fill-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ applicationId, formName, formData }),
       });
 
-      if (!res.ok) {
-        throw new Error("PDF generation failed");
-      }
+      if (!res.ok) throw new Error("PDF generation failed");
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "filled-form.pdf";
+      link.download = `${formName.replace(".pdf", "")}-filled.pdf`;
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -58,24 +85,42 @@ export default function DynamicForm({ applicationId, formName, label }) {
   };
 
   if (!user) return <p>Please log in to use this feature.</p>;
-  if (!applicationId || !formName) return null;
+
   return (
-    <>
-      {label && <h4>{label}</h4>}
-      <form className="dynamic-form" onSubmit={handleSubmit}>
-        {fieldNames.map((fieldName) => (
-          <div key={fieldName} className="dynamic-form-field">
-            <label>{fieldName}</label>
-            <input
-              type="text"
-              name={fieldName}
-              value={formData[fieldName] || ""}
-              onChange={handleChange}
-            />
-          </div>
-        ))}
-        <button type="submit">Download Filled PDF</button>
-      </form>
-    </>
+    <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="dynamic-form-header">
+        <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
+        <span className={`status ${status}`}>
+          {status === "saving"
+            ? "Saving..."
+            : status === "saved"
+            ? "Saved ✅"
+            : status === "error"
+            ? "Error ❌"
+            : ""}
+        </span>
+      </div>
+
+      {fieldNames.map((fieldName) => (
+        <div key={fieldName} className="dynamic-form-field">
+          <label>{fieldName}</label>
+          <input
+            type="text"
+            name={fieldName}
+            value={formData[fieldName] || ""}
+            onChange={handleChange}
+          />
+        </div>
+      ))}
+
+      <div className="form-actions">
+        <button type="button" onClick={handleReset}>
+          Reset Form
+        </button>
+        <button type="button" onClick={handleDownload}>
+          Download Filled PDF
+        </button>
+      </div>
+    </form>
   );
 }
