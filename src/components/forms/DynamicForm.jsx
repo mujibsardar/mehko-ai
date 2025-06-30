@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import "./DynamicForm.scss"; // Assuming you have some CSS for styling
 
-export default function DynamicForm({ applicationId, formName }) {
+export default function DynamicForm({ applicationId, formName, label }) {
   const { user } = useAuth();
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
@@ -58,20 +58,24 @@ export default function DynamicForm({ applicationId, formName }) {
   };
 
   if (!user) return <p>Please log in to use this feature.</p>;
+  if (!applicationId || !formName) return null;
   return (
-    <form className="dynamic-form" onSubmit={handleSubmit}>
-      {fieldNames.map((fieldName) => (
-        <div key={fieldName} className="dynamic-form-field">
-          <label>{fieldName}</label>
-          <input
-            type="text"
-            name={fieldName}
-            value={formData[fieldName] || ""}
-            onChange={handleChange}
-          />
-        </div>
-      ))}
-      <button type="submit">Download Filled PDF</button>
-    </form>
+    <>
+      {label && <h4>{label}</h4>}
+      <form className="dynamic-form" onSubmit={handleSubmit}>
+        {fieldNames.map((fieldName) => (
+          <div key={fieldName} className="dynamic-form-field">
+            <label>{fieldName}</label>
+            <input
+              type="text"
+              name={fieldName}
+              value={formData[fieldName] || ""}
+              onChange={handleChange}
+            />
+          </div>
+        ))}
+        <button type="submit">Download Filled PDF</button>
+      </form>
+    </>
   );
 }

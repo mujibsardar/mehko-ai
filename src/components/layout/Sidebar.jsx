@@ -1,41 +1,74 @@
-import React from "react";
 import "./Sidebar.scss";
 
-const Sidebar = ({ applications, activeApplicationId, onSelect, onRemove }) => {
+const Sidebar = ({
+  applications,
+  activeApplicationId,
+  onRemove,
+  activeTab,
+  setActiveTab,
+}) => {
   return (
-    <aside className="sidebar">
+    <div className="sidebar">
       <div className="sidebar-header">
         <h3>Your Applications</h3>
       </div>
 
       <div className="sidebar-list">
-        {applications.map((application) => (
-          <div
-            key={application.id}
-            className={`sidebar-item ${
-              application.id === activeApplicationId ? "active" : ""
-            }`}
-            onClick={() => onSelect(application.id)}
-          >
-            <span>{application.title}</span>
-            <button
-              className="remove-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove(application.id);
-              }}
-              title="Remove"
-            >
-              ✕
-            </button>
-          </div>
-        ))}
+        {applications.map((application) => {
+          const isActive = application.id === activeApplicationId;
 
-        {applications.length === 0 && (
-          <div className="sidebar-placeholder">No applications selected</div>
-        )}
+          return (
+            <div key={application.id} className="sidebar-item-wrapper">
+              <div
+                className={`sidebar-item ${isActive ? "active" : ""}`}
+                onClick={() => setActiveApplicationId(application.id)}
+              >
+                <span>{application.title}</span>
+                <button
+                  className="remove-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(application.id);
+                  }}
+                  title="Remove"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {isActive && (
+                <ul className="sidebar-sublist">
+                  <li
+                    className={activeTab === "overview" ? "active" : ""}
+                    onClick={() => setActiveTab("overview")}
+                  >
+                    Overview
+                  </li>
+                  <li
+                    className={activeTab === "forms" ? "active" : ""}
+                    onClick={() => setActiveTab("forms")}
+                  >
+                    Fill Out Forms
+                  </li>
+                  <li
+                    className={activeTab === "ai" ? "active" : ""}
+                    onClick={() => setActiveTab("ai")}
+                  >
+                    Ask the Assistant
+                  </li>
+                  <li
+                    className={activeTab === "comments" ? "active" : ""}
+                    onClick={() => setActiveTab("comments")}
+                  >
+                    Community Comments
+                  </li>
+                </ul>
+              )}
+            </div>
+          );
+        })}
       </div>
-    </aside>
+    </div>
   );
 };
 

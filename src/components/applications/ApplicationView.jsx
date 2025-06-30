@@ -1,12 +1,5 @@
 import ApplicationSteps from "./ApplicationSteps";
-import AIChat from "./AIChat";
-import CommentsSection from "./CommentsSection";
-import DynamicForm from "../forms/DynamicForm";
-
-const handlePdfSubmit = async (formData) => {
-  console.log("Filled data:", formData);
-  // TODO: Send to backend /api/fill-pdf and trigger download
-};
+import "./ApplicationView.scss";
 
 function ApplicationView({ application }) {
   if (!application) return null;
@@ -21,20 +14,6 @@ function ApplicationView({ application }) {
           steps={application.steps}
           requirements={application.requirements}
         />
-      )}
-
-      {application.pdfForms?.map((form) => (
-        <DynamicForm
-          key={form.file}
-          applicationId={application.id}
-          formName={form.file}
-          onSubmit={handlePdfSubmit}
-        />
-      ))}
-
-      {application.aiEnabled && <AIChat application={application} />}
-      {application.commentsEnabled && (
-        <CommentsSection application={application} />
       )}
     </div>
   );

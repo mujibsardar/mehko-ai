@@ -57,3 +57,25 @@
     margin-top: 1rem;
   }
 }
+
+.sidebar-sublist {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+
+  li {
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0.25rem 0;
+    color: #555;
+
+    &.active {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    &:hover {
+      color: #0056b3;
+    }
+  }
+}
