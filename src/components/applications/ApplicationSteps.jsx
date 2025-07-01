@@ -1,7 +1,7 @@
 import React from "react";
 import "./ApplicationSteps.scss";
 
-function ApplicationSteps({ steps = [], requirements = [] }) {
+function ApplicationSteps({ steps = [] }) {
   return (
     <div className="application-steps">
       {steps.length > 0 && (
@@ -9,20 +9,9 @@ function ApplicationSteps({ steps = [], requirements = [] }) {
           <h3>How to Apply</h3>
           <ol className="steps-list">
             {steps.map((step, idx) => (
-              <li key={idx}>{step}</li>
+              <li key={idx}>{step.title}</li>
             ))}
           </ol>
-        </div>
-      )}
-
-      {requirements.length > 0 && (
-        <div className="requirements-section">
-          <h4>Requirements</h4>
-          <ul className="requirements-list">
-            {requirements.map((req, idx) => (
-              <li key={idx}>{req}</li>
-            ))}
-          </ul>
         </div>
       )}
     </div>

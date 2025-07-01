@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import ApplicationCardGrid from "./components/layout/ApplicationCardGrid";
-import ApplicationView from "./components/applications/ApplicationView";
+import ApplicationOverview from "./components/applications/ApplicationOverview";
 import Header from "./components/layout/Header";
 import AIChat from "./components/applications/AIChat";
 import CommentsSection from "./components/applications/CommentsSection";
+import InfoStep from "./components/applications/InfoStep";
 
 import "./styles/app.scss";
 import DynamicForm from "./components/forms/DynamicForm";
@@ -13,7 +14,7 @@ function App() {
   console.log("App loaded");
   const [selectedApplications, setSelectedApplications] = useState([]);
   const [activeApplicationId, setActiveApplicationId] = useState(null);
-  const [activeTab, setActiveTab] = useState("overview"); // "forms" | "ai" | "comments"
+  const [activeSection, setActiveSection] = useState("overview");
 
   const handleApplicationSelect = (application) => {
     const alreadyAdded = selectedApplications.find(
@@ -49,26 +50,45 @@ function App() {
           applications={selectedApplications}
           activeApplicationId={activeApplicationId}
           onRemove={handleApplicationRemove}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
         />
         <main className="main-content">
           {activeApplication ? (
             <>
-              {activeTab === "overview" && (
-                <ApplicationView application={activeApplication} />
+              {activeSection === "overview" && (
+                <ApplicationOverview application={activeApplication} />
               )}
-              {activeTab === "forms" &&
-                activeApplication.pdfForms?.map((form) => (
-                  <DynamicForm
-                    key={form.file}
-                    applicationId={activeApplication.id}
-                    formName={form.file}
-                    label={form.name}
-                  />
-                ))}
-              {activeTab === "ai" && <AIChat application={activeApplication} />}
-              {activeTab === "comments" && (
+
+              {activeSection.startsWith("step:") &&
+                (() => {
+                  const stepId = activeSection.split(":")[1];
+                  const step = activeApplication.steps?.find(
+                    (s) => s.id === stepId
+                  );
+                  if (!step) return <p>Step not found.</p>;
+
+                  if (step.type === "form") {
+                    return (
+                      <DynamicForm
+                        applicationId={activeApplication.id}
+                        formName={step.formName}
+                        isPdf={step.isPdf}
+                      />
+                    );
+                  }
+
+                  if (step.type === "info") {
+                    return <InfoStep step={step} />;
+                  }
+
+                  return <p>Unsupported step type.</p>;
+                })()}
+
+              {activeSection === "ai" && (
+                <AIChat application={activeApplication} />
+              )}
+              {activeSection === "comments" && (
                 <CommentsSection application={activeApplication} />
               )}
             </>
