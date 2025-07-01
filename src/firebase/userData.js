@@ -22,3 +22,15 @@ export async function loadFormData(userId, applicationId, formName) {
   const snap = await getDoc(ref);
   return snap.exists() ? snap.data()[formName] || {} : {};
 }
+
+export async function pinApplication(userId, applicationId, source = "form") {
+  const ref = doc(db, "users", userId, "pinnedApplications", applicationId);
+  await setDoc(
+    ref,
+    {
+      pinnedAt: new Date(),
+      triggeredBy: source,
+    },
+    { merge: true }
+  );
+}

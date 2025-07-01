@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./components/layout/Sidebar";
 import ApplicationCardGrid from "./components/layout/ApplicationCardGrid";
 import ApplicationOverview from "./components/applications/ApplicationOverview";
@@ -6,15 +6,23 @@ import Header from "./components/layout/Header";
 import AIChat from "./components/applications/AIChat";
 import CommentsSection from "./components/applications/CommentsSection";
 import InfoStep from "./components/applications/InfoStep";
+import usePinnedApplications from "./hooks/usePinnedApplications";
 
 import "./styles/app.scss";
 import DynamicForm from "./components/forms/DynamicForm";
 
 function App() {
   console.log("App loaded");
+  const { applications: pinnedApplications, loading } = usePinnedApplications();
   const [selectedApplications, setSelectedApplications] = useState([]);
   const [activeApplicationId, setActiveApplicationId] = useState(null);
   const [activeSection, setActiveSection] = useState("overview");
+
+  useEffect(() => {
+    if (!loading && pinnedApplications.length > 0) {
+      setSelectedApplications(pinnedApplications);
+    }
+  }, [loading, pinnedApplications]);
 
   const handleApplicationSelect = (application) => {
     const alreadyAdded = selectedApplications.find(
@@ -23,7 +31,9 @@ function App() {
     if (!alreadyAdded) {
       setSelectedApplications([...selectedApplications, application]);
     }
+
     setActiveApplicationId(application.id);
+    setActiveSection("overview");
   };
 
   const handleApplicationSwitch = (applicationId) => {
@@ -52,9 +62,14 @@ function App() {
           onRemove={handleApplicationRemove}
           activeSection={activeSection}
           setActiveSection={setActiveSection}
+          onSelect={handleApplicationSwitch}
         />
         <main className="main-content">
-          {activeApplication ? (
+          {selectedApplications.length === 0 || !activeApplication ? (
+            <ApplicationCardGrid
+              onApplicationSelect={handleApplicationSelect}
+            />
+          ) : (
             <>
               {activeSection === "overview" && (
                 <ApplicationOverview application={activeApplication} />
@@ -92,10 +107,6 @@ function App() {
                 <CommentsSection application={activeApplication} />
               )}
             </>
-          ) : (
-            <ApplicationCardGrid
-              onApplicationSelect={handleApplicationSelect}
-            />
           )}
         </main>
       </div>

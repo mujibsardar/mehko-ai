@@ -13,10 +13,10 @@ const Sidebar = ({
   const [collapsedSteps, setCollapsedSteps] = useState({});
   const [collapsedSupport, setCollapsedSupport] = useState({});
 
-  const toggleCollapse = (map, setMap, appId) => {
+  const toggleCollapse = (map, setMap, appId, forceCollapse = null) => {
     setMap((prev) => ({
       ...prev,
-      [appId]: !prev[appId],
+      [appId]: forceCollapse !== null ? forceCollapse : !prev[appId],
     }));
   };
 
@@ -36,15 +36,15 @@ const Sidebar = ({
           return (
             <div key={application.id} className="sidebar-item-wrapper">
               <div className={`sidebar-item ${isActive ? "active" : ""}`}>
-                <span
-                  className="app-title"
+                <div
+                  className="sidebar-app-title"
                   onClick={() => {
                     onSelect(application.id);
-                    setActiveSection("overview");
                   }}
                 >
                   {application.title}
-                </span>
+                </div>
+
                 <div className="sidebar-controls">
                   <button
                     className="collapse-btn"
@@ -75,9 +75,23 @@ const Sidebar = ({
                 <ul className="sidebar-sublist">
                   <li
                     className={activeSection === "overview" ? "active" : ""}
-                    onClick={() => setActiveSection("overview")}
+                    onClick={() => {
+                      setActiveSection("overview");
+                      toggleCollapse(
+                        collapsedSteps,
+                        setCollapsedSteps,
+                        application.id,
+                        true
+                      ); // collapse steps
+                      toggleCollapse(
+                        collapsedSupport,
+                        setCollapsedSupport,
+                        application.id,
+                        true
+                      ); // collapse support
+                    }}
                   >
-                    Overview
+                    Overview ({application.steps?.length || 0} steps)
                   </li>
 
                   <li className="sidebar-section-label">

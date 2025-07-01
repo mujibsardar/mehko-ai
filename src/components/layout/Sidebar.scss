@@ -40,3 +40,15 @@
     }
   }
 }
+
+.sidebar-app-title {
+  font-weight: bold;
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  color: #222;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./AIChat.scss";
 import useAuth from "../../hooks/useAuth";
-import { saveChatMessages, loadChatMessages } from "../../firebase/userData";
+import {
+  saveChatMessages,
+  loadChatMessages,
+  pinApplication,
+} from "../../firebase/userData";
 
 function AIChat({ application }) {
   const { user } = useAuth();
@@ -65,6 +69,7 @@ function AIChat({ application }) {
       const updatedMessages = [...newMessages, aiMessage];
       setMessages(updatedMessages);
       await saveChatMessages(user.uid, application.id, updatedMessages);
+      await pinApplication(user.uid, application.id, "ai");
     } catch (error) {
       setMessages((prev) => [
         ...prev,

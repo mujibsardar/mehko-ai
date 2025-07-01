@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { saveFormData, loadFormData } from "../../firebase/userData";
+import {
+  saveFormData,
+  loadFormData,
+  pinApplication,
+} from "../../firebase/userData";
 import "./DynamicForm.scss";
 
 export default function DynamicForm({ applicationId, formName }) {
@@ -46,6 +50,7 @@ export default function DynamicForm({ applicationId, formName }) {
     if (user) {
       try {
         await saveFormData(user.uid, applicationId, formName, newData);
+        await pinApplication(user.uid, applicationId, "form");
         setStatus("saved");
         setTimeout(() => setStatus("idle"), 1500);
       } catch (err) {

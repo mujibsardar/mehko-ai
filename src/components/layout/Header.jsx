@@ -32,7 +32,12 @@ export default function Header() {
 
   return (
     <header style={styles.header}>
-      <h1>MEHKO.ai</h1>
+      <h1
+        style={{ cursor: "pointer" }}
+        onClick={() => window.location.reload()}
+      >
+        MEHKO.ai
+      </h1>
       <div>
         {!user ? (
           <div style={styles.authBox}>
