@@ -5,10 +5,16 @@ import {
   loadFormData,
   pinApplication,
 } from "../../firebase/userData";
+import useProgress from "../../hooks/useProgress";
 import "./DynamicForm.scss";
 
-export default function DynamicForm({ applicationId, formName }) {
+export default function DynamicForm({ applicationId, formName, stepId }) {
   const { user } = useAuth();
+  const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
+    user?.uid,
+    applicationId
+  );
+  const isComplete = completedSteps.includes(stepId);
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
   const [status, setStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
@@ -93,6 +99,22 @@ export default function DynamicForm({ applicationId, formName }) {
 
   return (
     <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
+      <div className="step-complete-checkbox">
+        <label>
+          <input
+            type="checkbox"
+            checked={isComplete}
+            onChange={(e) => {
+              if (e.target.checked) {
+                markStepComplete(stepId);
+              } else {
+                markStepIncomplete(stepId);
+              }
+            }}
+          />
+          Mark this step as complete
+        </label>
+      </div>
       <div className="dynamic-form-header">
         <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
         <span className={`status ${status}`}>

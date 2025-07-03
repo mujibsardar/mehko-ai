@@ -136,14 +136,19 @@ function App() {
                     return (
                       <DynamicForm
                         applicationId={activeApplication.id}
+                        stepId={step.id}
                         formName={step.formName}
-                        isPdf={step.isPdf}
                       />
                     );
                   }
 
                   if (step.type === "info") {
-                    return <InfoStep step={step} />;
+                    return (
+                      <InfoStep
+                        step={step}
+                        applicationId={activeApplication.id}
+                      />
+                    );
                   }
 
                   return <p>Unsupported step type.</p>;

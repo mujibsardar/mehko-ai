@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import ApplicationCard from "../shared/ApplicationCard";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/firebase"; // ✅ Your configured Firebase instance
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import useAuth from "../../hooks/useAuth";
 
 import "./ApplicationCardGrid.scss";
 
 const ApplicationCardGrid = ({ onApplicationSelect }) => {
   const [applications, setApplications] = useState([]);
+  const [progressByAppId, setProgressByAppId] = useState({});
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     async function fetchApplications() {
@@ -15,7 +18,7 @@ const ApplicationCardGrid = ({ onApplicationSelect }) => {
         const snapshot = await getDocs(collection(db, "applications"));
         const result = {};
         snapshot.forEach((doc) => {
-          result[doc.id] = doc.data();
+          result[doc.id] = { id: doc.id, ...doc.data() };
         });
         setApplications(result);
       } catch (err) {
@@ -24,6 +27,7 @@ const ApplicationCardGrid = ({ onApplicationSelect }) => {
         setLoading(false);
       }
     }
+
     fetchApplications();
   }, []);
 
@@ -32,7 +36,7 @@ const ApplicationCardGrid = ({ onApplicationSelect }) => {
       <h2 className="grid-title">Select Your Application</h2>
       <div className="card-grid">
         {loading && <p>Loading applications...</p>}
-        {!loading && applications.length === 0 && (
+        {!loading && Object.keys(applications).length === 0 && (
           <p>No applications available at this time.</p>
         )}
         {!loading &&

@@ -1,4 +1,8 @@
 import useApplicationSidebarState from "../../hooks/useApplicationSidebarState";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
+import useAuth from "../../hooks/useAuth";
+import { useEffect, useState } from "react";
 
 import "./Sidebar.scss";
 
@@ -20,6 +24,36 @@ const Sidebar = ({
     toggle,
   } = useApplicationSidebarState();
 
+  const { user } = useAuth();
+  const [progressByAppId, setProgressByAppId] = useState({});
+
+  useEffect(() => {
+    async function fetchProgress() {
+      if (!user || !applications.length) return;
+
+      const unsubscribers = [];
+
+      applications.forEach((app) => {
+        const ref = doc(db, "users", user.uid, "applicationProgress", app.id);
+        const unsub = onSnapshot(ref, (docSnap) => {
+          setProgressByAppId((prev) => ({
+            ...prev,
+            [app.id]: docSnap.exists()
+              ? docSnap.data().completedStepIds || []
+              : [],
+          }));
+        });
+        unsubscribers.push(unsub);
+      });
+
+      return () => {
+        unsubscribers.forEach((unsub) => unsub());
+      };
+    }
+
+    fetchProgress();
+  }, [user, applications]);
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -32,6 +66,11 @@ const Sidebar = ({
           const isAppCollapsed = collapsedApps[application.id];
           const areStepsCollapsed = collapsedSteps[application.id];
           const isSupportCollapsed = collapsedSupport[application.id];
+          const completedSteps = progressByAppId[application.id] || [];
+          const totalSteps = application.steps?.length || 0;
+          const completeCount = completedSteps.length;
+          const percent =
+            totalSteps > 0 ? Math.round((completeCount / totalSteps) * 100) : 0;
 
           return (
             <div key={application.id} className="sidebar-item-wrapper">
@@ -43,6 +82,17 @@ const Sidebar = ({
                   }}
                 >
                   {application.title}
+                </div>
+                <div className="sidebar-progress">
+                  <div className="sidebar-progress-bar">
+                    <div
+                      className="sidebar-progress-fill"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
+                  <small>
+                    {completeCount} of {totalSteps} steps complete
+                  </small>
                 </div>
 
                 {application.id === activeApplicationId && (
@@ -118,7 +168,12 @@ const Sidebar = ({
                         }
                         onClick={() => setActiveSection(`step:${step.id}`)}
                       >
-                        Step {idx + 1}: {step.title}
+                        <span>
+                          Step {idx + 1}: {step.title}
+                        </span>
+                        {completedSteps.includes(step.id) && (
+                          <span className="checkmark">✔</span>
+                        )}
                       </li>
                     ))}
 

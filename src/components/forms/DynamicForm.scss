@@ -40,3 +40,12 @@
 .dynamic-form button[type="submit"]:hover {
   background-color: #0056b3;
 }
+
+.step-complete-checkbox {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+

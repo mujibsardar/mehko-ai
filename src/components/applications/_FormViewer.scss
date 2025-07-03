@@ -33,3 +33,11 @@
 .form-list li a:hover {
   background-color: #e6e6e6;
 }
+
+.step-complete-checkbox {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}

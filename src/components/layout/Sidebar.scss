@@ -52,3 +52,42 @@
     text-decoration: underline;
   }
 }
+
+.sidebar-progress {
+  width: 100%;
+  font-size: 0.7rem;
+  margin: 0.5rem 0;
+}
+
+.sidebar-progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 4px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.sidebar-progress-fill {
+  background-color: #4caf50;
+  height: 100%;
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.sidebar-item-wrapper {
+  width: 80%;
+}
+
+.step-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.checkmark {
+  color: #4caf50;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+

@@ -1,27 +1,28 @@
-import "./InfoStep.scss";
-import ReactMarkdown from "react-markdown";
 import useAuth from "../../hooks/useAuth";
 import useProgress from "../../hooks/useProgress";
+import "./FormViewer.scss";
 
-function InfoStep({ step, applicationId }) {
+function FormViewer({ applicationId, stepId, formName, isPdf }) {
   const { user } = useAuth();
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,
     applicationId
   );
 
-  const isComplete = completedSteps.includes(step.id);
+  const isComplete = completedSteps.includes(stepId);
 
   return (
-    <div className="info-step">
-      <h2>{step.title}</h2>
-
-      {step.content ? (
-        <ReactMarkdown>{step.content}</ReactMarkdown>
-      ) : (
-        <p>No additional information available for this step.</p>
-      )}
-
+    <div className="form-viewer">
+      <h3>Permit Forms</h3>
+      <ul className="form-list">
+        {forms.map((form, idx) => (
+          <li key={idx}>
+            <a href={form.fileUrl} target="_blank" rel="noopener noreferrer">
+              {form.label}
+            </a>
+          </li>
+        ))}
+      </ul>
       {user && (
         <label className="step-complete-checkbox">
           <input
@@ -29,9 +30,9 @@ function InfoStep({ step, applicationId }) {
             checked={isComplete}
             onChange={(e) => {
               if (e.target.checked) {
-                markStepComplete(step.id);
+                markStepComplete(stepId);
               } else {
-                markStepIncomplete(step.id);
+                markStepIncomplete(stepId);
               }
             }}
           />
@@ -42,4 +43,4 @@ function InfoStep({ step, applicationId }) {
   );
 }
 
-export default InfoStep;
+export default FormViewer;
