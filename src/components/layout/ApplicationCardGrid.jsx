@@ -17,10 +17,6 @@ const ApplicationCardGrid = ({ onApplicationSelect }) => {
         snapshot.forEach((doc) => {
           result[doc.id] = doc.data();
         });
-        console.log(" ");
-        console.log(" ");
-        console.log(" ");
-        console.log("Fetched applications:", JSON.stringify(result, null, 2));
         setApplications(result);
       } catch (err) {
         console.error("Failed to fetch applications:", err);

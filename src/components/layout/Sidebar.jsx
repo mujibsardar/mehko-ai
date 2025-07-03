@@ -45,26 +45,28 @@ const Sidebar = ({
                   {application.title}
                 </div>
 
-                <div className="sidebar-controls">
-                  <button
-                    className="collapse-btn"
-                    onClick={() =>
-                      toggle(setCollapsedApps, collapsedApps, application.id)
-                    }
-                  >
-                    {isAppCollapsed ? "▶" : "▼"}
-                  </button>
-                  <button
-                    className="remove-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onRemove(application.id);
-                    }}
-                    title="Remove"
-                  >
-                    ✕
-                  </button>
-                </div>
+                {application.id === activeApplicationId && (
+                  <div className="sidebar-controls">
+                    <button
+                      className="collapse-btn"
+                      onClick={() =>
+                        toggle(setCollapsedApps, collapsedApps, application.id)
+                      }
+                    >
+                      {isAppCollapsed ? "▶" : "▼"}
+                    </button>
+                    <button
+                      className="remove-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove(application.id);
+                      }}
+                      title="Remove"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
 
               {!isAppCollapsed && isActive && (

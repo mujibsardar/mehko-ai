@@ -5,7 +5,12 @@ const ApplicationCard = ({ application, onClick }) => {
     <div className="application-card" onClick={onClick}>
       <div className="application-card-inner">
         <h3>{application.title}</h3>
-        <p>Click to view application steps</p>
+        <p>{application.description}</p>
+        {application.rootDomain && (
+          <div className="application-source">
+            <small>Source: {application.rootDomain}</small>
+          </div>
+        )}
       </div>
     </div>
   );
