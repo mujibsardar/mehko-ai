@@ -7,6 +7,9 @@ import AIChat from "./components/applications/AIChat";
 import CommentsSection from "./components/applications/CommentsSection";
 import InfoStep from "./components/applications/InfoStep";
 import usePinnedApplications from "./hooks/usePinnedApplications";
+import { doc, onSnapshot, collection } from "firebase/firestore";
+import { db } from "./firebase/firebase";
+import useAuth from "./hooks/useAuth"; // Add if not already present
 
 import "./styles/app.scss";
 import DynamicForm from "./components/forms/DynamicForm";
@@ -17,6 +20,8 @@ function App() {
   const [selectedApplications, setSelectedApplications] = useState([]);
   const [activeApplicationId, setActiveApplicationId] = useState(null);
   const [activeSection, setActiveSection] = useState(null);
+  const { user } = useAuth();
+  const [enrichedApplication, setEnrichedApplication] = useState(null);
 
   useEffect(() => {
     if (!loading && pinnedApplications.length > 0) {
@@ -52,6 +57,48 @@ function App() {
   const activeApplication = selectedApplications.find(
     (c) => c.id === activeApplicationId
   );
+
+  useEffect(() => {
+    if (!user || !activeApplicationId) {
+      setEnrichedApplication(null);
+      return;
+    }
+
+    const base = selectedApplications.find((a) => a.id === activeApplicationId);
+    if (!base) return;
+
+    const unsub1 = onSnapshot(
+      doc(db, "users", user.uid, "applicationProgress", base.id),
+      (snap) => {
+        const completedStepIds = snap.exists()
+          ? snap.data().completedStepIds || []
+          : [];
+        setEnrichedApplication((prev) => ({
+          ...(prev || base),
+          completedStepIds,
+        }));
+      }
+    );
+
+    const unsub2 = onSnapshot(
+      collection(db, "applications", base.id, "comments"),
+      (snap) => {
+        const comments = snap.docs.map((doc) => doc.data());
+        setEnrichedApplication((prev) => ({
+          ...(prev || base),
+          comments,
+        }));
+      }
+    );
+
+    // Set base initially so the UI doesn't wait
+    setEnrichedApplication(base);
+
+    return () => {
+      unsub1();
+      unsub2();
+    };
+  }, [user, activeApplicationId, selectedApplications]);
 
   return (
     <>
@@ -154,9 +201,10 @@ function App() {
                   return <p>Unsupported step type.</p>;
                 })()}
 
-              {activeSection === "ai" && (
-                <AIChat application={activeApplication} />
+              {activeSection === "ai" && enrichedApplication && (
+                <AIChat application={enrichedApplication} />
               )}
+
               {activeSection === "comments" && (
                 <CommentsSection application={activeApplication} />
               )}

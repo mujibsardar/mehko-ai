@@ -13,6 +13,33 @@ function AIChat({ application }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const [applicationForms, setApplicationForms] = useState({});
+
+  useEffect(() => {
+    const enrichFormSteps = async () => {
+      if (!application || !application.steps) return;
+
+      const formDetails = {};
+
+      for (const step of application.steps) {
+        if (step.type === "form" && step.formName) {
+          try {
+            const res = await fetch(
+              `http://localhost:3000/api/form-fields?applicationId=${application.id}&formName=${step.formName}`
+            );
+            const data = await res.json();
+            formDetails[step.id] = data.fields || [];
+          } catch (err) {
+            console.error(`Failed to fetch fields for ${step.id}`, err);
+          }
+        }
+      }
+
+      setApplicationForms(formDetails);
+    };
+
+    enrichFormSteps();
+  }, [application]);
 
   useEffect(() => {
     if (!user || !application?.id) return;
@@ -56,6 +83,14 @@ function AIChat({ application }) {
             content: m.text,
           })),
           applicationId: application.id,
+          context: {
+            title: application.title,
+            steps: application.steps,
+            completedStepIds: application.completedStepIds || [],
+            rootDomain: application.rootDomain,
+            comments: application.comments || [],
+            forms: applicationForms, // ✅ new
+          },
         }),
       });
 

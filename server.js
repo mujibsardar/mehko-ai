@@ -17,14 +17,47 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/api/ai-chat", async (req, res) => {
-  const { messages = [], applicationId = "unknown" } = req.body;
+  const { messages = [], applicationId = "unknown", context = {} } = req.body;
 
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: "Invalid messages format" });
   }
 
   try {
-    const systemPrompt = `You are an AI assistant helping users fill out a MEHKO permit application for ${applicationId}. Be clear, accurate, and helpful.`;
+    const formSection = Object.entries(context.forms || {})
+      .map(([stepId, fields]) => {
+        const step = (context.steps || []).find((s) => s.id === stepId);
+        return step
+          ? `Step: ${step.title} (${
+              step.formName || "Unknown PDF"
+            })\nFields:\n${fields.map((f) => `- ${f}`).join("\n")}`
+          : null;
+      })
+      .filter(Boolean)
+      .join("\n\n");
+
+    const systemPrompt = `
+You are an AI assistant helping users apply for a MEHKO permit.
+
+Application Title: ${context.title}
+Source: ${context.rootDomain}
+
+Steps:
+${(context.steps || [])
+  .map((s, i) => `Step ${i + 1}: ${s.title} (${s.type})`)
+  .join("\n")}
+
+Completed Steps:
+${(context.completedStepIds || []).join(", ") || "None"}
+
+Community Comments:
+${(context.comments || []).map((c) => `- ${c.text || c}`).join("\n") || "None"}
+
+Form Fields:
+${formSection || "None"}
+
+Be concise, accurate, and helpful. Explain unfamiliar fields and help users complete the application.
+`.trim();
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
