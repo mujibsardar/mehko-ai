@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import useApplicationSidebarState from "../../hooks/useApplicationSidebarState";
+
 import "./Sidebar.scss";
 
 const Sidebar = ({
@@ -9,16 +10,15 @@ const Sidebar = ({
   setActiveSection,
   onSelect,
 }) => {
-  const [collapsedApps, setCollapsedApps] = useState({});
-  const [collapsedSteps, setCollapsedSteps] = useState({});
-  const [collapsedSupport, setCollapsedSupport] = useState({});
-
-  const toggleCollapse = (map, setMap, appId, forceCollapse = null) => {
-    setMap((prev) => ({
-      ...prev,
-      [appId]: forceCollapse !== null ? forceCollapse : !prev[appId],
-    }));
-  };
+  const {
+    collapsedApps,
+    collapsedSteps,
+    collapsedSupport,
+    setCollapsedApps,
+    setCollapsedSteps,
+    setCollapsedSupport,
+    toggle,
+  } = useApplicationSidebarState();
 
   return (
     <div className="sidebar">
@@ -49,11 +49,7 @@ const Sidebar = ({
                   <button
                     className="collapse-btn"
                     onClick={() =>
-                      toggleCollapse(
-                        collapsedApps,
-                        setCollapsedApps,
-                        application.id
-                      )
+                      toggle(setCollapsedApps, collapsedApps, application.id)
                     }
                   >
                     {isAppCollapsed ? "▶" : "▼"}
@@ -77,15 +73,15 @@ const Sidebar = ({
                     className={activeSection === "overview" ? "active" : ""}
                     onClick={() => {
                       setActiveSection("overview");
-                      toggleCollapse(
-                        collapsedSteps,
+                      toggle(
                         setCollapsedSteps,
+                        collapsedSteps,
                         application.id,
                         true
                       ); // collapse steps
-                      toggleCollapse(
-                        collapsedSupport,
+                      toggle(
                         setCollapsedSupport,
+                        collapsedSupport,
                         application.id,
                         true
                       ); // collapse support
@@ -98,9 +94,9 @@ const Sidebar = ({
                     <span
                       className="collapsible-section"
                       onClick={() =>
-                        toggleCollapse(
-                          collapsedSteps,
+                        toggle(
                           setCollapsedSteps,
+                          collapsedSteps,
                           application.id
                         )
                       }
@@ -131,9 +127,9 @@ const Sidebar = ({
                         <span
                           className="collapsible-section"
                           onClick={() =>
-                            toggleCollapse(
-                              collapsedSupport,
+                            toggle(
                               setCollapsedSupport,
+                              collapsedSupport,
                               application.id
                             )
                           }
