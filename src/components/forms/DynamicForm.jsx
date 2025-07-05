@@ -18,9 +18,11 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
   const [fieldNames, setFieldNames] = useState([]);
   const [formData, setFormData] = useState({});
   const [status, setStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchFieldNamesAndData = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(
           `http://localhost:3000/api/form-fields?applicationId=${applicationId}&formName=${formName}`
@@ -39,6 +41,7 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
       } catch (err) {
         console.error("Error fetching fields or saved form data", err);
       }
+      setIsLoading(false);
     };
 
     fetchFieldNamesAndData();
@@ -97,6 +100,15 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
 
   if (!user) return <p>Please log in to use this feature.</p>;
 
+  if (isLoading) {
+    return (
+      <div className="form-loading">
+        <div className="spinner" />
+        <p>Loading form...</p>
+      </div>
+    );
+  }
+
   return (
     <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
       <div className="step-complete-checkbox">
@@ -128,15 +140,18 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
         </span>
       </div>
 
-      {fieldNames.map((fieldName) => (
-        <div key={fieldName} className="dynamic-form-field">
-          <label>{fieldName}</label>
+      {fieldNames.map((field) => (
+        <div key={field.name} className="dynamic-form-field">
+          <label>{field.label || field.name}</label>
           <input
             type="text"
-            name={fieldName}
-            value={formData[fieldName] || ""}
+            name={field.name}
+            value={formData[field.name] || ""}
             onChange={handleChange}
           />
+          {field.description && (
+            <small className="field-description">{field.description}</small>
+          )}
         </div>
       ))}
 
