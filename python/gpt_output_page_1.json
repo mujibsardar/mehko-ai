@@ -1,0 +1,53 @@
+
+[
+    {
+        "label": "Name of Business (Doing Business As)",
+        "type": "text",
+        "description": "Name under which the MEHKO operates."
+    },
+    {
+        "label": "Initials",
+        "type": "initials",
+        "description": "Initials of the owner/operator confirming the statement regarding the employee limit."
+    },
+    {
+        "label": "Number of Employees",
+        "type": "text",
+        "description": "Total number of employees working in the MEHKO."
+    },
+    {
+        "label": "Employee 1",
+        "type": "text",
+        "description": "Number of hours Employee 1 will work per week."
+    },
+    {
+        "label": "Employee 2",
+        "type": "text",
+        "description": "Number of hours Employee 2 will work per week."
+    },
+    {
+        "label": "Employee 3",
+        "type": "text",
+        "description": "Number of hours Employee 3 will work per week."
+    },
+    {
+        "label": "Employee 4",
+        "type": "text",
+        "description": "Number of hours Employee 4 will work per week."
+    },
+    {
+        "label": "Do you plan to operate a Compact Mobile Food Operation (CMFO) in combination with the MEHKO?",
+        "type": "checkbox",
+        "description": "Checkbox to indicate if the applicant plans to operate a CMFO in addition to the MEHKO."
+    },
+    {
+        "label": "Number of Carts",
+        "type": "checkbox",
+        "description": "CheckBox to select how many carts (One or Two) will be used in CMFO."
+    },
+    {
+        "label": "Initials",
+        "type": "initials",
+        "description": "Initials of the owner/operator confirming the statement regarding the need of an additional permit for CMFO."
+    }
+]

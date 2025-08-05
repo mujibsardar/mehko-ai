@@ -130,7 +130,6 @@ app.post("/api/save-progress", async (req, res) => {
   res.status(200).json({ success: true, userId, applicationId });
 });
 
-// --- Inside your Express app:
 app.get("/api/form-fields", async (req, res) => {
   const { applicationId, formName } = req.query;
   if (!applicationId || !formName) {

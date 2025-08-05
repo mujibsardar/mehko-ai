@@ -1,0 +1,112 @@
+[
+  {
+    "label": "Name of Business (Doing Business As)",
+    "type": "text",
+    "description": "Name under which the MEHKO operates.",
+    "rect": null,
+    "page": null,
+    "match_status": "unmatched"
+  },
+  {
+    "label": "Initials",
+    "type": "initials",
+    "description": "Initials of the owner/operator confirming the statement regarding the employee limit.",
+    "rect": null,
+    "page": null,
+    "match_status": "unmatched"
+  },
+  {
+    "label": "Number of Employees",
+    "type": "text",
+    "description": "Total number of employees working in the MEHKO.",
+    "rect": [
+      148.5515899658203,
+      456.31298828125,
+      197.8496551513672,
+      471.0845031738281
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Employee 1",
+    "type": "text",
+    "description": "Number of hours Employee 1 will work per week.",
+    "rect": [
+      102.48500061035156,
+      510.05572509765625,
+      146.2619171142578,
+      524.8272094726562
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Employee 2",
+    "type": "text",
+    "description": "Number of hours Employee 2 will work per week.",
+    "rect": [
+      237.2524871826172,
+      510.05572509765625,
+      286.55047607421875,
+      524.8272094726562
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Employee 3",
+    "type": "text",
+    "description": "Number of hours Employee 3 will work per week.",
+    "rect": [
+      380.1653137207031,
+      510.05572509765625,
+      424.0625,
+      524.8272094726562
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Employee 4",
+    "type": "text",
+    "description": "Number of hours Employee 4 will work per week.",
+    "rect": [
+      515.052001953125,
+      510.05572509765625,
+      564.3501586914062,
+      524.8272094726562
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Do you plan to operate a Compact Mobile Food Operation (CMFO) in combination with the MEHKO?",
+    "type": "checkbox",
+    "description": "Checkbox to indicate if the applicant plans to operate a CMFO in addition to the MEHKO.",
+    "rect": null,
+    "page": null,
+    "match_status": "unmatched"
+  },
+  {
+    "label": "Number of Carts",
+    "type": "checkbox",
+    "description": "CheckBox to select how many carts (One or Two) will be used in CMFO.",
+    "rect": [
+      148.5515899658203,
+      456.31298828125,
+      197.8496551513672,
+      471.0845031738281
+    ],
+    "page": 1,
+    "match_status": "matched"
+  },
+  {
+    "label": "Initials",
+    "type": "initials",
+    "description": "Initials of the owner/operator confirming the statement regarding the need of an additional permit for CMFO.",
+    "rect": null,
+    "page": null,
+    "match_status": "unmatched"
+  }
+]
