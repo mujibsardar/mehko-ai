@@ -1,0 +1,869 @@
+{
+  "los_angeles_mehko/MEHKO_SOP-English.pdf": [
+    {
+      "name": "Name of Business Doing Business As",
+      "label": "DBA Name",
+      "description": "Enter the legal name under which your business operates."
+    },
+    {
+      "name": "Initials",
+      "label": "Applicant Initials",
+      "description": "Provide your initials to confirm your understanding of the conditions."
+    },
+    {
+      "name": "Number of Employees",
+      "label": "Total Employees",
+      "description": "Indicate how many employees will be working for you."
+    },
+    {
+      "name": "Employee 1",
+      "label": "Employee 1 Hours",
+      "description": "State the number of hours employee 1 will work per week."
+    },
+    {
+      "name": "Employee 2",
+      "label": "Employee 2 Hours",
+      "description": "State the number of hours employee 2 will work per week."
+    },
+    {
+      "name": "Employee 3",
+      "label": "Employee 3 Hours",
+      "description": "State the number of hours employee 3 will work per week."
+    },
+    {
+      "name": "Employee 4",
+      "label": "Employee 4 Hours",
+      "description": "State the number of hours employee 4 will work per week."
+    },
+    {
+      "name": "Initials_2",
+      "label": "Initials Page 2",
+      "description": "Provide your initials on page 2 to verify the provided information."
+    },
+    {
+      "name": "Initials_3",
+      "label": "Initials Page 3",
+      "description": "Provide your initials on page 3 as acknowledgment of the form details."
+    },
+    {
+      "name": "Initials_4",
+      "label": "Initials Page 4",
+      "description": "Provide your initials on page 4 as a part of the application requirement."
+    },
+    {
+      "name": "Initials_5",
+      "label": "Applicant Initials - Page 1",
+      "description": "Provide your initials on the first page to confirm your information."
+    },
+    {
+      "name": "Initials_6",
+      "label": "Applicant Initials - Page 2",
+      "description": "Enter your initials on the second page as required."
+    },
+    {
+      "name": "Initials_7",
+      "label": "Applicant Initials - Page 3",
+      "description": "Please initial on the third page to verify the details provided."
+    },
+    {
+      "name": "Initials_8",
+      "label": "Applicant Initials - Page 4",
+      "description": "Initial the fourth page to acknowledge the information."
+    },
+    {
+      "name": "How will the number of meals served per day and per week be tracked",
+      "label": "Meal Tracking Method",
+      "description": "Specify which method you will use to track the number of meals served daily and weekly."
+    },
+    {
+      "name": "Initials_9",
+      "label": "Applicant Initials - Page 5",
+      "description": "Enter your initials on the fifth page for confirmation purposes."
+    },
+    {
+      "name": "Initials_10",
+      "label": "Applicant Initials - Page 6",
+      "description": "Initial on the sixth page as part of the verification process."
+    },
+    {
+      "name": "Initials_11",
+      "label": "Applicant Initials - Page 7",
+      "description": "Provide your initials on page seven to complete this section."
+    },
+    {
+      "name": "Platform ie Facebook Instagram etc 1",
+      "label": "Social Media Platform (First Entry)",
+      "description": "Indicate the first social media platform where your information will be shared."
+    },
+    {
+      "name": "Platform ie Facebook Instagram etc 2",
+      "label": "Social Media Platform (Second Entry)",
+      "description": "List the second social media platform where your details will be distributed."
+    },
+    {
+      "name": "Platform ie Facebook Instagram etc 3",
+      "label": "Social Media Platform",
+      "description": "Indicate the social media platforms your business uses, such as Facebook or Instagram."
+    },
+    {
+      "name": "Platform ie Facebook Instagram etc 4",
+      "label": "Social Media Platform",
+      "description": "Specify additional social media platforms your business is active on, if any."
+    },
+    {
+      "name": "Business Profile Name 1",
+      "label": "Business Name",
+      "description": "Enter the official registered name of your business."
+    },
+    {
+      "name": "Business Profile Name 2",
+      "label": "Alternate Business Name",
+      "description": "Provide any alternate or 'doing business as' (DBA) name your business operates under."
+    },
+    {
+      "name": "Business Profile Name 3",
+      "label": "Previous Business Name",
+      "description": "List any previous names your business has been registered under."
+    },
+    {
+      "name": "Business Profile Name 4",
+      "label": "Future Business Name",
+      "description": "If applicable, specify a future business name if a change is planned."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow1",
+      "label": "Menu Item 1",
+      "description": "Provide the name of the first menu item you offer, such as a burrito."
+    },
+    {
+      "name": "List of IngredientsRow1",
+      "label": "Ingredients for Item 1",
+      "description": "List the ingredients for the first menu item mentioned."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow2",
+      "label": "Menu Item 2",
+      "description": "Provide the name of the second menu item you offer, such as tamales."
+    },
+    {
+      "name": "List of IngredientsRow2",
+      "label": "Ingredients for Item 2",
+      "description": "List the ingredients for the second menu item mentioned."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow3",
+      "label": "Menu Items - Row 3",
+      "description": "Specify menu items such as burritos, tamales, eggrolls, etc. for row 3."
+    },
+    {
+      "name": "List of IngredientsRow3",
+      "label": "List of Ingredients - Row 3",
+      "description": "Provide the list of ingredients for the corresponding menu items in row 3."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow4",
+      "label": "Menu Items - Row 4",
+      "description": "Specify menu items such as burritos, tamales, eggrolls, etc. for row 4."
+    },
+    {
+      "name": "List of IngredientsRow4",
+      "label": "List of Ingredients - Row 4",
+      "description": "Provide the list of ingredients for the corresponding menu items in row 4."
+    },
+    {
+      "name": "LocationRoomRow1",
+      "label": "Location/Room - Row 1",
+      "description": "Identify the location or room for the storage of items in row 1."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow1",
+      "label": "Stored Items in Location - Row 1",
+      "description": "List the food, equipment, utensils, or linens stored in this location for row 1."
+    },
+    {
+      "name": "LocationRoomRow2",
+      "label": "Location/Room - Row 2",
+      "description": "Identify the location or room for the storage of items in row 2."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow2",
+      "label": "Stored Items in Location - Row 2",
+      "description": "List the food, equipment, utensils, or linens stored in this location for row 2."
+    },
+    {
+      "name": "LocationRoomRow3",
+      "label": "Location/Room - Row 3",
+      "description": "Identify the location or room for the storage of items in row 3."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow3",
+      "label": "Stored Items in Location - Row 3",
+      "description": "List the food, equipment, utensils, or linens stored in this location for row 3."
+    },
+    {
+      "name": "LocationRoomRow4",
+      "label": "Storage Location (Row 4)",
+      "description": "Indicate the specific location where items are stored in row 4."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow4",
+      "label": "Stored Items in Location (Row 4)",
+      "description": "List all food equipment, utensils, and linens stored in the location for row 4."
+    },
+    {
+      "name": "LocationRoomRow5",
+      "label": "Storage Location (Row 5)",
+      "description": "Indicate the specific location where items are stored in row 5."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow5",
+      "label": "Stored Items in Location (Row 5)",
+      "description": "List all food equipment, utensils, and linens stored in the location for row 5."
+    },
+    {
+      "name": "LocationRoomRow6",
+      "label": "Storage Location (Row 6)",
+      "description": "Indicate the specific location where items are stored in row 6."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow6",
+      "label": "Stored Items in Location (Row 6)",
+      "description": "List all food equipment, utensils, and linens stored in the location for row 6."
+    },
+    {
+      "name": "LocationRoomRow7",
+      "label": "Storage Location (Row 7)",
+      "description": "Indicate the specific location where items are stored in row 7."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow7",
+      "label": "Stored Items in Location (Row 7)",
+      "description": "List all food equipment, utensils, and linens stored in the location for row 7."
+    },
+    {
+      "name": "LocationRoomRow8",
+      "label": "Storage Location (Row 8)",
+      "description": "Indicate the specific location where items are stored in row 8."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow8",
+      "label": "Stored Items in Location (Row 8)",
+      "description": "List all food equipment, utensils, and linens stored in the location for row 8."
+    },
+    {
+      "name": "LocationRoomRow9",
+      "label": "Location of Room Row 9",
+      "description": "Please specify the location for room row 9 where items are stored."
+    },
+    {
+      "name": "List the food equipment utensils or linens that are stored in this locationRow9",
+      "label": "Stored Items in Room Row 9",
+      "description": "List the food-related equipment, utensils, and linens stored in room row 9."
+    },
+    {
+      "name": "Initials_12",
+      "label": "Initials Section 12",
+      "description": "Provide your initials for section 12 of the form."
+    },
+    {
+      "name": "If yes who will deliver the food",
+      "label": "Food Delivery Person",
+      "description": "Indicate who will be delivering the food if delivery is part of the service."
+    },
+    {
+      "name": "How will food be transported",
+      "label": "Mode of Food Transportation",
+      "description": "Describe how the food will be transported to ensure safety and quality."
+    },
+    {
+      "name": "Initials_13",
+      "label": "Initials Section 13",
+      "description": "Provide your initials for section 13 of the form."
+    },
+    {
+      "name": "Distance",
+      "label": "Maximum Delivery Distance",
+      "description": "Enter the maximum geographical distance in miles that the delivery service will cover."
+    },
+    {
+      "name": "Time",
+      "label": "Maximum Delivery Time",
+      "description": "Specify the maximum time in minutes that food will be in transit during delivery."
+    },
+    {
+      "name": "Initials_14",
+      "label": "Initials Section 14",
+      "description": "Provide your initials for section 14 of the form."
+    },
+    {
+      "name": "How will food be properly held hotcold during transportation if delivery time is over 30 minutes",
+      "label": "Food Temperature Control for Long Deliveries",
+      "description": "Explain the methods to maintain proper food temperature during transportation if delivery exceeds 30 minutes."
+    },
+    {
+      "name": "Describe how food will be packaged for transport",
+      "label": "Food Packaging Details",
+      "description": "Explain the methods used to ensure food remains at a safe temperature during transit."
+    },
+    {
+      "name": "Initials_15",
+      "label": "Initials for Acknowledgment",
+      "description": "Provide your initials to confirm understanding of the health permit requirements."
+    },
+    {
+      "name": "Initials_16",
+      "label": "Initials for Verification",
+      "description": "Enter your initials to verify the accuracy of the information provided."
+    },
+    {
+      "name": "Initials_17",
+      "label": "Initials for Confirmation",
+      "description": "Initial here to confirm your agreement with the operational terms."
+    },
+    {
+      "name": "Initials_18",
+      "label": "Health Division Initials",
+      "description": "Provide your initials as a record of reviewing the Environmental Health Division guidelines."
+    },
+    {
+      "name": "Initials_19",
+      "label": "Acknowledgment Initials",
+      "description": "Initial to acknowledge the requirement to submit requested attachments."
+    },
+    {
+      "name": "Initials_20",
+      "label": "Initials for Compliance",
+      "description": "Give your initials to indicate compliance with the submission process."
+    },
+    {
+      "name": "Initials_21",
+      "label": "Approval Initials",
+      "description": "Insert your initials to show agreement with the public health information provided."
+    },
+    {
+      "name": "Initials_22",
+      "label": "Consent Initials",
+      "description": "Initial to express your consent to the Environmental Health regulations."
+    },
+    {
+      "name": "Initials_23",
+      "label": "Document Initials",
+      "description": "Initial to indicate that you have reviewed and understood the document requirements."
+    },
+    {
+      "name": "Initials_24",
+      "label": "Your Initials",
+      "description": "Provide your initials to confirm the information on this form."
+    },
+    {
+      "name": "Initials_25",
+      "label": "Applicant Initials",
+      "description": "Enter your initials as they appear on your documentation."
+    },
+    {
+      "name": "Initials_26",
+      "label": "Initials for Verification",
+      "description": "Initial this section to verify the accuracy of the submitted information."
+    },
+    {
+      "name": "Initials_27",
+      "label": "Confirmation Initials",
+      "description": "Write your initials here to confirm your understanding of the form contents."
+    },
+    {
+      "name": "Initials_28",
+      "label": "Form Initials",
+      "description": "Initial here to indicate you have filled out the form correctly."
+    },
+    {
+      "name": "Initials_29",
+      "label": "Submission Initials",
+      "description": "Provide your initials as a signature for the form submission."
+    },
+    {
+      "name": "Initials_30",
+      "label": "Document Initials",
+      "description": "Enter your initials to acknowledge the information on this document."
+    },
+    {
+      "name": "Initials_31",
+      "label": "Initials for Agreement",
+      "description": "Initial to agree to the terms outlined in this document."
+    },
+    {
+      "name": "Initials_32",
+      "label": "Approval Initials",
+      "description": "Input your initials to approve the details provided in this form."
+    },
+    {
+      "name": "Initials_33",
+      "label": "Consent Initials",
+      "description": "By entering your initials, you consent to the processing of your information."
+    },
+    {
+      "name": "Initials_34",
+      "label": "Initials for Form Submission",
+      "description": "Enter your initials as a confirmation for submitting the Environmental Health Division form."
+    },
+    {
+      "name": "Initials_35",
+      "label": "Initials Confirmation",
+      "description": "Provide your initials here to confirm the accuracy of the information on the form."
+    },
+    {
+      "name": "Initials_36",
+      "label": "Initials for Information Verification",
+      "description": "Initial here to verify that all information you have provided is complete and accurate."
+    },
+    {
+      "name": "Initials_37",
+      "label": "Initials for Record Keeping",
+      "description": "Input your initials to maintain a record of your form completion with the Environmental Health Division."
+    },
+    {
+      "name": "Initials_38",
+      "label": "Initials for Documentation",
+      "description": "Use your initials here to document your review and submission of this form to the Department of Public Health."
+    },
+    {
+      "name": "Initials_41",
+      "label": "Initials for Compliance",
+      "description": "Initial here to demonstrate your compliance with the form requirements set by the Environmental Health Division."
+    },
+    {
+      "name": "Other_2",
+      "label": "Other Information",
+      "description": "Specify any other relevant information or details that may not be covered in the standard form fields."
+    },
+    {
+      "name": "How will the sanitizer concentration be tested",
+      "label": "Sanitizer Concentration Test Method",
+      "description": "Describe the method you will use to test the concentration of the sanitizer."
+    },
+    {
+      "name": "Initials_42",
+      "label": "Initials for Authorization",
+      "description": "Enter your initials to authorize and confirm the submission of the Environmental Health Division form."
+    },
+    {
+      "name": "Describe the cleaning sanitizing and drying process to be used",
+      "label": "Cleaning, Sanitizing and Drying Process",
+      "description": "Give a detailed description of the process for cleaning, sanitizing, and drying equipment used."
+    },
+    {
+      "name": "Initials_43",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Initials_44",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Initials_45",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Initials_46",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Initials_47",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Where and how will garbage be stored on your property until pickup Additional waste bins may be required to ensure proper disposal",
+      "label": "Garbage Storage and Disposal",
+      "description": "Describe where and how you will store garbage on your property before pickup."
+    },
+    {
+      "name": "How often will garbage be picked up from property",
+      "label": "Garbage Pickup Frequency",
+      "description": "Specify the frequency of garbage collection from your property."
+    },
+    {
+      "name": "Initials_48",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "How will you dispose of fats oils and greases generated by your MEHKO",
+      "label": "Disposal of Fats, Oils, and Greases",
+      "description": "Explain your method of disposing fats, oils, and greases from your microenterprise home kitchen operation (MEHKO)."
+    },
+    {
+      "name": "Initials_49",
+      "label": "Initials",
+      "description": "Enter your initials to confirm the provided information."
+    },
+    {
+      "name": "Initials_50",
+      "label": "Applicant Initials",
+      "description": "Please initialize here to confirm your information is accurate."
+    },
+    {
+      "name": "Signature",
+      "label": "Signature",
+      "description": "Sign here to validate this document."
+    },
+    {
+      "name": "Date",
+      "label": "Date Signed",
+      "description": "Enter the date you signed the document."
+    },
+    {
+      "name": "Print Name",
+      "label": "Printed Name",
+      "description": "Print your full name as it appears in official documents."
+    },
+    {
+      "name": "Title",
+      "label": "Title/Position",
+      "description": "Write your job title or position in the organization."
+    },
+    {
+      "name": "This agreement has been approved by",
+      "label": "Approval Authority",
+      "description": "The official that approved this agreement."
+    },
+    {
+      "name": "Date_2",
+      "label": "Approval Date",
+      "description": "The date when the agreement was approved."
+    },
+    {
+      "name": "No skip the operation",
+      "label": "Operation Skipped",
+      "description": "Check if the operation is to be skipped."
+    },
+    {
+      "name": "Yes indicate how many carts",
+      "label": "Number of Carts",
+      "description": "Indicate how many food carts you are operating."
+    },
+    {
+      "name": "One cart",
+      "label": "Single Cart Operation",
+      "description": "Check if operating only one food cart."
+    },
+    {
+      "name": "Two carts",
+      "label": "Cart Quantity",
+      "description": "Indicate the number of carts you will use for your operation."
+    },
+    {
+      "name": "Log",
+      "label": "Meal Tracking - Log",
+      "description": "Select this option if you will track meals served using a log."
+    },
+    {
+      "name": "Receipts",
+      "label": "Meal Tracking - Receipts",
+      "description": "Choose this method if you will track daily and weekly meals with receipts."
+    },
+    {
+      "name": "Phone app",
+      "label": "Meal Tracking - Phone App",
+      "description": "Use this option to track meals with a phone application."
+    },
+    {
+      "name": "Other (specify)",
+      "label": "Meal Tracking - Other",
+      "description": "Specify an alternative meal tracking method if not listed above."
+    },
+    {
+      "name": "Website",
+      "label": "Food Cart Website",
+      "description": "Provide the website address for your Compact Mobile Food Operation."
+    },
+    {
+      "name": "Social Media",
+      "label": "Social Media Advertising",
+      "description": "Indicate the social media platforms where you will advertise your food items."
+    },
+    {
+      "name": "website address",
+      "label": "Business Website Address",
+      "description": "List the web address where customers can learn more about your food products."
+    },
+    {
+      "name": "Internet Intermediary",
+      "label": "Internet Intermediary Advertising",
+      "description": "Identify if you will use an online platform or app to advertise your food."
+    },
+    {
+      "name": "Other - please_specify",
+      "label": "Other Method of Advertisement",
+      "description": "Describe any additional advertising methods you plan to use."
+    },
+    {
+      "name": "web add or mobile app",
+      "label": "Type of Profile",
+      "description": "Select whether the profile is for a web address or a mobile application."
+    },
+    {
+      "name": "please_specify",
+      "label": "Please Specify",
+      "description": "Provide additional information as requested."
+    },
+    {
+      "name": "NON PHF ONLY",
+      "label": "Non-Potentially Hazardous Food Only",
+      "description": "Check this box if your submission only includes non-potentially hazardous food items."
+    },
+    {
+      "name": "PHF",
+      "label": "Potentially Hazardous Food",
+      "description": "Check this box if your submission includes potentially hazardous food items."
+    },
+    {
+      "name": "Milk",
+      "label": "Milk Allergen",
+      "description": "Check if milk is an allergen in any of the food items."
+    },
+    {
+      "name": "Eggs",
+      "label": "Egg Allergen",
+      "description": "Check if eggs are an allergen in any of the food items."
+    },
+    {
+      "name": "Fish",
+      "label": "Fish Allergen",
+      "description": "Check if fish is an allergen in any of the food items."
+    },
+    {
+      "name": "Crustacean Shellfish",
+      "label": "Shellfish Allergen",
+      "description": "Check if crustacean shellfish are an allergen in any of the food items."
+    },
+    {
+      "name": "Tree Nuts",
+      "label": "Tree Nut Allergen",
+      "description": "Check if tree nuts are an allergen in any of the food items."
+    },
+    {
+      "name": "Wheat",
+      "label": "Wheat Allergen",
+      "description": "Check if wheat is an allergen in any of the food items."
+    },
+    {
+      "name": "Peanut",
+      "label": "Peanut Allergy",
+      "description": "Select if peanut is a potential allergen in your food items."
+    },
+    {
+      "name": "Soybean",
+      "label": "Soybean Allergy",
+      "description": "Mark if soybean is an allergen in any of the menu items."
+    },
+    {
+      "name": "Sesame",
+      "label": "Sesame Allergy",
+      "description": "Check this box if sesame is a known allergen in your dishes."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow5",
+      "label": "Menu Items",
+      "description": "Enter the names of the menu items that you offer, such as burritos, tamales, eggrolls, etc."
+    },
+    {
+      "name": "List of IngredientsRow5",
+      "label": "Ingredients List",
+      "description": "Provide a detailed list of ingredients for your menu items."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow6",
+      "label": "Menu Items",
+      "description": "Enter additional names of the menu items that you offer, if applicable."
+    },
+    {
+      "name": "List of IngredientsRow6",
+      "label": "Ingredients List",
+      "description": "List out the ingredients used in creating your additional menu items."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow7",
+      "label": "Menu Items",
+      "description": "Add further menu items you serve to this section."
+    },
+    {
+      "name": "List of IngredientsRow7",
+      "label": "Ingredients List",
+      "description": "Detail the ingredients for the menu items listed in the previous section."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow8",
+      "label": "Menu Items Continued",
+      "description": "Continue to add any remaining menu items your establishment serves."
+    },
+    {
+      "name": "List of IngredientsRow8",
+      "label": "Ingredients Details (Row 8)",
+      "description": "Provide a detailed list of ingredients for the menu item in row 8."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow9",
+      "label": "Menu Items (Row 9)",
+      "description": "Specify the menu items such as burritos, tamales, eggrolls, etc., for row 9."
+    },
+    {
+      "name": "List of IngredientsRow9",
+      "label": "Ingredients Details (Row 9)",
+      "description": "Provide a detailed list of ingredients for the menu item in row 9."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow10",
+      "label": "Menu Items (Row 10)",
+      "description": "Specify the menu items such as burritos, tamales, eggrolls, etc., for row 10."
+    },
+    {
+      "name": "List of IngredientsRow10",
+      "label": "Ingredients Details (Row 10)",
+      "description": "Provide a detailed list of ingredients for the menu item in row 10."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow11",
+      "label": "Menu Items (Row 11)",
+      "description": "Specify the menu items such as burritos, tamales, eggrolls, etc., for row 11."
+    },
+    {
+      "name": "List of IngredientsRow11",
+      "label": "Ingredients Details (Row 11)",
+      "description": "Provide a detailed list of ingredients for the menu item in row 11."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow12",
+      "label": "Menu Items (Row 12)",
+      "description": "Specify the menu items such as burritos, tamales, eggrolls, etc., for row 12."
+    },
+    {
+      "name": "Menu Items Burrito Tamales Eggrolls etcRow13",
+      "label": "Menu Items (Row 13)",
+      "description": "Specify the menu items such as burritos, tamales, eggrolls, etc., for row 13."
+    },
+    {
+      "name": "List of IngredientsRow12",
+      "label": "Ingredients Details (Row 12)",
+      "description": "Provide a detailed list of ingredients for the menu item in row 12."
+    },
+    {
+      "name": "List of IngredientsRow13",
+      "label": "List of Ingredients",
+      "description": "Please provide the list of ingredients used in your kitchen."
+    },
+    {
+      "name": "Dining room",
+      "label": "Dining Room",
+      "description": "Select this option if food will be served in the dining room."
+    },
+    {
+      "name": "Kitchen table",
+      "label": "Kitchen Table",
+      "description": "Select this option if food will be served at the kitchen table."
+    },
+    {
+      "name": "Backyard",
+      "label": "Backyard",
+      "description": "Select this option if food will be served in the backyard."
+    },
+    {
+      "name": "Other location",
+      "label": "Other Location",
+      "description": "Specify other locations where food will be served."
+    },
+    {
+      "name": "Yes pick-up",
+      "label": "Food Pickup Available",
+      "description": "Select 'Yes' if customers can pick up food."
+    },
+    {
+      "name": "No pick-up",
+      "label": "No Food Pickup",
+      "description": "Select 'No' if food pickup is not available."
+    },
+    {
+      "name": "Patio",
+      "label": "Patio",
+      "description": "Select this option if food will be served on the patio."
+    },
+    {
+      "name": "Not served on site",
+      "label": "Not Served On-site",
+      "description": "Select this option if the food will not be served on the premises."
+    },
+    {
+      "name": "Other location that will serve food",
+      "label": "Specify Other Service Location",
+      "description": "Specify any other locations where food will be served if not listed."
+    },
+    {
+      "name": "Yes deliver food",
+      "label": "Food Delivery Confirmation",
+      "description": "Check this option if your establishment delivers food."
+    },
+    {
+      "name": "No will not deliver food",
+      "label": "No Food Delivery",
+      "description": "Select this if your establishment does not offer food delivery services."
+    },
+    {
+      "name": "Initials_39",
+      "label": "Initials - 39",
+      "description": "Provide your initials here to confirm the information on page 39."
+    },
+    {
+      "name": "Initials_40",
+      "label": "Initials - 40",
+      "description": "Provide your initials here to confirm the information on page 40."
+    },
+    {
+      "name": "1 or 2 compartment sink",
+      "label": "1-2 Compartment Sink",
+      "description": "Check if you use a 1 or 2 compartment sink for warewashing."
+    },
+    {
+      "name": "Dishwasher",
+      "label": "Dishwasher Use",
+      "description": "Select this option if your facility uses a dishwasher for sanitization."
+    },
+    {
+      "name": "Chlorine 100ppm",
+      "label": "Chlorine Sanitizer - 100 ppm",
+      "description": "Indicate if you use 100 ppm chlorine solution for sanitizing."
+    },
+    {
+      "name": "Quaternary ammonium",
+      "label": "Quaternary Ammonium Sanitizer",
+      "description": "Check if your establishment uses quaternary ammonium as a sanitizer."
+    },
+    {
+      "name": "other sanitizer",
+      "label": "Other Sanitizer",
+      "description": "Specify if you use any other type of sanitizer not listed."
+    },
+    {
+      "name": "Public water system",
+      "label": "Public Water System Source",
+      "description": "Confirm if the potable water source is from a public water system."
+    },
+    {
+      "name": "Private well",
+      "label": "Private Well Water Source",
+      "description": "Confirm your private well as the potable water source and provide water quality testing results."
+    },
+    {
+      "name": "public sewer system",
+      "label": "Public Sewer System",
+      "description": "Select if your wastewater will be disposed of via a public sewer system."
+    },
+    {
+      "name": "private septic system",
+      "label": "Private Septic System",
+      "description": "Indicate if you will use a private septic system and ensure it is sized correctly for the anticipated usage."
+    }
+  ]
+}

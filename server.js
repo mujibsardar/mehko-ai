@@ -1,22 +1,17 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import { PDFDocument } from "pdf-lib";
 import fs from "fs";
 import path from "path";
 
-// Ensure worker is bundled correctly
-import {
-  getDocument,
-  GlobalWorkerOptions,
-  setVerbosityLevel,
-  VerbosityLevel,
-} from "pdfjs-dist";
+import { PDFDocument } from "pdf-lib";
+import pkg from "pdfjs-dist";
+const { getDocument, GlobalWorkerOptions } = pkg;
 import { createRequire } from "module";
-setVerbosityLevel(VerbosityLevel.ERROR); // Only show serious errors
 const require = createRequire(import.meta.url);
+
 GlobalWorkerOptions.workerSrc = require.resolve(
-  "pdfjs-dist/build/pdf.worker.mjs"
+  "pdfjs-dist/build/pdf.worker.js"
 );
 
 import OpenAI from "openai";
@@ -136,114 +131,22 @@ app.get("/api/form-fields", async (req, res) => {
     return res.status(400).json({ error: "Missing applicationId or formName" });
   }
 
-  const cacheKey = `${applicationId}/${formName}`;
-  const cache = loadFieldCache();
-  if (cache[cacheKey]) {
-    console.log(`Cache hit for ${cacheKey}`);
-    return res.json({ fields: cache[cacheKey] });
-  }
+  const jsonPath = path.resolve(
+    "python",
+    applicationId,
+    formName.replace(".pdf", ".json")
+  );
 
-  const pdfPath = path.resolve("src/data/forms", applicationId, formName);
-  if (!fs.existsSync(pdfPath)) {
-    return res.status(404).json({ error: "PDF not found" });
+  if (!fs.existsSync(jsonPath)) {
+    return res.status(404).json({ error: "Form JSON not found" });
   }
 
   try {
-    const pdf = await getDocument({
-      data: new Uint8Array(fs.readFileSync(pdfPath)),
-    }).promise;
-
-    const pageTexts = [];
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      const text = content.items.map((item) => item.str).join(" ");
-      pageTexts.push(text);
-    }
-
-    // Load raw field names with pdf-lib
-    const { PDFDocument } = await import("pdf-lib");
-    const pdfBytes = fs.readFileSync(pdfPath);
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    const form = pdfDoc.getForm();
-    const rawFieldNames = form.getFields().map((f) => f.getName());
-
-    // Build context entries
-    const fieldContexts = rawFieldNames.map((fieldName) => ({
-      name: fieldName,
-      context: extractNearbyText(fieldName, pageTexts.join(" "), 200),
-    }));
-
-    // Split into batches of 10 to avoid token limits
-    const chunkSize = 10;
-    const fieldChunks = [];
-
-    for (let i = 0; i < fieldContexts.length; i += chunkSize) {
-      fieldChunks.push(fieldContexts.slice(i, i + chunkSize));
-    }
-
-    let allFields = [];
-
-    for (const chunk of fieldChunks) {
-      const prompt = `
-          You are a form assistant. For each item below, generate:
-          - a short user-friendly "label"
-          - a short helpful "description" (1 sentence)
-
-          Only return raw valid JSON — no code block, no markdown, no explanation.
-
-          Return format:
-          [
-            { "name": "...", "label": "...", "description": "..." },
-            ...
-          ]
-
-          Items:
-          ${JSON.stringify(chunk, null, 2)}
-            `.trim();
-
-      try {
-        const response = await openai.chat.completions.create({
-          model: "gpt-4-1106-preview",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a helpful assistant that outputs only valid JSON. No markdown.",
-            },
-            { role: "user", content: prompt },
-          ],
-        });
-
-        const raw = response.choices[0].message.content;
-
-        function extractJsonFromMarkdown(text) {
-          const match = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
-          return match ? match[1] : text;
-        }
-
-        const clean = extractJsonFromMarkdown(raw);
-        const parsed = JSON.parse(clean);
-
-        if (Array.isArray(parsed)) {
-          allFields.push(...parsed);
-        } else {
-          console.warn("GPT returned non-array:", raw);
-        }
-      } catch (err) {
-        console.error("GPT chunk failed:", err);
-      }
-    }
-
-    // ✅ Save + respond
-    cache[cacheKey] = allFields;
-    saveFieldCache(cache);
-
-    res.json({ fields: allFields });
+    const mergedFields = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
+    return res.json({ fields: mergedFields });
   } catch (err) {
-    console.error("Form extraction failed:", err);
-    res.status(500).json({ error: "Failed to extract fields" });
+    console.error("Failed to load merged fields JSON:", err);
+    return res.status(500).json({ error: "Failed to load form fields" });
   }
 });
 
