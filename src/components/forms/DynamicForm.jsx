@@ -84,14 +84,10 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
 
       if (!res.ok) throw new Error("PDF generation failed");
 
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${formName.replace(".pdf", "")}-filled.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      // The response is JSON with { url }
+      const { url } = await res.json();
+      // Redirect the browser to download the file
+      window.location.href = url;
     } catch (err) {
       console.error("Error downloading PDF:", err);
       alert("Something went wrong generating the PDF.");
@@ -140,20 +136,22 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
         </span>
       </div>
 
-      {fieldNames.map((field) => (
-        <div key={field.name} className="dynamic-form-field">
-          <label>{field.label || field.name}</label>
-          <input
-            type="text"
-            name={field.name}
-            value={formData[field.name] || ""}
-            onChange={handleChange}
-          />
-          {field.description && (
-            <small className="field-description">{field.description}</small>
-          )}
-        </div>
-      ))}
+      {fieldNames.map((field, index) => {
+        return (
+          <div key={`${field.label}-${index}`} className="dynamic-form-field">
+            <label>{field.label || field.name}</label>
+            <input
+              type="text"
+              name={field.name}
+              value={formData[field.name] || ""}
+              onChange={handleChange}
+            />
+            {field.description && (
+              <small className="field-description">{field.description}</small>
+            )}
+          </div>
+        );
+      })}
 
       <div className="form-actions">
         <button type="button" onClick={handleReset}>

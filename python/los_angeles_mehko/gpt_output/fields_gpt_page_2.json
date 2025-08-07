@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Checkbox for MEHKO Initial Application Review Subsidy",
+    "type": "checkbox",
+    "description": "The checkbox to opt into applying for the MEHKO Initial Application Review Subsidy."
+  },
+  {
+    "label": "OWNER'S NAME",
+    "type": "text",
+    "description": "Input for the owner's full name, to certify the application under penalty of perjury."
+  },
+  {
+    "label": "OWNER'S SIGNATURE",
+    "type": "signature",
+    "description": "Space for the owner's signature to certify the information and agree to the terms."
+  },
+  {
+    "label": "DATE",
+    "type": "text",
+    "description": "Field for entering the date on which the owner signed the document."
+  }
+]

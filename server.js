@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import fs from "fs";
 import path from "path";
+import fetch from "node-fetch";
 
 import { PDFDocument } from "pdf-lib";
 import pkg from "pdfjs-dist";
@@ -151,33 +152,16 @@ app.get("/api/form-fields", async (req, res) => {
 });
 
 app.post("/api/fill-pdf", async (req, res) => {
-  const { applicationId, formName, formData } = req.body;
-  const filePath = path.resolve("src/data/forms", applicationId, formName);
-
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: "PDF form not found" });
-  }
-
   try {
-    const pdfBytes = fs.readFileSync(filePath);
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    const form = pdfDoc.getForm();
-
-    Object.entries(formData).forEach(([key, value]) => {
-      const field = form.getTextField(key);
-      if (field) field.setText(String(value));
+    const pyRes = await fetch("http://localhost:8000/fill-pdf", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(req.body),
     });
-
-    const filledPdfBytes = await pdfDoc.save();
-
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      "attachment; filename=filled-form.pdf"
-    );
-    res.send(Buffer.from(filledPdfBytes));
+    const data = await pyRes.json();
+    res.json(data);
   } catch (err) {
-    console.error("Error filling PDF:", err);
+    console.error("Error calling Python /fill-pdf:", err);
     res.status(500).json({ error: "Failed to fill PDF" });
   }
 });

@@ -1,0 +1,57 @@
+[
+  {
+    "label": "RECEIVED BY:",
+    "type": "text",
+    "description": "Field for entering the name of the person who received the application."
+  },
+  {
+    "label": "REVIEWED BY:",
+    "type": "text",
+    "description": "Field for entering the name of the person who reviewed the application."
+  },
+  {
+    "label": "PAYMENT DATE:",
+    "type": "text",
+    "description": "Field to enter the date when the payment was made."
+  },
+  {
+    "label": "INVOICE #:",
+    "type": "text",
+    "description": "Field for entering the invoice number associated with the application."
+  },
+  {
+    "label": "SR #:",
+    "type": "text",
+    "description": "Field to enter the service request number if applicable."
+  },
+  {
+    "label": "COMMENTS:",
+    "type": "text",
+    "description": "Field for entering any additional comments or notes by the receiver or reviewer."
+  },
+  {
+    "label": "PUBLIC HEALTH PERMIT",
+    "type": "label",
+    "description": "Section heading for public health permit details."
+  },
+  {
+    "label": "PHP APPROVED BY:",
+    "type": "text",
+    "description": "Field for the name of the person who approved the public health permit."
+  },
+  {
+    "label": "PHP APPROVED DATE:",
+    "type": "text",
+    "description": "Field for entering the date when the public health permit was approved."
+  },
+  {
+    "label": "PHP INVOICE #:",
+    "type": "text",
+    "description": "Field to enter the public health permit invoice number."
+  },
+  {
+    "label": "INVOICE DATE:",
+    "type": "text",
+    "description": "Field for entering the date on the corresponding invoice."
+  }
+]

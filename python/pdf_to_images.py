@@ -1,5 +1,6 @@
 from pdf2image import convert_from_path
 import os
+import argparse
 
 def pdf_to_images(pdf_path, output_folder="output_images", dpi=200):
     os.makedirs(output_folder, exist_ok=True)
@@ -13,7 +14,12 @@ def pdf_to_images(pdf_path, output_folder="output_images", dpi=200):
 
     return image_paths
 
-# Example usage:
-pdf_path = "/Users/avan/Desktop/Non-Teaching/Coding-Space/mehko-ai/src/data/forms/los_angeles_mehko/MEHKO_SOP-English.pdf"
-images = pdf_to_images(pdf_path)
-print("Saved image pages:", images)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Convert PDF to images (one PNG per page).")
+    parser.add_argument('--pdf', required=True, help='Path to input PDF')
+    parser.add_argument('--output_dir', required=True, help='Directory to save images')
+    parser.add_argument('--dpi', type=int, default=200, help='DPI for image quality (default 200)')
+    args = parser.parse_args()
+
+    images = pdf_to_images(args.pdf, output_folder=args.output_dir, dpi=args.dpi)
+    print("Saved image pages:", images)
