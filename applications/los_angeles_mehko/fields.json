@@ -1,0 +1,705 @@
+{
+  "widgets_labeled": [
+    {
+      "page": 0,
+      "rect": [
+        138.0,
+        197.03997802734375,
+        227.63999938964844,
+        225.84002685546875
+      ],
+      "name": "Date of Application",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        37.20000076293945,
+        261.719970703125,
+        574.9199829101562,
+        282.1199951171875
+      ],
+      "name": "BUSINESS NAME",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        37.20000076293945,
+        291.3599853515625,
+        282.7200012207031,
+        313.67999267578125
+      ],
+      "name": "BUSINESS ADDRESS",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        284.5199890136719,
+        291.3599853515625,
+        323.1600036621094,
+        313.67999267578125
+      ],
+      "name": "UNIT",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        324.9599914550781,
+        291.3599853515625,
+        516.719970703125,
+        313.67999267578125
+      ],
+      "name": "CITY",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        518.52001953125,
+        291.3599853515625,
+        574.9199829101562,
+        313.67999267578125
+      ],
+      "name": "ZIP CODE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        37.20000076293945,
+        322.9200134277344,
+        251.16000366210938,
+        344.760009765625
+      ],
+      "name": "OWNERS NAME",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        252.9600067138672,
+        322.9200134277344,
+        453.7200012207031,
+        344.760009765625
+      ],
+      "name": "EMAIL ADDRESS",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        455.5199890136719,
+        322.9200134277344,
+        574.9199829101562,
+        344.760009765625
+      ],
+      "name": "PHONE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        41.63999938964844,
+        383.8800048828125,
+        52.68000030517578,
+        391.20001220703125
+      ],
+      "name": "undefined",
+      "type": 2,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "Page 1 of 3",
+        "1",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        225.72000122070312,
+        383.8800048828125,
+        236.75999450683594,
+        391.20001220703125
+      ],
+      "name": "undefined_2",
+      "type": 2,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        37.20000076293945,
+        406.67999267578125,
+        251.16000366210938,
+        426.239990234375
+      ],
+      "name": "ADDRESS",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        252.9600067138672,
+        406.67999267578125,
+        296.1600036621094,
+        426.239990234375
+      ],
+      "name": "UNIT_2",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        297.9599914550781,
+        406.67999267578125,
+        476.1600036621094,
+        426.239990234375
+      ],
+      "name": "CITY_2",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        477.9599914550781,
+        406.67999267578125,
+        516.719970703125,
+        426.239990234375
+      ],
+      "name": "STATE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        518.52001953125,
+        406.67999267578125,
+        574.9199829101562,
+        426.239990234375
+      ],
+      "name": "ZIP",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        41.63999938964844,
+        492.7200012207031,
+        52.20000076293945,
+        499.79998779296875
+      ],
+      "name": "toggle_3",
+      "type": 2,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "Page 1 of 3",
+        "1",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        41.63999938964844,
+        525.47998046875,
+        52.20000076293945,
+        532.5599975585938
+      ],
+      "name": "Site evaluation fee for changes made to the menu or equipment after initial approval hourly",
+      "type": 2,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "Page 1 of 3",
+        "1",
+        "Page"
+      ]
+    },
+    {
+      "page": 0,
+      "rect": [
+        518.4000244140625,
+        540.47998046875,
+        575.0399780273438,
+        557.760009765625
+      ],
+      "name": "167Total Due",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "1",
+        "Page 1 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 1,
+      "rect": [
+        41.63999938964844,
+        348.1199951171875,
+        52.20000076293945,
+        355.20001220703125
+      ],
+      "name": "I would like to apply for the MEHKO Initial Application Review Subsidy",
+      "type": 2,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "Page 2 of 3",
+        "2",
+        "Page"
+      ]
+    },
+    {
+      "page": 1,
+      "rect": [
+        49.31999969482422,
+        357.239990234375,
+        201.0,
+        382.32000732421875
+      ],
+      "name": "first and last name declare under penalty of perjury under the laws of the State of",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "2",
+        "Page 2 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 1,
+      "rect": [
+        37.31999969482422,
+        703.5599975585938,
+        242.27999877929688,
+        726.719970703125
+      ],
+      "name": "OWNERS NAME_2",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "2",
+        "Page 2 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 1,
+      "rect": [
+        244.32000732421875,
+        703.5599975585938,
+        449.2799987792969,
+        726.719970703125
+      ],
+      "name": "OWNERS SIGNATURE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "2",
+        "Page 2 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 1,
+      "rect": [
+        451.32000732421875,
+        703.5599975585938,
+        574.7999877929688,
+        726.719970703125
+      ],
+      "name": "DATE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "2",
+        "Page 2 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        85.55999755859375,
+        457.32000732421875,
+        174.60000610351562,
+        476.2799987792969
+      ],
+      "name": "RECEIVED BY",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        227.75999450683594,
+        457.32000732421875,
+        314.0400085449219,
+        476.2799987792969
+      ],
+      "name": "REVIEWED BY",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        373.20001220703125,
+        457.32000732421875,
+        449.1600036621094,
+        476.2799987792969
+      ],
+      "name": "PAYMENT DATE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        490.67999267578125,
+        457.32000732421875,
+        574.9199829101562,
+        476.2799987792969
+      ],
+      "name": "INVOICE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        84.0,
+        477.4800109863281,
+        449.2799987792969,
+        495.6000061035156
+      ],
+      "name": "COMMENTS",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        471.239990234375,
+        477.4800109863281,
+        575.0399780273438,
+        495.6000061035156
+      ],
+      "name": "SR",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        105.23999786376953,
+        511.20001220703125,
+        174.72000122070312,
+        529.3200073242188
+      ],
+      "name": "PHP APPROVED BY",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        253.67999267578125,
+        511.20001220703125,
+        314.1600036621094,
+        529.3200073242188
+      ],
+      "name": "PHP APPROVED DATE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        370.9200134277344,
+        511.20001220703125,
+        449.2799987792969,
+        529.3200073242188
+      ],
+      "name": "PHP INVOICE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        503.6400146484375,
+        511.20001220703125,
+        575.0399780273438,
+        529.3200073242188
+      ],
+      "name": "INVOICE DATE",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    },
+    {
+      "page": 2,
+      "rect": [
+        84.0,
+        530.52001953125,
+        575.0399780273438,
+        548.6400146484375
+      ],
+      "name": "COMMENTS_2",
+      "type": 7,
+      "value": "",
+      "label": "3",
+      "label_candidates": [
+        "3",
+        "of",
+        "3",
+        "Page 3 of 3",
+        "Page"
+      ]
+    }
+  ],
+  "mode": "image"
+}
