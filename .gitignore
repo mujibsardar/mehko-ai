@@ -1,3 +1,7 @@
+# Ignore Python virtual environments
+python/venv
+venv/
+
 # Logs
 logs
 *.log
