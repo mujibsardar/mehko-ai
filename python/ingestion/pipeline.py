@@ -7,40 +7,25 @@ from . import mapping
 class ExtractionError(Exception): pass
 
 def extract_fields_pipeline(pdf_path: str) -> Dict[str, Any]:
-    """
-    1) Try Textract on original PDF (may fail for some weird PDFs).
-    2) If it fails with UnsupportedDocumentException, rasterize pages to PNG and analyze each image.
-    3) If PDF has widgets (AcroForms), use them as field rects; else you can infer later.
-    Returns:
-      {
-        "widgets": [{page,rect,name,type,value}],
-        "textract": { "pages": [ {"blocks":[...]} ] }
-      }
-    """
     pdf_bytes = pdfu.pdf_read(pdf_path)
-
-    # Step 0: widgets, if any (cheap and helpful even if Textract fails)
     widgets = pdfu.list_widgets(pdf_path)
 
-    # Step 1: try Textract on PDF
+    if len(pdf_bytes) > 4_500_000:
+        imgs = pdfu.pdf_render_pages_to_png(pdf_path, dpi=300)
+        pages = [{"blocks": tx.analyze_image_bytes(b).get("Blocks", [])} for b in imgs]
+        return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image"}
+
     try:
         r = tx.analyze_pdf_bytes(pdf_bytes)
         blocks = r.get("Blocks", [])
         if blocks:
             return {"widgets": widgets, "textract": {"pages":[{"blocks":blocks}]}, "mode":"pdf"}
-    except Exception as e:
-        msg = str(e)
+    except Exception:
+        pass
 
-    # Step 2: rasterize → Textract per image
     imgs = pdfu.pdf_render_pages_to_png(pdf_path, dpi=300)
-    pages = []
-    for b in imgs:
-        rr = tx.analyze_image_bytes(b)
-        pages.append({"blocks": rr.get("Blocks", [])})
-
-    if not pages:
-        raise ExtractionError("Textract returned no content for any page.")
-    return {"widgets": widgets, "textract": {"pages": pages}, "mode":"image"}
+    pages = [{"blocks": tx.analyze_image_bytes(b).get("Blocks", [])} for b in imgs]
+    return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image"}
 
 def map_labels_to_widgets(extraction: Dict[str,Any]) -> List[Dict[str,Any]]:
     """
