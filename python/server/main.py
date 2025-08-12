@@ -5,6 +5,7 @@ from ingestion.pipeline import extract_fields_pipeline, map_labels_to_widgets, f
 from ingestion import mapping
 from fastapi.responses import Response
 from ingestion.pdf_utils import pdf_preview_with_highlight
+import tempfile
 
 app = FastAPI()
 
@@ -41,25 +42,52 @@ async def extract_fields_raw(file: UploadFile = File(...)):
 
 @app.post("/extract-fields")
 async def extract_fields(file: UploadFile = File(...)):
-    in_path = os.path.join(TMP, f"{uuid.uuid4()}_{file.filename}")
-    with open(in_path, "wb") as f:
-        f.write(await file.read())
-    data = extract_fields_pipeline(in_path)
-    labeled = map_labels_to_widgets(data)  # existing
-    # NEW: post-process -> clean names + sections + dedupe
-    pages = data.get("textract", {}).get("pages", [])
-    cleaned = mapping.postprocess_fields(pages, labeled)
-    return JSONResponse({"fields": cleaned, "mode": data.get("mode")})
+    # Save upload to temp file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+        tmp.write(await file.read())
+        tmp_path = tmp.name
+
+    try:
+        # Run Textract + postprocessing
+        extraction = extract_fields_pipeline(tmp_path)
+        labeled_fields = map_labels_to_widgets(extraction)
+
+        return JSONResponse(
+            content={
+                "fields": labeled_fields,
+                "mode": extraction.get("mode", "pdf")
+            }
+        )
+    finally:
+        # Clean up temp file
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
 
 @app.post("/fill")
-async def fill(file: UploadFile = File(...),
-               answers_json: str = Form(...),
-               fields_json: str = Form(...)):
-    in_path = os.path.join(TMP, f"{uuid.uuid4()}_{file.filename}")
-    with open(in_path, "wb") as f:
-        f.write(await file.read())
+async def fill(file: UploadFile = File(...), answers_json: str = "", fields_json: str = ""):
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_in:
+        tmp_in.write(await file.read())
+        in_path = tmp_in.name
+
+    out_path = in_path.replace(".pdf", "_filled.pdf")
+
+    import json
     answers = json.loads(answers_json)
     fields = json.loads(fields_json)
-    out_path = in_path.replace(".pdf", "_filled.pdf")
-    fill_fields_and_save(in_path, answers, fields, out_path)
-    return FileResponse(out_path, filename=os.path.basename(out_path), media_type="application/pdf")
+
+    try:
+        fill_fields_and_save(in_path, answers, fields, out_path)
+        with open(out_path, "rb") as f:
+            data = f.read()
+        return JSONResponse(content={"status": "ok", "filled_bytes": len(data)})
+    finally:
+        try:
+            os.unlink(in_path)
+        except OSError:
+            pass
+        try:
+            os.unlink(out_path)
+        except OSError:
+            pass

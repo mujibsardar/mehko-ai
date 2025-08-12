@@ -3,6 +3,7 @@ from typing import Dict, Any, List
 from . import textract_utils as tx
 from . import pdf_utils as pdfu
 from . import mapping
+from . import vision_refinement
 
 class ExtractionError(Exception): pass
 
@@ -13,38 +14,46 @@ def extract_fields_pipeline(pdf_path: str) -> Dict[str, Any]:
     if len(pdf_bytes) > 4_500_000:
         imgs = pdfu.pdf_render_pages_to_png(pdf_path, dpi=300)
         pages = [{"blocks": tx.analyze_image_bytes(b).get("Blocks", [])} for b in imgs]
-        return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image"}
+        return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image", "pdf_path": pdf_path}
 
     try:
         r = tx.analyze_pdf_bytes(pdf_bytes)
         blocks = r.get("Blocks", [])
         if blocks:
-            return {"widgets": widgets, "textract": {"pages":[{"blocks":blocks}]}, "mode":"pdf"}
+            return {
+                "widgets": widgets,
+                "textract": {"pages": [{"blocks": blocks}]},
+                "mode": "pdf",
+                "pdf_path": pdf_path,
+            }
     except Exception:
         pass
 
     imgs = pdfu.pdf_render_pages_to_png(pdf_path, dpi=300)
     pages = [{"blocks": tx.analyze_image_bytes(b).get("Blocks", [])} for b in imgs]
-    return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image"}
+    return {"widgets": widgets, "textract": {"pages": pages}, "mode": "image", "pdf_path": pdf_path}
 
 def map_labels_to_widgets(extraction: Dict[str,Any]) -> List[Dict[str,Any]]:
     """
-    Use Textract text to label widgets (if any).
+    Use Textract text to label widgets (if any), then refine with Vision (optional).
     """
     widgets = extraction.get("widgets", [])
     pages = extraction.get("textract", {}).get("pages", [])
     if not widgets:
-        return []  # Up to you: implement non-widget field detection later.
+        return []
 
-    # Flatten all blocks by page (Textract uses 1-based Page index)
-    all_blocks = []
-    for i, p in enumerate(pages, start=1):
-        for b in p.get("blocks", []):
-            if "Page" not in b:
-                b["Page"] = i
-            all_blocks.append(b)
+    # 1) Heuristic/postprocess pass (multiword join, colon preference, header filter)
+    labeled = mapping.postprocess_fields(pages, widgets)
 
-    labeled = mapping.attach_labels_to_fields(all_blocks, widgets)
+    # 2) Optional Vision refinement (USE_VISION=1)
+    pdf_path = extraction.get("pdf_path")
+    try:
+        if pdf_path:
+            labeled = vision_refinement.refine_labels_with_vision(pdf_path, labeled)
+    except Exception:
+        # Never block extraction on Vision errors
+        pass
+
     return labeled
 
 def fill_fields_and_save(pdf_path: str, answers: Dict[str, str], field_defs: List[Dict[str,Any]], out_path: str) -> str:
@@ -56,7 +65,7 @@ def fill_fields_and_save(pdf_path: str, answers: Dict[str, str], field_defs: Lis
     overlays = []
     for f in field_defs:
         fid = f.get("name") or f.get("id")
-        if not fid: 
+        if not fid:
             continue
         val = answers.get(fid)
         if val is None:
