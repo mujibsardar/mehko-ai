@@ -1,0 +1,21 @@
+{
+  "date_of_application": "08/12/2025",
+  "business_name": "MEHKO Bakery Co.",
+  "business_address": "123 Main St",
+  "unit": "A",
+  "city": "Los Angeles",
+  "zip": "90012",
+
+  "owner_name": "Jane Doe",
+  "email": "jane@example.com",
+  "phone": "555-123-4567",
+
+  "send_invoice_to_business_address": true,
+  "send_invoice_to_other": false,
+
+  "mailing_address": "123 Main St",
+  "mailing_unit": "A",
+  "mailing_city": "Los Angeles",
+  "mailing_state": "CA",
+  "mailing_zip": "90012"
+}

@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {"id":"date_of_application","page":0,"rect":[138.0,197.04,227.64,225.84],"type":"text"},
+    {"id":"business_name","page":0,"rect":[37.2,261.72,574.92,282.12],"type":"text"},
+    {"id":"business_address","page":0,"rect":[37.2,291.36,282.72,313.68],"type":"text"},
+    {"id":"unit","page":0,"rect":[284.52,291.36,323.16,313.68],"type":"text"},
+    {"id":"city","page":0,"rect":[324.96,291.36,516.72,313.68],"type":"text"},
+    {"id":"zip","page":0,"rect":[518.52,291.36,574.92,313.68],"type":"text"},
+
+    {"id":"owner_name","page":0,"rect":[37.2,322.92,251.16,344.76],"type":"text"},
+    {"id":"email","page":0,"rect":[252.96,322.92,453.72,344.76],"type":"text"},
+    {"id":"phone","page":0,"rect":[455.52,322.92,574.92,344.76],"type":"text"},
+
+    {"id":"send_invoice_to_business_address","page":0,"rect":[41.64,383.88,52.68,391.20],"type":"checkbox"},
+    {"id":"send_invoice_to_other","page":0,"rect":[225.72,383.88,236.76,391.20],"type":"checkbox"},
+
+    {"id":"mailing_address","page":0,"rect":[37.2,406.68,251.16,426.24],"type":"text"},
+    {"id":"mailing_unit","page":0,"rect":[252.96,406.68,296.16,426.24],"type":"text"},
+    {"id":"mailing_city","page":0,"rect":[297.96,406.68,476.16,426.24],"type":"text"},
+    {"id":"mailing_state","page":0,"rect":[477.96,406.68,516.72,426.24],"type":"text"},
+    {"id":"mailing_zip","page":0,"rect":[518.52,406.68,574.92,426.24],"type":"text"}
+  ]
+}
