@@ -1,0 +1,7 @@
+:root { color-scheme: light; }
+html,body,#root { background:#fff; color:#111; }
+label,span,h1,h2,h3,p { color:#111; }
+input,select,button {
+  background:#fff; color:#111; border:1px solid #ccc; border-radius:6px; padding:8px;
+}
+button { background:#f6f6f6; cursor:pointer; }

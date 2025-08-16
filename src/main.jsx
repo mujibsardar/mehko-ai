@@ -9,6 +9,7 @@ import { AuthProvider } from "./hooks/useAuth";
 
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
+import "./styles/overlay.css";
 
 console.log("main.jsx loaded");
 

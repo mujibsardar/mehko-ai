@@ -18,6 +18,10 @@ export default defineConfig({
         target: "http://localhost:3000", // or use local mock file
         rewrite: (path) => path.replace(/^\/api\/ai-chat/, ""),
       },
+      "/api":{ 
+        target:'http://127.0.0.1:8081', 
+        changeOrigin:true,
+      },
     },
   },
 });

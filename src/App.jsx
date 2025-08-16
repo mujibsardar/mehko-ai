@@ -11,6 +11,8 @@ import { doc, onSnapshot, collection } from "firebase/firestore";
 import { db } from "./firebase/firebase";
 import useAuth from "./hooks/useAuth"; // Add if not already present
 import Interview from "./components/overlay/Interview.jsx";
+import Mapper from "./components/overlay/Mapper.jsx";
+
 
 // import "./styles/app.scss";
 import DynamicForm from "./components/forms/DynamicForm";
