@@ -25,7 +25,7 @@ export default function DashboardApp() {
   const [currentStepId, setCurrentStepId] = useState(null);
   const [enrichedApplication, setEnrichedApplication] = useState(null);
 
-  // responsive: desktop uses left sidebar as single source of truth; mobile uses top tabs
+  // responsive tabs only for mobile (<1024px)
   const [isDesktop, setIsDesktop] = useState(
     typeof window !== "undefined"
       ? window.matchMedia("(min-width: 1024px)").matches
@@ -141,7 +141,7 @@ export default function DashboardApp() {
     setCurrentStepId(id);
   };
 
-  // compact sub-nav (MOBILE ONLY)
+  // MOBILE ONLY compact tabs to switch sections
   const SubNav = () => {
     if (!activeApplication || isDesktop) return null; // hide on desktop
     const tab = (key, label) => (
@@ -168,87 +168,6 @@ export default function DashboardApp() {
         {tab("comments", "Comments")}
       </div>
     );
-  };
-
-  // left list only inside Steps
-  const StepsList = () => {
-    if (activeSection !== "steps" || steps.length === 0) return null;
-    return (
-      <div style={{ display: "grid", gap: 6 }}>
-        {steps.map((s) => {
-          const selected = currentStepId === s._id;
-          const done = enrichedApplication?.completedStepIds?.includes(
-            s.id || s._id
-          );
-          return (
-            <button
-              key={s._id}
-              onClick={() => setCurrentStepId(s._id)}
-              style={{
-                textAlign: "left",
-                padding: "8px 10px",
-                borderRadius: 8,
-                border: "1px solid #ddd",
-                background: selected ? "#eef" : "#fff",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <span>{s.title}</span>
-              {done && (
-                <span style={{ color: "#2a7", fontWeight: 600 }}>✓</span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-    );
-  };
-
-  // render a single step
-  const StepContent = () => {
-    if (activeSection !== "steps") return null;
-    const step = steps.find((s) => s._id === currentStepId);
-    if (!step) return <div>Select a step to begin.</div>;
-
-    if (step.type === "form") {
-      return (
-        <DynamicForm
-          applicationId={activeApplication.id}
-          stepId={step.id || step._id}
-          formName={step.formName}
-        />
-      );
-    }
-    if (step.type === "info" || step.content) {
-      return <InfoStep step={step} applicationId={activeApplication.id} />;
-    }
-    if (step.type === "pdf") {
-      return (
-        <div style={{ display: "grid", gap: 8 }}>
-          <p>Fill and download the official form.</p>
-          <Link
-            to={`/interview/${step.appId || activeApplication.id}/${
-              step.formId || "page1"
-            }`}
-          >
-            <button
-              style={{
-                padding: "10px 14px",
-                border: "1px solid #ccc",
-                borderRadius: 8,
-                cursor: "pointer",
-                width: "fit-content",
-              }}
-            >
-              Open Form
-            </button>
-          </Link>
-        </div>
-      );
-    }
-    return <p>Unsupported step type.</p>;
   };
 
   // Breadcrumb + compact back button
@@ -317,6 +236,101 @@ export default function DashboardApp() {
     );
   };
 
+  // Progress header for steps (no duplicate list)
+  const StepHeader = () => {
+    if (activeSection !== "steps") return null;
+    const idx = steps.findIndex((s) => s._id === currentStepId);
+    if (idx === -1) return null;
+    const step = steps[idx];
+    const total = steps.length;
+    const pct = Math.round(((idx + 1) / Math.max(total, 1)) * 100);
+
+    return (
+      <div
+        style={{
+          display: "grid",
+          gap: 6,
+          border: "1px solid #eee",
+          borderRadius: 10,
+          padding: "10px 12px",
+          marginBottom: 12,
+          background: "#fff",
+          boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+        }}
+      >
+        <div style={{ fontSize: 14, color: "#666" }}>
+          Step {idx + 1} of {total}
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700 }}>{step.title}</div>
+        <div
+          style={{
+            height: 6,
+            background: "#f2f2f2",
+            borderRadius: 999,
+            overflow: "hidden",
+          }}
+          aria-valuenow={pct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          role="progressbar"
+        >
+          <div
+            style={{
+              width: `${pct}%`,
+              height: "100%",
+              background: "#5b9df9",
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  // render a single step
+  const StepContent = () => {
+    if (activeSection !== "steps") return null;
+    const step = steps.find((s) => s._id === currentStepId);
+    if (!step) return <div>Select a step to begin.</div>;
+
+    if (step.type === "form") {
+      return (
+        <DynamicForm
+          applicationId={activeApplication.id}
+          stepId={step.id || step._id}
+          formName={step.formName}
+        />
+      );
+    }
+    if (step.type === "info" || step.content) {
+      return <InfoStep step={step} applicationId={activeApplication.id} />;
+    }
+    if (step.type === "pdf") {
+      return (
+        <div style={{ display: "grid", gap: 8 }}>
+          <p>Fill and download the official form.</p>
+          <Link
+            to={`/interview/${step.appId || activeApplication.id}/${
+              step.formId || "page1"
+            }`}
+          >
+            <button
+              style={{
+                padding: "10px 14px",
+                border: "1px solid #ccc",
+                borderRadius: 8,
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              Open Form
+            </button>
+          </Link>
+        </div>
+      );
+    }
+    return <p>Unsupported step type.</p>;
+  };
+
   return (
     <>
       <Header />
@@ -342,7 +356,7 @@ export default function DashboardApp() {
             />
           ) : (
             <>
-              {/* MOBILE ONLY tabs to avoid duplicating the left nav on desktop */}
+              {/* MOBILE ONLY tabs; avoid duplicating left nav on desktop */}
               <SubNav />
 
               {activeSection === "overview" && (
@@ -370,15 +384,9 @@ export default function DashboardApp() {
               )}
 
               {activeSection === "steps" && (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: isDesktop ? "260px 1fr" : "1fr",
-                    gap: 16,
-                    alignItems: "start",
-                  }}
-                >
-                  {isDesktop && <StepsList />}
+                <div style={{ display: "grid", gap: 12 }}>
+                  {/* Progress header replaces duplicate list */}
+                  <StepHeader />
                   <div style={{ minHeight: 200 }}>
                     <StepContent />
                   </div>
