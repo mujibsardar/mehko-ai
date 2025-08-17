@@ -2,6 +2,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const API = "http://127.0.0.1:8081";
+const PREVIEW_DPI = 144;
+const pxToPt = (n) => n * (72 / PREVIEW_DPI); // 0.5 at 144dpi
+const rectPxToPt = (r) => [
+  pxToPt(r[0]),
+  pxToPt(r[1]),
+  pxToPt(r[2]),
+  pxToPt(r[3]),
+];
 
 export default function Mapper() {
   const { app, form } = useParams();
@@ -129,8 +137,17 @@ export default function Mapper() {
   };
 
   async function save() {
+    // keep UI in pixels; persist a points-converted copy
+    const overlayToSave = {
+      ...overlay,
+      fields: (overlay.fields || []).map((f) => ({
+        ...f,
+        rect: rectPxToPt(f.rect),
+      })),
+    };
     const fd = new FormData();
-    fd.append("overlay_json", JSON.stringify(overlay));
+    fd.append("overlay_json", JSON.stringify(overlayToSave));
+
     const r = await fetch(`${API}/apps/${app}/forms/${form}/template`, {
       method: "POST",
       body: fd,
