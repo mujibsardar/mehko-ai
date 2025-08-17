@@ -25,6 +25,21 @@ export default function DashboardApp() {
   const [currentStepId, setCurrentStepId] = useState(null);
   const [enrichedApplication, setEnrichedApplication] = useState(null);
 
+  // responsive: desktop uses left sidebar as single source of truth; mobile uses top tabs
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== "undefined"
+      ? window.matchMedia("(min-width: 1024px)").matches
+      : true
+  );
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener?.("change", handler);
+    setIsDesktop(mq.matches);
+    return () => mq.removeEventListener?.("change", handler);
+  }, []);
+
   // seed pinned apps
   useEffect(() => {
     if (!loading && pinnedApplications.length > 0) {
@@ -126,9 +141,9 @@ export default function DashboardApp() {
     setCurrentStepId(id);
   };
 
-  // compact sub-nav (single row)
+  // compact sub-nav (MOBILE ONLY)
   const SubNav = () => {
-    if (!activeApplication) return null;
+    if (!activeApplication || isDesktop) return null; // hide on desktop
     const tab = (key, label) => (
       <button
         key={key}
@@ -236,7 +251,7 @@ export default function DashboardApp() {
     return <p>Unsupported step type.</p>;
   };
 
-  // Breadcrumb + compact back button in a single bar
+  // Breadcrumb + compact back button
   const BreadcrumbBar = () => {
     if (!selectedApplications.length) return null;
 
@@ -272,7 +287,6 @@ export default function DashboardApp() {
                 setActiveSection("overview");
                 setCurrentStepId(null);
               }}
-              // Link/ghost style: compact, unobtrusive
               style={{
                 padding: "4px 8px",
                 borderRadius: 6,
@@ -328,6 +342,7 @@ export default function DashboardApp() {
             />
           ) : (
             <>
+              {/* MOBILE ONLY tabs to avoid duplicating the left nav on desktop */}
               <SubNav />
 
               {activeSection === "overview" && (
@@ -358,12 +373,12 @@ export default function DashboardApp() {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "260px 1fr",
+                    gridTemplateColumns: isDesktop ? "260px 1fr" : "1fr",
                     gap: 16,
                     alignItems: "start",
                   }}
                 >
-                  <StepsList />
+                  {isDesktop && <StepsList />}
                   <div style={{ minHeight: 200 }}>
                     <StepContent />
                   </div>
