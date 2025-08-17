@@ -1,5 +1,5 @@
 # python/server/apps_routes.py
-import os, io, json
+import os, io, json, fitz
 from pathlib import Path
 from typing import List, Dict, Any
 from fastapi import APIRouter, UploadFile, File, Form, Request
@@ -93,3 +93,35 @@ async def fill_from_stored_pdf(
     filled = fill_pdf_overlay_bytes(pdf_bytes, overlay, answers)
     return StreamingResponse(io.BytesIO(filled), media_type="application/pdf",
                              headers={"Content-Disposition": f'attachment; filename="{app}_{form}_filled.pdf"'})
+
+@router.get("/{app}/forms/{form}/page-metrics")
+def app_page_metrics(app: str, form: str, page: int = 0, dpi: int = 144):
+    pdf_path = form_dir(app, form) / "form.pdf"
+    if not pdf_path.exists():
+        raise HTTPException(404, f"missing PDF at {pdf_path}")
+    doc = fitz.open(pdf_path)
+    try:
+        pg = doc[page]
+    except Exception:
+        raise HTTPException(400, f"invalid page {page}")
+    return {
+        "pages": len(doc),
+        "pointsWidth": pg.rect.width,
+        "pointsHeight": pg.rect.height,
+        "pixelWidth": int(pg.rect.width/72*dpi),
+        "pixelHeight": int(pg.rect.height/72*dpi),
+        "dpi": dpi,
+    }
+
+@router.get("/{app}/forms/{form}/preview-page")
+def app_preview_page(app: str, form: str, page: int = 0, dpi: int = 144):
+    pdf_path = form_dir(app, form) / "form.pdf"
+    if not pdf_path.exists():
+        raise HTTPException(404, f"missing PDF at {pdf_path}")
+    doc = fitz.open(pdf_path)
+    try:
+        pg = doc[page]
+    except Exception:
+        raise HTTPException(400, f"invalid page {page}")
+    pix = pg.get_pixmap(dpi=dpi, alpha=False)
+    return Response(pix.tobytes("png"), media_type="image/png")

@@ -5,34 +5,41 @@ const API = "http://127.0.0.1:8081";
 
 export default function Mapper() {
   const { app, form } = useParams();
-  const [imgUrl, setImgUrl] = useState(null);
   const [overlay, setOverlay] = useState({ fields: [] });
-  const [page] = useState(0);
+  const [page, setPage] = useState(0);
+  const [pages, setPages] = useState(1);
+  const [imgUrl, setImgUrl] = useState(null);
+  const [metrics, setMetrics] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const canvasRef = useRef(null);
-  const [drawing, setDrawing] = useState(null); // {x0,y0,x1,y1}
-  const [scale, setScale] = useState(1);
+  const drawingRef = useRef(null);
 
-  const pdfPath = useMemo(
-    () => `applications/${app}/${form}/form.pdf`,
-    [app, form]
-  );
-
-  // load preview (server renders PNG) + template
+  // load template
   useEffect(() => {
-    const q = new URLSearchParams({
-      pdf_path: pdfPath,
-      page: String(page),
-      dpi: "144",
-    });
-    fetch(`${API}/preview-page?${q.toString()}`)
-      .then((r) => r.blob())
-      .then((b) => setImgUrl(URL.createObjectURL(b)));
     fetch(`${API}/apps/${app}/forms/${form}/template`)
       .then((r) => r.json())
       .then((tpl) => setOverlay(tpl?.fields ? tpl : { fields: [] }));
-  }, [app, form, pdfPath, page]);
+  }, [app, form]);
 
-  // draw image + boxes
+  // load metrics + preview for current page
+  useEffect(() => {
+    const q = (obj) => new URLSearchParams(obj).toString();
+    async function load() {
+      const m = await fetch(
+        `${API}/apps/${app}/forms/${form}/page-metrics?${q({ page, dpi: 144 })}`
+      ).then((r) => r.json());
+      setMetrics(m);
+      setPages(m.pages || 1);
+      const blob = await fetch(
+        `${API}/apps/${app}/forms/${form}/preview-page?${q({ page, dpi: 144 })}`
+      ).then((r) => r.blob());
+      setImgUrl(URL.createObjectURL(blob));
+    }
+    load();
+    return () => setImgUrl(null);
+  }, [app, form, page]);
+
+  // draw background + boxes
   useEffect(() => {
     if (!imgUrl || !canvasRef.current) return;
     const img = new Image();
@@ -41,48 +48,75 @@ export default function Mapper() {
       const ctx = c.getContext("2d");
       c.width = img.width;
       c.height = img.height;
-      setScale(1); // 1 px == 1 px from preview
+      ctx.clearRect(0, 0, c.width, c.height);
       ctx.drawImage(img, 0, 0);
       ctx.lineWidth = 2;
-      ctx.strokeStyle = "#00e";
-      overlay.fields.forEach((f) => {
-        if (f.page !== page) return;
-        const [x0, y0, x1, y1] = f.rect;
-        ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-      });
-      if (drawing) {
-        const { x0, y0, x1, y1 } = drawing;
+      // existing fields on this page
+      overlay.fields
+        .filter((f) => Number(f.page || 0) === Number(page))
+        .forEach((f) => {
+          const [x0, y0, x1, y1] = f.rect;
+          ctx.strokeStyle = f.id === selectedId ? "#e00" : "#00e";
+          ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+        });
+      // current drawing
+      const d = drawingRef.current;
+      if (d) {
         ctx.strokeStyle = "#e00";
-        ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+        ctx.strokeRect(d.x0, d.y0, d.x1 - d.x0, d.y1 - d.y0);
       }
     };
     img.src = imgUrl;
-  }, [imgUrl, overlay, page, drawing]);
+  }, [imgUrl, overlay, page, selectedId]);
 
-  function pos(e) {
+  const onPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
     return {
-      x: (e.clientX - rect.left) / scale,
-      y: (e.clientY - rect.top) / scale,
+      x: Math.round(e.clientX - rect.left),
+      y: Math.round(e.clientY - rect.top),
     };
-  }
+  };
 
-  function onMouseDown(e) {
-    const p = pos(e);
-    setDrawing({ x0: p.x, y0: p.y, x1: p.x, y1: p.y });
-  }
-  function onMouseMove(e) {
-    if (!drawing) return;
-    const p = pos(e);
-    setDrawing({ ...drawing, x1: p.x, y1: p.y });
-  }
-  function onMouseUp() {
-    if (!drawing) return;
-    const { x0, y0, x1, y1 } = drawing;
-    const rect = [x0, y0, x1, y1].map((v) => Math.max(0, Math.round(v)));
+  const onDown = (e) => {
+    const p = onPos(e);
+    // select if clicking inside an existing rect
+    const hit = overlay.fields.find(
+      (f) =>
+        f.page === page &&
+        p.x >= f.rect[0] &&
+        p.x <= f.rect[2] &&
+        p.y >= f.rect[1] &&
+        p.y <= f.rect[3]
+    );
+    if (hit) {
+      setSelectedId(hit.id);
+      drawingRef.current = null;
+      return;
+    }
+    setSelectedId(null);
+    drawingRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
+  };
+  const onMove = (e) => {
+    if (!drawingRef.current) return;
+    const p = onPos(e);
+    drawingRef.current = { ...drawingRef.current, x1: p.x, y1: p.y };
+    // redraw
+    if (imgUrl) setImgUrl((prev) => prev); // trigger render effect
+  };
+  const onUp = () => {
+    const d = drawingRef.current;
+    if (!d) return;
+    drawingRef.current = null;
+    const rect = [
+      Math.min(d.x0, d.x1),
+      Math.min(d.y0, d.y1),
+      Math.max(d.x0, d.x1),
+      Math.max(d.y0, d.y1),
+    ];
     const id = `f_${overlay.fields.length + 1}`;
     const field = {
       id,
+      label: id,
       page,
       type: "text",
       rect,
@@ -91,8 +125,8 @@ export default function Mapper() {
       shrink: true,
     };
     setOverlay((o) => ({ ...o, fields: [...o.fields, field] }));
-    setDrawing(null);
-  }
+    setSelectedId(id);
+  };
 
   async function save() {
     const fd = new FormData();
@@ -101,39 +135,189 @@ export default function Mapper() {
       method: "POST",
       body: fd,
     });
-    if (!r.ok) alert("Save failed");
+    if (!r.ok) return alert("Save failed");
   }
 
+  function updateSelected(patch) {
+    setOverlay((o) => {
+      const i = o.fields.findIndex((f) => f.id === selectedId);
+      if (i === -1) return o;
+      const next = { ...o.fields[i], ...patch };
+      const fields = o.fields.slice();
+      fields[i] = next;
+      return { ...o, fields };
+    });
+    if (Object.prototype.hasOwnProperty.call(patch, "id")) {
+      setSelectedId(patch.id || selectedId);
+    }
+  }
+
+  function delSelected() {
+    if (!selectedId) return;
+    setOverlay((o) => ({
+      ...o,
+      fields: o.fields.filter((f) => f.id !== selectedId),
+    }));
+    setSelectedId(null);
+  }
+
+  const selected = useMemo(
+    () => overlay.fields.find((f) => f.id === selectedId) || null,
+    [overlay, selectedId]
+  );
+
   return (
-    <div style={{ padding: 12, display: "grid", gap: 8 }}>
-      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-        <strong>Mapper</strong>
-        <span>app:</span>
-        <code>{app}</code>
-        <span>form:</span>
-        <code>{form}</code>
-        <button onClick={save}>Save</button>
-        <a href={`/interview/${app}/${form}`} style={{ marginLeft: 8 }}>
-          Open Interview
-        </a>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 320px",
+        gap: 12,
+        padding: 12,
+      }}
+    >
+      <div>
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            alignItems: "center",
+            marginBottom: 8,
+          }}
+        >
+          <strong>Mapper</strong>
+          <code>
+            {app}/{form}
+          </code>
+          <button onClick={save}>Save</button>
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              gap: 6,
+              alignItems: "center",
+            }}
+          >
+            <button
+              disabled={page <= 0}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+            >
+              ◀ Prev
+            </button>
+            <div>
+              Page {page + 1} / {pages}
+            </div>
+            <button
+              disabled={page >= pages - 1}
+              onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
+            >
+              Next ▶
+            </button>
+          </div>
+        </div>
+        <canvas
+          ref={canvasRef}
+          style={{
+            border: "1px solid #ccc",
+            maxWidth: "100%",
+            cursor: "crosshair",
+          }}
+          onMouseDown={onDown}
+          onMouseMove={onMove}
+          onMouseUp={onUp}
+        />
       </div>
-      <canvas
-        ref={canvasRef}
-        style={{
-          border: "1px solid #ccc",
-          maxWidth: "100%",
-          cursor: "crosshair",
-        }}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-      />
-      <details>
-        <summary>{overlay.fields.length} fields</summary>
-        <pre style={{ maxHeight: 240, overflow: "auto" }}>
-          {JSON.stringify(overlay, null, 2)}
-        </pre>
-      </details>
+
+      {/* Editor */}
+      <div style={{ border: "1px solid #eee", padding: 10, borderRadius: 8 }}>
+        <div style={{ fontWeight: 700, marginBottom: 8 }}>Field</div>
+        {!selected && <div style={{ color: "#666" }}>Click a box to edit</div>}
+        {selected && (
+          <div style={{ display: "grid", gap: 8 }}>
+            <label>
+              <div>ID</div>
+              <input
+                value={selected.id}
+                onChange={(e) => updateSelected({ id: e.target.value })}
+              />
+            </label>
+            <label>
+              <div>Label</div>
+              <input
+                value={selected.label || ""}
+                onChange={(e) => updateSelected({ label: e.target.value })}
+              />
+            </label>
+            <label>
+              <div>Type</div>
+              <select
+                value={selected.type || "text"}
+                onChange={(e) => updateSelected({ type: e.target.value })}
+              >
+                <option value="text">text</option>
+                <option value="checkbox">checkbox</option>
+              </select>
+            </label>
+            <label>
+              <div>Font Size</div>
+              <input
+                type="number"
+                value={selected.fontSize || 11}
+                onChange={(e) =>
+                  updateSelected({ fontSize: Number(e.target.value || 11) })
+                }
+              />
+            </label>
+            <label>
+              <div>Align</div>
+              <select
+                value={selected.align || "left"}
+                onChange={(e) => updateSelected({ align: e.target.value })}
+              >
+                <option>left</option>
+                <option>center</option>
+                <option>right</option>
+              </select>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={!!selected.shrink}
+                onChange={(e) => updateSelected({ shrink: e.target.checked })}
+              />
+              <span style={{ marginLeft: 6 }}>Shrink to fit</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={!!selected.uppercase}
+                onChange={(e) =>
+                  updateSelected({ uppercase: e.target.checked })
+                }
+              />
+              <span style={{ marginLeft: 6 }}>Uppercase</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={!!selected.bg}
+                onChange={(e) => updateSelected({ bg: e.target.checked })}
+              />
+              <span style={{ marginLeft: 6 }}>White-out BG</span>
+            </label>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={delSelected} style={{ color: "#a00" }}>
+                Delete
+              </button>
+              <button onClick={() => updateSelected({}) || save()}>Save</button>
+            </div>
+          </div>
+        )}
+        <hr style={{ margin: "12px 0" }} />
+        <div>
+          {overlay.fields.filter((f) => f.page === page).length} fields on this
+          page
+        </div>
+      </div>
     </div>
   );
 }
