@@ -1,6 +1,8 @@
+/* Sidebar step list */
 .sidebar-sublist {
   padding-left: 1.25rem;
   margin-top: 0.5rem;
+  list-style: none;
 
   li {
     padding: 0.25rem 0;
@@ -8,74 +10,64 @@
     font-size: 0.95rem;
 
     &.active {
-      font-weight: bold;
-      color: #007bff;
+      font-weight: 700;
+      color: #111;
     }
   }
 
   .step-item {
-    padding-left: 1rem;
-  }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 12px;
 
-  .sidebar-support-item {
-    padding-left: 1.5rem;
-    font-size: 0.9rem;
-    color: #555;
-
-    &.active {
-      color: #007bff;
-      font-weight: bold;
-    }
-  }
-
-  .sidebar-section-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin: 1rem 0 0.25rem 0;
-    color: #444;
-
-    .collapsible-section {
-      cursor: pointer;
-      user-select: none;
+    &:hover {
+      background: #f3f4f6; /* neutral-100 */
     }
   }
 }
 
-.sidebar-app-title {
-  font-weight: bold;
-  font-size: 1.05rem;
+/* Lightweight controls */
+.remove-btn,
+.collapse-btn {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  padding: 0.25rem 0;
-  color: #222;
-
-  &:hover {
-    text-decoration: underline;
-  }
+  opacity: 0.65;
+  font-size: 0.9rem;
+  padding: 4px;
+}
+.remove-btn:hover,
+.collapse-btn:hover {
+  opacity: 1;
 }
 
+/* Progress styles (if used in your JSX) */
 .sidebar-progress {
-  width: 100%;
-  font-size: 0.7rem;
-  margin: 0.5rem 0;
-}
-
-.sidebar-progress-bar {
-  width: 100%;
-  background-color: #ddd;
-  border-radius: 4px;
-  height: 6px;
+  margin-top: 8px;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 999px;
   overflow: hidden;
 }
-
+.sidebar-progress-bar {
+  height: 8px;
+  background: #e5e7eb;
+}
 .sidebar-progress-fill {
-  background-color: #4caf50;
-  height: 100%;
-  width: 0;
-  transition: width 0.3s ease;
+  height: 8px;
+  background: #10b981;
 }
 
-.sidebar-item-wrapper {
-  // width: 80%;
+/* Section label */
+.sidebar-section-label {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .step-item {
@@ -85,9 +77,32 @@
 }
 
 .checkmark {
-  color: #4caf50;
+  color: #10b981;
   font-size: 1rem;
   margin-left: 0.5rem;
 }
 
+/* New: wrapper polish without changing layout rules in app.scss */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #111;
+  margin-bottom: 8px;
+}
 
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-item-wrapper {
+  border-radius: 12px;
+  padding: 6px 8px;
+}
+.sidebar-item-wrapper:hover {
+  background: #f8fafc;
+}
