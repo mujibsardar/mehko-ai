@@ -10,6 +10,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
 import "./styles/overlay.css";
+import "./styles/app.scss";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

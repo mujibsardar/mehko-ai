@@ -34,3 +34,28 @@ $fa-font-path: "../../node_modules/@fortawesome/fontawesome-free/webfonts";
   background-color: #fefefe;
   margin-bottom: 5%;
 }
+
+.sidebar {           // the component root has className="sidebar"
+  flex: 0 0 280px;   // fixed column
+  max-width: 280px;
+  width: 280px;
+  border-right: 1px solid #eee;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.app-wrapper {
+  display: flex;
+  min-height: 100vh;
+  gap: 16px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1 1 auto;
+  min-width: 0;      // prevents overlap/overflow in flex layouts
+  padding: 16px;
+  background: #fefefe;
+}
+

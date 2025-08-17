@@ -13,6 +13,8 @@ const Sidebar = ({
   activeSection,
   setActiveSection,
   onSelect,
+  onStepSelect,
+  selectedStepId,
 }) => {
   const {
     collapsedApps,
@@ -162,11 +164,14 @@ const Sidebar = ({
                       <li
                         key={step.id}
                         className={
-                          activeSection === `step:${step.id}`
+                          selectedStepId === step.id
                             ? "active step-item"
                             : "step-item"
                         }
-                        onClick={() => setActiveSection(`step:${step.id}`)}
+                        onClick={() => {
+                          if (onStepSelect) onStepSelect(step.id);
+                          else setActiveSection(`step:${step.id}`); // fallback for old behavior
+                        }}
                       >
                         <span>
                           Step {idx + 1}: {step.title}
