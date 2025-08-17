@@ -1,8 +1,10 @@
-import io, json, os
+import io, json, os,  math, fitz
 from pathlib import Path
-from fastapi import APIRouter, UploadFile, File, Form
-from starlette.responses import StreamingResponse
+from fastapi import APIRouter, UploadFile, File, Form, Query
+from starlette.responses import StreamingResponse, Response
 from overlay.fill_overlay import fill_pdf_overlay_bytes
+
+MAPPER_ENABLED = os.getenv("MAPPER_ENABLED", "1") == "1"
 
 # Optional path helper (unused by template endpoints, kept for future preview)
 ROOT = Path(__file__).resolve().parents[2]
@@ -28,8 +30,6 @@ async def fill_overlay(
                              headers={"Content-Disposition":"attachment; filename=filled.pdf"})
 
 # --- Template storage ---
-
-ROOT = Path(__file__).resolve().parents[2]  # repo root
 BASE_DIR = ROOT / "applications"
 
 @router.get("/templates/{form_id}")
@@ -44,3 +44,18 @@ def save_template(form_id: str, overlay_json: str = Form(...)):
     obj = json.loads(overlay_json)
     (d / "overlay.json").write_text(json.dumps(obj, indent=2))
     return {"ok": True, "count": len(obj.get("fields", []))}
+
+if MAPPER_ENABLED:
+    @router.get("/page-metrics")
+    def page_metrics(pdf_path: str = Query(...), page: int = 0, dpi: int = 144):
+        doc = fitz.open(_fs(pdf_path)); pg = doc[page]
+        wpt, hpt = pg.rect.width, pg.rect.height
+        return {"pointsWidth": wpt, "pointsHeight": hpt,
+                "pixelWidth": int(wpt/72*dpi), "pixelHeight": int(hpt/72*dpi),
+                "dpi": dpi}
+
+    @router.get("/preview-page")
+    def preview_page(pdf_path: str = Query(...), page: int = 0, dpi: int = 144):
+        doc = fitz.open(_fs(pdf_path)); pg = doc[page]
+        pix = pg.get_pixmap(dpi=dpi, alpha=False)
+        return Response(pix.tobytes("png"), media_type="image/png")
