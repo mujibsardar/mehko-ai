@@ -1,223 +1,139 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+
+const API = "http://127.0.0.1:8081";
 
 export default function Mapper() {
-  const [pdfPath, setPdfPath] = useState(
-    "applications/los_angeles_mehko/page1.pdf"
+  const { app, form } = useParams();
+  const [imgUrl, setImgUrl] = useState(null);
+  const [overlay, setOverlay] = useState({ fields: [] });
+  const [page] = useState(0);
+  const canvasRef = useRef(null);
+  const [drawing, setDrawing] = useState(null); // {x0,y0,x1,y1}
+  const [scale, setScale] = useState(1);
+
+  const pdfPath = useMemo(
+    () => `applications/${app}/${form}/form.pdf`,
+    [app, form]
   );
-  const [page, setPage] = useState(0);
-  const [dpi, setDpi] = useState(144);
-  const [imgUrl, setImgUrl] = useState("");
-  const [m, setM] = useState(null); // metrics
-  const [boxes, setBoxes] = useState([]); // {id,type,page,rect:[x0,y0,x1,y1]}
-  const [drag, setDrag] = useState(null); // {x0,y0}
 
-  const wrapRef = useRef(null);
-
-  const load = async () => {
-    const url = `http://127.0.0.1:8081/preview-page?pdf_path=${encodeURIComponent(
-      pdfPath
-    )}&page=${page}&dpi=${dpi}`;
-    const met = await fetch(
-      `http://127.0.0.1:8081/page-metrics?pdf_path=${encodeURIComponent(
-        pdfPath
-      )}&page=${page}&dpi=${dpi}`
-    ).then((r) => r.json());
-    setImgUrl(url);
-    setM(met);
-  };
-  const pxToPt = (x, y) =>
-    m
-      ? [
-          x * (m.pointsWidth / m.pixelWidth),
-          y * (m.pointsHeight / m.pixelHeight),
-        ]
-      : [x, y];
-  const onMouseDown = (e) => {
-    const r = wrapRef.current.getBoundingClientRect();
-    setDrag({ x0: e.clientX - r.left, y0: e.clientY - r.top });
-  };
-  const onMouseMove = (e) => {
-    if (!drag) return;
-    const r = wrapRef.current.getBoundingClientRect();
-    const x = e.clientX - r.left,
-      y = e.clientY - r.top;
-    setDrag({ ...drag, x1: x, y1: y });
-  };
-  const onMouseUp = () => {
-    if (!drag || !m) return setDrag(null);
-    const x0 = Math.min(drag.x0, drag.x1 || drag.x0),
-      y0 = Math.min(drag.y0, drag.y1 || drag.y0);
-    const x1 = Math.max(drag.x0, drag.x1 || drag.x0),
-      y1 = Math.max(drag.y0, drag.y1 || drag.y0);
-    const [X0, Y0] = pxToPt(x0, y0),
-      [X1, Y1] = pxToPt(x1, y1);
-    const id = `field_${boxes.length + 1}`;
-    setBoxes((b) => [
-      ...b,
-      {
-        id,
-        type: "text",
-        page,
-        rect: [+X0.toFixed(2), +Y0.toFixed(2), +X1.toFixed(2), +Y1.toFixed(2)],
-      },
-    ]);
-    setDrag(null);
-  };
-  const dl = () => {
-    const overlay = { fields: boxes };
-    const blob = new Blob([JSON.stringify(overlay, null, 2)], {
-      type: "application/json",
+  // load preview (server renders PNG) + template
+  useEffect(() => {
+    const q = new URLSearchParams({
+      pdf_path: pdfPath,
+      page: String(page),
+      dpi: "144",
     });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "overlay.json";
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  };
-  const update = (i, k, v) => {
-    setBoxes((b) => b.map((x, idx) => (idx === i ? { ...x, [k]: v } : x)));
-  };
-  const save = async () => {
+    fetch(`${API}/preview-page?${q.toString()}`)
+      .then((r) => r.blob())
+      .then((b) => setImgUrl(URL.createObjectURL(b)));
+    fetch(`${API}/apps/${app}/forms/${form}/template`)
+      .then((r) => r.json())
+      .then((tpl) => setOverlay(tpl?.fields ? tpl : { fields: [] }));
+  }, [app, form, pdfPath, page]);
+
+  // draw image + boxes
+  useEffect(() => {
+    if (!imgUrl || !canvasRef.current) return;
+    const img = new Image();
+    img.onload = () => {
+      const c = canvasRef.current;
+      const ctx = c.getContext("2d");
+      c.width = img.width;
+      c.height = img.height;
+      setScale(1); // 1 px == 1 px from preview
+      ctx.drawImage(img, 0, 0);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#00e";
+      overlay.fields.forEach((f) => {
+        if (f.page !== page) return;
+        const [x0, y0, x1, y1] = f.rect;
+        ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+      });
+      if (drawing) {
+        const { x0, y0, x1, y1 } = drawing;
+        ctx.strokeStyle = "#e00";
+        ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+      }
+    };
+    img.src = imgUrl;
+  }, [imgUrl, overlay, page, drawing]);
+
+  function pos(e) {
+    const rect = canvasRef.current.getBoundingClientRect();
+    return {
+      x: (e.clientX - rect.left) / scale,
+      y: (e.clientY - rect.top) / scale,
+    };
+  }
+
+  function onMouseDown(e) {
+    const p = pos(e);
+    setDrawing({ x0: p.x, y0: p.y, x1: p.x, y1: p.y });
+  }
+  function onMouseMove(e) {
+    if (!drawing) return;
+    const p = pos(e);
+    setDrawing({ ...drawing, x1: p.x, y1: p.y });
+  }
+  function onMouseUp() {
+    if (!drawing) return;
+    const { x0, y0, x1, y1 } = drawing;
+    const rect = [x0, y0, x1, y1].map((v) => Math.max(0, Math.round(v)));
+    const id = `f_${overlay.fields.length + 1}`;
+    const field = {
+      id,
+      page,
+      type: "text",
+      rect,
+      fontSize: 11,
+      align: "left",
+      shrink: true,
+    };
+    setOverlay((o) => ({ ...o, fields: [...o.fields, field] }));
+    setDrawing(null);
+  }
+
+  async function save() {
     const fd = new FormData();
-    fd.append("overlay_json", JSON.stringify({ fields: boxes }));
-    await fetch("http://127.0.0.1:8081/templates/los_angeles_mehko", {
+    fd.append("overlay_json", JSON.stringify(overlay));
+    const r = await fetch(`${API}/apps/${app}/forms/${form}/template`, {
       method: "POST",
       body: fd,
     });
-    alert("Saved overlay.json");
-  };
+    if (!r.ok) alert("Save failed");
+  }
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 320px",
-        gap: 16,
-        padding: 16,
-        fontFamily: "system-ui",
-      }}
-    >
-      <div>
-        <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
-          <input
-            value={pdfPath}
-            onChange={(e) => setPdfPath(e.target.value)}
-            style={{ flex: 1 }}
-          />
-          <input
-            type="number"
-            value={page}
-            onChange={(e) => setPage(+e.target.value)}
-            style={{ width: 70 }}
-          />
-          <input
-            type="number"
-            value={dpi}
-            onChange={(e) => setDpi(+e.target.value)}
-            style={{ width: 70 }}
-          />
-          <button onClick={load}>Load</button>
-          <button onClick={dl} disabled={!boxes.length}>
-            Download overlay.json
-          </button>
-          <button onClick={save}>Save to server</button>
-        </div>
-        <div
-          ref={wrapRef}
-          onMouseDown={onMouseDown}
-          onMouseMove={onMouseMove}
-          onMouseUp={onMouseUp}
-          style={{
-            position: "relative",
-            display: "inline-block",
-            border: "1px solid #ddd",
-            cursor: "crosshair",
-          }}
-        >
-          {imgUrl && (
-            <img
-              src={imgUrl}
-              width={m?.pixelWidth}
-              height={m?.pixelHeight}
-              alt="pdf"
-              draggable={false}
-            />
-          )}
-          {/* existing boxes */}
-          {boxes.map((b, i) => {
-            if (!m) return null;
-            const x0 = b.rect[0] * (m.pixelWidth / m.pointsWidth);
-            const y0 = b.rect[1] * (m.pixelHeight / m.pointsHeight);
-            const x1 = b.rect[2] * (m.pixelWidth / m.pointsWidth);
-            const y1 = b.rect[3] * (m.pixelHeight / m.pointsHeight);
-            return (
-              <div
-                key={i}
-                style={{
-                  position: "absolute",
-                  left: x0,
-                  top: y0,
-                  width: x1 - x0,
-                  height: y1 - y0,
-                  border: "2px solid #4A90E2",
-                  background: "rgba(74,144,226,0.12)",
-                }}
-              />
-            );
-          })}
-          {/* live drag */}
-          {drag && drag.x1 !== undefined && (
-            <div
-              style={{
-                position: "absolute",
-                left: Math.min(drag.x0, drag.x1),
-                top: Math.min(drag.y0, drag.y1),
-                width: Math.abs(drag.x1 - drag.x0),
-                height: Math.abs(drag.y1 - drag.y0),
-                border: "2px dashed #333",
-                background: "rgba(0,0,0,0.05)",
-              }}
-            />
-          )}
-        </div>
+    <div style={{ padding: 12, display: "grid", gap: 8 }}>
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <strong>Mapper</strong>
+        <span>app:</span>
+        <code>{app}</code>
+        <span>form:</span>
+        <code>{form}</code>
+        <button onClick={save}>Save</button>
+        <a href={`/interview/${app}/${form}`} style={{ marginLeft: 8 }}>
+          Open Interview
+        </a>
       </div>
-      <div style={{ display: "grid", gap: 8 }}>
-        <h3>Fields ({boxes.length})</h3>
-        {boxes.map((b, i) => (
-          <div
-            key={i}
-            style={{
-              border: "1px solid #eee",
-              padding: 8,
-              borderRadius: 8,
-              display: "grid",
-              gap: 6,
-            }}
-          >
-            <input
-              value={b.id}
-              onChange={(e) => update(i, "id", e.target.value)}
-            />
-            <select
-              value={b.type}
-              onChange={(e) => update(i, "type", e.target.value)}
-            >
-              <option>text</option>
-              <option>checkbox</option>
-              <option>date</option>
-              <option>signature</option>
-            </select>
-            <small>
-              page {b.page} rect [{b.rect.map((n) => n.toFixed(2)).join(", ")}]
-            </small>
-            <button
-              onClick={() => setBoxes((x) => x.filter((_, j) => j !== i))}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
+      <canvas
+        ref={canvasRef}
+        style={{
+          border: "1px solid #ccc",
+          maxWidth: "100%",
+          cursor: "crosshair",
+        }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+      />
+      <details>
+        <summary>{overlay.fields.length} fields</summary>
+        <pre style={{ maxHeight: 240, overflow: "auto" }}>
+          {JSON.stringify(overlay, null, 2)}
+        </pre>
+      </details>
     </div>
   );
 }

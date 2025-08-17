@@ -155,7 +155,8 @@ export const DataProvider = ({ children }) => {
         listImagesForCache,
       }}
     >
-      {status === Status.LOADED && dataValidated && <>{children}</>}
+      {/* {status === Status.LOADED && dataValidated && <>{children}</>} */}
+      {children}
     </DataContext.Provider>
   );
 };
