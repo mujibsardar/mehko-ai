@@ -126,7 +126,7 @@ export default function DashboardApp() {
     setCurrentStepId(id);
   };
 
-  // sub-nav (single row, no duplication)
+  // compact sub-nav (single row)
   const SubNav = () => {
     if (!activeApplication) return null;
     const tab = (key, label) => (
@@ -134,11 +134,12 @@ export default function DashboardApp() {
         key={key}
         onClick={() => setActiveSection(key)}
         style={{
-          padding: "8px 12px",
+          padding: "6px 10px",
           borderRadius: 8,
           border: "1px solid #ddd",
           background: activeSection === key ? "#eef" : "#fff",
           cursor: "pointer",
+          fontSize: 14,
         }}
       >
         {label}
@@ -235,6 +236,73 @@ export default function DashboardApp() {
     return <p>Unsupported step type.</p>;
   };
 
+  // Breadcrumb + compact back button in a single bar
+  const BreadcrumbBar = () => {
+    if (!selectedApplications.length) return null;
+
+    const showBack = Boolean(activeApplicationId);
+    const crumbs = activeApplication
+      ? `Home > ${activeApplication.title}${
+          activeSection !== "overview" ? ` > ${activeSection}` : ""
+        }`
+      : "Home";
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          justifyContent: "space-between",
+          marginBottom: 12,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            minWidth: 0,
+          }}
+        >
+          {showBack && (
+            <button
+              onClick={() => {
+                setActiveApplicationId(null);
+                setActiveSection("overview");
+                setCurrentStepId(null);
+              }}
+              // Link/ghost style: compact, unobtrusive
+              style={{
+                padding: "4px 8px",
+                borderRadius: 6,
+                border: "1px solid #e2e2e2",
+                background: "#fff",
+                cursor: "pointer",
+                fontSize: 14,
+              }}
+              aria-label="Back to Application Grid"
+              title="Back to Application Grid"
+            >
+              ← Back
+            </button>
+          )}
+          <div
+            style={{
+              fontSize: 14,
+              color: "#666",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {crumbs}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <Header />
@@ -251,32 +319,7 @@ export default function DashboardApp() {
         />
 
         <main className="main-content">
-          {/* Breadcrumb + back */}
-          {activeApplication && (
-            <div style={{ marginBottom: 8, fontSize: 14, color: "#666" }}>
-              Home &gt; {activeApplication.title}
-              {activeSection !== "overview" && ` > ${activeSection}`}
-            </div>
-          )}
-          {selectedApplications.length > 0 && activeApplicationId && (
-            <button
-              style={{
-                margin: "0 0 12px",
-                padding: "8px 12px",
-                border: "1px solid #bbb",
-                borderRadius: 8,
-                background: "#fff",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                setActiveApplicationId(null);
-                setActiveSection("overview");
-                setCurrentStepId(null);
-              }}
-            >
-              ← Back to Application Grid
-            </button>
-          )}
+          <BreadcrumbBar />
 
           {/* Grid vs App */}
           {selectedApplications.length === 0 || !activeApplication ? (
