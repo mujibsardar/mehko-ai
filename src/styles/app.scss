@@ -59,3 +59,23 @@ $fa-font-path: "../../node_modules/@fortawesome/fontawesome-free/webfonts";
   background: #fefefe;
 }
 
+/* Landing */
+.landing-page { max-width: 1100px; margin: 0 auto; padding: 64px 16px; }
+.landing-page .hero { margin-bottom: 40px; }
+.landing-page .hero h1 {
+  font-weight: 800; letter-spacing: -0.02em;
+  font-size: clamp(32px, 6vw, 48px); margin: 0 0 12px;
+}
+.landing-page .hero p { color: var(--muted-ink, #475066); font-size: 18px; margin: 0; }
+
+.landing-page .features {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  gap: 16px; margin-top: 32px;
+}
+.landing-page .feature-card {
+  background: #fff; border-radius: var(--radius,16px);
+  box-shadow: var(--shadow, 0 6px 24px rgba(15,23,42,.06));
+  padding: 20px;
+}
+.landing-page .feature-card h2 { margin: 0 0 6px; font-size: 20px; }
+.landing-page .feature-card p { margin: 0; color: var(--muted-ink, #475066); }
