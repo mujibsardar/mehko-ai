@@ -106,3 +106,22 @@
 .sidebar-item-wrapper:hover {
   background: #f8fafc;
 }
+
+.step-item,
+.sidebar-sublist li {
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.step-item:hover,
+.sidebar-sublist li:hover {
+  background: #f9f9f9;
+}
+
+.active-nav {
+  border-left: 4px solid #5b9df9;
+  background: #eef5ff;
+  font-weight: 600;
+}

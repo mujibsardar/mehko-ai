@@ -124,7 +124,7 @@ const Sidebar = ({
               {!isAppCollapsed && isActive && (
                 <ul className="sidebar-sublist">
                   <li
-                    className={activeSection === "overview" ? "active" : ""}
+                    className={activeSection === "overview" ? "active-nav" : ""}
                     onClick={() => {
                       setActiveSection("overview");
                       toggle(
@@ -132,13 +132,13 @@ const Sidebar = ({
                         collapsedSteps,
                         application.id,
                         true
-                      ); // collapse steps
+                      );
                       toggle(
                         setCollapsedSupport,
                         collapsedSupport,
                         application.id,
                         true
-                      ); // collapse support
+                      );
                     }}
                   >
                     Overview ({application.steps?.length || 0} steps)
@@ -160,27 +160,28 @@ const Sidebar = ({
                   </li>
 
                   {!areStepsCollapsed &&
-                    application.steps?.map((step, idx) => (
-                      <li
-                        key={step.id}
-                        className={
-                          selectedStepId === step.id
-                            ? "active step-item"
-                            : "step-item"
-                        }
-                        onClick={() => {
-                          if (onStepSelect) onStepSelect(step.id);
-                          else setActiveSection(`step:${step.id}`); // fallback for old behavior
-                        }}
-                      >
-                        <span>
-                          Step {idx + 1}: {step.title}
-                        </span>
-                        {completedSteps.includes(step.id) && (
-                          <span className="checkmark">✔</span>
-                        )}
-                      </li>
-                    ))}
+                    application.steps?.map((step, idx) => {
+                      const isStepActive =
+                        activeSection === "steps" && selectedStepId === step.id;
+                      return (
+                        <li
+                          key={step.id}
+                          className={`step-item ${
+                            isStepActive ? "active-nav" : ""
+                          }`}
+                          onClick={() => {
+                            if (onStepSelect) onStepSelect(step.id);
+                          }}
+                        >
+                          <span>
+                            Step {idx + 1}: {step.title}
+                          </span>
+                          {completedSteps.includes(step.id) && (
+                            <span className="checkmark">✔</span>
+                          )}
+                        </li>
+                      );
+                    })}
 
                   {(application.supportTools?.aiEnabled ||
                     application.supportTools?.commentsEnabled) && (
@@ -205,7 +206,7 @@ const Sidebar = ({
                           {application.supportTools?.aiEnabled && (
                             <li
                               className={`sidebar-support-item ${
-                                activeSection === "ai" ? "active" : ""
+                                activeSection === "ai" ? "active-nav" : ""
                               }`}
                               onClick={() => setActiveSection("ai")}
                             >
@@ -216,7 +217,7 @@ const Sidebar = ({
                           {application.supportTools?.commentsEnabled && (
                             <li
                               className={`sidebar-support-item ${
-                                activeSection === "comments" ? "active" : ""
+                                activeSection === "comments" ? "active-nav" : ""
                               }`}
                               onClick={() => setActiveSection("comments")}
                             >
