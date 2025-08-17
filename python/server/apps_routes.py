@@ -7,6 +7,8 @@ from fastapi import HTTPException
 from starlette.responses import Response, StreamingResponse
 from overlay.fill_overlay import fill_pdf_overlay_bytes
 
+MAPPER_ENABLED = os.getenv("MAPPER_ENABLED", "1") == "1"
+
 router = APIRouter(prefix="/apps", tags=["apps"])
 
 ROOT = Path(__file__).resolve().parents[2]  # repo root
@@ -96,6 +98,7 @@ async def fill_from_stored_pdf(
 
 @router.get("/{app}/forms/{form}/page-metrics")
 def app_page_metrics(app: str, form: str, page: int = 0, dpi: int = 144):
+    if not MAPPER_ENABLED: raise HTTPException(404, "mapper disabled")
     pdf_path = form_dir(app, form) / "form.pdf"
     if not pdf_path.exists():
         raise HTTPException(404, f"missing PDF at {pdf_path}")
@@ -115,6 +118,7 @@ def app_page_metrics(app: str, form: str, page: int = 0, dpi: int = 144):
 
 @router.get("/{app}/forms/{form}/preview-page")
 def app_preview_page(app: str, form: str, page: int = 0, dpi: int = 144):
+    if not MAPPER_ENABLED: raise HTTPException(404, "mapper disabled")
     pdf_path = form_dir(app, form) / "form.pdf"
     if not pdf_path.exists():
         raise HTTPException(404, f"missing PDF at {pdf_path}")
