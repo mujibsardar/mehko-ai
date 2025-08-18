@@ -32,9 +32,7 @@ const Sidebar = ({
   useEffect(() => {
     async function fetchProgress() {
       if (!user || !applications.length) return;
-
       const unsubscribers = [];
-
       applications.forEach((app) => {
         const ref = doc(db, "users", user.uid, "applicationProgress", app.id);
         const unsub = onSnapshot(ref, (docSnap) => {
@@ -47,12 +45,8 @@ const Sidebar = ({
         });
         unsubscribers.push(unsub);
       });
-
-      return () => {
-        unsubscribers.forEach((unsub) => unsub());
-      };
+      return () => unsubscribers.forEach((u) => u());
     }
-
     fetchProgress();
   }, [user, applications]);
 
@@ -74,17 +68,21 @@ const Sidebar = ({
           const percent =
             totalSteps > 0 ? Math.round((completeCount / totalSteps) * 100) : 0;
 
+          const hasComments = Boolean(
+            application.supportTools?.commentsEnabled
+          );
+          // We intentionally HIDE AI assistant in the sidebar now.
+
           return (
             <div key={application.id} className="sidebar-item-wrapper">
               <div className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <div
                   className="sidebar-app-title"
-                  onClick={() => {
-                    onSelect(application.id);
-                  }}
+                  onClick={() => onSelect(application.id)}
                 >
                   {application.title}
                 </div>
+
                 <div className="sidebar-progress">
                   <div className="sidebar-progress-bar">
                     <div
@@ -97,7 +95,7 @@ const Sidebar = ({
                   </small>
                 </div>
 
-                {application.id === activeApplicationId && (
+                {isActive && (
                   <div className="sidebar-controls">
                     <button
                       className="collapse-btn"
@@ -169,9 +167,7 @@ const Sidebar = ({
                           className={`step-item ${
                             isStepActive ? "active-nav" : ""
                           }`}
-                          onClick={() => {
-                            if (onStepSelect) onStepSelect(step.id);
-                          }}
+                          onClick={() => onStepSelect && onStepSelect(step.id)}
                         >
                           <span>
                             Step {idx + 1}: {step.title}
@@ -183,8 +179,7 @@ const Sidebar = ({
                       );
                     })}
 
-                  {(application.supportTools?.aiEnabled ||
-                    application.supportTools?.commentsEnabled) && (
+                  {hasComments && (
                     <>
                       <li className="sidebar-section-label">
                         <span
@@ -202,29 +197,14 @@ const Sidebar = ({
                       </li>
 
                       {!isSupportCollapsed && (
-                        <>
-                          {application.supportTools?.aiEnabled && (
-                            <li
-                              className={`sidebar-support-item ${
-                                activeSection === "ai" ? "active-nav" : ""
-                              }`}
-                              onClick={() => setActiveSection("ai")}
-                            >
-                              Ask the Assistant
-                            </li>
-                          )}
-
-                          {application.supportTools?.commentsEnabled && (
-                            <li
-                              className={`sidebar-support-item ${
-                                activeSection === "comments" ? "active-nav" : ""
-                              }`}
-                              onClick={() => setActiveSection("comments")}
-                            >
-                              Community Comments
-                            </li>
-                          )}
-                        </>
+                        <li
+                          className={`sidebar-support-item ${
+                            activeSection === "comments" ? "active-nav" : ""
+                          }`}
+                          onClick={() => setActiveSection("comments")}
+                        >
+                          Community Comments
+                        </li>
                       )}
                     </>
                   )}

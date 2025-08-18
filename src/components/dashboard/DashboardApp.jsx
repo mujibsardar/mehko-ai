@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../layout/Sidebar";
 import ApplicationCardGrid from "../layout/ApplicationCardGrid";
@@ -20,11 +20,11 @@ export default function DashboardApp() {
   // ui
   const [selectedApplications, setSelectedApplications] = useState([]);
   const [activeApplicationId, setActiveApplicationId] = useState(null);
-  const [activeSection, setActiveSection] = useState("overview"); // 'overview' | 'steps' | 'ai' | 'comments'
+  const [activeSection, setActiveSection] = useState("overview"); // 'overview' | 'steps' | 'comments'
   const [currentStepId, setCurrentStepId] = useState(null);
   const [enrichedApplication, setEnrichedApplication] = useState(null);
 
-  // responsive (show right panel only >= 1200px; otherwise tuck it under main)
+  // layout breakpoints
   const [wide, setWide] = useState(
     typeof window !== "undefined"
       ? window.matchMedia("(min-width: 1200px)").matches
@@ -47,11 +47,8 @@ export default function DashboardApp() {
   }, [loading, pinnedApplications]);
 
   // active app
-  const activeApplication = useMemo(
-    () =>
-      selectedApplications.find((c) => c.id === activeApplicationId) || null,
-    [selectedApplications, activeApplicationId]
-  );
+  const activeApplication =
+    selectedApplications.find((c) => c.id === activeApplicationId) || null;
 
   // steps
   const steps = useMemo(() => {
@@ -68,7 +65,7 @@ export default function DashboardApp() {
   }, [activeApplication]);
   const firstStepId = steps[0]?._id || null;
 
-  // enrich progress/comments
+  // progress/comments
   useEffect(() => {
     if (!user || !activeApplicationId) {
       setEnrichedApplication(null);
@@ -103,7 +100,7 @@ export default function DashboardApp() {
     };
   }, [user, activeApplicationId, selectedApplications]);
 
-  // ensure first step selected when entering Steps
+  // ensure first step when entering Steps
   useEffect(() => {
     if (activeSection === "steps" && !currentStepId && firstStepId) {
       setCurrentStepId(firstStepId);
@@ -185,7 +182,6 @@ export default function DashboardApp() {
     );
   };
 
-  // progress header for steps
   const StepHeader = () => {
     if (activeSection !== "steps") return null;
     const idx = steps.findIndex((s) => s._id === currentStepId);
@@ -323,8 +319,10 @@ export default function DashboardApp() {
             flex: 1,
             display: "grid",
             gridTemplateColumns:
-              activeApplication && wide ? "1fr 360px" : "1fr",
+              activeApplication && wide ? "1fr 380px" : "1fr",
             gap: 16,
+            // ensure the grid itself is tall enough to make the aside fill
+            minHeight: "calc(100vh - 90px)",
           }}
         >
           {/* Main content */}
@@ -382,13 +380,21 @@ export default function DashboardApp() {
                     style={{
                       marginTop: 16,
                       border: "1px solid #eee",
-                      borderRadius: 10,
+                      borderRadius: 12,
                       background: "#fff",
                     }}
                   >
-                    <AIChat
-                      application={enrichedApplication || activeApplication}
-                    />
+                    <div
+                      style={{
+                        height: 420,
+                        overflow: "auto",
+                        padding: 8,
+                      }}
+                    >
+                      <AIChat
+                        application={enrichedApplication || activeApplication}
+                      />
+                    </div>
                   </section>
                 )}
               </>
@@ -403,22 +409,51 @@ export default function DashboardApp() {
                 paddingLeft: 12,
                 position: "sticky",
                 top: 70,
+                // Full height column
                 height: "calc(100vh - 90px)",
-                overflow: "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
                 background: "transparent",
+                minHeight: 0, // allow inside scroll
               }}
             >
               <div
                 style={{
                   fontSize: 14,
-                  fontWeight: 600,
-                  marginBottom: 8,
-                  color: "#444",
+                  fontWeight: 700,
+                  color: "#30343a",
                 }}
               >
                 Your AI Assistant
               </div>
-              <AIChat application={enrichedApplication || activeApplication} />
+
+              {/* Chat card that truly fills and scrolls */}
+              <div
+                style={{
+                  border: "1px solid #e8e8e8",
+                  borderRadius: 12,
+                  background: "#fff",
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                  flex: 1, // fill column
+                  minHeight: 0, // enable child overflow
+                  display: "flex",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    flex: 1,
+                    minHeight: 0,
+                    overflow: "auto", // internal scroll
+                    padding: 8,
+                  }}
+                >
+                  <AIChat
+                    application={enrichedApplication || activeApplication}
+                  />
+                </div>
+              </div>
             </aside>
           )}
         </div>
