@@ -2,49 +2,33 @@
   "fields": [
     {
       "id": "date_of_application",
+      "label": "Date of Application",
       "page": 0,
       "type": "text",
       "rect": [
-        292,
-        419,
-        454,
-        444
+        145.5,
+        204,
+        215.5,
+        224
       ],
       "fontSize": 11,
       "align": "left",
-      "shrink": true,
-      "label": "Date of Application"
+      "shrink": true
     },
     {
-      "id": "mehko_business_name",
+      "id": "billing_send_invoice_to_address",
+      "label": "Send Invoice to Address Below",
       "page": 0,
-      "type": "text",
+      "type": "checkbox",
       "rect": [
-        88,
-        531,
-        1120,
-        555
+        225,
+        379.5,
+        238.5,
+        391
       ],
       "fontSize": 11,
       "align": "left",
-      "shrink": true,
-      "label": "Business Name",
-      "uppercase": true
-    },
-    {
-      "id": "mehko_business_address",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        86,
-        594,
-        538,
-        622
-      ],
-      "fontSize": 14,
-      "align": "center",
-      "shrink": true,
-      "label": "Business Address"
+      "shrink": true
     }
   ]
 }
