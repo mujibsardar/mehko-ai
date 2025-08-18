@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../layout/Sidebar";
 import ApplicationCardGrid from "../layout/ApplicationCardGrid";
@@ -14,30 +14,29 @@ import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
 
 export default function DashboardApp() {
-  // data
   const { applications: pinnedApplications, loading } = usePinnedApplications();
   const { user } = useAuth();
 
-  // ui state
+  // ui
   const [selectedApplications, setSelectedApplications] = useState([]);
   const [activeApplicationId, setActiveApplicationId] = useState(null);
   const [activeSection, setActiveSection] = useState("overview"); // 'overview' | 'steps' | 'ai' | 'comments'
   const [currentStepId, setCurrentStepId] = useState(null);
   const [enrichedApplication, setEnrichedApplication] = useState(null);
 
-  // responsive tabs only for mobile (<1024px)
-  const [isDesktop, setIsDesktop] = useState(
+  // responsive (show right panel only >= 1200px; otherwise tuck it under main)
+  const [wide, setWide] = useState(
     typeof window !== "undefined"
-      ? window.matchMedia("(min-width: 1024px)").matches
+      ? window.matchMedia("(min-width: 1200px)").matches
       : true
   );
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const handler = (e) => setIsDesktop(e.matches);
-    mq.addEventListener?.("change", handler);
-    setIsDesktop(mq.matches);
-    return () => mq.removeEventListener?.("change", handler);
+    const mq = window.matchMedia("(min-width: 1200px)");
+    const fn = (e) => setWide(e.matches);
+    mq.addEventListener?.("change", fn);
+    setWide(mq.matches);
+    return () => mq.removeEventListener?.("change", fn);
   }, []);
 
   // seed pinned apps
@@ -47,14 +46,14 @@ export default function DashboardApp() {
     }
   }, [loading, pinnedApplications]);
 
-  // find active app
+  // active app
   const activeApplication = useMemo(
     () =>
       selectedApplications.find((c) => c.id === activeApplicationId) || null,
     [selectedApplications, activeApplicationId]
   );
 
-  // normalize steps
+  // steps
   const steps = useMemo(() => {
     const raw = activeApplication?.steps || [];
     return raw.map((s, idx) => ({
@@ -67,10 +66,9 @@ export default function DashboardApp() {
       type: s.type ?? (s.formName ? "form" : s.content ? "info" : "unknown"),
     }));
   }, [activeApplication]);
-
   const firstStepId = steps[0]?._id || null;
 
-  // enrich app (progress + comments)
+  // enrich progress/comments
   useEffect(() => {
     if (!user || !activeApplicationId) {
       setEnrichedApplication(null);
@@ -105,7 +103,7 @@ export default function DashboardApp() {
     };
   }, [user, activeApplicationId, selectedApplications]);
 
-  // when entering Steps, ensure a step is focused
+  // ensure first step selected when entering Steps
   useEffect(() => {
     if (activeSection === "steps" && !currentStepId && firstStepId) {
       setCurrentStepId(firstStepId);
@@ -135,52 +133,20 @@ export default function DashboardApp() {
       setCurrentStepId(null);
     }
   };
-
   const onStepSelect = (id) => {
     setActiveSection("steps");
     setCurrentStepId(id);
   };
 
-  // MOBILE ONLY compact tabs to switch sections
-  const SubNav = () => {
-    if (!activeApplication || isDesktop) return null; // hide on desktop
-    const tab = (key, label) => (
-      <button
-        key={key}
-        onClick={() => setActiveSection(key)}
-        style={{
-          padding: "6px 10px",
-          borderRadius: 8,
-          border: "1px solid #ddd",
-          background: activeSection === key ? "#eef" : "#fff",
-          cursor: "pointer",
-          fontSize: 14,
-        }}
-      >
-        {label}
-      </button>
-    );
-    return (
-      <div style={{ display: "flex", gap: 8, margin: "8px 0 12px" }}>
-        {tab("overview", "Overview")}
-        {tab("steps", "Steps")}
-        {tab("ai", "AI Assistant")}
-        {tab("comments", "Comments")}
-      </div>
-    );
-  };
-
-  // Breadcrumb + compact back button
+  // top bar (back + crumbs)
   const BreadcrumbBar = () => {
     if (!selectedApplications.length) return null;
-
     const showBack = Boolean(activeApplicationId);
     const crumbs = activeApplication
       ? `Home > ${activeApplication.title}${
           activeSection !== "overview" ? ` > ${activeSection}` : ""
         }`
       : "Home";
-
     return (
       <div
         style={{
@@ -191,14 +157,7 @@ export default function DashboardApp() {
           marginBottom: 12,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            minWidth: 0,
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           {showBack && (
             <button
               onClick={() => {
@@ -220,23 +179,13 @@ export default function DashboardApp() {
               ← Back
             </button>
           )}
-          <div
-            style={{
-              fontSize: 14,
-              color: "#666",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {crumbs}
-          </div>
+          <div style={{ fontSize: 14, color: "#666" }}>{crumbs}</div>
         </div>
       </div>
     );
   };
 
-  // Progress header for steps (no duplicate list)
+  // progress header for steps
   const StepHeader = () => {
     if (activeSection !== "steps") return null;
     const idx = steps.findIndex((s) => s._id === currentStepId);
@@ -244,7 +193,6 @@ export default function DashboardApp() {
     const step = steps[idx];
     const total = steps.length;
     const pct = Math.round(((idx + 1) / Math.max(total, 1)) * 100);
-
     return (
       <div
         style={{
@@ -269,24 +217,19 @@ export default function DashboardApp() {
             borderRadius: 999,
             overflow: "hidden",
           }}
+          role="progressbar"
           aria-valuenow={pct}
           aria-valuemin={0}
           aria-valuemax={100}
-          role="progressbar"
         >
           <div
-            style={{
-              width: `${pct}%`,
-              height: "100%",
-              background: "#5b9df9",
-            }}
+            style={{ width: `${pct}%`, height: "100%", background: "#5b9df9" }}
           />
         </div>
       </div>
     );
   };
 
-  // render a single step
   const StepContent = () => {
     if (activeSection !== "steps") return null;
     const step = steps.find((s) => s._id === currentStepId);
@@ -331,10 +274,38 @@ export default function DashboardApp() {
     return <p>Unsupported step type.</p>;
   };
 
+  const MobileTabs = () => {
+    if (!activeApplication || wide) return null; // only show on smaller screens
+    const tab = (key, label) => (
+      <button
+        key={key}
+        onClick={() => setActiveSection(key)}
+        style={{
+          padding: "6px 10px",
+          borderRadius: 8,
+          border: "1px solid #ddd",
+          background: activeSection === key ? "#eef" : "#fff",
+          cursor: "pointer",
+          fontSize: 14,
+        }}
+      >
+        {label}
+      </button>
+    );
+    return (
+      <div style={{ display: "flex", gap: 8, margin: "8px 0 12px" }}>
+        {tab("overview", "Overview")}
+        {tab("steps", "Steps")}
+        {tab("comments", "Comments")}
+      </div>
+    );
+  };
+
   return (
     <>
       <Header />
       <div className="app-wrapper">
+        {/* Left navigation */}
         <Sidebar
           applications={selectedApplications}
           activeApplicationId={activeApplicationId}
@@ -346,63 +317,111 @@ export default function DashboardApp() {
           selectedStepId={currentStepId}
         />
 
-        <main className="main-content">
-          <BreadcrumbBar />
+        {/* Main + AI right panel */}
+        <div
+          style={{
+            flex: 1,
+            display: "grid",
+            gridTemplateColumns:
+              activeApplication && wide ? "1fr 360px" : "1fr",
+            gap: 16,
+          }}
+        >
+          {/* Main content */}
+          <main className="main-content" style={{ minWidth: 0 }}>
+            <BreadcrumbBar />
 
-          {/* Grid vs App */}
-          {selectedApplications.length === 0 || !activeApplication ? (
-            <ApplicationCardGrid
-              onApplicationSelect={handleApplicationSelect}
-            />
-          ) : (
-            <>
-              {/* MOBILE ONLY tabs; avoid duplicating left nav on desktop */}
-              <SubNav />
+            {selectedApplications.length === 0 || !activeApplication ? (
+              <ApplicationCardGrid
+                onApplicationSelect={handleApplicationSelect}
+              />
+            ) : (
+              <>
+                <MobileTabs />
 
-              {activeSection === "overview" && (
-                <div style={{ display: "grid", gap: 12 }}>
-                  <ApplicationOverview application={activeApplication} />
-                  {steps.length > 0 && (
-                    <button
-                      onClick={() => {
-                        setActiveSection("steps");
-                        setCurrentStepId(firstStepId);
-                      }}
-                      style={{
-                        padding: "10px 14px",
-                        border: "1px solid #ccc",
-                        borderRadius: 8,
-                        width: "fit-content",
-                        background: "#f7f7f7",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Start application →
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {activeSection === "steps" && (
-                <div style={{ display: "grid", gap: 12 }}>
-                  {/* Progress header replaces duplicate list */}
-                  <StepHeader />
-                  <div style={{ minHeight: 200 }}>
-                    <StepContent />
+                {activeSection === "overview" && (
+                  <div style={{ display: "grid", gap: 12 }}>
+                    <ApplicationOverview application={activeApplication} />
+                    {steps.length > 0 && (
+                      <button
+                        onClick={() => {
+                          setActiveSection("steps");
+                          setCurrentStepId(firstStepId);
+                        }}
+                        style={{
+                          padding: "10px 14px",
+                          border: "1px solid #ccc",
+                          borderRadius: 8,
+                          width: "fit-content",
+                          background: "#f7f7f7",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Start application →
+                      </button>
+                    )}
                   </div>
-                </div>
-              )}
+                )}
 
-              {activeSection === "ai" && enrichedApplication && (
-                <AIChat application={enrichedApplication} />
-              )}
+                {activeSection === "steps" && (
+                  <div style={{ display: "grid", gap: 12 }}>
+                    <StepHeader />
+                    <div style={{ minHeight: 200 }}>
+                      <StepContent />
+                    </div>
+                  </div>
+                )}
 
-              {activeSection === "comments" && (
-                <CommentsSection application={activeApplication} />
-              )}
-            </>
+                {activeSection === "comments" && activeApplication && (
+                  <CommentsSection application={activeApplication} />
+                )}
+
+                {/* On narrow screens, show AI panel beneath main content */}
+                {!wide && activeApplication && (
+                  <section
+                    style={{
+                      marginTop: 16,
+                      border: "1px solid #eee",
+                      borderRadius: 10,
+                      background: "#fff",
+                    }}
+                  >
+                    <AIChat
+                      application={enrichedApplication || activeApplication}
+                    />
+                  </section>
+                )}
+              </>
+            )}
+          </main>
+
+          {/* Right AI panel (desktop/wide only) */}
+          {activeApplication && wide && (
+            <aside
+              style={{
+                borderLeft: "1px solid #eee",
+                paddingLeft: 12,
+                position: "sticky",
+                top: 70,
+                height: "calc(100vh - 90px)",
+                overflow: "auto",
+                background: "transparent",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  marginBottom: 8,
+                  color: "#444",
+                }}
+              >
+                Your AI Assistant
+              </div>
+              <AIChat application={enrichedApplication || activeApplication} />
+            </aside>
           )}
-        </main>
+        </div>
       </div>
     </>
   );
