@@ -1,0 +1,13 @@
+{
+  "id": "sierra_county_mehko",
+  "title": "Sierra County MEHKO",
+  "description": "Sierra County’s Microenterprise Home Kitchen Operations (MEHKO) program allows qualified residents to run home-based food businesses with a county health permit. Applicants must contact Environmental Health, submit an application with menu and SOP, pay the permit fee, and hold a Food Protection Manager Certification.",
+  "rootDomain": "sierracounty.ca.gov",
+  "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+  "steps": [
+    { "id": "eligibility", "title": "Verify Eligibility", "type": "info", "content": "To qualify for a MEHKO in Sierra County:\n- Operate from your private home kitchen.\n- MEHKOs are only authorized in jurisdictions that allow them.\n- A county-issued health permit is required.\n- You must hold a Food Protection Manager Certification." },
+    { "id": "requirements", "title": "Application Requirements", "type": "info", "content": "- Contact the Sierra County Department of Environmental Health at (530) 993-6716.\n- Complete the Health Permit Application, include your menu, and provide a Standard Operating Procedures (SOP) form.\n- Pay the required permit fee.\n- Obtain a Food Protection Manager Certification (online or self-study).\n- See COOK Alliance resources for additional support." },
+    { "id": "sop_template", "title": "Prepare Standard Operating Procedures", "type": "form", "formName": "MEHKO_SOP-English.pdf", "content": "Fill out the SOP template provided by Sierra County Environmental Health." },
+    { "id": "official_pdf", "title": "Official MEHKO Application", "type": "pdf", "formId": "page1", "appId": "sierra_county_mehko", "content": "Complete and submit the Sierra County MEHKO Health Permit Application with your supporting documents." }
+  ]
+}
