@@ -8,7 +8,12 @@ import {
 import useProgress from "../../hooks/useProgress";
 import "./DynamicForm.scss";
 
-export default function DynamicForm({ applicationId, formName, stepId }) {
+export default function DynamicForm({
+  applicationId,
+  formName,
+  stepId,
+  hideCompleteToggle = false,
+}) {
   const { user } = useAuth();
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,
@@ -107,22 +112,24 @@ export default function DynamicForm({ applicationId, formName, stepId }) {
 
   return (
     <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
-      <div className="step-complete-checkbox">
-        <label>
-          <input
-            type="checkbox"
-            checked={isComplete}
-            onChange={(e) => {
-              if (e.target.checked) {
-                markStepComplete(stepId);
-              } else {
-                markStepIncomplete(stepId);
-              }
-            }}
-          />
-          Mark this step as complete
-        </label>
-      </div>
+      {!hideCompleteToggle && (
+        <div className="step-complete-checkbox">
+          <label>
+            <input
+              type="checkbox"
+              checked={isComplete}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  markStepComplete(stepId);
+                } else {
+                  markStepIncomplete(stepId);
+                }
+              }}
+            />
+            Mark this step as complete
+          </label>
+        </div>
+      )}
       <div className="dynamic-form-header">
         <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
         <span className={`status ${status}`}>

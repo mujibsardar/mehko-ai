@@ -1,49 +1,70 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { db } from "../firebase/firebase";
 import {
   doc,
   onSnapshot,
-  setDoc,
+  updateDoc,
   arrayUnion,
   arrayRemove,
+  setDoc,
+  getDoc,
 } from "firebase/firestore";
-import { db } from "../firebase/firebase";
 
 export default function useProgress(userId, applicationId) {
   const [completedSteps, setCompletedSteps] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const ref = doc(db, "users", userId, "applicationProgress", applicationId);
-
+  // subscribe only when both IDs are ready
   useEffect(() => {
-    const unsub = onSnapshot(ref, (docSnap) => {
-      setCompletedSteps(
-        docSnap.exists() ? docSnap.data().completedStepIds || [] : []
-      );
-      setLoading(false);
-    });
-    return unsub;
+    if (!userId || !applicationId) {
+      setCompletedSteps([]); // reset for safety
+      return; // no Firestore calls
+    }
+
+    setLoading(true);
+    const ref = doc(db, "users", userId, "applicationProgress", applicationId);
+
+    const unsub = onSnapshot(
+      ref,
+      (snap) => {
+        setCompletedSteps(
+          snap.exists() ? snap.data().completedStepIds || [] : []
+        );
+        setLoading(false);
+      },
+      () => setLoading(false)
+    );
+
+    return () => unsub();
   }, [userId, applicationId]);
 
-  const markStepComplete = async (stepId) => {
-    await setDoc(
-      ref,
-      { completedStepIds: arrayUnion(stepId) },
-      { merge: true }
-    );
-  };
+  const ensureDoc = useCallback(async () => {
+    if (!userId || !applicationId) return null;
+    const ref = doc(db, "users", userId, "applicationProgress", applicationId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) await setDoc(ref, { completedStepIds: [] });
+    return ref;
+  }, [userId, applicationId]);
 
-  const markStepIncomplete = async (stepId) => {
-    await setDoc(
-      ref,
-      { completedStepIds: arrayRemove(stepId) },
-      { merge: true }
-    );
-  };
+  const markStepComplete = useCallback(
+    async (stepId) => {
+      if (!userId || !applicationId || !stepId) return;
+      const ref = await ensureDoc();
+      if (!ref) return;
+      await updateDoc(ref, { completedStepIds: arrayUnion(stepId) });
+    },
+    [userId, applicationId, ensureDoc]
+  );
 
-  return {
-    completedSteps,
-    loading,
-    markStepComplete,
-    markStepIncomplete,
-  };
+  const markStepIncomplete = useCallback(
+    async (stepId) => {
+      if (!userId || !applicationId || !stepId) return;
+      const ref = await ensureDoc();
+      if (!ref) return;
+      await updateDoc(ref, { completedStepIds: arrayRemove(stepId) });
+    },
+    [userId, applicationId, ensureDoc]
+  );
+
+  return { completedSteps, loading, markStepComplete, markStepIncomplete };
 }

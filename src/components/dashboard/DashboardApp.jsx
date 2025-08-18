@@ -12,6 +12,7 @@ import { doc, onSnapshot, collection } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
+import useProgress from "../../hooks/useProgress";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();
@@ -30,6 +31,7 @@ export default function DashboardApp() {
       ? window.matchMedia("(min-width: 1200px)").matches
       : true
   );
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(min-width: 1200px)");
@@ -49,6 +51,12 @@ export default function DashboardApp() {
   // active app
   const activeApplication =
     selectedApplications.find((c) => c.id === activeApplicationId) || null;
+
+  // progress
+  const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
+    user?.uid,
+    activeApplicationId
+  );
 
   // steps
   const steps = useMemo(() => {
@@ -182,41 +190,130 @@ export default function DashboardApp() {
     );
   };
 
-  const StepHeader = () => {
-    if (activeSection !== "steps") return null;
-    const idx = steps.findIndex((s) => s._id === currentStepId);
-    if (idx === -1) return null;
-    const step = steps[idx];
-    const total = steps.length;
-    const pct = Math.round(((idx + 1) / Math.max(total, 1)) * 100);
+  // helpers
+  const stepIndex = steps.findIndex((s) => s._id === currentStepId);
+  const total = steps.length;
+  const pct = total ? Math.round(((stepIndex + 1) / total) * 100) : 0;
+  const canPrev = stepIndex > 0;
+  const canNext = stepIndex < total - 1;
+
+  const goPrev = () => canPrev && setCurrentStepId(steps[stepIndex - 1]._id);
+  const goNext = () => canNext && setCurrentStepId(steps[stepIndex + 1]._id);
+
+  const currentStep = stepIndex >= 0 ? steps[stepIndex] : null;
+  const stepIsComplete = currentStep
+    ? completedSteps.includes(currentStep.id || currentStep._id)
+    : false;
+
+  // NEW: StepNavigator (replaces StepHeader)
+  const StepNavigator = () => {
+    if (activeSection !== "steps" || !currentStep) return null;
+
+    const toggleComplete = () => {
+      const id = currentStep.id || currentStep._id;
+      stepIsComplete ? markStepIncomplete(id) : markStepComplete(id);
+    };
+
     return (
       <div
         style={{
           display: "grid",
-          gap: 6,
+          gap: 8,
           border: "1px solid #eee",
-          borderRadius: 10,
-          padding: "10px 12px",
-          marginBottom: 12,
+          borderRadius: 12,
+          padding: 12,
           background: "#fff",
           boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
         }}
       >
-        <div style={{ fontSize: 14, color: "#666" }}>
-          Step {idx + 1} of {total}
-        </div>
-        <div style={{ fontSize: 20, fontWeight: 700 }}>{step.title}</div>
         <div
           style={{
-            height: 6,
-            background: "#f2f2f2",
-            borderRadius: 999,
-            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
           }}
+        >
+          <button
+            onClick={goPrev}
+            disabled={!canPrev}
+            title="Previous step"
+            style={{
+              padding: "6px 10px",
+              borderRadius: 10,
+              border: "1px solid #e5e7eb",
+              background: "#fff",
+              cursor: canPrev ? "pointer" : "not-allowed",
+              opacity: canPrev ? 1 : 0.5,
+            }}
+          >
+            ←
+          </button>
+
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, color: "#6b7280" }}>
+              Step {stepIndex + 1} of {total}
+            </div>
+            <div
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                color: "#111827",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+              title={currentStep.title}
+            >
+              {currentStep.title}
+            </div>
+          </div>
+
+          <button
+            onClick={goNext}
+            disabled={!canNext}
+            title="Next step"
+            style={{
+              padding: "6px 10px",
+              borderRadius: 10,
+              border: "1px solid #e5e7eb",
+              background: "#fff",
+              cursor: canNext ? "pointer" : "not-allowed",
+              opacity: canNext ? 1 : 0.5,
+            }}
+          >
+            →
+          </button>
+
+          <button
+            onClick={toggleComplete}
+            style={{
+              marginLeft: 8,
+              padding: "8px 12px",
+              borderRadius: 10,
+              border: "1px solid " + (stepIsComplete ? "#10b981" : "#d1d5db"),
+              background: stepIsComplete ? "#ecfdf5" : "#fff",
+              color: stepIsComplete ? "#065f46" : "#374151",
+              cursor: "pointer",
+              fontSize: 13,
+              whiteSpace: "nowrap",
+            }}
+            title="Toggle completion"
+          >
+            {stepIsComplete ? "Completed ✓" : "Mark Complete"}
+          </button>
+        </div>
+
+        <div
           role="progressbar"
           aria-valuenow={pct}
           aria-valuemin={0}
           aria-valuemax={100}
+          style={{
+            height: 6,
+            background: "#f3f4f6",
+            borderRadius: 999,
+            overflow: "hidden",
+          }}
         >
           <div
             style={{ width: `${pct}%`, height: "100%", background: "#5b9df9" }}
@@ -237,11 +334,18 @@ export default function DashboardApp() {
           applicationId={activeApplication.id}
           stepId={step.id || step._id}
           formName={step.formName}
+          hideCompleteToggle
         />
       );
     }
     if (step.type === "info" || step.content) {
-      return <InfoStep step={step} applicationId={activeApplication.id} />;
+      return (
+        <InfoStep
+          step={step}
+          applicationId={activeApplication.id}
+          hideCompleteToggle
+        />
+      );
     }
     if (step.type === "pdf") {
       return (
@@ -363,7 +467,7 @@ export default function DashboardApp() {
 
                 {activeSection === "steps" && (
                   <div style={{ display: "grid", gap: 12 }}>
-                    <StepHeader />
+                    <StepNavigator />
                     <div style={{ minHeight: 200 }}>
                       <StepContent />
                     </div>
