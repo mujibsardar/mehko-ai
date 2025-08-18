@@ -8,6 +8,10 @@ from starlette.responses import Response, StreamingResponse
 
 from overlay.fill_overlay import fill_pdf_overlay_bytes
 
+from server.firebase_admin_init import db  # <-- add this import (after other imports)
+from firebase_admin import firestore
+
+
 router = APIRouter(prefix="/apps", tags=["apps"])
 MAPPER_ENABLED = os.getenv("MAPPER_ENABLED", "1") == "1"
 
@@ -39,10 +43,33 @@ async def create_app(request: Request, app: str = Form(None)):
         data = await request.json()
     except Exception:
         pass
+
     name = app or data.get("app") or request.query_params.get("app")
     if not name:
         raise HTTPException(400, "missing app")
+
     ensure_dir(app_dir(name))
+
+    # Firestore doc + comments subcollection (idempotent)
+    app_ref = db.collection("applications").document(name)
+    snap = app_ref.get()
+    if not snap.exists:
+        payload = {
+            "id": name,
+            "title": data.get("title", name.replace("_", " ").title()),
+            "description": data.get("description", ""),
+            "rootDomain": data.get("rootDomain", ""),
+            "supportTools": {"aiEnabled": True, "commentsEnabled": True},
+            "steps": [],
+        }
+        app_ref.set(payload)
+        app_ref.collection("comments").add({
+            "displayName": "System",
+            "text": "Comments thread started.",
+            "timestamp": firestore.SERVER_TIMESTAMP,
+            "userId": "system",
+        })
+
     return {"ok": True, "app": name}
 
 # --- Form assets (new format only) ---

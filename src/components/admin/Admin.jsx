@@ -89,7 +89,12 @@ export default function Admin() {
     const r = await fetch(`${API}/apps`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ app: appId }),
+      body: JSON.stringify({
+        app: appId, // or `app`
+        title: appTitle,
+        description,
+        rootDomain,
+      }),
     });
     const j = await r.json();
     if (!r.ok) return alert(j.detail || "Backend /apps failed");
