@@ -1,15 +1,14 @@
+// Interview.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const API = "http://127.0.0.1:8081";
 
-export default function Interview() {
-  const { app, form } = useParams();
+export function InterviewView({ app, form }) {
   const [overlay, setOverlay] = useState({ fields: [] });
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // load template
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -17,7 +16,6 @@ export default function Interview() {
       const tpl = await r.json();
       const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
       setOverlay({ fields });
-      // init values
       const init = {};
       for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
       setValues(init);
@@ -37,10 +35,7 @@ export default function Interview() {
       method: "POST",
       body: fd,
     });
-    if (!r.ok) {
-      alert("Fill failed");
-      return;
-    }
+    if (!r.ok) return alert("Fill failed");
     const blob = await r.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -53,7 +48,6 @@ export default function Interview() {
   }
 
   const group = useMemo(() => {
-    // simple per-page grouping for readability
     const g = new Map();
     for (const f of overlay.fields) {
       const p = f.page ?? 0;
@@ -66,12 +60,7 @@ export default function Interview() {
   if (loading) return <div style={{ padding: 16 }}>Loading…</div>;
 
   return (
-    <div style={{ padding: 16, maxWidth: 900 }}>
-      <h2 style={{ margin: "0 0 8px" }}>Interview</h2>
-      <div style={{ color: "#666", marginBottom: 16 }}>
-        <code>{app}</code> / <code>{form}</code>
-      </div>
-
+    <div style={{ padding: 0, maxWidth: 900 }}>
       <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
         {group.map(([page, fields]) => (
           <fieldset
@@ -128,14 +117,14 @@ export default function Interview() {
           >
             Download Filled PDF
           </button>
-          <a
-            href={`/mapper/${app}/${form}`}
-            style={{ alignSelf: "center", fontSize: 14 }}
-          >
-            Open Mapper
-          </a>
         </div>
       </form>
     </div>
   );
+}
+
+// Route wrapper (kept for direct navigation)
+export default function Interview() {
+  const { app, form } = useParams();
+  return <InterviewView app={app} form={form} />;
 }

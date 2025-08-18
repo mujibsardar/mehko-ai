@@ -13,6 +13,7 @@ import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
 import useProgress from "../../hooks/useProgress";
+import { InterviewView } from "../overlay/Interview";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();
@@ -64,11 +65,9 @@ export default function DashboardApp() {
     return raw.map((s, idx) => ({
       ...s,
       _id: s.id ?? String(idx),
-      title:
-        s.title ??
-        s.formName ??
-        (s.content ? String(s.content).slice(0, 40) + "…" : `Step ${idx + 1}`),
-      type: s.type ?? (s.formName ? "form" : s.content ? "info" : "unknown"),
+      title: s.title ?? `Step ${idx + 1}`,
+      // only support explicit types
+      type: s.type ?? "unknown",
     }));
   }, [activeApplication]);
   const firstStepId = steps[0]?._id || null;
@@ -347,27 +346,11 @@ export default function DashboardApp() {
         />
       );
     }
+
     if (step.type === "pdf") {
       return (
         <div style={{ display: "grid", gap: 8 }}>
-          <p>Fill and download the official form.</p>
-          <Link
-            to={`/interview/${step.appId || activeApplication.id}/${
-              step.formId || "page1"
-            }`}
-          >
-            <button
-              style={{
-                padding: "10px 14px",
-                border: "1px solid #ccc",
-                borderRadius: 8,
-                cursor: "pointer",
-                width: "fit-content",
-              }}
-            >
-              Open Form
-            </button>
-          </Link>
+          <InterviewView app={step.appId} form={step.formId} />
         </div>
       );
     }

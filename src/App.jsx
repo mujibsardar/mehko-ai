@@ -1,7 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Interview from "./components/overlay/Interview.jsx";
 import Mapper from "./components/overlay/Mapper.jsx";
 import Admin from "./components/admin/Admin.jsx";
 import DashboardApp from "./components/dashboard/DashboardApp.jsx";
@@ -15,7 +14,6 @@ export default function App() {
       {/* Admin tools */}
       <Route path="/admin" element={<Admin />} />
       <Route path="/mapper/:app/:form" element={<Mapper />} />
-      <Route path="/interview/:app/:form" element={<Interview />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
