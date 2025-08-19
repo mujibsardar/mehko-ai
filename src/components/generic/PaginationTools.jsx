@@ -1,6 +1,4 @@
 import "./PaginationTools.scss"
-import React from 'react'
-import FaIcon from "/src/components/generic/FaIcon.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 
 const THREE_DOTS = '...'

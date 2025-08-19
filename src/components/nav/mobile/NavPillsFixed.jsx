@@ -1,9 +1,7 @@
 import "./NavPillsFixed.scss"
-import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
 import {useData} from "/src/providers/DataProvider.jsx"
 import {useGlobalState} from "/src/providers/GlobalStateProvider.jsx"
-import NavPills from "/src/components/nav/mobile/NavPills.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 
 function NavPillsFixed() {

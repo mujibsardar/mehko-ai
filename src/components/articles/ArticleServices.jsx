@@ -1,8 +1,3 @@
-import React from 'react'
-import Article from "/src/components/wrappers/Article.jsx"
-import Swipeable from "/src/components/capabilities/Swipeable.jsx"
-import {SwiperSlide} from "swiper/react"
-import FunFact from "/src/components/generic/FunFact.jsx"
 import {useParser} from "/src/helpers/parser.js"
 
 function ArticleServices({ data }) {

@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-import { InputGroup } from 'react-bootstrap';
-import InputGroupText from 'react-bootstrap/InputGroupText';
-import FaIcon from '/src/components/generic/FaIcon.jsx';
+import { useState } from 'react';
 
 function FormInput({ id, type, value, valueSetter, faIcon, placeholder, required }) {
     const parsedPlaceholder = placeholder + (required ? '*' : '')

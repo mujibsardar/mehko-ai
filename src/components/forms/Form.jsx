@@ -1,6 +1,3 @@
-import React from 'react'
-import {Row, Col} from "react-bootstrap"
-import FaIcon from "/src/components/generic/FaIcon.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 
 function Form({children, id, submitLabel, submitIcon, onSubmit}) {

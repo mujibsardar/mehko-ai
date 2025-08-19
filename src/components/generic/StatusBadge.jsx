@@ -1,6 +1,5 @@
 import "./StatusBadge.scss"
-import React, {useEffect, useState} from 'react'
-import Tooltip from "/src/components/generic/Tooltip.jsx"
+import {useEffect, useState} from 'react'
 import {useUtils} from "/src/helpers/utils.js"
 import {useScheduler} from "/src/helpers/scheduler.js"
 import {useWindow} from "/src/providers/WindowProvider.jsx"

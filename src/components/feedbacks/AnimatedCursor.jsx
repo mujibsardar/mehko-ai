@@ -1,7 +1,5 @@
 import "./AnimatedCursor.scss"
-import React, {useEffect, useState} from 'react'
-import FaIcon from "/src/components/generic/FaIcon.jsx"
-import Tooltip from "/src/components/generic/Tooltip.jsx"
+import {useEffect, useState} from 'react'
 import {useUtils} from "/src/helpers/utils.js"
 
 const CIRCLE_SIZE_IN_PIXELS = 75

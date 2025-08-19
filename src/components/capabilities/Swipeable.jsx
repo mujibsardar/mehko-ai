@@ -1,6 +1,4 @@
 import "./Swipeable.scss"
-import React from 'react'
-import { Swiper } from 'swiper/react'
 import {Pagination, Autoplay} from "swiper/modules"
 import {useUtils} from "/src/helpers/utils.js"
 

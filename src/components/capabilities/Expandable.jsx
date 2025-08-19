@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react'
-import FaIcon from "/src/components/generic/FaIcon.jsx"
+import {useEffect, useState} from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 
 function Expandable({ children, items, storageId, onFilter, controlsClass, maxItems, stepAmount }) {

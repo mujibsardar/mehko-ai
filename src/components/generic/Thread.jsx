@@ -1,8 +1,4 @@
 import "./Thread.scss"
-import React from 'react'
-import FaIcon from "/src/components/generic/FaIcon.jsx"
-import InfoBadge from "/src/components/generic/InfoBadge.jsx"
-import ExternalLink from "/src/components/generic/ExternalLink.jsx"
 
 function Thread({ items, shouldShowAsComplete }) {
     items = items || []

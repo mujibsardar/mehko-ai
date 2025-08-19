@@ -1,5 +1,4 @@
 import "./CustomProgressBar.scss"
-import React from 'react'
 
 function CustomProgressBar({now, fillColor}) {
     return (

@@ -1,6 +1,3 @@
-import React from 'react'
-import Article from "/src/components/wrappers/Article.jsx"
-import InfoBlock from "/src/components/generic/InfoBlock.jsx"
 import {useParser} from "/src/helpers/parser.js"
 
 function ArticleInfoBlock({ data }) {

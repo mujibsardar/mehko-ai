@@ -1,8 +1,4 @@
 import "./InlineList.scss"
-import React from 'react'
-import FaIcon from "/src/components/generic/FaIcon.jsx"
-import ImageView from "/src/components/generic/ImageView.jsx"
-import ExternalLink from "/src/components/generic/ExternalLink.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 
 function InlineList({ items, textClass }) {

@@ -1,6 +1,4 @@
-import React from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-import DropdownPicker from "/src/components/generic/DropdownPicker.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 
 function LanguagePicker({shrink}) {

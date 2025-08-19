@@ -1,5 +1,3 @@
-import React from 'react'
-import ToolButton from "/src/components/generic/ToolButton.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 
 function FullscreenToggleButton({className, enabled}) {

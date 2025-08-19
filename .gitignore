@@ -49,3 +49,8 @@ serviceAccountKey.json
 # Application files
 applications/**/form.pdf
 applications/**/meta.json
+
+# Agent artifacts
+agent-output/
+analyzer.log
+*.rej

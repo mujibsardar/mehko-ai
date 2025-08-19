@@ -1,19 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
-import Sidebar from "../layout/Sidebar";
-import ApplicationCardGrid from "../layout/ApplicationCardGrid";
-import ApplicationOverview from "../applications/ApplicationOverview";
-import Header from "../layout/Header";
-import AIChat from "../applications/AIChat";
-import CommentsSection from "../applications/CommentsSection";
-import InfoStep from "../applications/InfoStep";
 import usePinnedApplications from "../../hooks/usePinnedApplications";
 import { doc, onSnapshot, collection } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
-import DynamicForm from "../forms/DynamicForm";
 import useProgress from "../../hooks/useProgress";
-import { InterviewView } from "../overlay/Interview";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();

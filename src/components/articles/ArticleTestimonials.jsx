@@ -1,8 +1,3 @@
-import React from 'react'
-import Article from "/src/components/wrappers/Article.jsx"
-import Testimonial from "/src/components/generic/Testimonial.jsx"
-import Swipeable from "/src/components/capabilities/Swipeable.jsx"
-import { SwiperSlide } from 'swiper/react'
 import {useParser} from "/src/helpers/parser.js"
 
 function ArticleTestimonials({ data }) {

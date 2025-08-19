@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-import Article from "/src/components/wrappers/Article.jsx"
-import ActivityList from "/src/components/generic/ActivityList.jsx"
 import {useParser} from "/src/helpers/parser.js"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 

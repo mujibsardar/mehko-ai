@@ -1,5 +1,4 @@
 import "./Divider.scss"
-import React from 'react'
 
 function Divider({type, variant}) {
     type = type || 'simple'

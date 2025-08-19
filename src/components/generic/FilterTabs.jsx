@@ -1,7 +1,5 @@
 import "./FilterTabs.scss"
-import React, {useState} from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-import SensitiveButton from "/src/components/generic/SensitiveButton"
 
 function FilterTabs({items, selectedItemId, onSelect}) {
     const _onTabClicked = (item) => {

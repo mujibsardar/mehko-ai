@@ -1,17 +1,11 @@
 import "./NavSidebar.scss";
-import React, { useEffect, useState } from "react";
-import Box from "/src/components/wrappers/Box.jsx";
+import { useEffect, useState } from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useData } from "/src/providers/DataProvider.jsx";
 import { useWindow } from "/src/providers/WindowProvider.jsx";
 import { useGlobalState } from "/src/providers/GlobalStateProvider.jsx";
-import ToolButton from "/src/components/generic/ToolButton.jsx";
-import NavHeader from "/src/components/nav/desktop/NavHeader.jsx";
-import {
-  NavSidebarGroup,
-  NavSidebarGroupItem,
-} from "/src/components/nav/desktop/NavSidebarGroup";
-import NavLink from "/src/components/nav/desktop/NavLink.jsx";
+
+
 
 function NavSidebar() {
   const utils = useUtils();

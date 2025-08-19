@@ -1,7 +1,5 @@
 import "./MainSlider.scss"
-import React from 'react'
 import {useData} from "/src/providers/DataProvider.jsx"
-import Section from "/src/components/layout/Section.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 
 function MainSlider() {

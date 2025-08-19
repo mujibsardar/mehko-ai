@@ -1,4 +1,3 @@
-import ApplicationSteps from "./ApplicationSteps";
 import "./ApplicationOverview.scss";
 
 function ApplicationOverview({ application }) {

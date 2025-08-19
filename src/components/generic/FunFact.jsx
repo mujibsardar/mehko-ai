@@ -1,6 +1,4 @@
 import "./FunFact.scss"
-import React from 'react'
-import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 

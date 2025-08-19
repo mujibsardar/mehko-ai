@@ -1,6 +1,3 @@
-import React from 'react'
-import {Dropdown} from 'react-bootstrap'
-import MenuItem from "/src/components/generic/MenuItem.jsx"
 import "./DropdownPicker.scss"
 
 function DropdownPicker({availableOptions, selectedOption, size, onOptionSelected, shrink, alwaysForceDropdown, tooltip}) {

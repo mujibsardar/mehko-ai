@@ -1,11 +1,6 @@
 import "./Timeline.scss"
-import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
-import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
-import InfoBadge from "/src/components/generic/InfoBadge.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-import Tags from "/src/components/generic/Tags.jsx"
-import FaIcon from "/src/components/generic/FaIcon.jsx"
 
 const utils = useUtils()
 

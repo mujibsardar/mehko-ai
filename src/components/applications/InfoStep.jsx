@@ -1,5 +1,4 @@
 import "./InfoStep.scss";
-import ReactMarkdown from "react-markdown";
 import useAuth from "../../hooks/useAuth";
 import useProgress from "../../hooks/useProgress";
 

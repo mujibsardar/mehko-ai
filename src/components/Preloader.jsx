@@ -1,5 +1,5 @@
 import "./Preloader.scss";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useScheduler } from "/src/helpers/scheduler.js";
 

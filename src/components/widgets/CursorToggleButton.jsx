@@ -1,5 +1,3 @@
-import React from 'react'
-import NavLink from "/src/components/nav/desktop/NavLink.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
 

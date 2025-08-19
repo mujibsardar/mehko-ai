@@ -1,8 +1,5 @@
 import "./NavLink.scss"
-import React from 'react'
-import MenuItem from "/src/components/generic/MenuItem.jsx"
 import {useUtils} from "/src/helpers/utils.js"
-import SensitiveButton from "/src/components/generic/SensitiveButton.jsx"
 
 function NavLink({ shrink, label, icon, size, className, rounded, selected, disabled, onClick, tooltip }) {
     const utils = useUtils()

@@ -1,7 +1,4 @@
-import React, {useEffect, useState} from 'react'
-import Article from "/src/components/wrappers/Article.jsx"
-import Thread from "/src/components/generic/Thread.jsx"
-import Expandable from "/src/components/capabilities/Expandable.jsx"
+import {useEffect, useState} from 'react'
 import {useParser} from "/src/helpers/parser.js"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"

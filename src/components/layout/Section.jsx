@@ -1,15 +1,10 @@
 import "./Section.scss";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGlobalState } from "/src/providers/GlobalStateProvider.jsx";
-import Box from "/src/components/wrappers/Box.jsx";
-import BorderWrap from "/src/components/wrappers/BorderWrap.jsx";
-import Scrollable from "/src/components/capabilities/Scrollable.jsx";
 import { useUtils } from "/src/helpers/utils.js";
 import { useData } from "/src/providers/DataProvider.jsx";
 import { useWindow } from "/src/providers/WindowProvider.jsx";
 import { useScheduler } from "/src/helpers/scheduler.js";
-import FullScreenToggleButton from "/src/components/widgets/FullScreenToggleButton";
-import FaIcon from "/src/components/generic/FaIcon.jsx";
 
 import ArticleCards from "/src/components/articles/ArticleCards.jsx";
 import ArticleContactForm from "/src/components/articles/ArticleContactForm.jsx";

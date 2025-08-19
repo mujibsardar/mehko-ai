@@ -1,7 +1,5 @@
 import "./ActivitySpinner.scss"
-import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
-import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
 
 function ActivitySpinner({activities}) {
     const utils = useUtils()
