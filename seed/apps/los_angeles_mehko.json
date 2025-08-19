@@ -1,0 +1,101 @@
+{
+    "id": "los_angeles_mehko",
+    "title": "Los Angeles County MEHKO",
+    "description": "LA County MEHKO (excludes Pasadena, Long Beach, Vernon). Up to 30 meals/day, 90/week, $100k cap.",
+    "rootDomain": "lacounty.gov",
+    "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "- Review the 'How to Get Started' guide\n- Download the Self-Inspection Checklist\n- Ensure kitchen & menu align with MEHKO rules"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Landlord approval (if renting)\n- Get Certified Food Protection Manager (CFPM)\n- Check city business license\n- Register for sales tax\n- Check ABC if serving alcohol"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- SOP + menu\n- Public Health Permit Application\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO_SOP-English",
+        "appId": "los_angeles_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "Fill out and submit the SOP form."
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "MEHKO_PublicHealthPermitApplication-ENG",
+        "appId": "los_angeles_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "Complete and submit the official Public Health Permit Application."
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Submit application online\n- Pay $597 review fee (unless subsidized)"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Department schedules inspection\n- Fix issues and complete follow-ups if needed"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Permit will be mailed upon approval."
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Follow approved SOP\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits"
+      },
+      {
+        "id": "subsidy",
+        "title": "Limited-Time Subsidy",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Fee waiver available for first 1,000 applicants (net revenue < $50k, no prior subsidy). Deadline: June 30, 2026 or until funds run out."
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Home-Based Food Operations Program  \nPhone: (626) 430-9855  \nEmail: homebasedfoods@ph.lacounty.gov"
+      }
+    ]
+  }

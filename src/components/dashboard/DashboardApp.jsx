@@ -341,6 +341,24 @@ export default function DashboardApp() {
         />
       );
     }
+
+    console.log("Rendering step:", JSON.stringify(step, null, 2));
+    console.log(
+      "activeApplication:",
+      JSON.stringify(activeApplication, null, 2)
+    );
+    if (step.type === "pdf") {
+      return (
+        <div style={{ display: "grid", gap: 8 }}>
+          <InterviewView
+            key={`${activeApplication.id}:${step.formId}`}
+            app={activeApplication.id}
+            form={step.formId} // <- FIX
+          />
+        </div>
+      );
+    }
+
     if (step.type === "info" || step.content) {
       return (
         <InfoStep
@@ -351,13 +369,6 @@ export default function DashboardApp() {
       );
     }
 
-    if (step.type === "pdf") {
-      return (
-        <div style={{ display: "grid", gap: 8 }}>
-          <InterviewView app={step.appId} form={step.formId} />
-        </div>
-      );
-    }
     return <p>Unsupported step type.</p>;
   };
 

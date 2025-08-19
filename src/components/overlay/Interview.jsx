@@ -12,8 +12,10 @@ export function InterviewView({ app, form }) {
   useEffect(() => {
     (async () => {
       setLoading(true);
+      console.log("InterviewView fetching:", app, form); // debug
       const r = await fetch(`${API}/apps/${app}/forms/${form}/template`);
       const tpl = await r.json();
+      console.log("template response:", tpl); // debug
       const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
       setOverlay({ fields });
       const init = {};
@@ -58,6 +60,9 @@ export function InterviewView({ app, form }) {
   }, [overlay]);
 
   if (loading) return <div style={{ padding: 16 }}>Loading…</div>;
+
+  if (!overlay.fields.length)
+    return <div style={{ padding: 16 }}>No fields found for {form}.</div>;
 
   return (
     <div style={{ padding: 0, maxWidth: 900 }}>
