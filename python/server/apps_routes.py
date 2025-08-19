@@ -99,6 +99,17 @@ def save_template(app: str, form: str, overlay_json: str = Form(...)):
     p.write_text(json.dumps(overlay, indent=2))
     return {"ok": True, "fields": len(overlay.get("fields", []))}
 
+@router.get("/{app}/forms/{form}/text")
+def get_pdf_text(app: str, form: str):
+  pdf_path = form_dir(app, form) / "form.pdf"
+  if not pdf_path.exists():
+      raise HTTPException(404, f"missing PDF at {pdf_path}")
+  doc = fitz.open(pdf_path)
+  pages = []
+  for i in range(len(doc)):
+      pages.append(doc[i].get_text("text"))
+  return {"pages": pages, "chars": sum(len(p) for p in pages)}
+
 # --- Filling ---
 @router.post("/{app}/forms/{form}/fill")
 async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...)):
@@ -161,3 +172,4 @@ def app_preview_page(app: str, form: str, page: int = 0, dpi: int = 144):
         raise HTTPException(400, f"invalid page {page}")
     pix = pg.get_pixmap(dpi=dpi, alpha=False)
     return Response(pix.tobytes("png"), media_type="image/png")
+

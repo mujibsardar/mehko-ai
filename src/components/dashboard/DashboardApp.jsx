@@ -495,6 +495,11 @@ export default function DashboardApp() {
                     >
                       <AIChat
                         application={enrichedApplication || activeApplication}
+                        currentStep={currentStep}
+                        currentStepId={
+                          currentStep?.id || currentStep?._id || null
+                        }
+                        completedStepIds={completedSteps}
                       />
                     </div>
                   </section>
@@ -553,6 +558,9 @@ export default function DashboardApp() {
                 >
                   <AIChat
                     application={enrichedApplication || activeApplication}
+                    currentStep={currentStep}
+                    currentStepId={currentStep?.id || currentStep?._id || null}
+                    completedStepIds={completedSteps}
                   />
                 </div>
               </div>

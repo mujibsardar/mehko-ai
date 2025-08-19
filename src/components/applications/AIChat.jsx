@@ -5,38 +5,109 @@ import {
   saveChatMessages,
   loadChatMessages,
   pinApplication,
+  loadFormData, // reuse your helpers
 } from "../../firebase/userData";
 
-export default function AIChat({ application }) {
+const API_APP = "http://127.0.0.1:8081";
+const API_CHAT = "http://localhost:3000/api/ai-chat";
+
+export default function AIChat({
+  application,
+  currentStep,
+  currentStepId,
+  completedStepIds = [],
+}) {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef(null);
-  const [applicationForms, setApplicationForms] = useState({});
 
-  // Fetch per-step form fields once
+  // overlays (template fields), saved answers, and pdf refs
+  const [overlayMap, setOverlayMap] = useState({}); // {formId: fields[]}
+  const [formDataMap, setFormDataMap] = useState({}); // {formId: {...answers}}
+  const [pdfRefs, setPdfRefs] = useState({}); // {formId: "PDF available at ..."}
+
+  const [pdfText, setPdfText] = useState({});
+
+  // Normalize steps with completion so the model doesn't have to infer
+  const computedSteps = useMemo(() => {
+    const steps = application?.steps || [];
+    return steps.map((s) => {
+      const sid = s.id || s._id;
+      return { ...s, _id: sid, isComplete: completedStepIds.includes(sid) };
+    });
+  }, [application?.steps, completedStepIds]);
+
+  // Fetch overlays for all pdf steps
   useEffect(() => {
-    const enrich = async () => {
+    (async () => {
       if (!application?.steps) return;
       const map = {};
       for (const step of application.steps) {
-        if (step.type === "form" && step.formName) {
+        if (step.type === "pdf" && step.formId) {
           try {
-            const res = await fetch(
-              `http://localhost:3000/api/form-fields?applicationId=${application.id}&formName=${step.formName}`
+            const r = await fetch(
+              `${API_APP}/apps/${application.id}/forms/${step.formId}/template`
             );
-            const data = await res.json();
-            map[step.id] = data.fields || [];
-          } catch (e) {
-            console.error(`Failed to fetch fields for ${step.id}`, e);
+            const j = await r.json();
+            map[step.formId] = j.fields || [];
+          } catch (err) {
+            console.error("overlay fetch failed:", step.formId, err);
           }
         }
       }
-      setApplicationForms(map);
-    };
-    enrich();
-  }, [application?.id]);
+      setOverlayMap(map);
+    })();
+  }, [application?.id, application?.steps]);
+
+  // Load saved answers for all pdf steps (if any)
+  useEffect(() => {
+    (async () => {
+      if (!user?.uid || !application?.steps) return;
+      const map = {};
+      for (const step of application.steps) {
+        if (step.type === "pdf" && step.formId) {
+          try {
+            const saved = await loadFormData(
+              user.uid,
+              application.id,
+              step.formId
+            );
+            map[step.formId] = saved || {};
+          } catch (err) {
+            console.error("loadFormData failed:", step.formId, err);
+          }
+        }
+      }
+      setFormDataMap(map);
+    })();
+  }, [user?.uid, application?.id, application?.steps]);
+
+  // Optionally expose a reference to the PDF asset (useful if backend later extracts text)
+  useEffect(() => {
+    (async () => {
+      if (!application?.steps) return;
+      const map = {};
+      for (const step of application.steps) {
+        if (step.type === "pdf" && step.formId) {
+          try {
+            const r = await fetch(
+              `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/text`
+            );
+            if (!r.ok) continue;
+            const j = await r.json();
+            map[step.formId] = Array.isArray(j.pages)
+              ? j.pages.join("\n\n---\n\n")
+              : "";
+          } catch (e) {
+            console.error("pdf text fetch failed:", step.formId, e);
+          }
+        }
+      }
+      setPdfText(map);
+    })();
+  }, [application?.id, application?.steps]);
 
   // Load chat history or seed greeting
   useEffect(() => {
@@ -64,6 +135,7 @@ export default function AIChat({ application }) {
       "What are the required forms?",
       "Which step should I do next?",
       "Explain how to submit the public health app.",
+      "What steps have I completed?",
       "Show fields for my current form.",
     ],
     []
@@ -78,7 +150,7 @@ export default function AIChat({ application }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3000/api/ai-chat", {
+      const res = await fetch(API_CHAT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -88,15 +160,23 @@ export default function AIChat({ application }) {
           })),
           applicationId: application.id,
           context: {
-            title: application.title,
-            steps: application.steps,
-            completedStepIds: application.completedStepIds || [],
-            rootDomain: application.rootDomain,
+            application: {
+              id: application.id,
+              title: application.title,
+              rootDomain: application.rootDomain,
+            },
+            steps: computedSteps, // includes isComplete flags
+            currentStep: currentStep || null,
+            currentStepId: currentStepId || null,
+            completedStepIds, // raw list too
             comments: application.comments || [],
-            forms: applicationForms,
+            overlays: overlayMap, // {formId: fields[]}
+            formData: formDataMap, // {formId: {...answers}}
+            pdfText, // refs to the actual PDFs (for future text extraction)
           },
         }),
       });
+
       const data = await res.json();
       const aiMsg = {
         sender: "ai",
@@ -108,6 +188,7 @@ export default function AIChat({ application }) {
       await saveChatMessages(user.uid, application.id, updated);
       await pinApplication(user.uid, application.id, "ai");
     } catch (e) {
+      console.error(e);
       setMessages((prev) => [
         ...prev,
         {
@@ -149,7 +230,7 @@ export default function AIChat({ application }) {
         </button>
       </div>
 
-      {/* Quick tasks card (like Jobright’s checklist) */}
+      {/* Quick tasks */}
       <div className="ai-chat__guide-card">
         <div className="ai-chat__guide-title">Tasks I can assist you with:</div>
         <ul className="ai-chat__guide-list">
@@ -163,7 +244,7 @@ export default function AIChat({ application }) {
         </ul>
       </div>
 
-      {/* Messages */}
+      {/* History */}
       <div className="ai-chat__history">
         {messages.map((m, i) => (
           <div key={i} className={`chat-msg ${m.sender}`}>
