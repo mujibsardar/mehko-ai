@@ -49,3 +49,6 @@ serviceAccountKey.json
 # Application files
 applications/**/form.pdf
 applications/**/meta.json
+
+agent-output/*
+agent-output/
