@@ -106,7 +106,7 @@ function AnimatedCursor({enabled, active, modalOpen }) {
     )
 }
 
-function _AnimatedCursorCircle({ targetX, targetY, hoveringDiv, isClicked}) {
+function AnimatedCursorCircle({ targetX, targetY, hoveringDiv, isClicked}) {
     const [curX, setCurX] = useState(targetX)
     const [curY, setCurY] = useState(targetY)
     const [curScale, setCurScale] = useState(1)
@@ -231,7 +231,7 @@ function _AnimatedCursorCircle({ targetX, targetY, hoveringDiv, isClicked}) {
     )
 }
 
-function _AnimatedCursorTooltip({ hoveringDiv }) {
+function AnimatedCursorTooltip({ hoveringDiv }) {
     const [dirty, setDirty] = useState(false)
     const [curLabel, setCurLabel] = useState('Label')
     const [timeoutDisplayId, setTimeoutDisplayId] = useState(-1)

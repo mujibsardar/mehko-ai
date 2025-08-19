@@ -27,7 +27,7 @@ function InlineList({ items, textClass }) {
     )
 }
 
-function _InlineListLinkBody({item, shortenedMode}) {
+function InlineListLinkBody({item, shortenedMode}) {
     let label = item.label
     if(shortenedMode) {
         label = item['shortLabel'] || label

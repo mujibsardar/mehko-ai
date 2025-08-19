@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 const LanguageContext = createContext({
   getString: (key) => key,
-  getTranslation: (obj, key, _fallback = false) => obj?.[key] || key,
+  getTranslation: (obj, key, fallback = false) => obj?.[key] || key,
   canChangeLanguage: false,
 });
 
@@ -12,7 +12,7 @@ export const LanguageProvider = ({ children }) => (
   <LanguageContext.Provider
     value={{
       getString: (key) => key,
-      getTranslation: (obj, key, _fallback = false) => obj?.[key] || key,
+      getTranslation: (obj, key, fallback = false) => obj?.[key] || key,
       canChangeLanguage: false,
     }}
   >

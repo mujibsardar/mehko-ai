@@ -55,7 +55,7 @@ function NavTabController() {
   );
 }
 
-function _NavTab({ category, active, onClick }) {
+function NavTab({ category, active, onClick }) {
   return (
     <SensitiveButton
       className={`nav-tab-btn ${active ? `nav-tab-btn-active` : ""}`}

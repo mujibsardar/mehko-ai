@@ -84,7 +84,7 @@ function ModalWindowTransparent({ children, onClose }) {
   );
 }
 
-function _ModalCloseButton({ color, onClose }) {
+function ModalCloseButton({ color, onClose }) {
   color = color || "dark";
 
   const _onButtonClicked = () => {

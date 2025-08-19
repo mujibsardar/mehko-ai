@@ -1,7 +1,7 @@
 
 function StylizedTitle({text, classList}) {
     const classes = {tag: 'h4', lineTag: 'eq-h3'}
-    const _HeadingTag = classes.tag
+    const HeadingTag = classes.tag
 
     return (
         <HeadingTag className={`stylized-title d-flex align-items-center fw-bold ` + classList}>

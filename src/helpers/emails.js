@@ -41,13 +41,13 @@ export const useEmails = () => {
         }
 
         try {
-            const _response = await emailjs.send(
+            const response = await emailjs.send(
                 _status.config['serviceId'],
                 _status.config['templateId'],
                 params
             )
             return true
-        } catch (_error) {
+        } catch (error) {
             return false
         }
     }

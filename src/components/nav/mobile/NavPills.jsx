@@ -41,7 +41,7 @@ function NavPills({ sections }) {
     )
 }
 
-function _NavPill({section, active, onClick}) {
+function NavPill({section, active, onClick}) {
     const {getTranslation} = useLanguage()
 
     return (

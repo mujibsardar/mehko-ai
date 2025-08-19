@@ -57,7 +57,7 @@ function ActivityList({ items, storageId, colClass, maxItems, hideProgressBar, c
     )
 }
 
-function _ActivityListItem({item, customStyle, children}) {
+function ActivityListItem({item, customStyle, children}) {
     const {getString} = useLanguage()
 
     let experienceLabel = ''
@@ -117,7 +117,7 @@ function _ActivityListItem({item, customStyle, children}) {
     )
 }
 
-function _ActivityListInfoBlock({icon, text, shouldDisplayLargeText}) {
+function ActivityListInfoBlock({icon, text, shouldDisplayLargeText}) {
     return (
         <div className={`w-100 text-muted fw-bold`}>
             <div className={`${shouldDisplayLargeText ? 'text-1' : 'text-2'}`} style={{marginTop: '2px'}}>
@@ -132,7 +132,7 @@ function _ActivityListInfoBlock({icon, text, shouldDisplayLargeText}) {
 }
 
 
-function _ActivityListItemWithProgress({ item, createdAt }) {
+function ActivityListItemWithProgress({ item, createdAt }) {
     const {currentTimeSpan, isBreakpoint} = useWindow()
 
     const skipAnimation = utils.isTouchDevice() || !isBreakpoint('xl')

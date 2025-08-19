@@ -32,7 +32,7 @@ export default function Mapper() {
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
   const [imgUrl, setImgUrl] = useState(null);
-  const [_metrics, setMetrics] = useState(null);
+  const [metrics, setMetrics] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const canvasRef = useRef(null);
   const drawingRef = useRef(null);

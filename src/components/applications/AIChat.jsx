@@ -107,7 +107,7 @@ export default function AIChat({ application }) {
       setMessages(updated);
       await saveChatMessages(user.uid, application.id, updated);
       await pinApplication(user.uid, application.id, "ai");
-    } catch (_e) {
+    } catch (e) {
       setMessages((prev) => [
         ...prev,
         {

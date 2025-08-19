@@ -15,7 +15,7 @@ function InfoBlock({img, faIcon, faIconColors, html}) {
     )
 }
 
-function _InfoBlockImageCol({img, fallbackIcon, fallbackIconColors}) {
+function InfoBlockImageCol({img, fallbackIcon, fallbackIconColors}) {
     return (
         <div className={`info-block-image-col`}>
             {img && (
@@ -30,7 +30,7 @@ function _InfoBlockImageCol({img, fallbackIcon, fallbackIconColors}) {
     )
 }
 
-function _InfoBlockTextCol({html}) {
+function InfoBlockTextCol({html}) {
     return (
         <div className={`info-block-text-col`}>
             <span className={`text-4`} dangerouslySetInnerHTML={{

@@ -14,7 +14,7 @@ export const DataProvider = ({ children }) => {
   const utils = useUtils();
   const emails = useEmails();
 
-  const [_status, setStatus] = useState(Status.NOT_LOADED);
+  const [status, setStatus] = useState(Status.NOT_LOADED);
   const [jsonData, setJsonData] = useState({
     settings: {},
     strings: {},
@@ -24,7 +24,7 @@ export const DataProvider = ({ children }) => {
   const [dataValidated, setDataValidated] = useState(false);
 
   useEffect(() => {
-    _load().then((_r) => {});
+    _load().then((r) => {});
   }, []);
 
   useEffect(() => {
