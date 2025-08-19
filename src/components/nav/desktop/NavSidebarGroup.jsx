@@ -1,4 +1,5 @@
 import "./NavSidebarGroup.scss"
+import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
 
 function NavSidebarGroup({ children, className, direction, shrink, fillSpace }) {

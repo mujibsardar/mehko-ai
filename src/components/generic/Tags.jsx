@@ -1,4 +1,6 @@
 import './Tags.scss'
+import React from 'react'
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 
 function Tags({strings, className, shorten}) {
     if(!strings || !strings.map)

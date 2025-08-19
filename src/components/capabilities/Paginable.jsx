@@ -1,4 +1,6 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {Col} from "react-bootstrap"
+import PaginationTools from "/src/components/generic/PaginationTools.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 
 function Paginable({ children, items, storageId, onFilter, controlsClass, maxItemsPerPage, autoHide }) {

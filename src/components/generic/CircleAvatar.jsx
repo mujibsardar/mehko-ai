@@ -1,4 +1,7 @@
 import "./CircleAvatar.scss"
+import React from 'react'
+import ImageView from "/src/components/generic/ImageView.jsx"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 
 function CircleAvatar({img, alt, size, dynamicSize, fallbackIcon, fallbackIconColors, className}) {
     const sizeClass = `circle-avatar-${size || 1}`

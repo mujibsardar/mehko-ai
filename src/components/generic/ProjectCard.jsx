@@ -1,4 +1,9 @@
 import "./ProjectCard.scss"
+import React from 'react'
+import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
+import {Card, CardBody} from "react-bootstrap"
+import Tags from "/src/components/generic/Tags.jsx"
+import CircularButtonList from "/src/components/generic/CircularButtonList.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
 

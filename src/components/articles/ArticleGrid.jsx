@@ -1,5 +1,9 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import Article from "/src/components/wrappers/Article.jsx"
+import InlineList from "/src/components/generic/InlineList.jsx"
+import InfoGrid from "/src/components/generic/InfoGrid.jsx"
 import {useParser} from "/src/helpers/parser.js"
+import Expandable from "/src/components/capabilities/Expandable.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 

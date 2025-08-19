@@ -1,5 +1,5 @@
 // src/components/overlay/Mapper.jsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // API prefix

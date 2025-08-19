@@ -1,4 +1,5 @@
 import "./Box.scss"
+import React from 'react'
 
 function Box({ children, opaque, nav, className, id }) {
     const opaqueClass = opaque ? 'box-opacity' : ''

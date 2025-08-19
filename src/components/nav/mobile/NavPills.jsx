@@ -1,8 +1,10 @@
 import "./NavPills.scss"
-import {useState} from 'react'
+import React, {useState} from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useGlobalState} from "/src/providers/GlobalStateProvider.jsx"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
+import SensitiveButton from "/src/components/generic/SensitiveButton.jsx"
 
 function NavPills({ sections }) {
     const {setActiveSection, isSectionActive} = useGlobalState()

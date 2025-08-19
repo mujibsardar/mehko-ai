@@ -1,6 +1,9 @@
 import "./NavHeader.scss";
+import React from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useData } from "/src/providers/DataProvider.jsx";
+import ImageView from "/src/components/generic/ImageView.jsx";
+import StatusBadge from "/src/components/generic/StatusBadge.jsx";
 
 function NavHeader({ shrink }) {
   const utils = useUtils();

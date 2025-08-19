@@ -1,4 +1,10 @@
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
+import DashboardApp from "./components/dashboard/DashboardApp";
+import Admin from "./components/admin/Admin";
+import Mapper from "./components/overlay/Mapper";
+import Interview from "./components/overlay/Interview";
 
 export default function App() {
   return (

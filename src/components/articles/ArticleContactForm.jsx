@@ -1,7 +1,13 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import Article from "/src/components/wrappers/Article.jsx"
 import {useParser} from "/src/helpers/parser.js"
+import {Col} from "react-bootstrap"
+import FormInput from "/src/components/forms/FormInput.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
+import FormTextArea from "/src/components/forms/FormTextArea.jsx"
+import Form from "/src/components/forms/Form.jsx"
 import {useEmails} from "/src/helpers/emails.js"
+import StatusMessage from "/src/components/generic/StatusMessage.jsx"
 import {useTheme} from "/src/providers/ThemeProvider.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
 

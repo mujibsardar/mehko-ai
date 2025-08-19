@@ -1,3 +1,5 @@
+import React from 'react'
+import {InputGroup} from "react-bootstrap"
 
 function FormTextArea({id, placeholder, value, valueSetter, required}) {
     const parsedPlaceholder = placeholder + (required ? '*' : '')

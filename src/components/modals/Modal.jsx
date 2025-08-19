@@ -1,6 +1,9 @@
 import "./Modal.scss";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Card, CardBody, CardHeader, CardFooter } from "react-bootstrap";
+import FaIcon from "/src/components/generic/FaIcon.jsx";
 import { useUtils } from "/src/helpers/utils.js";
+import ToolButton from "/src/components/generic/ToolButton.jsx";
 import { useScheduler } from "/src/helpers/scheduler.js";
 
 const utils = useUtils();

@@ -1,4 +1,6 @@
 import "./YoutubeModal.scss"
+import React from 'react'
+import {Modal, ModalWindow, ModalHeader, ModalBody, ModalFooter} from "/src/components/modals/Modal.jsx"
 
 function YoutubeModal({displayingYoutubeVideo, hideYoutubeVideo}) {
     let url = null

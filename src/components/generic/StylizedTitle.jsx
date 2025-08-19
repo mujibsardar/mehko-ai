@@ -1,3 +1,4 @@
+import React from 'react'
 
 function StylizedTitle({text, classList}) {
     const classes = {tag: 'h4', lineTag: 'eq-h3'}

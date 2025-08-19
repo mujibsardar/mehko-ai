@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchComments, addComment } from "../../firebase/comments";
 import useAuth from "../../hooks/useAuth";
 

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import {useData} from "/src/providers/DataProvider.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
 import {useScheduler} from "/src/helpers/scheduler.js"

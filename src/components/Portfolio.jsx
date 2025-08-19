@@ -1,5 +1,10 @@
 import "./Portfolio.scss"
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import NavSidebar from "/src/components/nav/desktop/NavSidebar.jsx"
+import MainSlider from "/src/components/layout/MainSlider"
+import NavHeaderMobile from "/src/components/nav/mobile/NavHeaderMobile.jsx"
+import NavTabController from "/src/components/nav/mobile/NavTabController.jsx"
+import NavPillsFixed from "/src/components/nav/mobile/NavPillsFixed.jsx"
 import {useGlobalState} from "/src/providers/GlobalStateProvider.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 

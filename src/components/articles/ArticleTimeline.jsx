@@ -1,3 +1,6 @@
+import React from 'react'
+import Article from "/src/components/wrappers/Article.jsx"
+import Timeline from "/src/components/generic/Timeline.jsx"
 import {useParser} from "/src/helpers/parser.js"
 
 function ArticleTimeline({ data }) {

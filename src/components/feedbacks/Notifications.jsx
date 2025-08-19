@@ -1,5 +1,7 @@
 import "./Notifications.scss"
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {Card, CardBody, CardHeader} from "react-bootstrap"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 import {useScheduler} from "/src/helpers/scheduler.js"
 
 function Notifications({displayingNotification, killNotification}) {

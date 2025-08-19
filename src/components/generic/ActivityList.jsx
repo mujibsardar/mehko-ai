@@ -1,6 +1,11 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
+import {Col, Row} from "react-bootstrap"
+import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 import {useUtils} from "/src/helpers/utils.js"
+import CustomProgressBar from "/src/components/generic/CustomProgressBar.jsx"
+import Expandable from "/src/components/capabilities/Expandable.jsx"
 import "./ActivityList.scss"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 

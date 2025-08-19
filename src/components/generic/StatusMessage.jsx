@@ -1,4 +1,7 @@
 import "./StatusMessage.scss"
+import React from 'react'
+import {Card, CardBody} from "react-bootstrap"
+import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 

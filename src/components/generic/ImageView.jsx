@@ -1,5 +1,5 @@
 import "./ImageView.scss"
-import {useState} from 'react'
+import React, {useState} from 'react'
 
 const LoadStatus = {
     LOADING: "loading",

@@ -1,8 +1,10 @@
 import "./GalleryModal.scss"
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {Modal, ModalWindowTransparent} from "/src/components/modals/Modal.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 import {useScheduler} from "/src/helpers/scheduler.js"
 
+import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'

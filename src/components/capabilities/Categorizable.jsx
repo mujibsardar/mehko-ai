@@ -1,5 +1,7 @@
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {Col} from "react-bootstrap"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
+import FilterTabs from "/src/components/generic/FilterTabs.jsx"
 
 function Categorizable({ children, items, categories, storageId, onFilter, controlsClass }) {
     const {getString, getTranslation} = useLanguage()

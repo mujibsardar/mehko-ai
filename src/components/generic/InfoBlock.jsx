@@ -1,5 +1,8 @@
 import "./InfoBlock.scss"
+import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
+import ImageView from "/src/components/generic/ImageView.jsx"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 
 const utils = useUtils()
 

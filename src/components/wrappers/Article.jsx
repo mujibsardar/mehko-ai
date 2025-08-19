@@ -1,4 +1,6 @@
 import "./Article.scss"
+import React from 'react'
+import StylizedTitle from "/src/components/generic/StylizedTitle.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 
 function Article({ title, children, className }) {

@@ -1,3 +1,4 @@
+import React from 'react'
 
 function FaIcon({iconName, colors, className}) {
     const faIconClassList = `fa-icon ${iconName}`

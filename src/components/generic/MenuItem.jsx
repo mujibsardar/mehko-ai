@@ -1,5 +1,7 @@
 import "./MenuItem.scss"
+import React from 'react'
 import {useUtils} from "/src/helpers/utils.js"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
 
 function MenuItem({label, icon, faSuffix, hoverAnimation, selected, size, shrink, className, style, tooltip}) {
     const utils = useUtils()

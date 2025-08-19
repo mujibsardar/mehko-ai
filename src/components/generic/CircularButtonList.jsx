@@ -1,4 +1,7 @@
 import "./CircularButtonList.scss"
+import React from 'react'
+import FaIcon from "/src/components/generic/FaIcon.jsx"
+import ExternalLink from "/src/components/generic/ExternalLink.jsx"
 
 function CircularButtonList({links, options, type, onOptionClicked}) {
     type = type || 'default'

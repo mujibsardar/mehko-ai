@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import ApplicationCard from "../shared/ApplicationCard";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
 

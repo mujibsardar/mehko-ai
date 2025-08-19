@@ -1,5 +1,6 @@
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useUtils} from "/src/helpers/utils.js"
+import {forEach} from "react-bootstrap/ElementChildren"
 
 export const useParser = () => {
     const {getString, getTranslation, selectedLanguageId} = useLanguage()

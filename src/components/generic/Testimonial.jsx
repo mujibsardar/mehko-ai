@@ -1,5 +1,9 @@
 import "./Testimonial.scss"
+import React from 'react'
+import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
 import {useUtils} from "/src/helpers/utils.js"
+import FaIcon from "/src/components/generic/FaIcon.jsx"
+import ExternalLink from "/src/components/generic/ExternalLink.jsx"
 
 function Testimonial({quote, avatar, fallbackIcon, fallbackIconColors, author, role, href}) {
     const utils = useUtils()

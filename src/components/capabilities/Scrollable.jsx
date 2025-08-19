@@ -1,5 +1,5 @@
 import "./Scrollable.scss"
-import {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Scrollbar from 'smooth-scrollbar'
 import OverscrollPlugin from 'smooth-scrollbar/plugins/overscroll'
 

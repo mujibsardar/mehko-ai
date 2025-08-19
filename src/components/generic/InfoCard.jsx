@@ -1,5 +1,10 @@
 import "./InfoCard.scss"
+import React from 'react'
+import {Card, CardBody, CardFooter} from "react-bootstrap"
+import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
 import {useUtils} from "/src/helpers/utils.js"
+import InfoBadge from "/src/components/generic/InfoBadge.jsx"
+import ToolButton from "/src/components/generic/ToolButton.jsx"
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useWindow} from "/src/providers/WindowProvider.jsx"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
