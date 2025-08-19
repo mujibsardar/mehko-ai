@@ -25,3 +25,16 @@
   gap: 0.5rem;
   font-size: 0.9rem;
 }
+
+.info-step a {
+  color: #2563eb !important; /* clean blue */
+  text-decoration: underline !important;
+}
+
+.info-step a:hover {
+  color: #1d4ed8 !important;
+}
+
+.info-step a:visited {
+  color: #4f46e5 !important;
+}

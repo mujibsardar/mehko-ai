@@ -12,7 +12,7 @@
         "type": "info",
         "action_required": false,
         "fill_pdf": false,
-        "content": "- Review the 'How to Get Started' guide\n- Download the Self-Inspection Checklist\n- Ensure kitchen & menu align with MEHKO rules"
+        "content": "- [How to Get Started (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_HowToGetStarted-English.pdf)\n- [Self-Inspection Checklist (PDF)](http://ph.lacounty.gov/eh/docs/business/MEHKO_Self-InspectionChecklist-English.pdf)\n- Ensure kitchen & menu align with MEHKO rules"
       },
       {
         "id": "approvals_training",
@@ -28,7 +28,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- SOP + menu\n- Public Health Permit Application\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
+        "content": "- [SOP template (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf) + your menu\n- [Public Health Permit Application (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
       },
       {
         "id": "sop_form",
@@ -38,7 +38,7 @@
         "appId": "los_angeles_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "Fill out and submit the SOP form."
+        "content": "Fill out and submit the SOP form. Source: [SOP template (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf)"
       },
       {
         "id": "permit_application_form",
@@ -48,7 +48,7 @@
         "appId": "los_angeles_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "Complete and submit the official Public Health Permit Application."
+        "content": "Complete and submit the official [Public Health Permit Application (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)."
       },
       {
         "id": "submit_application",
@@ -56,7 +56,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- Submit application online\n- Pay $597 review fee (unless subsidized)"
+        "content": "- Submit the [application PDF](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)\n- Pay $597 review fee (unless subsidized)"
       },
       {
         "id": "inspection",
@@ -80,7 +80,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- Follow approved SOP\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits"
+        "content": "- Follow approved SOP\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits\n- See: [Guide to Food Safety in a Home Kitchen (PDF)](http://www.publichealth.lacounty.gov/eh/docs/safety/guide-food-safety-your-home-kitchen-en.pdf)"
       },
       {
         "id": "subsidy",
@@ -96,7 +96,7 @@
         "type": "info",
         "action_required": false,
         "fill_pdf": false,
-        "content": "Home-Based Food Operations Program  \nPhone: (626) 430-9855  \nEmail: homebasedfoods@ph.lacounty.gov"
+        "content": "Home-Based Food Operations Program  \nPhone: (626) 430-9855  \nEmail: [homebasedfoods@ph.lacounty.gov](mailto:homebasedfoods@ph.lacounty.gov)  \nWebsite: [LA County Environmental Health MEHKO Program](http://publichealth.lacounty.gov/eh)"
       }
     ]
   }

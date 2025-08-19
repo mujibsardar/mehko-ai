@@ -10,14 +10,23 @@ function InfoStep({ step, applicationId, hideCompleteToggle }) {
     applicationId
   );
 
-  const isComplete = completedSteps.includes(step.id);
+  const stepId = step.id || step._id;
+  const isComplete = completedSteps.includes(stepId);
 
   return (
     <div className="info-step">
       <h2>{step.title}</h2>
 
       {step.content ? (
-        <ReactMarkdown>{step.content}</ReactMarkdown>
+        <ReactMarkdown
+          components={{
+            a: ({ node, ...props }) => (
+              <a {...props} target="_blank" rel="noopener noreferrer" />
+            ),
+          }}
+        >
+          {step.content}
+        </ReactMarkdown>
       ) : (
         <p>No additional information available for this step.</p>
       )}
@@ -29,9 +38,9 @@ function InfoStep({ step, applicationId, hideCompleteToggle }) {
             checked={isComplete}
             onChange={(e) => {
               if (e.target.checked) {
-                markStepComplete(step.id);
+                markStepComplete(stepId);
               } else {
-                markStepIncomplete(step.id);
+                markStepIncomplete(stepId);
               }
             }}
           />
