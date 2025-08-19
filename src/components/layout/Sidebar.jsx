@@ -120,95 +120,145 @@ const Sidebar = ({
               </div>
 
               {!isAppCollapsed && isActive && (
-                <ul className="sidebar-sublist">
-                  <li
-                    className={activeSection === "overview" ? "active-nav" : ""}
-                    onClick={() => {
-                      setActiveSection("overview");
-                      toggle(
-                        setCollapsedSteps,
-                        collapsedSteps,
-                        application.id,
-                        true
-                      );
-                      toggle(
-                        setCollapsedSupport,
-                        collapsedSupport,
-                        application.id,
-                        true
-                      );
-                    }}
-                  >
-                    Overview ({application.steps?.length || 0} steps)
-                  </li>
-
-                  <li className="sidebar-section-label">
-                    <span
-                      className="collapsible-section"
-                      onClick={() =>
+                <div
+                  className="sidebar-sublist"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    maxHeight: "60vh", // adjust if needed
+                  }}
+                >
+                  {/* Overview row */}
+                  <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                    <li
+                      className={
+                        activeSection === "overview" ? "active-nav" : ""
+                      }
+                      onClick={() => {
+                        setActiveSection("overview");
                         toggle(
                           setCollapsedSteps,
                           collapsedSteps,
-                          application.id
-                        )
-                      }
+                          application.id,
+                          true
+                        );
+                        toggle(
+                          setCollapsedSupport,
+                          collapsedSupport,
+                          application.id,
+                          true
+                        );
+                      }}
                     >
-                      {areStepsCollapsed ? "▶" : "▼"} Steps
-                    </span>
-                  </li>
+                      Overview ({application.steps?.length || 0} steps)
+                    </li>
 
-                  {!areStepsCollapsed &&
-                    application.steps?.map((step, idx) => {
-                      const isStepActive =
-                        activeSection === "steps" && selectedStepId === step.id;
-                      return (
-                        <li
-                          key={step.id}
-                          className={`step-item ${
-                            isStepActive ? "active-nav" : ""
-                          }`}
-                          onClick={() => onStepSelect && onStepSelect(step.id)}
-                        >
-                          <span>
-                            Step {idx + 1}: {step.title}
-                          </span>
-                          {completedSteps.includes(step.id) && (
-                            <span className="checkmark">✔</span>
-                          )}
-                        </li>
-                      );
-                    })}
+                    {/* Steps header */}
+                    <li className="sidebar-section-label">
+                      <span
+                        className="collapsible-section"
+                        onClick={() =>
+                          toggle(
+                            setCollapsedSteps,
+                            collapsedSteps,
+                            application.id
+                          )
+                        }
+                      >
+                        {areStepsCollapsed ? "▶" : "▼"} Steps
+                      </span>
+                    </li>
+                  </ul>
 
+                  {/* Steps list (scrollable) */}
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      flex: 1,
+                      overflowY: "auto",
+                    }}
+                  >
+                    {!areStepsCollapsed &&
+                      application.steps?.map((step, idx) => {
+                        const isStepActive =
+                          activeSection === "steps" &&
+                          selectedStepId === step.id;
+                        return (
+                          <li
+                            key={step.id}
+                            className={`step-item ${
+                              isStepActive ? "active-nav" : ""
+                            }`}
+                            onClick={() =>
+                              onStepSelect && onStepSelect(step.id)
+                            }
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <span>
+                                Step {idx + 1}: {step.title}
+                              </span>
+                              <small style={{ color: "#666", fontSize: 11 }}>
+                                {step.action_required
+                                  ? "Requires Action"
+                                  : "Info Only"}
+                                {step.fill_pdf ? " • PDF Form" : ""}
+                              </small>
+                            </div>
+                            {completedSteps.includes(step.id) && (
+                              <span className="checkmark">✔</span>
+                            )}
+                          </li>
+                        );
+                      })}
+                  </ul>
+
+                  {/* Support block (fixed at bottom) */}
                   {hasComments && (
-                    <>
-                      <li className="sidebar-section-label">
-                        <span
-                          className="collapsible-section"
-                          onClick={() =>
-                            toggle(
-                              setCollapsedSupport,
-                              collapsedSupport,
-                              application.id
-                            )
-                          }
-                        >
-                          {isSupportCollapsed ? "▶" : "▼"} Support
-                        </span>
-                      </li>
-
-                      {!isSupportCollapsed && (
-                        <li
-                          className={`sidebar-support-item ${
-                            activeSection === "comments" ? "active-nav" : ""
-                          }`}
-                          onClick={() => setActiveSection("comments")}
-                        >
-                          Community Comments
+                    <div
+                      style={{
+                        borderTop: "1px solid #eee",
+                        padding: "8px 12px",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                        <li className="sidebar-section-label">
+                          <span
+                            className="collapsible-section"
+                            onClick={() =>
+                              toggle(
+                                setCollapsedSupport,
+                                collapsedSupport,
+                                application.id
+                              )
+                            }
+                          >
+                            {isSupportCollapsed ? "▶" : "▼"} Support
+                          </span>
                         </li>
-                      )}
-                    </>
+
+                        {!isSupportCollapsed && (
+                          <li
+                            className={`sidebar-support-item ${
+                              activeSection === "comments" ? "active-nav" : ""
+                            }`}
+                            onClick={() => setActiveSection("comments")}
+                          >
+                            Community Comments
+                          </li>
+                        )}
+                      </ul>
+                    </div>
                   )}
-                </ul>
+                </div>
               )}
             </div>
           );

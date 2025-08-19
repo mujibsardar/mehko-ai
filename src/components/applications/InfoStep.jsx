@@ -35,7 +35,9 @@ function InfoStep({ step, applicationId, hideCompleteToggle }) {
               }
             }}
           />
-          Mark this step as complete
+          {step.action_required
+            ? "Mark this step as complete"
+            : "Mark this step as read"}
         </label>
       )}
     </div>

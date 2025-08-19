@@ -298,7 +298,11 @@ export default function DashboardApp() {
             }}
             title="Toggle completion"
           >
-            {stepIsComplete ? "Completed ✓" : "Mark Complete"}
+            {stepIsComplete
+              ? "Completed ✓"
+              : currentStep.action_required
+              ? "Mark Complete"
+              : "Mark Read"}
           </button>
         </div>
 

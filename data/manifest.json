@@ -1,5 +1,4 @@
 [
-  
   {
     "id": "los_angeles_mehko",
     "title": "Los Angeles County MEHKO",
@@ -11,19 +10,25 @@
         "id": "planning_overview",
         "title": "Plan Your MEHKO",
         "type": "info",
-        "content": "Review ‘How to Get Started’ + Self‑Inspection Checklist. Ensure kitchen/menu align with MEHKO rules."
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "- Review the 'How to Get Started' guide\n- Download the Self-Inspection Checklist\n- Ensure kitchen & menu align with MEHKO rules"
       },
       {
         "id": "approvals_training",
         "title": "Approvals & Training",
         "type": "info",
-        "content": "Landlord OK (if renting). Get Certified Food Protection Manager. Check city business license. Register sales tax. Check ABC if serving alcohol."
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Landlord approval (if renting)\n- Get Certified Food Protection Manager (CFPM)\n- Check city business license\n- Register for sales tax\n- Check ABC if serving alcohol"
       },
       {
         "id": "prepare_docs",
         "title": "Prepare Required Documents",
         "type": "info",
-        "content": "SOP + menu, Public Health Permit Application, CFPM certificate, Food Handler Cards, water test (if on private well)."
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- SOP + menu\n- Public Health Permit Application\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
       },
       {
         "id": "sop_form",
@@ -31,7 +36,9 @@
         "type": "pdf",
         "formId": "MEHKO_SOP-English",
         "appId": "los_angeles_mehko",
-        "content": "Fill out the SOP form."
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "Fill out and submit the SOP form."
       },
       {
         "id": "permit_application_form",
@@ -39,46 +46,58 @@
         "type": "pdf",
         "formId": "MEHKO_PublicHealthPermitApplication-ENG",
         "appId": "los_angeles_mehko",
+        "action_required": true,
+        "fill_pdf": true,
         "content": "Complete and submit the official Public Health Permit Application."
       },
       {
         "id": "submit_application",
         "title": "Submit Application & Fees",
         "type": "info",
-        "content": "Submit online. Pay $597 review fee (unless subsidized)."
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Submit application online\n- Pay $597 review fee (unless subsidized)"
       },
       {
         "id": "inspection",
         "title": "Schedule & Pass Inspection",
         "type": "info",
-        "content": "Dept. schedules inspection. Fix issues and do follow‑ups if needed."
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Department schedules inspection\n- Fix issues and complete follow-ups if needed"
       },
       {
         "id": "receive_permit",
         "title": "Receive Permit",
         "type": "info",
-        "content": "Permit is mailed upon approval."
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Permit will be mailed upon approval."
       },
       {
         "id": "operate_comply",
         "title": "Operate & Stay Compliant",
         "type": "info",
-        "content": "Follow approved SOP. Notify program of changes within 20 days. Observe $100k/year and 30/day, 90/week limits."
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "- Follow approved SOP\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits"
       },
       {
         "id": "subsidy",
-        "title": "Limited‑Time Subsidy",
+        "title": "Limited-Time Subsidy",
         "type": "info",
-        "content": "Fee waiver for first 1,000 applicants (net revenue < $50k, no prior subsidy). Deadline: June 30, 2026 or until funds run out."
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Fee waiver available for first 1,000 applicants (net revenue < $50k, no prior subsidy). Deadline: June 30, 2026 or until funds run out."
       },
       {
         "id": "contact",
         "title": "Contact Info",
         "type": "info",
-        "content": "Home‑Based Food Operations Program — (626) 430‑9855 • homebasedfoods@ph.lacounty.gov"
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "Home-Based Food Operations Program  \nPhone: (626) 430-9855  \nEmail: homebasedfoods@ph.lacounty.gov"
       }
     ]
   }
 ]
-
-
