@@ -1,14 +1,84 @@
 [
+  
   {
-    "appId": "los_angeles_mehko",
+    "id": "los_angeles_mehko",
     "title": "Los Angeles County MEHKO",
+    "description": "LA County MEHKO (excludes Pasadena, Long Beach, Vernon). Up to 30 meals/day, 90/week, $100k cap.",
     "rootDomain": "lacounty.gov",
-    "mehkoPageUrl": "https://mehko.org/get-your-mehko-approved-in-los-angeles-excluding-pasadena-long-beach-and-vernon/"
-  },
-  {
-    "appId": "santa_barbara_mehko",
-    "title": "Santa Barbara County MEHKO",
-    "rootDomain": "countyofsb.org",
-    "mehkoPageUrl": "https://mehko.org/get-your-mehko-approved-in-santa-barbara/"
+    "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "content": "Review ‘How to Get Started’ + Self‑Inspection Checklist. Ensure kitchen/menu align with MEHKO rules."
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "content": "Landlord OK (if renting). Get Certified Food Protection Manager. Check city business license. Register sales tax. Check ABC if serving alcohol."
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "content": "SOP + menu, Public Health Permit Application, CFPM certificate, Food Handler Cards, water test (if on private well)."
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO_SOP-English",
+        "appId": "los_angeles_mehko",
+        "content": "Fill out the SOP form."
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "MEHKO_PublicHealthPermitApplication-ENG",
+        "appId": "los_angeles_mehko",
+        "content": "Complete and submit the official Public Health Permit Application."
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "content": "Submit online. Pay $597 review fee (unless subsidized)."
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "content": "Dept. schedules inspection. Fix issues and do follow‑ups if needed."
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "content": "Permit is mailed upon approval."
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "content": "Follow approved SOP. Notify program of changes within 20 days. Observe $100k/year and 30/day, 90/week limits."
+      },
+      {
+        "id": "subsidy",
+        "title": "Limited‑Time Subsidy",
+        "type": "info",
+        "content": "Fee waiver for first 1,000 applicants (net revenue < $50k, no prior subsidy). Deadline: June 30, 2026 or until funds run out."
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "content": "Home‑Based Food Operations Program — (626) 430‑9855 • homebasedfoods@ph.lacounty.gov"
+      }
+    ]
   }
 ]
+
+

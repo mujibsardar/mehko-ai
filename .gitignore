@@ -45,3 +45,7 @@ dist-ssr
 # firebase service account keys
 firebase-adminsdk-*.json
 serviceAccountKey.json
+
+# Application files
+applications/**/form.pdf
+applications/**/meta.json
