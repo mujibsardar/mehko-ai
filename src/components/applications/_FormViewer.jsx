@@ -2,7 +2,7 @@ import useAuth from "../../hooks/useAuth";
 import useProgress from "../../hooks/useProgress";
 import "./FormViewer.scss";
 
-function FormViewer({ applicationId, stepId, formName, isPdf }) {
+function FormViewer({ applicationId, stepId, _formName, _isPdf }) {
   const { user } = useAuth();
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,

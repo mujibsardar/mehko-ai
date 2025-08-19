@@ -22,14 +22,14 @@ function FilterTabs({items, selectedItemId, onSelect}) {
     )
 }
 
-function FilterTabButton({item, isSelected, onClick}) {
+function _FilterTabButton({item, isSelected, onClick}) {
     const {getString} = useLanguage()
 
     const customBtnClass = isSelected ? `btn-selected` : null
     const tooltipText = getString('filter_by').replace('{x}', item.label)
     const label = item.label + (item.count ? ` (${item.count})` : '')
 
-    const _onClick = (e) => {
+    const _onClick = (_e) => {
         onClick(item)
     }
 

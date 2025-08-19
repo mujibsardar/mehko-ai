@@ -7,9 +7,9 @@ import "./ApplicationCardGrid.scss";
 
 const ApplicationCardGrid = ({ onApplicationSelect }) => {
   const [applications, setApplications] = useState([]);
-  const [progressByAppId, setProgressByAppId] = useState({});
+  const [_progressByAppId, _setProgressByAppId] = useState({});
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { _user } = useAuth();
 
   useEffect(() => {
     async function fetchApplications() {

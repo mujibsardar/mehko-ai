@@ -55,7 +55,7 @@ function NavSidebar() {
   );
 }
 
-function NavSidebarLinks({ shouldShrink, sections }) {
+function _NavSidebarLinks({ shouldShrink, sections }) {
   const { isSectionActive, setActiveSection } = useGlobalState();
   const [selectedItemSectionId, setSelectedItemSectionId] = useState(null);
 

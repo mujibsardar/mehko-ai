@@ -68,13 +68,13 @@ function ArticlePortfolio({ data }) {
 
         switch(animationStatus) {
             case AnimationStatus.INVISIBLE:
-                divs.forEach((div, index) => {
+                divs.forEach((div, _index) => {
                     div.classList.add(`grid-item-hidden`)
                 })
                 break
 
             case AnimationStatus.VISIBLE:
-                divs.forEach((div, index) => {
+                divs.forEach((div, _index) => {
                     div.classList.remove(`grid-item-hidden`)
                 })
                 break

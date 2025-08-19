@@ -138,7 +138,7 @@ function Section({ section }) {
   );
 }
 
-function SectionHeader({ section }) {
+function _SectionHeader({ section }) {
   const { isBreakpoint } = useWindow();
   const title = section.title || section.id;
   const prefix = section.titlePrefix || null;
@@ -163,7 +163,7 @@ function SectionHeader({ section }) {
   );
 }
 
-function SectionContent({ articles }) {
+function _SectionContent({ articles }) {
   return (
     <div className="section-content">
       {articles.map((article, key) => {

@@ -3,15 +3,15 @@ import { useState} from 'react'
 function SensitiveButton({ onClick, children, className, tooltipText, disabled }) {
     const [isTouched, setIsTouched] = useState(false)
 
-    const _onTouchStart = (e) => {
+    const _onTouchStart = (_e) => {
         setIsTouched(true)
     }
 
-    const _onTouchMove = (e) => {
+    const _onTouchMove = (_e) => {
         setIsTouched(false)
     }
 
-    const _onTouchEnd = (e) => {
+    const _onTouchEnd = (_e) => {
         if(isTouched)
             onClick()
         setIsTouched(false)

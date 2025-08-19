@@ -6,7 +6,7 @@ import {useWindow} from "/src/providers/WindowProvider.jsx"
 
 function StatusBadge({ available, message, smallMode }) {
     const utils = useUtils()
-    const scheduler = useScheduler()
+    const _scheduler = useScheduler()
     const {getBreakpoint} = useWindow()
     const isTouchScreen = utils.isTouchDevice()
 

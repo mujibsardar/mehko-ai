@@ -13,7 +13,7 @@ function InfoGrid({items}) {
     )
 }
 
-function InfoGridItem({item}) {
+function _InfoGridItem({item}) {
     const {isMobileLayout} = useWindow()
 
     return (

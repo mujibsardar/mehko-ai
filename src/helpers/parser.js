@@ -60,7 +60,7 @@ export const useParser = () => {
         options = options || {}
         options.hideDayFromDates = options.hideDayFromDates || true
 
-        return rawItems.map((item, key) => {
+        return rawItems.map((item, _key) => {
             const locales = item['locales']
             const icon = item['icon']
             const dates = item['dates']
@@ -83,7 +83,7 @@ export const useParser = () => {
             parsedItem.dateStarted = dates?.start
             parsedItem.dateEnded = dates?.end
 
-            parsedItem.links = links ? links.map((link, key) => {
+            parsedItem.links = links ? links.map((link, _key) => {
                 return {
                     href: link.href,
                     hrefLabel: getString(link.string || 'link'),

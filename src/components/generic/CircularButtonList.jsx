@@ -3,7 +3,7 @@ import "./CircularButtonList.scss"
 function CircularButtonList({links, options, type, onOptionClicked}) {
     type = type || 'default'
 
-    const _onOptionClicked = (option, e) => {
+    const _onOptionClicked = (option, _e) => {
         if(onOptionClicked) {
             onOptionClicked(option)
         }

@@ -133,7 +133,7 @@ export default function DashboardApp() {
   };
 
   // top bar (back + crumbs)
-  const BreadcrumbBar = () => {
+  const _BreadcrumbBar = () => {
     if (!selectedApplications.length) return null;
     const showBack = Boolean(activeApplicationId);
     const crumbs = activeApplication
@@ -195,7 +195,7 @@ export default function DashboardApp() {
     : false;
 
   // NEW: StepNavigator (replaces StepHeader)
-  const StepNavigator = () => {
+  const _StepNavigator = () => {
     if (activeSection !== "steps" || !currentStep) return null;
 
     const toggleComplete = () => {
@@ -316,7 +316,7 @@ export default function DashboardApp() {
     );
   };
 
-  const StepContent = () => {
+  const _StepContent = () => {
     if (activeSection !== "steps") return null;
     const step = steps.find((s) => s._id === currentStepId);
     if (!step) return <div>Select a step to begin.</div>;
@@ -362,7 +362,7 @@ export default function DashboardApp() {
     return <p>Unsupported step type.</p>;
   };
 
-  const MobileTabs = () => {
+  const _MobileTabs = () => {
     if (!activeApplication || wide) return null; // only show on smaller screens
     const tab = (key, label) => (
       <button

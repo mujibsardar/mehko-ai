@@ -24,7 +24,7 @@ function Timeline({items}) {
     )
 }
 
-function TimelineItem({item}) {
+function _TimelineItem({item}) {
     const {getSelectedLanguage, getString} = useLanguage()
 
     if(item.dateEnded === 'now')
@@ -73,7 +73,7 @@ function TimelineItem({item}) {
     )
 }
 
-function TimelineTrailer() {
+function _TimelineTrailer() {
     return (
         <li className={`timeline-item timeline-item-trailer`}>
             <div className={`timeline-avatar-wrapper`}>
