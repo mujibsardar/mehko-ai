@@ -15,12 +15,13 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/ai-chat": {
-        target: "http://localhost:3000", // or use local mock file
+        target: "http://localhost:3000",
         rewrite: (path) => path.replace(/^\/api\/ai-chat/, ""),
       },
-      "/api":{ 
-        target:'http://127.0.0.1:8081', 
-        changeOrigin:true,
+      "/api": {
+        target: "http://127.0.0.1:8081",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""), // strip "/api"
       },
     },
   },

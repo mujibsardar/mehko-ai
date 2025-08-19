@@ -1,10 +1,21 @@
+// src/components/overlay/Mapper.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const API = "http://127.0.0.1:8081";
-const PREVIEW_DPI = 144;
-const pxToPt = (n) => n * (72 / PREVIEW_DPI); // 0.5 at 144dpi
-const rectPxToPt = (r) => [
+// API prefix
+const API = "/api";
+
+// Preview DPI + unit converters
+const PREVIEW_DPI = 144; // image rendered at 144 dpi
+const ptToPx = (n) => n * (PREVIEW_DPI / 72); // points -> pixels
+const pxToPt = (n) => n * (72 / PREVIEW_DPI); // pixels -> points
+const rectPtToPx = (r = [0, 0, 0, 0]) => [
+  ptToPx(r[0]),
+  ptToPx(r[1]),
+  ptToPx(r[2]),
+  ptToPx(r[3]),
+];
+const rectPxToPt = (r = [0, 0, 0, 0]) => [
   pxToPt(r[0]),
   pxToPt(r[1]),
   pxToPt(r[2]),
@@ -12,7 +23,11 @@ const rectPxToPt = (r) => [
 ];
 
 export default function Mapper() {
-  const { app, form } = useParams();
+  // Support both route param styles: /admin/mapper/:app/:form and /admin/mapper/:appId/:formId
+  const params = useParams();
+  const app = params.app || params.appId;
+  const form = params.form || params.formId;
+
   const [overlay, setOverlay] = useState({ fields: [] });
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
@@ -22,24 +37,36 @@ export default function Mapper() {
   const canvasRef = useRef(null);
   const drawingRef = useRef(null);
 
-  // load template
+  // Load template (convert saved points -> screen pixels)
   useEffect(() => {
-    fetch(`${API}/apps/${app}/forms/${form}/template`)
-      .then((r) => r.json())
-      .then((tpl) => setOverlay(tpl?.fields ? tpl : { fields: [] }));
+    (async () => {
+      const res = await fetch(`${API}/apps/${app}/forms/${form}/template`);
+      const tpl = await res.json();
+      const fields = Array.isArray(tpl?.fields)
+        ? tpl.fields.map((f) => ({ ...f, rect: rectPtToPx(f.rect) }))
+        : [];
+      setOverlay({ fields });
+    })();
   }, [app, form]);
 
-  // load metrics + preview for current page
+  // Load metrics + preview for current page
   useEffect(() => {
     const q = (obj) => new URLSearchParams(obj).toString();
     async function load() {
       const m = await fetch(
-        `${API}/apps/${app}/forms/${form}/page-metrics?${q({ page, dpi: 144 })}`
+        `${API}/apps/${app}/forms/${form}/page-metrics?${q({
+          page,
+          dpi: PREVIEW_DPI,
+        })}`
       ).then((r) => r.json());
       setMetrics(m);
       setPages(m.pages || 1);
+
       const blob = await fetch(
-        `${API}/apps/${app}/forms/${form}/preview-page?${q({ page, dpi: 144 })}`
+        `${API}/apps/${app}/forms/${form}/preview-page?${q({
+          page,
+          dpi: PREVIEW_DPI,
+        })}`
       ).then((r) => r.blob());
       setImgUrl(URL.createObjectURL(blob));
     }
@@ -47,7 +74,7 @@ export default function Mapper() {
     return () => setImgUrl(null);
   }, [app, form, page]);
 
-  // draw background + boxes
+  // Draw background + boxes
   useEffect(() => {
     if (!imgUrl || !canvasRef.current) return;
     const img = new Image();
@@ -59,6 +86,7 @@ export default function Mapper() {
       ctx.clearRect(0, 0, c.width, c.height);
       ctx.drawImage(img, 0, 0);
       ctx.lineWidth = 2;
+
       // existing fields on this page
       overlay.fields
         .filter((f) => Number(f.page || 0) === Number(page))
@@ -67,6 +95,7 @@ export default function Mapper() {
           ctx.strokeStyle = f.id === selectedId ? "#e00" : "#00e";
           ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
         });
+
       // current drawing
       const d = drawingRef.current;
       if (d) {
@@ -104,13 +133,14 @@ export default function Mapper() {
     setSelectedId(null);
     drawingRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
   };
+
   const onMove = (e) => {
     if (!drawingRef.current) return;
     const p = onPos(e);
     drawingRef.current = { ...drawingRef.current, x1: p.x, y1: p.y };
-    // redraw
-    if (imgUrl) setImgUrl((prev) => prev); // trigger render effect
+    if (imgUrl) setImgUrl((prev) => prev); // trigger redraw
   };
+
   const onUp = () => {
     const d = drawingRef.current;
     if (!d) return;
@@ -127,7 +157,7 @@ export default function Mapper() {
       label: id,
       page,
       type: "text",
-      rect,
+      rect, // keep in px in UI; convert on save
       fontSize: 11,
       align: "left",
       shrink: true,
@@ -137,7 +167,7 @@ export default function Mapper() {
   };
 
   async function save() {
-    // keep UI in pixels; persist a points-converted copy
+    // Persist a copy converted to POINTS
     const overlayToSave = {
       ...overlay,
       fields: (overlay.fields || []).map((f) => ({
@@ -147,7 +177,6 @@ export default function Mapper() {
     };
     const fd = new FormData();
     fd.append("overlay_json", JSON.stringify(overlayToSave));
-
     const r = await fetch(`${API}/apps/${app}/forms/${form}/template`, {
       method: "POST",
       body: fd,

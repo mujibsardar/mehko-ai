@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import {
   doc,
@@ -9,7 +10,7 @@ import {
   collection,
 } from "firebase/firestore";
 
-const API = "http://127.0.0.1:8081";
+const API = "/api"; // <-- prefix all backend calls
 
 export default function Admin() {
   // App list + selection
@@ -90,14 +91,17 @@ export default function Admin() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        app: appId, // or `app`
+        app: appId,
         title: appTitle,
         description,
         rootDomain,
       }),
     });
-    const j = await r.json();
-    if (!r.ok) return alert(j.detail || "Backend /apps failed");
+    let j = {};
+    try {
+      j = await r.json();
+    } catch {}
+    if (!r.ok) return alert(j.detail || "Backend /api/apps failed");
 
     const ref = doc(db, "applications", appId);
     const snap = await getDoc(ref);
@@ -126,7 +130,7 @@ export default function Admin() {
       title: newTitle,
       type: newType,
       content: newContent || "",
-      appId, // handy for display; not required for info/form, but harmless
+      appId, // harmless extra context
     };
 
     if (newType === "form") {
@@ -170,7 +174,10 @@ export default function Admin() {
           method: "POST",
           body: fd,
         });
-        const j = await r.json();
+        let j = {};
+        try {
+          j = await r.json();
+        } catch {}
         if (!r.ok)
           return alert(j.detail || `PDF upload failed for ${s.formId}`);
       }
@@ -271,20 +278,25 @@ export default function Admin() {
             background: "#fff",
             zIndex: 5,
             paddingBottom: 8,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
           }}
         >
-          <h2 style={{ margin: 0 }}>Admin Dashboard</h2>
+          <h2 style={{ margin: 0, flex: 1 }}>Admin Dashboard</h2>
+          <Link to="/dashboard" style={{ fontSize: 13 }}>
+            ← Back to Dashboard
+          </Link>
           {status && (
             <div
               style={{
-                marginTop: 8,
+                marginLeft: 8,
                 padding: "6px 10px",
                 background: "#ecfeff",
                 border: "1px solid #a5f3fc",
                 borderRadius: 8,
                 color: "#155e75",
                 fontSize: 13,
-                display: "inline-block",
               }}
             >
               {status}
@@ -328,16 +340,7 @@ export default function Admin() {
             />
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={saveAppMeta}>Save App</button>
-              {selectedApp && (
-                <a
-                  href={`/mapper/${appId}/page1`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ alignSelf: "center", fontSize: 13 }}
-                >
-                  Mapper (example)
-                </a>
-              )}
+              {/* Removed old "Mapper (example)" link */}
             </div>
           </div>
         </section>
@@ -387,19 +390,17 @@ export default function Admin() {
                           Delete
                         </button>
                       </div>
+
                       {s.type === "pdf" && (
                         <div style={{ fontSize: 13, color: "#374151" }}>
-                          formId: <code>{s.formId}</code>{" "}
-                          <a
-                            href={`/mapper/${appId}/${s.formId}`}
-                            style={{ marginLeft: 8 }}
-                          >
+                          formId: <code>{s.formId}</code> |{" "}
+                          <Link to={`/admin/mapper/${appId}/${s.formId}`}>
                             Mapper
-                          </a>{" "}
+                          </Link>{" "}
                           |{" "}
-                          <a href={`/interview/${appId}/${s.formId}`}>
+                          <Link to={`/admin/interview/${appId}/${s.formId}`}>
                             Interview
-                          </a>
+                          </Link>
                         </div>
                       )}
                       {s.type === "form" && (
@@ -474,7 +475,7 @@ export default function Admin() {
             {newType === "pdf" && (
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <input
-                  placeholder="formId (e.g., page1)"
+                  placeholder="formId (e.g., MEHKO_SOP-English)"
                   value={newFormId}
                   onChange={(e) => setNewFormId(e.target.value)}
                 />

@@ -1,0 +1,19 @@
+{
+  "fields": [
+    {
+      "id": "owner_name_of_business",
+      "label": "Name of Business",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        40,
+        354,
+        568.5,
+        373
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
 
-import { PDFDocument } from "pdf-lib";
+// import { PDFDocument } from "pdf-lib";
 import pkg from "pdfjs-dist";
 const { getDocument, GlobalWorkerOptions } = pkg;
 import { createRequire } from "module";
@@ -29,34 +29,34 @@ app.use(express.json());
 const CACHE_PATH = path.resolve("form-label-cache.json");
 
 // Load cache from file
-function loadFieldCache() {
-  if (fs.existsSync(CACHE_PATH)) {
-    return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
-  }
-  return {};
-}
+// function loadFieldCache() {
+//   if (fs.existsSync(CACHE_PATH)) {
+//     return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
+//   }
+//   return {};
+// }
 
-// Save cache to file
-function saveFieldCache(cache) {
-  fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
-}
+// // Save cache to file
+// function saveFieldCache(cache) {
+//   fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
+// }
 
-function extractNearbyText(fieldName, fullText, radius = 100) {
-  const cleanField = fieldName.replace(/[_\-]/g, " ").toLowerCase();
-  const cleanText = fullText.replace(/[\n\r]/g, " ").toLowerCase();
-  const index = cleanText.indexOf(cleanField);
+// function extractNearbyText(fieldName, fullText, radius = 100) {
+//   const cleanField = fieldName.replace(/[_\-]/g, " ").toLowerCase();
+//   const cleanText = fullText.replace(/[\n\r]/g, " ").toLowerCase();
+//   const index = cleanText.indexOf(cleanField);
 
-  if (index === -1) return fullText.slice(0, radius * 2); // fallback to first snippet
+//   if (index === -1) return fullText.slice(0, radius * 2); // fallback to first snippet
 
-  const start = Math.max(index - radius, 0);
-  const end = Math.min(index + cleanField.length + radius, fullText.length);
-  return fullText.slice(start, end).replace(/\s+/g, " ").trim();
-}
+//   const start = Math.max(index - radius, 0);
+//   const end = Math.min(index + cleanField.length + radius, fullText.length);
+//   return fullText.slice(start, end).replace(/\s+/g, " ").trim();
+// }
 
-function extractJsonFromMarkdown(content) {
-  const match = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  return match ? match[1] : content;
-}
+// function extractJsonFromMarkdown(content) {
+//   const match = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
+//   return match ? match[1] : content;
+// }
 
 app.post("/api/ai-chat", async (req, res) => {
   const { messages = [], applicationId = "unknown", context = {} } = req.body;

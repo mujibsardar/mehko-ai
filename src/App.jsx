@@ -1,20 +1,24 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Mapper from "./components/overlay/Mapper.jsx";
-import Admin from "./components/admin/Admin.jsx";
-import DashboardApp from "./components/dashboard/DashboardApp.jsx";
-import Landing from "./components/landing/Landing.jsx"; // NEW
+import DashboardApp from "./components/dashboard/DashboardApp";
+import Admin from "./components/admin/Admin";
+import Mapper from "./components/overlay/Mapper";
+import Interview from "./components/overlay/Interview";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<DashboardApp />} />
-      <Route path="/landing" element={<Landing />} /> {/* NEW */}
-      {/* Admin tools */}
+      {/* User dashboard */}
+      <Route path="/dashboard/*" element={<DashboardApp />} />
+
+      {/* Admin */}
       <Route path="/admin" element={<Admin />} />
-      <Route path="/mapper/:app/:form" element={<Mapper />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="/admin/mapper/:appId/:formId" element={<Mapper />} />
+      <Route path="/admin/interview/:appId/:formId" element={<Interview />} />
+
+      {/* Default */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }
