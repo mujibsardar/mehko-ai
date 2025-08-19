@@ -1,0 +1,14 @@
+[
+  {
+    "appId": "los_angeles_mehko",
+    "title": "Los Angeles County MEHKO",
+    "rootDomain": "lacounty.gov",
+    "mehkoPageUrl": "https://mehko.org/get-your-mehko-approved-in-los-angeles-excluding-pasadena-long-beach-and-vernon/"
+  },
+  {
+    "appId": "santa_barbara_mehko",
+    "title": "Santa Barbara County MEHKO",
+    "rootDomain": "countyofsb.org",
+    "mehkoPageUrl": "https://mehko.org/get-your-mehko-approved-in-santa-barbara/"
+  }
+]

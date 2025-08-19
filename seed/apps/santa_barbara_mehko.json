@@ -1,0 +1,26 @@
+{
+  "id": "santa_barbara_mehko",
+  "title": "Santa Barbara County MEHKO",
+  "description": "Santa Barbara County MEHKO information and official application materials.",
+  "rootDomain": "countyofsb.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "eligibility",
+      "title": "Verify Eligibility",
+      "type": "info",
+      "content": "Operate from your private home kitchen. MEHKO permit required. County must authorize MEHKOs. Hold a Food Protection Manager Certification."
+    },
+    {
+      "id": "pdf_url",
+      "title": "Official MEHKO Application",
+      "type": "pdf",
+      "formId": "url",
+      "appId": "santa_barbara_mehko",
+      "content": "Complete and submit the county MEHKO application and required documents."
+    }
+  ]
+}

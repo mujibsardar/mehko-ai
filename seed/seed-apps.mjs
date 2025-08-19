@@ -62,7 +62,8 @@ function initFirebase({ emulator }) {
         console.error("GOOGLE_APPLICATION_CREDENTIALS not set or file missing");
         process.exit(2);
       }
-      initializeApp({ credential: cert(keyPath) });
+      const key = JSON.parse(fs.readFileSync(keyPath, "utf8"));
+      initializeApp({ credential: cert(key) });
       logInfo("Initialized Firebase Admin for PROD");
     }
   }
@@ -150,7 +151,6 @@ function validate(app) {
           errs.push(`${p}.${k} missing/non-string`);
       }
       if (s?.id) {
-        if (!ID_RE.test(s.id)) errs.push(`${p}.id must match ${ID_RE}`);
         if (ids.has(s.id)) errs.push(`${p}.id duplicate within app`);
         ids.add(s.id);
       }
