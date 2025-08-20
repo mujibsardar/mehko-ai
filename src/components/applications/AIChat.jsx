@@ -331,47 +331,7 @@ export default function AIChat({
     );
   }
 
-  function PdfChips() {
-    if (!pdfFormSteps.length) return null;
 
-    const open = (formId, page) => {
-      const link = pdfLinks[formId];
-      if (!link) return;
-      if (typeof page === "number") {
-        window.open(link.previewBase + page, "_blank", "noopener,noreferrer");
-      } else {
-        window.open(link.url, "_blank", "noopener,noreferrer");
-      }
-    };
-
-    // prefer current step first
-    const ordered = [...pdfFormSteps].sort(
-      (a, b) =>
-        (a.formId === currentStep?.formId ? -1 : 0) -
-        (b.formId === currentStep?.formId ? -1 : 0)
-    );
-
-    return (
-      <div className="ai-chat__pdf-chips">
-        {ordered.map((s) => (
-          <div key={s.formId} className="ai-chat__pdf-chip-group">
-            <button
-              className="ai-chat__guide-chip"
-              onClick={() => open(s.formId)}
-            >
-              📄 {s.title || s.formId}
-            </button>
-            <button
-              className="ai-chat__guide-chip"
-              onClick={() => open(s.formId, 0)}
-            >
-              👁️ Preview p.1
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   if (!user)
     return <p className="ai-chat__login">Please log in to use this feature.</p>;
@@ -389,9 +349,6 @@ export default function AIChat({
             Let's work on <strong>{application?.title}</strong>.
           </div>
         </div>
-        <button className="ai-chat__pill" type="button">
-          Quick Guide
-        </button>
       </div>
 
       {/* Form Selection and Quick Actions */}
@@ -411,7 +368,6 @@ export default function AIChat({
             </li>
           ))}
         </ul>
-        <PdfChips />
       </div>
 
       {/* Selected Form Context */}
