@@ -26,9 +26,9 @@ export default function AIChat({
   // overlays (template fields), saved answers, and pdf refs
   const [overlayMap, setOverlayMap] = useState({}); // {formId: fields[]}
   const [formDataMap, setFormDataMap] = useState({}); // {formId: {...answers}}
-  const [pdfRefs, setPdfRefs] = useState({}); // {formId: "PDF available at ..."}
 
   const [pdfText, setPdfText] = useState({});
+  const [pdfLinks, setPdfLinks] = useState({});
 
   // Normalize steps with completion so the model doesn't have to infer
   const computedSteps = useMemo(() => {
@@ -84,28 +84,36 @@ export default function AIChat({
     })();
   }, [user?.uid, application?.id, application?.steps]);
 
-  // Optionally expose a reference to the PDF asset (useful if backend later extracts text)
+  // fetch PDF text (already discussed)
   useEffect(() => {
     (async () => {
       if (!application?.steps) return;
-      const map = {};
+      const textMap = {};
+      const linkMap = {};
       for (const step of application.steps) {
         if (step.type === "pdf" && step.formId) {
+          // text
           try {
             const r = await fetch(
               `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/text`
             );
-            if (!r.ok) continue;
-            const j = await r.json();
-            map[step.formId] = Array.isArray(j.pages)
-              ? j.pages.join("\n\n---\n\n")
-              : "";
-          } catch (e) {
-            console.error("pdf text fetch failed:", step.formId, e);
-          }
+            if (r.ok) {
+              const j = await r.json();
+              textMap[step.formId] = Array.isArray(j.pages)
+                ? j.pages.join("\n\n---\n\n")
+                : "";
+            }
+          } catch {}
+          // links
+          linkMap[step.formId] = {
+            title: step.title || step.formId,
+            url: `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/pdf?inline=0`,
+            previewBase: `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/preview-page?page=`,
+          };
         }
       }
-      setPdfText(map);
+      setPdfText(textMap);
+      setPdfLinks(linkMap);
     })();
   }, [application?.id, application?.steps]);
 
@@ -165,14 +173,15 @@ export default function AIChat({
               title: application.title,
               rootDomain: application.rootDomain,
             },
-            steps: computedSteps, // includes isComplete flags
-            currentStep: currentStep || null,
-            currentStepId: currentStepId || null,
-            completedStepIds, // raw list too
+            steps: computedSteps,
+            currentStep,
+            currentStepId,
+            completedStepIds,
             comments: application.comments || [],
-            overlays: overlayMap, // {formId: fields[]}
-            formData: formDataMap, // {formId: {...answers}}
-            pdfText, // refs to the actual PDFs (for future text extraction)
+            overlays: overlayMap,
+            formData: formDataMap,
+            pdfText, // full extracted text
+            pdfLinks, // {formId: {title,url,previewBase}}
           },
         }),
       });
@@ -209,6 +218,57 @@ export default function AIChat({
     }
   };
 
+  function PdfChips() {
+    const pdfSteps = (application?.steps || []).filter(
+      (s) => s.type === "pdf" && s.formId
+    );
+    if (!pdfSteps.length) return null;
+
+    const open = (formId, page) => {
+      const link = pdfLinks[formId];
+      if (!link) return;
+      if (typeof page === "number") {
+        window.open(link.previewBase + page, "_blank", "noopener,noreferrer");
+      } else {
+        window.open(link.url, "_blank", "noopener,noreferrer");
+      }
+    };
+
+    // prefer current step first
+    const ordered = [...pdfSteps].sort(
+      (a, b) =>
+        (a.formId === currentStep?.formId ? -1 : 0) -
+        (b.formId === currentStep?.formId ? -1 : 0)
+    );
+
+    return (
+      <div
+        className="ai-chat__pdf-chips"
+        style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "8px 0" }}
+      >
+        {ordered.map((s) => (
+          <div
+            key={s.formId}
+            style={{ display: "flex", gap: 6, alignItems: "center" }}
+          >
+            <button
+              className="ai-chat__guide-chip"
+              onClick={() => open(s.formId)}
+            >
+              Open {s.title || s.formId} (PDF)
+            </button>
+            <button
+              className="ai-chat__guide-chip"
+              onClick={() => open(s.formId, 0)}
+            >
+              Preview p.1
+            </button>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   if (!user)
     return <p className="ai-chat__login">Please log in to use this feature.</p>;
 
@@ -242,6 +302,7 @@ export default function AIChat({
             </li>
           ))}
         </ul>
+        <PdfChips />
       </div>
 
       {/* History */}

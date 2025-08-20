@@ -342,11 +342,6 @@ export default function DashboardApp() {
       );
     }
 
-    console.log("Rendering step:", JSON.stringify(step, null, 2));
-    console.log(
-      "activeApplication:",
-      JSON.stringify(activeApplication, null, 2)
-    );
     if (step.type === "pdf") {
       return (
         <div style={{ display: "grid", gap: 8 }}>

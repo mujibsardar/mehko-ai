@@ -2,18 +2,31 @@ import io, json, os
 from pathlib import Path
 from typing import List, Dict, Any
 
+# NEW: load .env early (so env vars exist when this module is imported)
+from dotenv import load_dotenv
+load_dotenv()  # will pick up /python/.env if you start the server from /python
+
 import fitz
 from fastapi import APIRouter, UploadFile, File, Form, Request, HTTPException
+from fastapi.responses import FileResponse
 from starlette.responses import Response, StreamingResponse
 
 from overlay.fill_overlay import fill_pdf_overlay_bytes
-
-from server.firebase_admin_init import db  # <-- add this import (after other imports)
+from server.firebase_admin_init import db
 from firebase_admin import firestore
 
 
 router = APIRouter(prefix="/apps", tags=["apps"])
-MAPPER_ENABLED = os.getenv("MAPPER_ENABLED", "1") == "1"
+
+# NEW: tolerant bool parser (1/true/yes/on → True)
+def env_bool(name: str, default: bool = True) -> bool:
+    val = os.getenv(name)
+    if val is None:
+        return default
+    return val.strip().lower() in ("1", "true", "yes", "on")
+
+# Use it here — defaults to True so mapper is ON unless explicitly disabled
+MAPPER_ENABLED = env_bool("MAPPER_ENABLED", True)
 
 # --- Paths ---
 ROOT = Path(__file__).resolve().parents[2]        # repo root
@@ -99,16 +112,29 @@ def save_template(app: str, form: str, overlay_json: str = Form(...)):
     p.write_text(json.dumps(overlay, indent=2))
     return {"ok": True, "fields": len(overlay.get("fields", []))}
 
+# extract text for AI context
 @router.get("/{app}/forms/{form}/text")
 def get_pdf_text(app: str, form: str):
-  pdf_path = form_dir(app, form) / "form.pdf"
-  if not pdf_path.exists():
-      raise HTTPException(404, f"missing PDF at {pdf_path}")
-  doc = fitz.open(pdf_path)
-  pages = []
-  for i in range(len(doc)):
-      pages.append(doc[i].get_text("text"))
-  return {"pages": pages, "chars": sum(len(p) for p in pages)}
+    p = form_dir(app, form) / "form.pdf"
+    if not p.exists():
+        raise HTTPException(404, f"missing PDF at {p}")
+    doc = fitz.open(p)
+    pages = [doc[i].get_text("text") for i in range(len(doc))]
+    return {"pages": pages, "chars": sum(len(t) for t in pages)}
+
+# serve the actual PDF
+@router.get("/{app}/forms/{form}/pdf")
+def download_pdf(app: str, form: str, inline: bool = False):
+    p = form_dir(app, form) / "form.pdf"
+    if not p.exists():
+        raise HTTPException(404, f"missing PDF at {p}")
+    disposition = "inline" if inline else "attachment"
+    return FileResponse(
+        path=str(p),
+        media_type="application/pdf",
+        filename=f"{app}_{form}.pdf",
+        headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}.pdf"'},
+    )
 
 # --- Filling ---
 @router.post("/{app}/forms/{form}/fill")
