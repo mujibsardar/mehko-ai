@@ -147,27 +147,41 @@ export default function AIChat({
   }, [messages]);
 
   // Enhanced quick tasks with form-specific options
-  const quickTasks = useMemo(() => {
-    const generalTasks = [
-      "What are the required forms?",
-      "Which step should I do next?",
-      "What steps have I completed?",
-      "Explain how to submit the application.",
-    ];
+  const quickTasks = [
+    {
+      title: "What should I do next?",
+      prompt: "What's the next step I should complete in my MEHKO application?",
+    },
+    {
+      title: "Help with current step",
+      prompt: "I'm currently on this step. What do I need to do?",
+    },
+    {
+      title: "Form completion help",
+      prompt: "I need help filling out a form. What should I know?",
+    },
+    {
+      title: "Application overview",
+      prompt: "Give me an overview of the entire MEHKO application process.",
+    },
+  ];
 
-    const formSpecificTasks = pdfFormSteps.map((step) => ({
-      formId: step.formId,
-      title: step.title,
-      tasks: [
-        `Help me fill out ${step.title}`,
-        `What fields are required for ${step.title}?`,
-        `Explain the ${step.title} form`,
-        `Show me examples for ${step.title}`,
-      ],
-    }));
-
-    return { generalTasks, formSpecificTasks };
-  }, [pdfFormSteps]);
+  const formSpecificTasks = selectedForm
+    ? [
+        {
+          title: `Complete ${selectedForm.title}`,
+          prompt: `I want to complete the ${selectedForm.title} form. What do I need to do?`,
+        },
+        {
+          title: "Form field help",
+          prompt: `I'm confused about some fields in the ${selectedForm.title} form. Can you help?`,
+        },
+        {
+          title: "Form submission",
+          prompt: `How do I submit the completed ${selectedForm.title} form?`,
+        },
+      ]
+    : [];
 
   const send = async (text, formContext = null) => {
     if (!text?.trim()) return;
@@ -279,17 +293,15 @@ export default function AIChat({
               {selectedForm?.formId === step.formId && (
                 <div className="ai-chat__form-card-content">
                   <div className="ai-chat__form-quick-tasks">
-                    {quickTasks.formSpecificTasks
-                      .find((f) => f.formId === step.formId)
-                      ?.tasks.map((task, index) => (
-                        <button
-                          key={index}
-                          className="ai-chat__form-task-btn"
-                          onClick={() => send(task, step)}
-                        >
-                          {task}
-                        </button>
-                      ))}
+                    {formSpecificTasks.map((task, index) => (
+                      <button
+                        key={index}
+                        className="ai-chat__form-task-btn"
+                        onClick={() => send(task.prompt, step)}
+                      >
+                        {task.title}
+                      </button>
+                    ))}
                   </div>
 
                   <div className="ai-chat__form-actions-buttons">
@@ -331,8 +343,6 @@ export default function AIChat({
     );
   }
 
-
-
   if (!user)
     return <p className="ai-chat__login">Please log in to use this feature.</p>;
 
@@ -360,10 +370,13 @@ export default function AIChat({
           General Tasks I can assist you with:
         </div>
         <ul className="ai-chat__guide-list">
-          {quickTasks.generalTasks.map((t) => (
-            <li key={t}>
-              <button className="ai-chat__guide-chip" onClick={() => send(t)}>
-                {t}
+          {quickTasks.map((t) => (
+            <li key={t.title}>
+              <button
+                className="ai-chat__guide-chip"
+                onClick={() => send(t.prompt)}
+              >
+                {t.title}
               </button>
             </li>
           ))}
@@ -408,23 +421,34 @@ export default function AIChat({
 
       {/* Composer */}
       <div className="ai-chat__composer">
-        <textarea
-          placeholder={
-            selectedForm
-              ? `Ask about ${selectedForm.title}... (e.g., "What does this field mean?")`
-              : 'Ask Orion… (e.g., "What should I do next?")'
-          }
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={loading}
-        />
-        <button
-          onClick={() => send(input, selectedForm)}
-          disabled={!input.trim() || loading}
-        >
-          {loading ? "…" : "Send"}
-        </button>
+        <div className="ai-chat__input-section">
+          {selectedForm && (
+            <div className="ai-chat__form-guidance">
+              <strong>📝 Form Guidance:</strong> You're working on the{" "}
+              <strong>{selectedForm.title}</strong>. This form is completed
+              directly in the application - no PDF downloads needed!
+            </div>
+          )}
+          <div className="ai-chat__input-container">
+            <textarea
+              placeholder={
+                selectedForm
+                  ? `Ask about ${selectedForm.title}... (e.g., "What does this field mean?")`
+                  : 'Ask Orion… (e.g., "What should I do next?")'
+              }
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={loading}
+            />
+            <button
+              onClick={() => send(input, selectedForm)}
+              disabled={!input.trim() || loading}
+            >
+              {loading ? "…" : "Send"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

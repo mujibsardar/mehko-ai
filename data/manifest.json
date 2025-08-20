@@ -28,7 +28,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- [SOP template (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf) + your menu\n- [Public Health Permit Application (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
+        "content": "- **SOP Form**: Complete in Step 4: Standard Operating Procedures (SOP)\n- **Health Permit Application**: Complete in Step 5: Health Permit Application\n- CFPM certificate\n- Food Handler Cards (if employees)\n- Water test (if private well)"
       },
       {
         "id": "sop_form",
@@ -38,7 +38,7 @@
         "appId": "los_angeles_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "Fill out and submit the SOP form. Source: [SOP template (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf)"
+        "content": "Fill out and submit the SOP form. This is where you'll complete the Standard Operating Procedures document."
       },
       {
         "id": "permit_application_form",
@@ -48,7 +48,7 @@
         "appId": "los_angeles_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "Complete and submit the official [Public Health Permit Application (PDF)](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)."
+        "content": "Complete and submit the official Public Health Permit Application. This is where you'll fill out the main permit form."
       },
       {
         "id": "submit_application",
@@ -56,7 +56,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- Submit the [application PDF](http://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf)\n- Pay $597 review fee (unless subsidized)"
+        "content": "- Submit the completed forms from Steps 4 & 5\n- Pay $597 review fee (unless subsidized)"
       },
       {
         "id": "inspection",
@@ -80,7 +80,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "- Follow approved SOP\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits\n- See: [Guide to Food Safety in a Home Kitchen (PDF)](http://www.publichealth.lacounty.gov/eh/docs/safety/guide-food-safety-your-home-kitchen-en.pdf)"
+        "content": "- Follow approved SOP from Step 4\n- Notify program of changes within 20 days\n- Stay within $100k/year, 30/day, 90/week limits\n- See: [Guide to Food Safety in a Home Kitchen (PDF)](http://www.publichealth.lacounty.gov/eh/docs/safety/guide-food-safety-your-home-kitchen-en.pdf)"
       },
       {
         "id": "subsidy",
