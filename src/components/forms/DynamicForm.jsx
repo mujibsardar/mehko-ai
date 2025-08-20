@@ -111,63 +111,65 @@ export default function DynamicForm({
   }
 
   return (
-    <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
-      {!hideCompleteToggle && (
-        <div className="step-complete-checkbox">
-          <label>
-            <input
-              type="checkbox"
-              checked={isComplete}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  markStepComplete(stepId);
-                } else {
-                  markStepIncomplete(stepId);
-                }
-              }}
-            />
-            Mark this step as complete
-          </label>
-        </div>
-      )}
-      <div className="dynamic-form-header">
-        <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
-        <span className={`status ${status}`}>
-          {status === "saving"
-            ? "Saving..."
-            : status === "saved"
-            ? "Saved ✅"
-            : status === "error"
-            ? "Error ❌"
-            : ""}
-        </span>
-      </div>
-
-      {fieldNames.map((field, index) => {
-        return (
-          <div key={`${field.label}-${index}`} className="dynamic-form-field">
-            <label>{field.label || field.name}</label>
-            <input
-              type="text"
-              name={field.name}
-              value={formData[field.name] || ""}
-              onChange={handleChange}
-            />
-            {field.description && (
-              <small className="field-description">{field.description}</small>
-            )}
+    <div className={`dynamic-form ${className}`}>
+      <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
+        {!hideCompleteToggle && (
+          <div className="step-complete-checkbox">
+            <label>
+              <input
+                type="checkbox"
+                checked={isComplete}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    markStepComplete(stepId);
+                  } else {
+                    markStepIncomplete(stepId);
+                  }
+                }}
+              />
+              Mark this step as complete
+            </label>
           </div>
-        );
-      })}
+        )}
+        <div className="dynamic-form-header">
+          <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
+          <span className={`status ${status}`}>
+            {status === "saving"
+              ? "Saving..."
+              : status === "saved"
+              ? "Saved ✅"
+              : status === "error"
+              ? "Error ❌"
+              : ""}
+          </span>
+        </div>
 
-      <div className="form-actions">
-        <button type="button" onClick={handleReset}>
-          Reset Form
-        </button>
-        <button type="button" onClick={handleDownload}>
-          Download Filled PDF
-        </button>
-      </div>
-    </form>
+        {fieldNames.map((field, index) => {
+          return (
+            <div key={`${field.label}-${index}`} className="dynamic-form-field">
+              <label>{field.label || field.name}</label>
+              <input
+                type="text"
+                name={field.name}
+                value={formData[field.name] || ""}
+                onChange={handleChange}
+              />
+              {field.description && (
+                <small className="field-description">{field.description}</small>
+              )}
+            </div>
+          );
+        })}
+
+        <div className="form-actions">
+          <button type="button" onClick={handleReset}>
+            Reset Form
+          </button>
+          <button type="button" onClick={handleDownload}>
+            Download Filled PDF
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
