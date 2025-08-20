@@ -126,3 +126,63 @@
   font-weight: 600;
 }
 
+/* Step Captions and Badges */
+.step-captions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 3px;
+}
+
+.step-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.1;
+  white-space: nowrap;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.step-badge--action {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.step-badge--form {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.step-badge--info {
+  background: #f9fafb;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+/* Subtle hover effects */
+.step-badge--action:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.step-badge--form:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.step-badge--info:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* Smooth transitions */
+.step-badge {
+  transition: all 0.15s ease-in-out;
+}
+

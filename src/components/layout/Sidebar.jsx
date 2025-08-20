@@ -205,12 +205,23 @@ const Sidebar = ({
                               <span>
                                 Step {idx + 1}: {step.title}
                               </span>
-                              <small style={{ color: "#666", fontSize: 11 }}>
-                                {step.action_required
-                                  ? "Requires Action"
-                                  : "Info Only"}
-                                {step.fill_pdf ? " • PDF Form" : ""}
-                              </small>
+                              <div className="step-captions">
+                                {step.action_required && (
+                                  <span className="step-badge step-badge--action">
+                                    Requires Action
+                                  </span>
+                                )}
+                                {step.fill_pdf && (
+                                  <span className="step-badge step-badge--form">
+                                    PDF Form
+                                  </span>
+                                )}
+                                {!step.action_required && !step.fill_pdf && (
+                                  <span className="step-badge step-badge--info">
+                                    Info Only
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             {completedSteps.includes(step.id) && (
                               <span className="checkmark">✔</span>
