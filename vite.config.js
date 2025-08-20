@@ -8,7 +8,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        silenceDeprecations: ["mixed-decls"],
+        silenceDeprecations: ["import", "mixed-decls", "legacy-js-api"],
+        quietDeps: true,
+        style: "compressed",
       },
     },
   },
@@ -19,7 +21,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api\/ai-chat/, ""),
       },
       "/api": {
-        target: "http://127.0.0.1:8081",
+        target: "http://127.0.0.1:8000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // strip "/api"
       },

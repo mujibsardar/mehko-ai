@@ -8,7 +8,7 @@ import {
   loadFormData, // reuse your helpers
 } from "../../firebase/userData";
 
-const API_APP = "http://127.0.0.1:8081";
+const API_APP = "http://127.0.0.1:8000";
 const API_CHAT = "http://localhost:3000/api/ai-chat";
 
 export default function AIChat({
@@ -95,7 +95,7 @@ export default function AIChat({
           // text
           try {
             const r = await fetch(
-              `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/text`
+              `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/text`
             );
             if (r.ok) {
               const j = await r.json();
@@ -107,8 +107,8 @@ export default function AIChat({
           // links
           linkMap[step.formId] = {
             title: step.title || step.formId,
-            url: `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/pdf?inline=0`,
-            previewBase: `http://127.0.0.1:8081/apps/${application.id}/forms/${step.formId}/preview-page?page=`,
+            url: `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/pdf?inline=0`,
+            previewBase: `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/preview-page?page=`,
           };
         }
       }

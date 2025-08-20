@@ -2,6 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from server.overlay_routes import router as overlay_router
 from server.apps_routes import router as apps_router
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(title="PDF Microservice", version="1.0")
 
