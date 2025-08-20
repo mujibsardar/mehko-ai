@@ -104,14 +104,14 @@ app.post("/api/ai-chat", async (req, res) => {
       - Current Step: ${context.currentStep?.title || "Not specified"}
       
       Form Completion Steps:
-      ${(context.steps || [])
-        .filter((s) => s.type === "pdf")
-        .map(
-          (s, i) =>
-            `- Step ${i + 1}: ${s.title} (${s.formId}) - Complete the form here`
-        )
-        .join("\n")}
-      
+${(context.steps || [])
+  .filter((s) => s.type === "pdf")
+  .map(
+    (s, i) =>
+      `- Step ${i + 1}: ${s.title} (${s.formId}) - Complete the form here`
+  )
+  .join("\n")}
+
       Form Field Information:
       ${formSection || "No form fields data available"}
       
