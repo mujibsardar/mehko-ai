@@ -21,6 +21,7 @@ export default function AIChat({
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedForm, setSelectedForm] = useState(null);
   const chatEndRef = useRef(null);
 
   // overlays (template fields), saved answers, and pdf refs
@@ -38,6 +39,13 @@ export default function AIChat({
       return { ...s, _id: sid, isComplete: completedStepIds.includes(sid) };
     });
   }, [application?.steps, completedStepIds]);
+
+  // Get PDF form steps for better organization
+  const pdfFormSteps = useMemo(() => {
+    return (application?.steps || []).filter(
+      (s) => s.type === "pdf" && s.formId
+    );
+  }, [application?.steps]);
 
   // Fetch overlays for all pdf steps
   useEffect(() => {
@@ -126,7 +134,7 @@ export default function AIChat({
         setMessages([
           {
             sender: "ai",
-            text: `Welcome! I’m here to help with ${application.title}. Ask me anything or pick a quick task below.`,
+            text: `Welcome! I'm here to help with ${application.title}. Ask me anything or pick a quick task below.`,
             timestamp: new Date(),
           },
         ]);
@@ -138,20 +146,42 @@ export default function AIChat({
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const quickTasks = useMemo(
-    () => [
+  // Enhanced quick tasks with form-specific options
+  const quickTasks = useMemo(() => {
+    const generalTasks = [
       "What are the required forms?",
       "Which step should I do next?",
-      "Explain how to submit the public health app.",
       "What steps have I completed?",
-      "Show fields for my current form.",
-    ],
-    []
-  );
+      "Explain how to submit the application.",
+    ];
 
-  const send = async (text) => {
+    const formSpecificTasks = pdfFormSteps.map((step) => ({
+      formId: step.formId,
+      title: step.title,
+      tasks: [
+        `Help me fill out ${step.title}`,
+        `What fields are required for ${step.title}?`,
+        `Explain the ${step.title} form`,
+        `Show me examples for ${step.title}`,
+      ],
+    }));
+
+    return { generalTasks, formSpecificTasks };
+  }, [pdfFormSteps]);
+
+  const send = async (text, formContext = null) => {
     if (!text?.trim()) return;
-    const userMsg = { sender: "user", text, timestamp: new Date() };
+
+    // Add form context to the message if provided
+    const enhancedText = formContext
+      ? `[Form: ${formContext.title}] ${text}`
+      : text;
+
+    const userMsg = {
+      sender: "user",
+      text: enhancedText,
+      timestamp: new Date(),
+    };
     const next = [...messages, userMsg];
     setMessages(next);
     setInput("");
@@ -182,6 +212,7 @@ export default function AIChat({
             formData: formDataMap,
             pdfText, // full extracted text
             pdfLinks, // {formId: {title,url,previewBase}}
+            selectedForm: formContext, // Add selected form context
           },
         }),
       });
@@ -189,7 +220,7 @@ export default function AIChat({
       const data = await res.json();
       const aiMsg = {
         sender: "ai",
-        text: data.reply || "Sorry, I don’t have a response right now.",
+        text: data.reply || "Sorry, I don't have a response right now.",
         timestamp: new Date(),
       };
       const updated = [...next, aiMsg];
@@ -214,15 +245,94 @@ export default function AIChat({
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      send(input);
+      send(input, selectedForm);
     }
   };
 
-  function PdfChips() {
-    const pdfSteps = (application?.steps || []).filter(
-      (s) => s.type === "pdf" && s.formId
+  function FormSpecificQuickActions() {
+    if (!pdfFormSteps.length) return null;
+
+    return (
+      <div className="ai-chat__form-actions">
+        <div className="ai-chat__form-actions-title">Form-Specific Help:</div>
+        <div className="ai-chat__form-actions-grid">
+          {pdfFormSteps.map((step) => (
+            <div key={step.formId} className="ai-chat__form-card">
+              <div className="ai-chat__form-card-header">
+                <h4>{step.title}</h4>
+                <button
+                  className={`ai-chat__form-select-btn ${
+                    selectedForm?.formId === step.formId ? "active" : ""
+                  }`}
+                  onClick={() =>
+                    setSelectedForm(
+                      selectedForm?.formId === step.formId ? null : step
+                    )
+                  }
+                >
+                  {selectedForm?.formId === step.formId
+                    ? "✓ Selected"
+                    : "Select Form"}
+                </button>
+              </div>
+
+              {selectedForm?.formId === step.formId && (
+                <div className="ai-chat__form-card-content">
+                  <div className="ai-chat__form-quick-tasks">
+                    {quickTasks.formSpecificTasks
+                      .find((f) => f.formId === step.formId)
+                      ?.tasks.map((task, index) => (
+                        <button
+                          key={index}
+                          className="ai-chat__form-task-btn"
+                          onClick={() => send(task, step)}
+                        >
+                          {task}
+                        </button>
+                      ))}
+                  </div>
+
+                  <div className="ai-chat__form-actions-buttons">
+                    <button
+                      className="ai-chat__guide-chip"
+                      onClick={() => {
+                        const link = pdfLinks[step.formId];
+                        if (link)
+                          window.open(
+                            link.url,
+                            "_blank",
+                            "noopener,noreferrer"
+                          );
+                      }}
+                    >
+                      📄 Open PDF
+                    </button>
+                    <button
+                      className="ai-chat__guide-chip"
+                      onClick={() => {
+                        const link = pdfLinks[step.formId];
+                        if (link)
+                          window.open(
+                            link.previewBase + "0",
+                            "_blank",
+                            "noopener,noreferrer"
+                          );
+                      }}
+                    >
+                      👁️ Preview
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
     );
-    if (!pdfSteps.length) return null;
+  }
+
+  function PdfChips() {
+    if (!pdfFormSteps.length) return null;
 
     const open = (formId, page) => {
       const link = pdfLinks[formId];
@@ -235,33 +345,27 @@ export default function AIChat({
     };
 
     // prefer current step first
-    const ordered = [...pdfSteps].sort(
+    const ordered = [...pdfFormSteps].sort(
       (a, b) =>
         (a.formId === currentStep?.formId ? -1 : 0) -
         (b.formId === currentStep?.formId ? -1 : 0)
     );
 
     return (
-      <div
-        className="ai-chat__pdf-chips"
-        style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "8px 0" }}
-      >
+      <div className="ai-chat__pdf-chips">
         {ordered.map((s) => (
-          <div
-            key={s.formId}
-            style={{ display: "flex", gap: 6, alignItems: "center" }}
-          >
+          <div key={s.formId} className="ai-chat__pdf-chip-group">
             <button
               className="ai-chat__guide-chip"
               onClick={() => open(s.formId)}
             >
-              Open {s.title || s.formId} (PDF)
+              📄 {s.title || s.formId}
             </button>
             <button
               className="ai-chat__guide-chip"
               onClick={() => open(s.formId, 0)}
             >
-              Preview p.1
+              👁️ Preview p.1
             </button>
           </div>
         ))}
@@ -282,7 +386,7 @@ export default function AIChat({
             Welcome back{user?.displayName ? `, ${user.displayName}` : ""}!
           </div>
           <div className="ai-chat__subtitle">
-            Let’s work on <strong>{application?.title}</strong>.
+            Let's work on <strong>{application?.title}</strong>.
           </div>
         </div>
         <button className="ai-chat__pill" type="button">
@@ -290,11 +394,16 @@ export default function AIChat({
         </button>
       </div>
 
-      {/* Quick tasks */}
+      {/* Form Selection and Quick Actions */}
+      <FormSpecificQuickActions />
+
+      {/* General Quick tasks */}
       <div className="ai-chat__guide-card">
-        <div className="ai-chat__guide-title">Tasks I can assist you with:</div>
+        <div className="ai-chat__guide-title">
+          General Tasks I can assist you with:
+        </div>
         <ul className="ai-chat__guide-list">
-          {quickTasks.map((t) => (
+          {quickTasks.generalTasks.map((t) => (
             <li key={t}>
               <button className="ai-chat__guide-chip" onClick={() => send(t)}>
                 {t}
@@ -304,6 +413,27 @@ export default function AIChat({
         </ul>
         <PdfChips />
       </div>
+
+      {/* Selected Form Context */}
+      {selectedForm && (
+        <div className="ai-chat__form-context">
+          <div className="ai-chat__form-context-header">
+            <span>
+              📋 Working on: <strong>{selectedForm.title}</strong>
+            </span>
+            <button
+              className="ai-chat__form-context-clear"
+              onClick={() => setSelectedForm(null)}
+            >
+              ✕ Clear
+            </button>
+          </div>
+          <div className="ai-chat__form-context-info">
+            Ask me anything specific about this form. I'll provide targeted help
+            based on the form content and your progress.
+          </div>
+        </div>
+      )}
 
       {/* History */}
       <div className="ai-chat__history">
@@ -323,13 +453,20 @@ export default function AIChat({
       {/* Composer */}
       <div className="ai-chat__composer">
         <textarea
-          placeholder="Ask Orion… (e.g., “What should I do next?”)"
+          placeholder={
+            selectedForm
+              ? `Ask about ${selectedForm.title}... (e.g., "What does this field mean?")`
+              : 'Ask Orion… (e.g., "What should I do next?")'
+          }
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={loading}
         />
-        <button onClick={() => send(input)} disabled={!input.trim() || loading}>
+        <button
+          onClick={() => send(input, selectedForm)}
+          disabled={!input.trim() || loading}
+        >
           {loading ? "…" : "Send"}
         </button>
       </div>

@@ -78,32 +78,90 @@ app.post("/api/ai-chat", async (req, res) => {
       .filter(Boolean)
       .join("\n\n");
 
-    const systemPrompt = `
-You are an AI assistant helping users apply for a MEHKO permit.
+    // Enhanced system prompt with form-specific context
+    let systemPrompt = `
+You are an AI assistant helping users apply for a MEHKO permit. You are knowledgeable, patient, and provide practical guidance.
 
-Application Title: ${context.title}
-Source: ${context.rootDomain}
+Application: ${context.application?.title || "MEHKO Permit"}
+Source: ${context.application?.rootDomain || "Government"}
 
-Steps:
+Available Steps:
 ${(context.steps || [])
-  .map((s, i) => `Step ${i + 1}: ${s.title} (${s.type})`)
+  .map((s, i) => `Step ${i + 1}: ${s.title} (${s.type})${s.action_required ? ' - ACTION REQUIRED' : ''}`)
   .join("\n")}
 
-Completed Steps:
-${(context.completedStepIds || []).join(", ") || "None"}
+User's Progress:
+- Completed Steps: ${(context.completedStepIds || []).join(", ") || "None"}
+- Current Step: ${context.currentStep?.title || "Not specified"}
 
-Community Comments:
-${(context.comments || []).map((c) => `- ${c.text || c}`).join("\n") || "None"}
+Available Forms:
+${(context.steps || [])
+  .filter(s => s.type === "pdf")
+  .map(s => `- ${s.title} (${s.formId})`)
+  .join("\n")}
 
-Form Fields:
-${formSection || "None"}
+Form Field Information:
+${formSection || "No form fields data available"}
 
-Be concise, accurate, and helpful. Explain unfamiliar fields and help users complete the application.
-`.trim();
+User's Saved Form Data:
+${Object.entries(context.formData || {})
+  .map(([formId, data]) => `- ${formId}: ${Object.keys(data).length} fields filled`)
+  .join("\n") || "No saved form data"}
+
+Community Insights:
+${(context.comments || []).map((c) => `- ${c.text || c}`).join("\n") || "No community comments yet"}`;
+
+    // Add form-specific context if user is working on a specific form
+    if (context.selectedForm) {
+      const form = context.selectedForm;
+      const formText = context.pdfText?.[form.formId] || "";
+      const formFields = context.overlays?.[form.formId] || [];
+      const userFormData = context.formData?.[form.formId] || {};
+      
+      systemPrompt += `
+
+CURRENT FORM CONTEXT:
+Form: ${form.title}
+Form ID: ${form.formId}
+
+Available Form Fields:
+${formFields.map(f => `- ${f.label || f.id} (${f.type || 'text'})`).join("\n") || "No field information available"}
+
+User's Progress on This Form:
+${Object.entries(userFormData).length > 0 
+  ? Object.entries(userFormData).map(([field, value]) => `- ${field}: ${value}`).join("\n")
+  : "No fields filled yet"}
+
+Form Content (if available):
+${formText ? formText.substring(0, 1000) + "..." : "Form content not available"}
+
+INSTRUCTIONS FOR FORM-SPECIFIC HELP:
+- Focus on the specific form the user is asking about
+- Reference the actual form fields and content when possible
+- Provide step-by-step guidance for filling out the form
+- Explain any unclear or complex fields
+- Suggest best practices for completing the form
+- Help troubleshoot any issues the user is experiencing`;
+    }
+
+    systemPrompt += `
+
+GENERAL GUIDELINES:
+- Be concise but thorough
+- Use bullet points for step-by-step instructions
+- Explain unfamiliar terms and requirements
+- Provide practical examples when helpful
+- Encourage users to save their progress
+- Direct users to relevant resources or forms
+- Be encouraging and supportive
+
+Remember: You're helping someone navigate a government permit application. Be clear, accurate, and helpful.`.trim();
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "system", content: systemPrompt }, ...messages],
+      temperature: 0.7,
+      max_tokens: 1000,
     });
 
     const reply = response.choices[0].message.content;
