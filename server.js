@@ -355,7 +355,7 @@ async function convertPDFToImages(pdfBuffer) {
     // Convert each page to image buffer
     for (let i = 0; i < pageCount.length; i++) {
       try {
-        const pageImage = await convert(i + 1, true); // true = return buffer
+        const pageImage = await convert(i + 1, { returnBuffer: true }); // Return buffer instead of saving to file
         if (pageImage && pageImage.data) {
           // Process with sharp to ensure proper format and size
           const processedImage = await sharp(pageImage.data)
