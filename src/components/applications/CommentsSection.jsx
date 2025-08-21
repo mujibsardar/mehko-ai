@@ -1,21 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { fetchComments, addComment, addReaction, removeReaction } from "../../firebase/comments";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  fetchComments,
+  addComment,
+  addReaction,
+  removeReaction,
+} from "../../firebase/comments";
 import useAuth from "../../hooks/useAuth";
 
 import "./CommentsSection.scss";
 
-// Common emojis for quick reactions
-const QUICK_EMOJIS = ["👍", "❤️", "😊", "🎉", "👏", "🔥", "💯", "🚀"];
+// Common emojis for quick reactions - matching the screenshot
+const QUICK_EMOJIS = ["👍", "👎", "😊", "🎉", "😢", "❤️", "🚀", "👀"];
 
 function CommentsSection({ application }) {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
+  const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track which comment's emoji picker is open
   const { user } = useAuth();
+  const emojiPickerRef = useRef(null);
 
   useEffect(() => {
     if (!application?.id) return;
     fetchComments(application.id).then(setComments);
   }, [application?.id]);
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
+        setActiveEmojiPicker(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,23 +58,25 @@ function CommentsSection({ application }) {
 
   const handleReaction = async (commentId, emoji) => {
     if (!user) return;
-    
-    const comment = comments.find(c => c.id === commentId);
+
+    const comment = comments.find((c) => c.id === commentId);
     const hasReacted = comment?.reactions?.[user.uid]?.includes(emoji);
-    
+
     if (hasReacted) {
       await removeReaction(application.id, commentId, user.uid, emoji);
     } else {
       await addReaction(application.id, commentId, user.uid, emoji);
     }
-    
+
     // Refresh comments to get updated reactions
     fetchComments(application.id).then(setComments);
   };
 
   const getReactionCount = (reactions, emoji) => {
     if (!reactions) return 0;
-    return Object.values(reactions).flat().filter(r => r === emoji).length;
+    return Object.values(reactions)
+      .flat()
+      .filter((r) => r === emoji).length;
   };
 
   const hasUserReacted = (reactions, emoji) => {
@@ -95,41 +121,53 @@ function CommentsSection({ application }) {
               </span>
             </div>
             <p className="comment-text">{c.text}</p>
-            
+
             {/* Emoji Reactions */}
             <div className="comment-reactions">
-              {QUICK_EMOJIS.map((emoji) => {
-                const count = getReactionCount(c.reactions, emoji);
-                const isActive = hasUserReacted(c.reactions, emoji);
-                
-                if (count === 0) return null;
-                
-                return (
-                  <button
-                    key={emoji}
-                    className={`reaction-btn ${isActive ? 'active' : ''}`}
-                    onClick={() => handleReaction(c.id, emoji)}
-                    title={`${emoji} ${count}`}
-                  >
-                    <span className="emoji">{emoji}</span>
-                    <span className="count">{count}</span>
-                  </button>
-                );
-              })}
-              
-              {/* Add Reaction Button */}
+              {/* Emoji Picker - appears on hover/click */}
+              {activeEmojiPicker === c.id && (
+                <div className="emoji-picker" ref={emojiPickerRef}>
+                  {QUICK_EMOJIS.map((emoji) => (
+                    <button
+                      key={emoji}
+                      className={`emoji-option ${
+                        hasUserReacted(c.reactions, emoji) ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        handleReaction(c.id, emoji);
+                        setActiveEmojiPicker(null); // Close picker after selection
+                      }}
+                      title={emoji}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Smiley Face Button to Open Emoji Picker */}
               <button
-                className="add-reaction-btn"
-                onClick={() => {
-                  const emoji = prompt("Enter an emoji:");
-                  if (emoji && emoji.trim()) {
-                    handleReaction(c.id, emoji.trim());
-                  }
-                }}
+                className="emoji-trigger-btn"
+                onClick={() =>
+                  setActiveEmojiPicker(activeEmojiPicker === c.id ? null : c.id)
+                }
                 title="Add reaction"
               >
-                +
+                😊
               </button>
+
+              {/* Display Existing Reactions */}
+              {QUICK_EMOJIS.map((emoji) => {
+                const count = getReactionCount(c.reactions, emoji);
+                if (count === 0) return null;
+
+                return (
+                  <div key={emoji} className="reaction-display">
+                    <span className="emoji">{emoji}</span>
+                    <span className="count">{count}</span>
+                  </div>
+                );
+              })}
             </div>
           </li>
         ))}
