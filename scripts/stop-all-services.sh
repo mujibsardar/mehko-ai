@@ -101,3 +101,5 @@ done
 echo ""
 echo -e "${GREEN}🎉 All services have been stopped!${NC}"
 echo -e "${BLUE}💡 To start all services again, run: ${NC}./scripts/start-all-services.sh"
+echo -e "${BLUE}💡 To restart all services, run: ${NC}./scripts/restart-all-services.sh"
+echo -e "${BLUE}💡 To watch logs, run: ${NC}./scripts/watch-logs.sh"

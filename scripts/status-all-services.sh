@@ -143,9 +143,11 @@ fi
 
 echo ""
 echo -e "${CYAN}💡 Quick Commands:${NC}"
-echo -e "   Start all: ${BLUE}./scripts/start-all-services.sh${NC}"
-echo -e "   Stop all:  ${BLUE}./scripts/stop-all-services.sh${NC}"
-echo -e "   Status:    ${BLUE}./scripts/status-all-services.sh${NC}"
+echo -e "   Start all:  ${BLUE}./scripts/start-all-services.sh${NC}"
+echo -e "   Stop all:   ${BLUE}./scripts/stop-all-services.sh${NC}"
+echo -e "   Restart all: ${BLUE}./scripts/restart-all-services.sh${NC}"
+echo -e "   Watch logs:  ${BLUE}./scripts/watch-logs.sh${NC}"
+echo -e "   Status:     ${BLUE}./scripts/status-all-services.sh${NC}"
 echo ""
 
 # Exit with appropriate code

@@ -70,6 +70,9 @@ export default function Mapper() {
   const [metrics, setMetrics] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [showAIMapper, setShowAIMapper] = useState(false);
+  const [editMode, setEditMode] = useState(false); // New: Field placement mode
+  const [draggedField, setDraggedField] = useState(null); // New: Track field being dragged
+  const [resizeHandle, setResizeHandle] = useState(null); // New: Track resize handle
   const canvasRef = useRef(null);
   const drawingRef = useRef(null);
 
@@ -128,8 +131,45 @@ export default function Mapper() {
         .filter((f) => Number(f.page || 0) === Number(page))
         .forEach((f) => {
           const [x0, y0, x1, y1] = f.rect;
-          ctx.strokeStyle = f.id === selectedId ? "#e00" : "#00e";
+          const isSelected = f.id === selectedId;
+          const isAIField = f.id.startsWith('ai_field_');
+          
+          // Different colors for different field types
+          if (isSelected) {
+            ctx.strokeStyle = "#e00"; // Red for selected
+            ctx.lineWidth = 3;
+          } else if (isAIField) {
+            ctx.strokeStyle = "#00a"; // Blue for AI fields
+            ctx.lineWidth = 2;
+          } else {
+            ctx.strokeStyle = "#0a0"; // Green for manual fields
+            ctx.lineWidth = 2;
+          }
+          
           ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+          
+          // Draw resize handles in edit mode
+          if (editMode && isSelected) {
+            const handleSize = 6;
+            ctx.fillStyle = "#e00";
+            // Corner handles
+            ctx.fillRect(x0 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect(x1 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect(x0 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect(x1 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
+            // Edge handles
+            ctx.fillRect((x0 + x1)/2 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect((x0 + x1)/2 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect(x0 - handleSize/2, (y0 + y1)/2 - handleSize/2, handleSize, handleSize);
+            ctx.fillRect(x1 - handleSize/2, (y0 + y1)/2 - handleSize/2, handleSize, handleSize);
+          }
+          
+          // Draw field label
+          if (isSelected || editMode) {
+            ctx.fillStyle = "#000";
+            ctx.font = "12px Arial";
+            ctx.fillText(f.label || f.id, x0, y0 - 5);
+          }
         });
 
       // current drawing
@@ -140,7 +180,7 @@ export default function Mapper() {
       }
     };
     img.src = imgUrl;
-  }, [imgUrl, overlay, page, selectedId]);
+  }, [imgUrl, overlay, page, selectedId, editMode]);
 
   const onPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -152,32 +192,141 @@ export default function Mapper() {
 
   const onDown = (e) => {
     const p = onPos(e);
-    // select if clicking inside an existing rect
-    const hit = overlay.fields.find(
-      (f) =>
-        f.page === page &&
-        p.x >= f.rect[0] &&
-        p.x <= f.rect[2] &&
-        p.y >= f.rect[1] &&
-        p.y <= f.rect[3]
-    );
-    if (hit) {
-      setSelectedId(hit.id);
-      drawingRef.current = null;
-      return;
+    
+    if (editMode) {
+      // In edit mode, handle field dragging and resizing
+      const hit = overlay.fields.find(
+        (f) =>
+          f.page === page &&
+          p.x >= f.rect[0] &&
+          p.x <= f.rect[2] &&
+          p.y >= f.rect[1] &&
+          p.y <= f.rect[3]
+      );
+      
+      if (hit) {
+        setSelectedId(hit.id);
+        
+        // Check if clicking on resize handle
+        const [x0, y0, x1, y1] = hit.rect;
+        const handleSize = 6;
+        
+        // Corner handles
+        if (p.x >= x0 - handleSize/2 && p.x <= x0 + handleSize/2 && 
+            p.y >= y0 - handleSize/2 && p.y <= y0 + handleSize/2) {
+          setResizeHandle('nw'); // Northwest corner
+        } else if (p.x >= x1 - handleSize/2 && p.x <= x1 + handleSize/2 && 
+                   p.y >= y0 - handleSize/2 && p.y <= y0 + handleSize/2) {
+          setResizeHandle('ne'); // Northeast corner
+        } else if (p.x >= x0 - handleSize/2 && p.x <= x0 + handleSize/2 && 
+                   p.y >= y1 - handleSize/2 && p.y <= y1 + handleSize/2) {
+          setResizeHandle('sw'); // Southwest corner
+        } else if (p.x >= x1 - handleSize/2 && p.x <= x1 + handleSize/2 && 
+                   p.y >= y1 - handleSize/2 && p.y <= y1 + handleSize/2) {
+          setResizeHandle('se'); // Southeast corner
+        } else {
+          // Edge handles or center - start dragging
+          setDraggedField({ id: hit.id, offsetX: p.x - x0, offsetY: p.y - y0 });
+        }
+        return;
+      }
+    } else {
+      // Normal mode - select if clicking inside an existing rect
+      const hit = overlay.fields.find(
+        (f) =>
+          f.page === page &&
+          p.x >= f.rect[0] &&
+          p.x <= f.rect[2] &&
+          p.y >= f.rect[1] &&
+          p.y <= f.rect[3]
+      );
+      if (hit) {
+        setSelectedId(hit.id);
+        drawingRef.current = null;
+        return;
+      }
     }
+    
     setSelectedId(null);
-    drawingRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
+    if (!editMode) {
+      drawingRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
+    }
   };
 
   const onMove = (e) => {
-    if (!drawingRef.current) return;
     const p = onPos(e);
-    drawingRef.current = { ...drawingRef.current, x1: p.x, y1: p.y };
-    if (imgUrl) setImgUrl((prev) => prev); // trigger redraw
+    
+    if (editMode && draggedField) {
+      // Handle field dragging
+      setOverlay((o) => {
+        const i = o.fields.findIndex((f) => f.id === draggedField.id);
+        if (i === -1) return o;
+        
+        const field = o.fields[i];
+        const newRect = [
+          p.x - draggedField.offsetX,
+          p.y - draggedField.offsetY,
+          p.x - draggedField.offsetX + (field.rect[2] - field.rect[0]),
+          p.y - draggedField.offsetY + (field.rect[3] - field.rect[1])
+        ];
+        
+        const fields = o.fields.slice();
+        fields[i] = { ...field, rect: newRect };
+        return { ...o, fields };
+      });
+      return;
+    }
+    
+    if (editMode && resizeHandle && selectedId) {
+      // Handle field resizing
+      setOverlay((o) => {
+        const i = o.fields.findIndex((f) => f.id === selectedId);
+        if (i === -1) return o;
+        
+        const field = o.fields[i];
+        const [x0, y0, x1, y1] = field.rect;
+        let newRect = [...field.rect];
+        
+        switch (resizeHandle) {
+          case 'nw':
+            newRect = [p.x, p.y, x1, y1];
+            break;
+          case 'ne':
+            newRect = [x0, p.y, p.x, y1];
+            break;
+          case 'sw':
+            newRect = [p.x, y0, x1, p.y];
+            break;
+          case 'se':
+            newRect = [x0, y0, p.x, p.y];
+            break;
+        }
+        
+        // Ensure positive dimensions
+        if (newRect[2] > newRect[0] && newRect[3] > newRect[1]) {
+          const fields = o.fields.slice();
+          fields[i] = { ...field, rect: newRect };
+          return { ...o, fields };
+        }
+        return o;
+      });
+      return;
+    }
+    
+    if (!editMode && drawingRef.current) {
+      drawingRef.current = { ...drawingRef.current, x1: p.x, y1: p.y };
+      if (imgUrl) setImgUrl((prev) => prev); // trigger redraw
+    }
   };
 
   const onUp = () => {
+    if (editMode) {
+      // Clear drag/resize state
+      setDraggedField(null);
+      setResizeHandle(null);
+      return;
+    }
+    
     const d = drawingRef.current;
     if (!d) return;
     drawingRef.current = null;
@@ -248,6 +397,28 @@ export default function Mapper() {
     [overlay, selectedId]
   );
 
+  // New: Toggle edit mode
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+    if (editMode) {
+      setDraggedField(null);
+      setResizeHandle(null);
+    }
+  };
+
+  // New: Get field statistics
+  const fieldStats = useMemo(() => {
+    const pageFields = overlay.fields.filter((f) => f.page === page);
+    const aiFields = pageFields.filter((f) => f.id.startsWith('ai_field_'));
+    const manualFields = pageFields.filter((f) => !f.id.startsWith('ai_field_'));
+    
+    return {
+      total: pageFields.length,
+      ai: aiFields.length,
+      manual: manualFields.length
+    };
+  }, [overlay, page]);
+
   return (
     <div
       style={{
@@ -286,6 +457,21 @@ export default function Mapper() {
           >
             🤖 AI Field Detection
           </button>
+          <button
+            onClick={toggleEditMode}
+            style={{
+              background: editMode ? "#dc2626" : "#3b82f6",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "6px",
+              fontWeight: "600",
+              cursor: "pointer",
+              marginLeft: "8px",
+            }}
+          >
+            {editMode ? "✋ Exit Edit Mode" : "✏️ Edit Fields"}
+          </button>
           <div
             style={{
               marginLeft: "auto",
@@ -311,6 +497,24 @@ export default function Mapper() {
             </button>
           </div>
         </div>
+        
+        {/* Edit Mode Instructions */}
+        {editMode && (
+          <div style={{
+            background: "#fef3c7",
+            border: "1px solid #f59e0b",
+            borderRadius: "6px",
+            padding: "8px 12px",
+            marginBottom: "8px",
+            fontSize: "14px"
+          }}>
+            <strong>✏️ Edit Mode Active:</strong> 
+            {editMode && draggedField ? " Drag fields to reposition" : 
+             editMode && resizeHandle ? " Resize field by dragging handles" :
+             " Click and drag fields to move, drag handles to resize"}
+          </div>
+        )}
+        
         <div
           style={{
             border: "1px solid #ccc",
@@ -322,7 +526,7 @@ export default function Mapper() {
           <canvas
             ref={canvasRef}
             style={{
-              cursor: "crosshair",
+              cursor: editMode ? "move" : "crosshair",
               display: "block",
             }}
             onMouseDown={onDown}
@@ -405,7 +609,9 @@ export default function Mapper() {
               <input
                 type="checkbox"
                 checked={!!selected.bg}
-                onChange={(e) => updateSelected({ bg: e.target.checked })}
+                onChange={(e) =>
+                  updateSelected({ bg: e.target.checked })
+                }
               />
               <span style={{ marginLeft: 6 }}>White-out BG</span>
             </label>
@@ -419,8 +625,14 @@ export default function Mapper() {
         )}
         <hr style={{ margin: "12px 0" }} />
         <div>
-          {overlay.fields.filter((f) => f.page === page).length} fields on this
-          page
+          <div style={{ marginBottom: "8px" }}>
+            <strong>Field Statistics:</strong>
+          </div>
+          <div style={{ fontSize: "14px", color: "#666" }}>
+            <div>📊 Total: {fieldStats.total}</div>
+            <div>🤖 AI Detected: {fieldStats.ai}</div>
+            <div>✏️ Manual: {fieldStats.manual}</div>
+          </div>
         </div>
       </div>
 
@@ -475,6 +687,8 @@ export default function Mapper() {
               onMappingComplete={(newOverlay) => {
                 setOverlay(newOverlay);
                 setShowAIMapper(false);
+                // Auto-enable edit mode after AI detection for field placement
+                setEditMode(true);
               }}
             />
           </div>
