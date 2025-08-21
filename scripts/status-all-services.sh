@@ -1,158 +1,159 @@
 #!/bin/bash
 
-# Script hardening - exit on any error
-set -euo pipefail
+# MEHKO AI Services Status Check Script
+# This script checks the status of all running services
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+set -e  # Exit on any error
 
-echo -e "${BLUE}🔍 MEHKO AI Services Status Check${NC}"
+echo "🔍 MEHKO AI Services Status Check"
 echo "=========================================="
-echo ""
 
-# Function to check if a port is in use and get process info
-check_port_status() {
-    local port=$1
-    local service_name=$2
-    local health_url=$3
-    
-    if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
-        local pid=$(lsof -Pi :$port -sTCP:LISTEN -t 2>/dev/null | head -1)
-        local process_name=$(ps -p $pid -o comm= 2>/dev/null || echo "Unknown")
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
+
+# Check Python FastAPI Server
+echo ""
+echo "🐍 Python FastAPI Server (PDF Service)"
+echo "----------------------------------------"
+if lsof -ti:8000 >/dev/null 2>&1; then
+    PYTHON_PID=$(lsof -ti:8000 | head -1)
+    if [ -n "$PYTHON_PID" ]; then
+        PROCESS_INFO=$(ps -p $PYTHON_PID -o pid,comm,etime --no-headers 2>/dev/null || echo "Process info unavailable")
+        START_TIME=$(ps -p $PYTHON_PID -o lstart --no-headers 2>/dev/null || echo "Start time unavailable")
         
-        echo -e "${GREEN}✅ $service_name is RUNNING${NC}"
-        echo -e "   Port: ${CYAN}$port${NC}"
-        echo -e "   PID: ${CYAN}$pid${NC}"
-        echo -e "   Process: ${CYAN}$process_name${NC}"
+        echo "✅ Python FastAPI is RUNNING"
+        echo "   Port: 8000"
+        echo "   PID: $PYTHON_PID"
+        echo "   Process: $PROCESS_INFO"
         
-        # Try to check health endpoint if provided
-        if [ -n "$health_url" ]; then
-            if curl -s --max-time 5 "$health_url" > /dev/null 2>&1; then
-                echo -e "   Health: ${GREEN}✓ Healthy${NC}"
-            else
-                echo -e "   Health: ${YELLOW}⚠️  Unhealthy (endpoint not responding)${NC}"
-            fi
+        # Check health endpoint
+        if curl -s --max-time 5 http://localhost:8000/health >/dev/null 2>&1; then
+            echo "   Health: ✓ Healthy"
+        else
+            echo "   Health: ⚠️  Port open but health check failed"
         fi
         
-        return 0
+        echo "   Started: $START_TIME"
     else
-        echo -e "${RED}❌ $service_name is NOT RUNNING${NC}"
-        echo -e "   Port: ${CYAN}$port${NC}"
-        return 1
+        echo "❌ Port 8000 is in use but process info unavailable"
     fi
-}
-
-# Function to check service uptime
-get_uptime() {
-    local pid=$1
-    if [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null; then
-        local start_time=$(ps -p "$pid" -o lstart= 2>/dev/null)
-        if [ -n "$start_time" ]; then
-            echo -e "   Started: ${CYAN}$start_time${NC}"
-        fi
-    fi
-}
-
-# Check Python FastAPI server
-echo -e "${YELLOW}🐍 Python FastAPI Server (PDF Service)${NC}"
-echo "----------------------------------------"
-if check_port_status 8000 "Python FastAPI" "http://localhost:8000/health"; then
-    PYTHON_PID=$(lsof -Pi :8000 -sTCP:LISTEN -t 2>/dev/null | head -1)
-    get_uptime "$PYTHON_PID"
-fi
-echo ""
-
-# Check Node.js server
-echo -e "${YELLOW}🟢 Node.js Server (AI Chat & API)${NC}"
-echo "----------------------------------------"
-if check_port_status 3000 "Node.js Server" "http://localhost:3000/api/ai-chat"; then
-    NODE_PID=$(lsof -Pi :3000 -sTCP:LISTEN -t 2>/dev/null | head -1)
-    get_uptime "$NODE_PID"
-fi
-echo ""
-
-# Check React dev server
-echo -e "${YELLOW}⚛️  React Dev Server (Frontend)${NC}"
-echo "----------------------------------------"
-if check_port_status 5173 "React Dev Server" "http://localhost:5173"; then
-    REACT_PID=$(lsof -Pi :5173 -sTCP:LISTEN -t 2>/dev/null | head -1)
-    get_uptime "$REACT_PID"
-fi
-echo ""
-
-# Check additional services
-echo -e "${YELLOW}🔧 Additional Services${NC}"
-echo "----------------------------------------"
-
-# Check if MongoDB/Firebase is accessible (if applicable)
-echo -e "${CYAN}📊 Database Connection${NC}"
-if curl -s --max-time 5 "http://localhost:3000/api/ai-chat" > /dev/null 2>&1; then
-    echo -e "   AI Chat API: ${GREEN}✓ Accessible${NC}"
 else
-    echo -e "   AI Chat API: ${RED}✗ Not accessible${NC}"
+    echo "❌ Python FastAPI is NOT RUNNING"
 fi
 
-# Check environment variables
-echo -e "${CYAN}🔑 Environment Variables${NC}"
+# Check Node.js Server
+echo ""
+echo "🟢 Node.js Server (AI Chat & API)"
+echo "----------------------------------------"
+if lsof -ti:3000 >/dev/null 2>&1; then
+    NODE_PID=$(lsof -ti:3000 | head -1)
+    if [ -n "$NODE_PID" ]; then
+        PROCESS_INFO=$(ps -p $NODE_PID -o pid,comm,etime --no-headers 2>/dev/null || echo "Process info unavailable")
+        START_TIME=$(ps -p $NODE_PID -o lstart --no-headers 2>/dev/null || echo "Start time unavailable")
+        
+        echo "✅ Node.js Server is RUNNING"
+        echo "   Port: 3000"
+        echo "   PID: $NODE_PID"
+        echo "   Process: $PROCESS_INFO"
+        
+        # Check health endpoint
+        if curl -s --max-time 5 http://localhost:3000/health >/dev/null 2>&1; then
+            echo "   Health: ✓ Healthy"
+        else
+            echo "   Health: ⚠️  Port open but health check failed"
+        fi
+        
+        echo "   Started: $START_TIME"
+    else
+        echo "❌ Port 3000 is in use but process info unavailable"
+    fi
+else
+    echo "❌ Node.js Server is NOT RUNNING"
+fi
+
+# Check React Dev Server
+echo ""
+echo "⚛️  React Dev Server (Frontend)"
+echo "----------------------------------------"
+if lsof -ti:5173 >/dev/null 2>&1; then
+    REACT_PID=$(lsof -ti:5173 | head -1)
+    if [ -n "$REACT_PID" ]; then
+        PROCESS_INFO=$(ps -p $REACT_PID -o pid,comm,etime --no-headers 2>/dev/null || echo "Process info unavailable")
+        START_TIME=$(ps -p $REACT_PID -o lstart --no-headers 2>/dev/null || echo "Start time unavailable")
+        
+        echo "✅ React Dev Server is RUNNING"
+        echo "   Port: 5173"
+        echo "   PID: $REACT_PID"
+        echo "   Process: $PROCESS_INFO"
+        
+        # Check if server responds
+        if curl -s --max-time 5 http://localhost:5173 >/dev/null 2>&1; then
+            echo "   Health: ✓ Healthy"
+        else
+            echo "   Health: ⚠️  Port open but server not responding"
+        fi
+        
+        echo "   Started: $START_TIME"
+    else
+        echo "❌ Port 5173 is in use but process info unavailable"
+    fi
+else
+    echo "❌ React Dev Server is NOT RUNNING"
+fi
+
+# Additional checks
+echo ""
+echo "🔧 Additional Services"
+echo "----------------------------------------"
+
+# Database connection check
+echo "📊 Database Connection"
+if curl -s --max-time 5 http://localhost:3000/health >/dev/null 2>&1; then
+    echo "   AI Chat API: ✓ Accessible"
+else
+    echo "   AI Chat API: ❌ Not accessible"
+fi
+
+# Environment variables check
+echo "🔑 Environment Variables"
 if [ -f ".env" ]; then
-    if grep -q "OPENAI_API_KEY" .env; then
-        echo -e "   OpenAI API Key: ${GREEN}✓ Configured${NC}"
+    if grep -q "OPENAI_API_KEY" .env 2>/dev/null; then
+        echo "   OpenAI API Key: ✓ Configured"
     else
-        echo -e "   OpenAI API Key: ${RED}✗ Missing${NC}"
+        echo "   OpenAI API Key: ❌ Not found in .env"
     fi
 else
-    echo -e "   .env file: ${RED}✗ Not found${NC}"
+    echo "   .env file: ❌ Not found"
 fi
 
 if [ -f "python/.env" ]; then
-    if grep -q "OPENAI_API_KEY" python/.env; then
-        echo -e "   Python .env: ${GREEN}✓ Configured${NC}"
-    else
-        echo -e "   Python .env: ${RED}✗ Missing${NC}"
-    fi
+    echo "   Python .env: ✓ Configured"
 else
-    echo -e "   Python .env: ${YELLOW}⚠️  Not found${NC}"
+    echo "   Python .env: ❌ Not found"
 fi
-
-echo ""
 
 # Summary
-echo -e "${BLUE}📊 Summary${NC}"
+echo ""
+echo "📊 Summary"
 echo "=========="
 
-# Count running services
 RUNNING_COUNT=0
-TOTAL_COUNT=3
+if lsof -ti:8000 >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
+if lsof -ti:3000 >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
+if lsof -ti:5173 >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
 
-if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
-if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
-if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null 2>&1; then RUNNING_COUNT=$((RUNNING_COUNT + 1)); fi
-
-if [ $RUNNING_COUNT -eq $TOTAL_COUNT ]; then
-    echo -e "${GREEN}🎉 All services are running! (${RUNNING_COUNT}/${TOTAL_COUNT})${NC}"
+if [ $RUNNING_COUNT -eq 3 ]; then
+    echo "🎉 All services are running! ($RUNNING_COUNT/3)"
 elif [ $RUNNING_COUNT -gt 0 ]; then
-    echo -e "${YELLOW}⚠️  Some services are running (${RUNNING_COUNT}/${TOTAL_COUNT})${NC}"
+    echo "⚠️  Some services are running ($RUNNING_COUNT/3)"
 else
-    echo -e "${RED}💥 No services are running (${RUNNING_COUNT}/${TOTAL_COUNT})${NC}"
+    echo "❌ No services are running (0/3)"
 fi
 
 echo ""
-echo -e "${CYAN}💡 Quick Commands:${NC}"
-echo -e "   Start all: ${BLUE}./scripts/start-all-services.sh${NC}"
-echo -e "   Stop all:  ${BLUE}./scripts/stop-all-services.sh${NC}"
-echo -e "   Status:    ${BLUE}./scripts/status-all-services.sh${NC}"
-echo ""
-
-# Exit with appropriate code
-if [ $RUNNING_COUNT -eq $TOTAL_COUNT ]; then
-    exit 0  # All services running
-elif [ $RUNNING_COUNT -gt 0 ]; then
-    exit 1  # Some services running
-else
-    exit 2  # No services running
-fi
+echo "💡 Quick Commands:"
+echo "   Start all: ./scripts/start-all-services.sh"
+echo "   Stop all:  ./scripts/stop-all-services.sh"
+echo "   Restart:   ./scripts/restart-all-services.sh"
+echo "   Status:    ./scripts/status-all-services.sh"

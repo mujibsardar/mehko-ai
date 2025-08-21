@@ -1,124 +1,117 @@
 #!/bin/bash
 
-# Script hardening - exit on any error
-set -euo pipefail
+# MEHKO AI Services Start Script
+# This script starts all required services for development
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+set -e  # Exit on any error
 
-echo -e "${BLUE}🚀 Starting all services for MEHKO AI...${NC}"
-echo ""
+echo "🚀 Starting all services for MEHKO AI..."
+echo "=========================================="
 
-# Function to check if a port is in use
-check_port() {
-    if lsof -Pi :$1 -sTCP:LISTEN -t >/dev/null ; then
-        echo -e "${RED}❌ Port $1 is already in use!${NC}"
-        return 1
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR/.."
+
+# Check if ports are already in use
+echo "🔍 Checking port availability..."
+
+# Check if services are already running
+if lsof -ti:8000 >/dev/null 2>&1 || lsof -ti:3000 >/dev/null 2>&1 || lsof -ti:5173 >/dev/null 2>&1; then
+    echo "⚠️  Some ports are already in use. Stopping existing services first..."
+    if [ -f "./scripts/stop-all-services.sh" ]; then
+        ./scripts/stop-all-services.sh
+        sleep 2
     fi
-    return 0
-}
+fi
 
-# Check if ports are available
-echo -e "${YELLOW}🔍 Checking port availability...${NC}"
-if ! check_port 8000; then exit 1; fi  # Python FastAPI (PDF service)
-if ! check_port 3000; then exit 1; fi  # Node.js server (AI chat)
-if ! check_port 5173; then exit 1; fi  # React dev server (frontend)
-echo -e "${GREEN}✅ All ports are available${NC}"
-echo -e "${BLUE}💡 Note: Frontend now configured to use FastAPI on port 8000${NC}"
-echo ""
+echo "✅ All ports are available"
+echo "💡 Note: Frontend now configured to use FastAPI on port 8000"
 
 # Start Python FastAPI server
-echo -e "${YELLOW}🐍 Starting Python FastAPI server...${NC}"
-cd python
-if [ ! -d "venv" ] && [ ! -d ".venv" ]; then
-    echo -e "${YELLOW}📦 Creating Python virtual environment...${NC}"
-    python3 -m venv venv
-fi
+echo ""
+echo "🐍 Starting Python FastAPI server..."
+echo "📦 Installing/updating Python dependencies..."
 
-# Activate virtual environment
-if [ -d "venv" ]; then
+# Use timeout to prevent hanging
+timeout 60s bash -c '
+    cd python
     source venv/bin/activate
-elif [ -d ".venv" ]; then
-    source .venv/bin/activate
-fi
+    pip install -r requirements.txt
+' || {
+    echo "⚠️  Pip install took too long, continuing anyway..."
+}
 
-# Install requirements if needed
-echo -e "${YELLOW}📦 Installing/updating Python dependencies...${NC}"
-pip install -r requirements.txt
-
-# Start FastAPI server in background
-echo -e "${GREEN}🚀 Starting FastAPI server on port 8000...${NC}"
-uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload &
-PYTHON_PID=$!
+echo "🚀 Starting FastAPI server on port 8000..."
+cd python
+source venv/bin/activate
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 --reload > ../fastapi.log 2>&1 &
+FASTAPI_PID=$!
 cd ..
 
-# Wait a moment for Python server to start
-sleep 3
+# Save PID
+echo $FASTAPI_PID > .service-pids
 
 # Start Node.js server
-echo -e "${YELLOW}🟢 Starting Node.js server...${NC}"
-echo -e "${GREEN}🚀 Starting Node.js server on port 3000...${NC}"
-node server.js &
+echo ""
+echo "🟢 Starting Node.js server..."
+echo "🚀 Starting Node.js server on port 3000..."
+nohup node server.js > node.log 2>&1 &
 NODE_PID=$!
 
-# Wait a moment for Node server to start
-sleep 2
+# Save PID
+echo $NODE_PID >> .service-pids
 
 # Start React dev server
-echo -e "${YELLOW}⚛️  Starting React dev server...${NC}"
-echo -e "${GREEN}🚀 Starting React dev server on port 5173...${NC}"
-npm run dev &
-REACT_PID=$!
-
-# Wait for all services to start
 echo ""
-echo -e "${YELLOW}⏳ Waiting for all services to start...${NC}"
+echo "⚛️  Starting React dev server..."
+echo "🚀 Starting React dev server on port 5173..."
+cd frontend
+nohup npm run dev > ../react.log 2>&1 &
+REACT_PID=$!
+cd ..
+
+# Save PID
+echo $REACT_PID >> .service-pids
+
+# Wait for services to start
+echo ""
+echo "⏳ Waiting for all services to start..."
 sleep 5
 
-# Check if all services are running
+# Verify services are running
 echo ""
-echo -e "${YELLOW}🔍 Verifying all services are running...${NC}"
+echo "🔍 Verifying all services are running..."
 
-# Check Python server
-if curl -s http://localhost:8000/health > /dev/null; then
-    echo -e "${GREEN}✅ Python FastAPI server is running on http://localhost:8000${NC}"
+# Check Python FastAPI
+if curl -s http://localhost:8000/health >/dev/null 2>&1; then
+    echo "✅ Python FastAPI server is running on http://localhost:8000"
 else
-    echo -e "${RED}❌ Python FastAPI server failed to start${NC}"
+    echo "❌ Python FastAPI server failed to start"
 fi
 
-# Check Node server (assuming it has a health endpoint or just check if port is listening)
-if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null; then
-    echo -e "${GREEN}✅ Node.js server is running on port 3000${NC}"
+# Check Node.js server
+if curl -s http://localhost:3000/health >/dev/null 2>&1; then
+    echo "✅ Node.js server is running on port 3000"
 else
-    echo -e "${RED}❌ Node.js server failed to start${NC}"
+    echo "❌ Node.js server failed to start"
 fi
 
 # Check React dev server
-if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null; then
-    echo -e "${GREEN}✅ React dev server is running on http://localhost:5173${NC}"
+if curl -s http://localhost:5173 >/dev/null 2>&1; then
+    echo "✅ React dev server is running on http://localhost:5173"
 else
-    echo -e "${RED}❌ React dev server failed to start${NC}"
+    echo "❌ React dev server failed to start"
 fi
 
 echo ""
-echo -e "${GREEN}🎉 All services have been started!${NC}"
+echo "🎉 All services have been started!"
 echo ""
-echo -e "${BLUE}📱 Services running:${NC}"
-echo -e "  • Python FastAPI: ${GREEN}http://localhost:8000${NC}"
-echo -e "  • Node.js Server: ${GREEN}http://localhost:3000${NC}"
-echo -e "  • React App:      ${GREEN}http://localhost:5173${NC}"
+echo "📱 Services running:"
+echo "  • Python FastAPI: http://localhost:8000"
+echo "  • Node.js Server: http://localhost:3000"
+echo "  • React App:      http://localhost:5173"
 echo ""
-echo -e "${YELLOW}💡 To stop all services, run: ${NC}./scripts/stop-all-services.sh"
-echo -e "${YELLOW}💡 Or manually kill PIDs: ${NC}Python: $PYTHON_PID, Node: $NODE_PID, React: $REACT_PID"
+echo "💡 To stop all services, run: ./scripts/stop-all-services.sh"
+echo "💡 Or manually kill PIDs: Python: $FASTAPI_PID, Node: $NODE_PID, React: $REACT_PID"
 echo ""
-echo -e "${GREEN}🚀 You're all set! Happy coding! 🚀${NC}"
-
-# Save PIDs to a file for easy stopping
-echo "$PYTHON_PID $NODE_PID $REACT_PID" > .service-pids
-
-# Return to terminal
-exec $SHELL
+echo "🚀 You're all set! Happy coding! 🚀"

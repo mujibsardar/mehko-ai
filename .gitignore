@@ -1,4 +1,4 @@
-# Python’s compiled bytecode
+# Python's compiled bytecode
 __pycache__/
 **/__pycache__/
 *.pyc
@@ -52,3 +52,18 @@ applications/**/meta.json
 
 agent-output/*
 agent-output/
+
+# Temporary files and directories
+temp/
+temp_*.pdf
+temp_*.png
+temp_*.jpg
+temp_*.jpeg
+*.tmp
+*.temp
+
+# Service management files
+.service-pids
+fastapi.log
+node.log
+react.log

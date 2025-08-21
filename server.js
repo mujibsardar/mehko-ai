@@ -323,23 +323,77 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
 
 // Helper function to convert PDF to images
 async function convertPDFToImages(pdfBuffer) {
-  // This would integrate with a PDF processing library like pdf2pic or similar
-  // For now, returning a mock implementation
-  console.log("Converting PDF to images...");
-
-  // Mock: In real implementation, you'd use:
-  // const pdf2pic = require('pdf2pic');
-  // const options = { density: 300, saveFilename: "page", savePath: "./temp" };
-  // const convert = pdf2pic.convert(pdfBuffer, options);
-
-  // Create a larger test image buffer for testing (16x16 instead of 1x1)
-  const testImageBuffer = Buffer.from(
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjY0NjdGNjM5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjY0NjdGNjQ5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNjQ2N0Y2MTlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNjQ2N0Y2MjlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAABAAEAAAAj/AAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3MkzIAA7",
-    "base64"
-  );
-
-  console.log("Created test image buffer for AI analysis");
-  return [testImageBuffer];
+  try {
+    console.log("Converting PDF to images using pdf2pic...");
+    
+    const { fromPath } = require('pdf2pic');
+    const sharp = require('sharp');
+    
+    // Create a temporary file path for the PDF buffer
+    const tempPdfPath = `./temp_${Date.now()}.pdf`;
+    const fs = require('fs');
+    fs.writeFileSync(tempPdfPath, pdfBuffer);
+    
+    // Configure pdf2pic options
+    const options = {
+      density: 300,        // High resolution for better AI analysis
+      saveFilename: "page",
+      savePath: "./temp",
+      format: "png",
+      width: 2048,         // Max width for OpenAI Vision API
+      height: 2048         // Max height for OpenAI Vision API
+    };
+    
+    const convert = fromPath(tempPdfPath, options);
+    
+    // Get page count
+    const pageCount = await convert.bulk(-1); // -1 means all pages
+    console.log(`PDF has ${pageCount.length} pages`);
+    
+    const imageBuffers = [];
+    
+    // Convert each page to image buffer
+    for (let i = 0; i < pageCount.length; i++) {
+      try {
+        const pageImage = await convert(i + 1, true); // true = return buffer
+        if (pageImage && pageImage.data) {
+          // Process with sharp to ensure proper format and size
+          const processedImage = await sharp(pageImage.data)
+            .png()
+            .resize(2048, 2048, { fit: 'inside', withoutEnlargement: true })
+            .toBuffer();
+          
+          imageBuffers.push(processedImage);
+          console.log(`Page ${i + 1} converted successfully`);
+        }
+      } catch (pageError) {
+        console.error(`Error converting page ${i + 1}:`, pageError);
+        // Continue with other pages
+      }
+    }
+    
+    // Clean up temp files
+    try {
+      fs.unlinkSync(tempPdfPath);
+      // Clean up temp images
+      for (let i = 0; i < pageCount.length; i++) {
+        const tempImagePath = `./temp/page_${i + 1}.png`;
+        if (fs.existsSync(tempImagePath)) {
+          fs.unlinkSync(tempImagePath);
+        }
+      }
+    } catch (cleanupError) {
+      console.log("Cleanup warning:", cleanupError.message);
+    }
+    
+    console.log(`Successfully converted ${imageBuffers.length} pages to images`);
+    return imageBuffers;
+    
+  } catch (error) {
+    console.error("PDF conversion error:", error);
+    // Fallback: return empty array instead of crashing
+    return [];
+  }
 }
 
 // Helper function to analyze page with OpenAI Vision API
