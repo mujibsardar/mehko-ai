@@ -319,7 +319,7 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       // Note: PDF dimensions would need to be extracted from the original PDF
       // For now, using standard US Letter dimensions as fallback
       pageWidthPt: 612,
-      pageHeightPt: 792
+      pageHeightPt: 792,
     }));
 
     res.json({
@@ -327,7 +327,7 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       fields: processedFields,
       totalPages: pdfImages.length,
       totalFields: processedFields.length,
-      imageDimensions: imageDimensions
+      imageDimensions: imageDimensions,
     });
   } catch (error) {
     console.error("AI PDF analysis error:", error);
@@ -533,13 +533,24 @@ async function analyzePageWithAI(base64Image, pageIndex) {
     }
 
     // Add page information to each field
-    return fields.map((field) => ({
-      ...field,
-      page: pageIndex,
-      rect: field.rect || [0, 0, 100, 20], // Default rectangle if not provided
-      confidence: field.confidence || 0.5,
-      reasoning: field.reasoning || "AI detected form field",
-    }));
+    console.log(`Page ${pageIndex} AI response fields:`, fields);
+
+    return fields.map((field) => {
+      console.log(`Field "${field.label}" raw data:`, {
+        rect: field.rect,
+        rect_ratio: field.rect_ratio,
+        type: field.type,
+        confidence: field.confidence,
+      });
+
+      return {
+        ...field,
+        page: pageIndex,
+        rect: field.rect || [0, 0, 100, 20], // Default rectangle if not provided
+        confidence: field.confidence || 0.5,
+        reasoning: field.reasoning || "AI detected form field",
+      };
+    });
   } catch (error) {
     console.error(`Error analyzing page ${pageIndex}:`, error);
     return [];
@@ -554,32 +565,56 @@ function postProcessFields(fields, totalPages) {
       // Convert normalized ratios to PDF points if available
       let rectPt = [0, 0, 100, 20]; // Default rectangle
       let rectRatio = null;
-      
-      if (field.rect_ratio && Array.isArray(field.rect_ratio) && field.rect_ratio.length === 4) {
+
+      if (
+        field.rect_ratio &&
+        Array.isArray(field.rect_ratio) &&
+        field.rect_ratio.length === 4
+      ) {
         // Convert ratios to PDF points (bottom-left origin)
         const [x1_ratio, y1_ratio, x2_ratio, y2_ratio] = field.rect_ratio;
-        
+
         // Standard US Letter dimensions (612 x 792 points)
         const pageWidthPt = 612;
         const pageHeightPt = 792;
-        
+
         // Convert to PDF points with Y-flip (bottom-left origin)
         rectPt = [
-          x1_ratio * pageWidthPt,                    // x1
-          pageHeightPt * (1 - y2_ratio),             // y1 (flipped)
-          x2_ratio * pageWidthPt,                    // x2  
-          pageHeightPt * (1 - y1_ratio)              // y2 (flipped)
+          x1_ratio * pageWidthPt, // x1
+          pageHeightPt * (1 - y2_ratio), // y1 (flipped)
+          x2_ratio * pageWidthPt, // x2
+          pageHeightPt * (1 - y1_ratio), // y2 (flipped)
         ];
-        
+
         // Keep the normalized ratios for frontend drawing
         rectRatio = field.rect_ratio;
-        
-        console.log(`Field "${field.label}" converted: ratios [${x1_ratio.toFixed(3)}, ${y1_ratio.toFixed(3)}, ${x2_ratio.toFixed(3)}, ${y2_ratio.toFixed(3)}] -> points [${rectPt[0].toFixed(1)}, ${rectPt[1].toFixed(1)}, ${rectPt[2].toFixed(1)}, ${rectPt[3].toFixed(1)}]`);
-      } else if (field.rect && Array.isArray(field.rect) && field.rect.length === 4) {
+
+        console.log(
+          `Field "${field.label}" converted: ratios [${x1_ratio.toFixed(
+            3
+          )}, ${y1_ratio.toFixed(3)}, ${x2_ratio.toFixed(
+            3
+          )}, ${y2_ratio.toFixed(3)}] -> points [${rectPt[0].toFixed(
+            1
+          )}, ${rectPt[1].toFixed(1)}, ${rectPt[2].toFixed(
+            1
+          )}, ${rectPt[3].toFixed(1)}]`
+        );
+      } else if (
+        field.rect &&
+        Array.isArray(field.rect) &&
+        field.rect.length === 4
+      ) {
         // Fallback to existing rect format
+        console.log(`Field "${field.label}" using fallback rect:`, field.rect);
         rectPt = normalizeRectangle(field.rect);
+      } else {
+        console.log(`Field "${field.label}" has no valid coordinates:`, {
+          rect: field.rect,
+          rect_ratio: field.rect_ratio
+        });
       }
-      
+
       return {
         ...field,
         id: generateDescriptiveId(field.label, field.type),
@@ -641,27 +676,27 @@ function normalizeRectangle(rect) {
 
 // Helper function to generate descriptive IDs from field labels
 function generateDescriptiveId(label, type) {
-  if (!label || typeof label !== 'string') {
+  if (!label || typeof label !== "string") {
     return `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   // Convert label to a clean, descriptive ID
   let id = label
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .replace(/[^a-z0-9\s]/g, "") // Remove special characters
+    .replace(/\s+/g, "_") // Replace spaces with underscores
     .trim();
-  
+
   // Add type suffix for clarity
-  if (type && type !== 'text') {
+  if (type && type !== "text") {
     id += `_${type}`;
   }
-  
+
   // Ensure ID is not empty
   if (!id) {
     id = `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  
+
   return id;
 }
 

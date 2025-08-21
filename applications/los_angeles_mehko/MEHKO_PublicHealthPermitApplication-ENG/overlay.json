@@ -1,345 +1,462 @@
 {
   "fields": [
     {
-      "id": "ai_field_1",
-      "label": "Date of Application",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        100,
-        300,
-        120
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_2",
-      "label": "Business Name",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        140,
-        300,
-        160
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_3",
-      "label": "Business Address",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        180,
-        300,
-        200
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_4",
-      "label": "Unit",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        320,
-        180,
-        400,
-        200
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_5",
-      "label": "City",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        410,
-        180,
-        500,
-        200
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_6",
-      "label": "Owner's Name",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        220,
-        300,
-        240
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_7",
-      "label": "E-Mail Address",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        260,
-        300,
-        280
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_8",
-      "label": "Phone #",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        300,
-        300,
-        320
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_9",
-      "label": "Send invoice to business address",
-      "page": 0,
-      "type": "checkbox",
-      "rect": [
-        100,
-        340,
-        120,
-        360
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_10",
-      "label": "Send invoice to address below",
-      "page": 0,
-      "type": "checkbox",
-      "rect": [
-        100,
-        360,
-        120,
-        380
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_11",
-      "label": "Address",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        400,
-        300,
-        420
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_12",
-      "label": "Unit",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        320,
-        400,
-        400,
-        420
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_13",
-      "label": "City",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        410,
-        400,
-        500,
-        420
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_14",
-      "label": "State",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        100,
-        440,
-        300,
-        460
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_15",
-      "label": "Zip",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        320,
-        440,
-        400,
-        460
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_16",
-      "label": "Initial Application Review",
-      "page": 0,
-      "type": "checkbox",
-      "rect": [
-        100,
-        480,
-        120,
-        500
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_17",
+      "id": "site_evaluation_fee_checkbox",
       "label": "Site evaluation fee",
       "page": 0,
       "type": "checkbox",
       "rect": [
-        100,
-        500,
-        120,
-        520
+        61.2,
+        221.76000000000002,
+        183.6,
+        237.60000000000002
+      ],
+      "rectRatio": [
+        0.1,
+        0.7,
+        0.3,
+        0.72
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_20",
-      "label": "I would like to apply for the MEHKO Initial Application Review Subsidy",
-      "page": 1,
+      "id": "initial_application_review_checkbox",
+      "label": "Initial Application Review",
+      "page": 0,
       "type": "checkbox",
       "rect": [
-        150,
-        270,
-        400,
-        290
+        61.2,
+        261.35999999999996,
+        183.6,
+        277.2
+      ],
+      "rectRatio": [
+        0.1,
+        0.65,
+        0.3,
+        0.67
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_18",
-      "label": "First Name",
-      "page": 1,
+      "id": "state",
+      "label": "State",
+      "page": 0,
       "type": "text",
       "rect": [
-        150,
-        300,
-        250,
-        320
+        61.2,
+        316.8,
+        122.4,
+        332.64000000000004
+      ],
+      "rectRatio": [
+        0.1,
+        0.58,
+        0.2,
+        0.6
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_19",
-      "label": "Last Name",
-      "page": 1,
+      "id": "zip",
+      "label": "ZIP",
+      "page": 0,
       "type": "text",
       "rect": [
-        260,
-        300,
-        360,
-        320
+        183.6,
+        316.8,
+        244.8,
+        332.64000000000004
+      ],
+      "rectRatio": [
+        0.3,
+        0.58,
+        0.4,
+        0.6
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_21",
+      "id": "unit",
+      "label": "Unit",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        340.56000000000006,
+        122.4,
+        356.4
+      ],
+      "rectRatio": [
+        0.1,
+        0.55,
+        0.2,
+        0.57
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "city",
+      "label": "City",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        183.6,
+        340.56000000000006,
+        244.8,
+        356.4
+      ],
+      "rectRatio": [
+        0.3,
+        0.55,
+        0.4,
+        0.57
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        364.32,
+        244.8,
+        380.15999999999997
+      ],
+      "rectRatio": [
+        0.1,
+        0.52,
+        0.4,
+        0.54
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "send_invoice_to_address_below_checkbox",
+      "label": "Send invoice to address below",
+      "page": 0,
+      "type": "checkbox",
+      "rect": [
+        61.2,
+        396,
+        91.8,
+        411.84000000000003
+      ],
+      "rectRatio": [
+        0.1,
+        0.48,
+        0.15,
+        0.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "send_invoice_to_business_address_checkbox",
+      "label": "Send invoice to business address",
+      "page": 0,
+      "type": "checkbox",
+      "rect": [
+        61.2,
+        419.76000000000005,
+        91.8,
+        435.6
+      ],
+      "rectRatio": [
+        0.1,
+        0.45,
+        0.15,
+        0.47
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "phone_",
+      "label": "Phone #",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        459.36000000000007,
+        122.4,
+        475.2
+      ],
+      "rectRatio": [
+        0.1,
+        0.4,
+        0.2,
+        0.42
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "email_address",
+      "label": "E-Mail Address",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        491.04,
+        244.8,
+        506.88
+      ],
+      "rectRatio": [
+        0.1,
+        0.36,
+        0.4,
+        0.38
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "owners_name",
       "label": "Owner's Name",
-      "page": 1,
+      "page": 0,
       "type": "text",
       "rect": [
-        150,
-        400,
-        300,
-        420
+        61.2,
+        522.7199999999999,
+        244.8,
+        538.56
+      ],
+      "rectRatio": [
+        0.1,
+        0.32,
+        0.4,
+        0.34
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_22",
-      "label": "Owner's Signature",
-      "page": 1,
+      "id": "unit",
+      "label": "Unit",
+      "page": 0,
       "type": "text",
       "rect": [
-        300,
-        400,
-        450,
-        420
+        61.2,
+        554.4,
+        122.4,
+        570.24
+      ],
+      "rectRatio": [
+        0.1,
+        0.28,
+        0.2,
+        0.3
       ],
       "fontSize": 11,
       "align": "left",
       "shrink": true
     },
     {
-      "id": "ai_field_23",
-      "label": "Date",
+      "id": "city",
+      "label": "City",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        183.6,
+        554.4,
+        244.8,
+        570.24
+      ],
+      "rectRatio": [
+        0.3,
+        0.28,
+        0.4,
+        0.3
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "business_address",
+      "label": "Business Address",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        578.16,
+        244.8,
+        594
+      ],
+      "rectRatio": [
+        0.1,
+        0.25,
+        0.4,
+        0.27
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "business_name",
+      "label": "Business Name",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        617.76,
+        244.8,
+        633.6
+      ],
+      "rectRatio": [
+        0.1,
+        0.2,
+        0.4,
+        0.22
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "date_of_application",
+      "label": "Date of Application",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        61.2,
+        696.96,
+        244.8,
+        712.8000000000001
+      ],
+      "rectRatio": [
+        0.1,
+        0.1,
+        0.4,
+        0.12
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "date",
+      "label": "DATE",
       "page": 1,
       "type": "text",
       "rect": [
-        450,
-        400,
-        500,
-        420
+        30.6,
+        7.920000000000007,
+        581.4,
+        31.680000000000028
+      ],
+      "rectRatio": [
+        0.05,
+        0.96,
+        0.95,
+        0.99
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "owners_signature",
+      "label": "OWNER'S SIGNATURE",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        30.6,
+        31.680000000000028,
+        581.4,
+        55.43999999999996
+      ],
+      "rectRatio": [
+        0.05,
+        0.93,
+        0.95,
+        0.96
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "owners_name",
+      "label": "OWNER'S NAME",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        30.6,
+        55.43999999999996,
+        581.4,
+        79.19999999999999
+      ],
+      "rectRatio": [
+        0.05,
+        0.9,
+        0.95,
+        0.93
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "first_and_last_name",
+      "label": "first and last name",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        30.6,
+        118.80000000000001,
+        581.4,
+        142.56000000000003
+      ],
+      "rectRatio": [
+        0.05,
+        0.82,
+        0.95,
+        0.85
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "i_would_like_to_apply_for_the_mehko_initial_application_review_subsidy",
+      "label": "I would like to apply for the MEHKO Initial Application Review Subsidy",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        30.6,
+        158.39999999999998,
+        581.4,
+        198
+      ],
+      "rectRatio": [
+        0.05,
+        0.75,
+        0.95,
+        0.8
       ],
       "fontSize": 11,
       "align": "left",
