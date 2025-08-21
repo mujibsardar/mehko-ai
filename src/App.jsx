@@ -14,21 +14,30 @@ export default function App() {
       <Route path="/dashboard/*" element={<DashboardApp />} />
 
       {/* Admin */}
-      <Route path="/admin" element={
-        <ProtectedAdminRoute>
-          <Admin />
-        </ProtectedAdminRoute>
-      } />
-      <Route path="/admin/mapper/:appId/:formId" element={
-        <ProtectedAdminRoute>
-          <Mapper />
-        </ProtectedAdminRoute>
-      } />
-      <Route path="/admin/interview/:appId/:formId" element={
-        <ProtectedAdminRoute>
-          <Interview />
-        </ProtectedAdminRoute>
-      } />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedAdminRoute>
+            <Admin />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/mapper/:appId/:formId"
+        element={
+          <ProtectedAdminRoute>
+            <Mapper />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/interview/:appId/:formId"
+        element={
+          <ProtectedAdminRoute>
+            <Interview />
+          </ProtectedAdminRoute>
+        }
+      />
 
       {/* Default */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
