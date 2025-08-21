@@ -132,8 +132,8 @@ export default function Mapper() {
         .forEach((f) => {
           const [x0, y0, x1, y1] = f.rect;
           const isSelected = f.id === selectedId;
-          const isAIField = f.id.startsWith('ai_field_');
-          
+          const isAIField = f.id.startsWith("ai_field_");
+
           // Different colors for different field types
           if (isSelected) {
             ctx.strokeStyle = "#e00"; // Red for selected
@@ -145,25 +145,78 @@ export default function Mapper() {
             ctx.strokeStyle = "#0a0"; // Green for manual fields
             ctx.lineWidth = 2;
           }
-          
+
           ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-          
+
           // Draw resize handles in edit mode
           if (editMode && isSelected) {
-            const handleSize = 6;
+            const handleSize = 8;
             ctx.fillStyle = "#e00";
-            // Corner handles
-            ctx.fillRect(x0 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect(x1 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect(x0 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect(x1 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
-            // Edge handles
-            ctx.fillRect((x0 + x1)/2 - handleSize/2, y0 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect((x0 + x1)/2 - handleSize/2, y1 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect(x0 - handleSize/2, (y0 + y1)/2 - handleSize/2, handleSize, handleSize);
-            ctx.fillRect(x1 - handleSize/2, (y0 + y1)/2 - handleSize/2, handleSize, handleSize);
+
+            // Corner handles (larger for easier interaction)
+            ctx.fillRect(
+              x0 - handleSize / 2,
+              y0 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              x1 - handleSize / 2,
+              y0 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              x0 - handleSize / 2,
+              y1 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              x1 - handleSize / 2,
+              y1 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+
+            // Edge handles (for easier resizing)
+            ctx.fillRect(
+              (x0 + x1) / 2 - handleSize / 2,
+              y0 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              (x0 + x1) / 2 - handleSize / 2,
+              y1 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              x0 - handleSize / 2,
+              (y0 + y1) / 2 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+            ctx.fillRect(
+              x1 - handleSize / 2,
+              (y0 + y1) / 2 - handleSize / 2,
+              handleSize,
+              handleSize
+            );
+
+            // Draw field dimensions for better editing
+            const width = x1 - x0;
+            const height = y1 - y0;
+            ctx.fillStyle = "#000";
+            ctx.font = "10px Arial";
+            ctx.fillText(
+              `${Math.round(width)}×${Math.round(height)}`,
+              x0,
+              y1 + 15
+            );
           }
-          
+
           // Draw field label
           if (isSelected || editMode) {
             ctx.fillStyle = "#000";
@@ -190,133 +243,211 @@ export default function Mapper() {
     };
   };
 
-  const onDown = (e) => {
-    const p = onPos(e);
-    
+  // Handle mouse down for field selection, resizing, and manual creation
+  const handleMouseDown = (e) => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
     if (editMode) {
-      // In edit mode, handle field dragging and resizing
-      const hit = overlay.fields.find(
-        (f) =>
-          f.page === page &&
-          p.x >= f.rect[0] &&
-          p.x <= f.rect[2] &&
-          p.y >= f.rect[1] &&
-          p.y <= f.rect[3]
-      );
-      
-      if (hit) {
-        setSelectedId(hit.id);
-        
+      // In edit mode, handle field selection and resizing
+      const clickedField = overlay.fields
+        .filter((f) => Number(f.page || 0) === Number(page))
+        .find((f) => {
+          const [x0, y0, x1, y1] = f.rect;
+          return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+        });
+
+      if (clickedField) {
+        setSelectedId(clickedField.id);
+
         // Check if clicking on resize handle
-        const [x0, y0, x1, y1] = hit.rect;
-        const handleSize = 6;
-        
-        // Corner handles
-        if (p.x >= x0 - handleSize/2 && p.x <= x0 + handleSize/2 && 
-            p.y >= y0 - handleSize/2 && p.y <= y0 + handleSize/2) {
-          setResizeHandle('nw'); // Northwest corner
-        } else if (p.x >= x1 - handleSize/2 && p.x <= x1 + handleSize/2 && 
-                   p.y >= y0 - handleSize/2 && p.y <= y0 + handleSize/2) {
-          setResizeHandle('ne'); // Northeast corner
-        } else if (p.x >= x0 - handleSize/2 && p.x <= x0 + handleSize/2 && 
-                   p.y >= y1 - handleSize/2 && p.y <= y1 + handleSize/2) {
-          setResizeHandle('sw'); // Southwest corner
-        } else if (p.x >= x1 - handleSize/2 && p.x <= x1 + handleSize/2 && 
-                   p.y >= y1 - handleSize/2 && p.y <= y1 + handleSize/2) {
-          setResizeHandle('se'); // Southeast corner
+        const handleSize = 8;
+        const [x0, y0, x1, y1] = clickedField.rect;
+
+        // Check corner handles
+        if (
+          Math.abs(x - x0) <= handleSize / 2 &&
+          Math.abs(y - y0) <= handleSize / 2
+        ) {
+          setResizeHandle("top-left");
+        } else if (
+          Math.abs(x - x1) <= handleSize / 2 &&
+          Math.abs(y - y0) <= handleSize / 2
+        ) {
+          setResizeHandle("top-right");
+        } else if (
+          Math.abs(x - x0) <= handleSize / 2 &&
+          Math.abs(y - y1) <= handleSize / 2
+        ) {
+          setResizeHandle("bottom-left");
+        } else if (
+          Math.abs(x - x1) <= handleSize / 2 &&
+          Math.abs(y - y1) <= handleSize / 2
+        ) {
+          setResizeHandle("bottom-right");
         } else {
-          // Edge handles or center - start dragging
-          setDraggedField({ id: hit.id, offsetX: p.x - x0, offsetY: p.y - y0 });
+          setResizeHandle(null);
         }
-        return;
-      }
-    } else {
-      // Normal mode - select if clicking inside an existing rect
-      const hit = overlay.fields.find(
-        (f) =>
-          f.page === page &&
-          p.x >= f.rect[0] &&
-          p.x <= f.rect[2] &&
-          p.y >= f.rect[1] &&
-          p.y <= f.rect[3]
-      );
-      if (hit) {
-        setSelectedId(hit.id);
-        drawingRef.current = null;
+
+        setDraggedField(clickedField);
         return;
       }
     }
-    
+
+    // Check if clicking on existing field (for selection)
+    const hit = overlay.fields.find(
+      (f) =>
+        f.page === page &&
+        x >= f.rect[0] &&
+        x <= f.rect[2] &&
+        y >= f.rect[1] &&
+        y <= f.rect[3]
+    );
+
+    if (hit) {
+      setSelectedId(hit.id);
+      drawingRef.current = null;
+      return;
+    }
+
+    // Start drawing new field or clear selection
     setSelectedId(null);
     if (!editMode) {
-      drawingRef.current = { x0: p.x, y0: p.y, x1: p.x, y1: p.y };
+      drawingRef.current = { x0: x, y0: y, x1: x, y1: y };
     }
   };
 
-  const onMove = (e) => {
-    const p = onPos(e);
-    
-    if (editMode && draggedField) {
-      // Handle field dragging
-      setOverlay((o) => {
-        const i = o.fields.findIndex((f) => f.id === draggedField.id);
-        if (i === -1) return o;
-        
-        const field = o.fields[i];
-        const newRect = [
-          p.x - draggedField.offsetX,
-          p.y - draggedField.offsetY,
-          p.x - draggedField.offsetX + (field.rect[2] - field.rect[0]),
-          p.y - draggedField.offsetY + (field.rect[3] - field.rect[1])
-        ];
-        
-        const fields = o.fields.slice();
-        fields[i] = { ...field, rect: newRect };
-        return { ...o, fields };
-      });
+  // Handle mouse move for field dragging, resizing, and manual drawing
+  const handleMouseMove = (e) => {
+    const rect = canvasRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    if (editMode && draggedField && selectedId) {
+      // Handle field dragging and resizing
+      if (resizeHandle) {
+        // Resize the field
+        const fieldIndex = overlay.fields.findIndex((f) => f.id === selectedId);
+        if (fieldIndex !== -1) {
+          const newFields = [...overlay.fields];
+          const [x0, y0, x1, y1] = newFields[fieldIndex].rect;
+
+          switch (resizeHandle) {
+            case "top-left":
+              newFields[fieldIndex].rect = [x, y, x1, y1];
+              break;
+            case "top-right":
+              newFields[fieldIndex].rect = [x0, y, x, y1];
+              break;
+            case "bottom-left":
+              newFields[fieldIndex].rect = [x, y0, x1, y];
+              break;
+            case "bottom-right":
+              newFields[fieldIndex].rect = [x0, y0, x, y];
+              break;
+          }
+
+          // Ensure minimum size
+          const [nx0, ny0, nx1, ny1] = newFields[fieldIndex].rect;
+          if (nx1 - nx0 < 20) {
+            newFields[fieldIndex].rect[2] = nx0 + 20;
+          }
+          if (ny1 - ny0 < 15) {
+            newFields[fieldIndex].rect[3] = ny0 + 15;
+          }
+
+          setOverlay({ ...overlay, fields: newFields });
+        }
+      } else {
+        // Move the field
+        const fieldIndex = overlay.fields.findIndex((f) => f.id === selectedId);
+        if (fieldIndex !== -1) {
+          const newFields = [...overlay.fields];
+          const [x0, y0, x1, y1] = newFields[fieldIndex].rect;
+          const width = x1 - x0;
+          const height = y1 - y0;
+
+          newFields[fieldIndex].rect = [
+            x - width / 2,
+            y - height / 2,
+            x + width / 2,
+            y + height / 2,
+          ];
+          setOverlay({ ...overlay, fields: newFields });
+        }
+      }
       return;
     }
-    
-    if (editMode && resizeHandle && selectedId) {
-      // Handle field resizing
-      setOverlay((o) => {
-        const i = o.fields.findIndex((f) => f.id === selectedId);
-        if (i === -1) return o;
-        
-        const field = o.fields[i];
-        const [x0, y0, x1, y1] = field.rect;
-        let newRect = [...field.rect];
-        
-        switch (resizeHandle) {
-          case 'nw':
-            newRect = [p.x, p.y, x1, y1];
-            break;
-          case 'ne':
-            newRect = [x0, p.y, p.x, y1];
-            break;
-          case 'sw':
-            newRect = [p.x, y0, x1, p.y];
-            break;
-          case 'se':
-            newRect = [x0, y0, p.x, p.y];
-            break;
-        }
-        
-        // Ensure positive dimensions
-        if (newRect[2] > newRect[0] && newRect[3] > newRect[1]) {
-          const fields = o.fields.slice();
-          fields[i] = { ...field, rect: newRect };
-          return { ...o, fields };
-        }
-        return o;
-      });
-      return;
-    }
-    
+
+    // Handle manual field drawing
     if (!editMode && drawingRef.current) {
-      drawingRef.current = { ...drawingRef.current, x1: p.x, y1: p.y };
+      drawingRef.current = { ...drawingRef.current, x1: x, y1: y };
       if (imgUrl) setImgUrl((prev) => prev); // trigger redraw
     }
+  };
+
+  // Handle mouse up to stop dragging/resizing and complete field creation
+  const handleMouseUp = () => {
+    if (editMode) {
+      // Stop editing operations
+      setDraggedField(null);
+      setResizeHandle(null);
+    } else if (drawingRef.current) {
+      // Complete manual field creation
+      const d = drawingRef.current;
+      if (Math.abs(d.x1 - d.x0) > 10 && Math.abs(d.y1 - d.y0) > 10) {
+        const newField = {
+          id: `field_${Date.now()}`,
+          label: `Field ${overlay.fields.length + 1}`,
+          page: page,
+          type: "text",
+          rect: [d.x0, d.y0, d.x1, d.y1],
+          fontSize: 11,
+          align: "left",
+          shrink: true,
+        };
+
+        setOverlay({
+          ...overlay,
+          fields: [...overlay.fields, newField],
+        });
+        setSelectedId(newField.id);
+      }
+      drawingRef.current = null;
+    }
+  };
+
+  // Helper function to convert PDF coordinates to screen coordinates
+  const convertPDFToScreen = (pdfRect) => {
+    if (!metrics) return pdfRect;
+
+    // Convert from PDF points to screen pixels
+    const scaleX = metrics.pixelWidth / metrics.pointsWidth;
+    const scaleY = metrics.pixelHeight / metrics.pointsHeight;
+
+    return [
+      pdfRect[0] * scaleX,
+      pdfRect[1] * scaleY,
+      pdfRect[2] * scaleX,
+      pdfRect[3] * scaleY,
+    ];
+  };
+
+  // Helper function to convert screen coordinates back to PDF coordinates
+  const convertScreenToPDF = (screenRect) => {
+    if (!metrics) return screenRect;
+
+    // Convert from screen pixels back to PDF points
+    const scaleX = metrics.pointsWidth / metrics.pixelWidth;
+    const scaleY = metrics.pointsHeight / metrics.pixelHeight;
+
+    return [
+      screenRect[0] * scaleX,
+      screenRect[1] * scaleY,
+      screenRect[2] * scaleX,
+      screenRect[3] * scaleY,
+    ];
   };
 
   const onUp = () => {
@@ -326,7 +457,7 @@ export default function Mapper() {
       setResizeHandle(null);
       return;
     }
-    
+
     const d = drawingRef.current;
     if (!d) return;
     drawingRef.current = null;
@@ -409,13 +540,15 @@ export default function Mapper() {
   // New: Get field statistics
   const fieldStats = useMemo(() => {
     const pageFields = overlay.fields.filter((f) => f.page === page);
-    const aiFields = pageFields.filter((f) => f.id.startsWith('ai_field_'));
-    const manualFields = pageFields.filter((f) => !f.id.startsWith('ai_field_'));
-    
+    const aiFields = pageFields.filter((f) => f.id.startsWith("ai_field_"));
+    const manualFields = pageFields.filter(
+      (f) => !f.id.startsWith("ai_field_")
+    );
+
     return {
       total: pageFields.length,
       ai: aiFields.length,
-      manual: manualFields.length
+      manual: manualFields.length,
     };
   }, [overlay, page]);
 
@@ -497,24 +630,28 @@ export default function Mapper() {
             </button>
           </div>
         </div>
-        
+
         {/* Edit Mode Instructions */}
         {editMode && (
-          <div style={{
-            background: "#fef3c7",
-            border: "1px solid #f59e0b",
-            borderRadius: "6px",
-            padding: "8px 12px",
-            marginBottom: "8px",
-            fontSize: "14px"
-          }}>
-            <strong>✏️ Edit Mode Active:</strong> 
-            {editMode && draggedField ? " Drag fields to reposition" : 
-             editMode && resizeHandle ? " Resize field by dragging handles" :
-             " Click and drag fields to move, drag handles to resize"}
+          <div
+            style={{
+              background: "#fef3c7",
+              border: "1px solid #f59e0b",
+              borderRadius: "6px",
+              padding: "8px 12px",
+              marginBottom: "8px",
+              fontSize: "14px",
+            }}
+          >
+            <strong>✏️ Edit Mode Active:</strong>
+            {editMode && draggedField
+              ? " Drag fields to reposition"
+              : editMode && resizeHandle
+              ? " Resize field by dragging handles"
+              : " Click and drag fields to move, drag handles to resize"}
           </div>
         )}
-        
+
         <div
           style={{
             border: "1px solid #ccc",
@@ -529,9 +666,9 @@ export default function Mapper() {
               cursor: editMode ? "move" : "crosshair",
               display: "block",
             }}
-            onMouseDown={onDown}
-            onMouseMove={onMove}
-            onMouseUp={onUp}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
           />
         </div>
       </div>
@@ -609,9 +746,7 @@ export default function Mapper() {
               <input
                 type="checkbox"
                 checked={!!selected.bg}
-                onChange={(e) =>
-                  updateSelected({ bg: e.target.checked })
-                }
+                onChange={(e) => updateSelected({ bg: e.target.checked })}
               />
               <span style={{ marginLeft: 6 }}>White-out BG</span>
             </label>

@@ -31,7 +31,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     console.log("File selected:", file); // Debug log
-    
+
     if (!file || !file.type.includes("pdf")) {
       setError("Please select a valid PDF file");
       return;
@@ -46,16 +46,22 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       // Step 1: Upload PDF and get AI analysis
       setProgress(20);
       console.log("Starting PDF upload..."); // Debug log
-      
+
       const formData = new FormData();
       formData.append("pdf", file);
 
-      console.log("Sending request to:", "http://localhost:3000/api/ai-analyze-pdf"); // Debug log
-      
-      const uploadResponse = await fetch("http://localhost:3000/api/ai-analyze-pdf", {
-        method: "POST",
-        body: formData,
-      });
+      console.log(
+        "Sending request to:",
+        "http://localhost:3000/api/ai-analyze-pdf"
+      ); // Debug log
+
+      const uploadResponse = await fetch(
+        "http://localhost:3000/api/ai-analyze-pdf",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       console.log("Upload response status:", uploadResponse.status); // Debug log
       console.log("Upload response ok:", uploadResponse.ok); // Debug log
@@ -63,7 +69,9 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
         console.error("Upload failed with response:", errorText); // Debug log
-        throw new Error(`Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`);
+        throw new Error(
+          `Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`
+        );
       }
 
       const analysisData = await uploadResponse.json();
@@ -107,6 +115,10 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       confidence: field.confidence || 0.5,
       aiReasoning: field.reasoning || "AI detected form field",
       originalId: field.originalId,
+      // Add metadata for better coordinate handling
+      originalRect: field.rect,
+      width: field.rect ? field.rect[2] - field.rect[0] : 100,
+      height: field.rect ? field.rect[3] - field.rect[1] : 20,
     }));
   };
 
@@ -217,6 +229,9 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
             <div className="field-details">
               <div className="field-type">Type: {field.type}</div>
               <div className="field-page">Page: {field.page + 1}</div>
+              <div className="field-dimensions">
+                Size: {Math.round(field.width)}×{Math.round(field.height)} px
+              </div>
               <div className="ai-reasoning">{field.aiReasoning}</div>
             </div>
           </div>

@@ -445,11 +445,17 @@ async function analyzePageWithAI(base64Image, pageIndex) {
               text: `Analyze this PDF page and identify all form fields. For each field, provide:
               1. Field type (text, checkbox, radio, select, etc.)
               2. Field label/name (what the field is for)
-              3. Approximate position (x, y coordinates)
+              3. Precise position and size (x, y, width, height coordinates)
               4. Confidence level (0.0-1.0)
               5. Reasoning for your classification
               
               CRITICAL: Return ONLY a JSON object with a "fields" array. If no fields are visible, return {"fields": []}. No commentary, no code fences, no additional text.
+              
+              IMPORTANT: For coordinates, use the format [x, y, width, height] where:
+              - x, y = top-left corner of the field
+              - width, height = actual dimensions of the field
+              - All coordinates should be relative to the image dimensions
+              - Focus on the actual input area size, not just the label
               
               Structure:
               {
@@ -457,9 +463,9 @@ async function analyzePageWithAI(base64Image, pageIndex) {
                   {
                     "type": "text",
                     "label": "Full Name",
-                    "rect": [x1, y1, x2, y2],
+                    "rect": [x, y, width, height],
                     "confidence": 0.95,
-                    "reasoning": "This appears to be a text input field labeled 'Full Name'"
+                    "reasoning": "This appears to be a text input field labeled 'Full Name' with dimensions approximately 200x25 pixels"
                   }
                 ]
               }
@@ -537,11 +543,11 @@ async function analyzePageWithAI(base64Image, pageIndex) {
       }
     }
 
-    // Add page information to each field
+    // Add page information and normalize coordinates
     return fields.map((field) => ({
       ...field,
       page: pageIndex,
-      rect: field.rect || [0, 0, 100, 20], // Default rectangle if not provided
+      rect: normalizeAICoordinates(field.rect),
       confidence: field.confidence || 0.5,
       reasoning: field.reasoning || "AI detected form field",
     }));
@@ -549,6 +555,26 @@ async function analyzePageWithAI(base64Image, pageIndex) {
     console.error(`Error analyzing page ${pageIndex}:`, error);
     return [];
   }
+}
+
+// Helper function to normalize AI coordinates from [x, y, width, height] to [x1, y1, x2, y2]
+function normalizeAICoordinates(rect) {
+  if (!Array.isArray(rect) || rect.length < 4) {
+    return [0, 0, 100, 20]; // Default rectangle
+  }
+
+  // Handle both formats: [x, y, width, height] and [x1, y1, x2, y2]
+  let [x, y, width, height] = rect.map((coord) => Number(coord) || 0);
+  
+  // If the coordinates look like they're already in [x1, y1, x2, y2] format
+  // (i.e., if width/height are very large), convert them
+  if (width > 1000 || height > 1000) {
+    // Already in [x1, y1, x2, y2] format
+    return [x, y, width, height];
+  }
+  
+  // Convert from [x, y, width, height] to [x1, y1, x2, y2]
+  return [x, y, x + width, y + height];
 }
 
 // Helper function to post-process AI field suggestions
@@ -563,6 +589,9 @@ function postProcessFields(fields) {
       fontSize: field.fontSize || 11,
       align: field.align || "left",
       shrink: field.shrink !== false,
+      // Add metadata for better coordinate handling
+      originalRect: field.rect,
+      confidence: field.confidence || 0.5,
     }))
     .sort((a, b) => {
       // Sort by page, then by Y position (top to bottom)
@@ -595,21 +624,36 @@ function normalizeFieldType(type) {
   return normalized;
 }
 
-// Helper function to normalize rectangle coordinates
+// Helper function to normalize rectangle coordinates with better scaling
 function normalizeRectangle(rect) {
   if (!Array.isArray(rect) || rect.length !== 4) {
     return [0, 0, 100, 20]; // Default rectangle
   }
 
   // Ensure coordinates are numbers and in correct order
-  const [x1, y1, x2, y2] = rect.map((coord) => Number(coord) || 0);
+  let [x1, y1, x2, y2] = rect.map((coord) => Number(coord) || 0);
 
-  return [
-    Math.min(x1, x2),
-    Math.min(y1, y2),
-    Math.max(x1, x2),
-    Math.max(y1, y2),
-  ];
+  // Ensure proper order (x1 < x2, y1 < y2)
+  if (x1 > x2) [x1, x2] = [x2, x1];
+  if (y1 > y2) [y1, y2] = [y1, y2];
+
+  // Apply minimum size constraints for better usability
+  const minWidth = 50;
+  const minHeight = 20;
+  
+  if (x2 - x1 < minWidth) {
+    const centerX = (x1 + x2) / 2;
+    x1 = centerX - minWidth / 2;
+    x2 = centerX + minWidth / 2;
+  }
+  
+  if (y2 - y1 < minHeight) {
+    const centerY = (y1 + y2) / 2;
+    y1 = centerY - minHeight / 2;
+    y2 = centerY + minHeight / 2;
+  }
+
+  return [x1, y1, x2, y2];
 }
 
 const PORT = 3000;
