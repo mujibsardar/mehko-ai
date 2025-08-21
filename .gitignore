@@ -52,3 +52,20 @@ applications/**/meta.json
 
 agent-output/*
 agent-output/
+
+# Temporary files
+temp_*.pdf
+temp_*.tmp
+*.tmp
+temp/
+
+# Service PIDs
+.service-pids
+
+# Large binary files
+*.pdf
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
