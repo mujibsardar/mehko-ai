@@ -355,7 +355,15 @@ async function convertPDFToImages(pdfBuffer) {
     // Convert each page to image buffer
     for (let i = 0; i < pageCount.length; i++) {
       try {
+        console.log(`Attempting to convert page ${i + 1}...`);
         const pageImage = await convert(i + 1, { returnBuffer: true }); // Return buffer instead of saving to file
+        console.log(`Page ${i + 1} result:`, {
+          hasPageImage: !!pageImage,
+          hasData: !!(pageImage && pageImage.data),
+          pageImageType: typeof pageImage,
+          pageImageKeys: pageImage ? Object.keys(pageImage) : 'null'
+        });
+        
         if (pageImage && pageImage.data) {
           // Process with sharp to ensure proper format and size
           const processedImage = await sharp(pageImage.data)
@@ -365,6 +373,8 @@ async function convertPDFToImages(pdfBuffer) {
           
           imageBuffers.push(processedImage);
           console.log(`Page ${i + 1} converted successfully`);
+        } else {
+          console.log(`Page ${i + 1} conversion failed: no valid image data`);
         }
       } catch (pageError) {
         console.error(`Error converting page ${i + 1}:`, pageError);
