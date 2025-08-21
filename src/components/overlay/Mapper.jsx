@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import AIFieldMapper from "../ai/AIFieldMapper";
 
 // API prefix
 const API = "/api";
@@ -39,10 +40,17 @@ export default function Mapper() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Access Denied
+          </h1>
           <p className="text-gray-600 mb-4">Admin privileges required.</p>
-          <p className="text-sm text-gray-500">Only authorized users can access this area.</p>
-          <Link to="/dashboard" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <p className="text-sm text-gray-500">
+            Only authorized users can access this area.
+          </p>
+          <Link
+            to="/dashboard"
+            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
             Return to Dashboard
           </Link>
         </div>
@@ -61,6 +69,7 @@ export default function Mapper() {
   const [imgUrl, setImgUrl] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [showAIMapper, setShowAIMapper] = useState(false);
   const canvasRef = useRef(null);
   const drawingRef = useRef(null);
 
@@ -262,6 +271,21 @@ export default function Mapper() {
             {app}/{form}
           </code>
           <button onClick={save}>Save</button>
+          <button
+            onClick={() => setShowAIMapper(true)}
+            style={{
+              background: "linear-gradient(135deg, #10b981, #059669)",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "6px",
+              fontWeight: "600",
+              cursor: "pointer",
+              marginLeft: "8px",
+            }}
+          >
+            🤖 AI Field Detection
+          </button>
           <div
             style={{
               marginLeft: "auto",
@@ -287,17 +311,25 @@ export default function Mapper() {
             </button>
           </div>
         </div>
-        <canvas
-          ref={canvasRef}
+        <div
           style={{
             border: "1px solid #ccc",
-            maxWidth: "100%",
-            cursor: "crosshair",
+            maxHeight: "70vh",
+            overflow: "auto",
+            backgroundColor: "#f9f9f9",
           }}
-          onMouseDown={onDown}
-          onMouseMove={onMove}
-          onMouseUp={onUp}
-        />
+        >
+          <canvas
+            ref={canvasRef}
+            style={{
+              cursor: "crosshair",
+              display: "block",
+            }}
+            onMouseDown={onDown}
+            onMouseMove={onMove}
+            onMouseUp={onUp}
+          />
+        </div>
       </div>
 
       {/* Editor */}
@@ -391,6 +423,63 @@ export default function Mapper() {
           page
         </div>
       </div>
+
+      {/* AI Field Mapper Modal */}
+      {showAIMapper && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              borderRadius: "16px",
+              maxWidth: "800px",
+              width: "100%",
+              maxHeight: "90vh",
+              overflow: "auto",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={() => setShowAIMapper(false)}
+              style={{
+                position: "absolute",
+                top: "16px",
+                right: "16px",
+                background: "#f3f4f6",
+                border: "none",
+                borderRadius: "50%",
+                width: "32px",
+                height: "32px",
+                cursor: "pointer",
+                fontSize: "18px",
+              }}
+            >
+              ✕
+            </button>
+            <AIFieldMapper
+              app={app}
+              form={form}
+              onMappingComplete={(newOverlay) => {
+                setOverlay(newOverlay);
+                setShowAIMapper(false);
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

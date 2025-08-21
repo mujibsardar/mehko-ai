@@ -14,6 +14,21 @@
       "fontSize": 11,
       "align": "left",
       "shrink": true
+    },
+    {
+      "id": "mehko_number_of_employees",
+      "label": "Number of Employees",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        148,
+        449.5,
+        202,
+        466.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
     }
   ]
 }

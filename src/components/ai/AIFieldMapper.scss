@@ -1,0 +1,279 @@
+.ai-field-mapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  max-width: 800px;
+  margin: 0 auto;
+
+  .mapper-header {
+    text-align: center;
+    margin-bottom: 32px;
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 12px 0;
+      letter-spacing: -0.025em;
+    }
+
+    p {
+      font-size: 16px;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  .upload-section {
+    .upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #f9fafb;
+
+      &:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        transform: translateY(-2px);
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+        display: block;
+      }
+
+      .upload-text {
+        strong {
+          display: block;
+          font-size: 18px;
+          font-weight: 600;
+          color: #374151;
+          margin-bottom: 4px;
+        }
+
+        span {
+          font-size: 14px;
+          color: #6b7280;
+        }
+      }
+    }
+  }
+
+  .processing-section {
+    text-align: center;
+    padding: 32px;
+
+    .progress-container {
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 16px;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #3b82f6, #10b981);
+          border-radius: 4px;
+          transition: width 0.3s ease;
+        }
+      }
+
+      .progress-text {
+        font-size: 16px;
+        color: #374151;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+
+    .error-icon {
+      font-size: 20px;
+    }
+  }
+
+  .field-suggestions {
+    margin-top: 32px;
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+      margin: 0 0 20px 0;
+    }
+
+    .suggestions-grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 24px;
+
+      .field-suggestion {
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 16px;
+        transition: all 0.2s ease;
+        background: white;
+
+        &:hover {
+          border-color: #d1d5db;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        &.selected {
+          border-color: #3b82f6;
+          background: #eff6ff;
+        }
+
+        .field-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 12px;
+
+          input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+          }
+
+          .field-label {
+            font-weight: 600;
+            color: #1f2937;
+            flex: 1;
+          }
+
+          .confidence-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+
+            &.confidence-10, &.confidence-9, &.confidence-8 {
+              background: #10b981;
+            }
+
+            &.confidence-7, &.confidence-6 {
+              background: #f59e0b;
+            }
+
+            &.confidence-5, &.confidence-4, &.confidence-3, &.confidence-2, &.confidence-1 {
+              background: #ef4444;
+            }
+          }
+        }
+
+        .field-details {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 8px;
+          font-size: 14px;
+          color: #6b7280;
+
+          .field-type, .field-page {
+            font-weight: 500;
+          }
+
+          .ai-reasoning {
+            grid-column: 1 / -1;
+            font-style: italic;
+            color: #9ca3af;
+            margin-top: 8px;
+          }
+        }
+      }
+    }
+
+    .mapping-actions {
+      text-align: center;
+
+      .apply-mapping-btn {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          background: #059669;
+          transform: translateY(-1px);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  .existing-fields {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 12px 0;
+    }
+
+    .fields-count {
+      font-size: 14px;
+      color: #6b7280;
+      background: #f3f4f6;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .ai-field-mapper {
+    padding: 24px;
+    margin: 0 16px;
+
+    .mapper-header h2 {
+      font-size: 24px;
+    }
+
+    .upload-section .upload-area {
+      padding: 32px 16px;
+
+      .upload-icon {
+        font-size: 36px;
+      }
+    }
+
+    .field-suggestions .suggestions-grid .field-suggestion .field-details {
+      grid-template-columns: 1fr;
+    }
+  }
+}

@@ -6,20 +6,30 @@ import path from "path";
 import fetch from "node-fetch";
 
 // import { PDFDocument } from "pdf-lib";
-import pkg from "pdfjs-dist";
-const { getDocument, GlobalWorkerOptions } = pkg;
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-GlobalWorkerOptions.workerSrc = require.resolve(
-  "pdfjs-dist/build/pdf.worker.js"
-);
-
 import OpenAI from "openai";
+import multer from "multer";
 dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+});
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 50 * 1024 * 1024, // 50MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === "application/pdf") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only PDF files are allowed"), false);
+    }
+  },
 });
 
 const app = express();
@@ -243,6 +253,255 @@ app.post("/api/fill-pdf", async (req, res) => {
     res.status(500).json({ error: "Failed to fill PDF" });
   }
 });
+
+// AI PDF Field Analysis endpoint
+app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
+  try {
+    // Check if file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ error: "No PDF file uploaded" });
+    }
+
+    const pdfFile = req.file;
+
+    // File type is already validated by multer
+
+    // Convert PDF to images for Vision API analysis
+    const pdfImages = await convertPDFToImages(pdfFile.buffer);
+
+    // Analyze each page with AI
+    const allFields = [];
+
+    for (let pageIndex = 0; pageIndex < pdfImages.length; pageIndex++) {
+      const imageBuffer = pdfImages[pageIndex];
+
+      // Convert buffer to base64 for OpenAI
+      const base64Image = imageBuffer.toString("base64");
+
+      // Analyze with OpenAI Vision API
+      const pageFields = await analyzePageWithAI(base64Image, pageIndex);
+      allFields.push(...pageFields);
+    }
+
+    // Post-process and validate fields
+    const processedFields = postProcessFields(allFields);
+
+    res.json({
+      success: true,
+      fields: processedFields,
+      totalPages: pdfImages.length,
+      totalFields: processedFields.length,
+    });
+  } catch (error) {
+    console.error("AI PDF analysis error:", error);
+    res.status(500).json({
+      error: "Failed to analyze PDF",
+      details: error.message,
+    });
+  }
+});
+
+// Helper function to convert PDF to images
+async function convertPDFToImages(pdfBuffer) {
+  // This would integrate with a PDF processing library like pdf2pic or similar
+  // For now, returning a mock implementation
+  console.log("Converting PDF to images...");
+
+  // Mock: In real implementation, you'd use:
+  // const pdf2pic = require('pdf2pic');
+  // const options = { density: 300, saveFilename: "page", savePath: "./temp" };
+  // const convert = pdf2pic.convert(pdfBuffer, options);
+
+  // Create a simple PNG image buffer for testing
+  const testImageBuffer = Buffer.from(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+    "base64"
+  );
+
+  console.log("Created test image buffer for AI analysis");
+  return [testImageBuffer];
+}
+
+// Helper function to analyze page with OpenAI Vision API
+async function analyzePageWithAI(base64Image, pageIndex) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `Analyze this PDF page and identify all form fields. For each field, provide:
+              1. Field type (text, checkbox, radio, select, etc.)
+              2. Field label/name (what the field is for)
+              3. Approximate position (x, y coordinates)
+              4. Confidence level (0.0-1.0)
+              5. Reasoning for your classification
+              
+              CRITICAL: Return ONLY a JSON object with a "fields" array. If no fields are visible, return {"fields": []}. No commentary, no code fences, no additional text.
+              
+              Structure:
+              {
+                "fields": [
+                  {
+                    "type": "text",
+                    "label": "Full Name",
+                    "rect": [x1, y1, x2, y2],
+                    "confidence": 0.95,
+                    "reasoning": "This appears to be a text input field labeled 'Full Name'"
+                  }
+                ]
+              }
+              
+              When unsure or no fields visible → return {"fields": []}. Focus on identifying fillable form fields, not static text or labels.`,
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:image/png;base64,${base64Image}`,
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 2000,
+      temperature: 0,
+      response_format: { type: "json_object" },
+    });
+
+    const content = response.choices[0].message.content;
+
+    // Harden JSON parsing with multiple fallbacks
+    let fields = [];
+
+    try {
+      // First attempt: Parse the entire content as JSON
+      const parsed = JSON.parse(content);
+      if (parsed && parsed.fields && Array.isArray(parsed.fields)) {
+        fields = parsed.fields;
+      } else if (Array.isArray(parsed)) {
+        fields = parsed;
+      }
+    } catch (parseError) {
+      console.log("Direct JSON parse failed, trying fallbacks...");
+
+      // Fallback 1: Extract fenced JSON blocks
+      const jsonBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+      if (jsonBlockMatch) {
+        try {
+          const parsed = JSON.parse(jsonBlockMatch[1]);
+          if (parsed && parsed.fields && Array.isArray(parsed.fields)) {
+            fields = parsed.fields;
+          } else if (Array.isArray(parsed)) {
+            fields = parsed;
+          }
+        } catch (blockError) {
+          console.log("JSON block parse failed");
+        }
+      }
+
+      // Fallback 2: Extract array substring
+      if (fields.length === 0) {
+        const arrayMatch = content.match(/\[[\s\S]*\]/);
+        if (arrayMatch) {
+          try {
+            const parsed = JSON.parse(arrayMatch[0]);
+            if (Array.isArray(parsed)) {
+              fields = parsed;
+            }
+          } catch (arrayError) {
+            console.log("Array substring parse failed");
+          }
+        }
+      }
+
+      // If all parsing attempts failed, log for debugging and return empty array
+      if (fields.length === 0) {
+        console.log(
+          "All JSON parsing attempts failed. Content preview (first 300 chars):",
+          content.substring(0, 300)
+        );
+        console.log("Parse error details:", parseError.message);
+        return []; // Don't throw, return empty array
+      }
+    }
+
+    // Add page information to each field
+    return fields.map((field) => ({
+      ...field,
+      page: pageIndex,
+      rect: field.rect || [0, 0, 100, 20], // Default rectangle if not provided
+      confidence: field.confidence || 0.5,
+      reasoning: field.reasoning || "AI detected form field",
+    }));
+  } catch (error) {
+    console.error(`Error analyzing page ${pageIndex}:`, error);
+    return [];
+  }
+}
+
+// Helper function to post-process AI field suggestions
+function postProcessFields(fields) {
+  return fields
+    .filter((field) => field.confidence > 0.3) // Filter out low-confidence fields
+    .map((field, index) => ({
+      ...field,
+      id: `ai_field_${index + 1}`,
+      type: normalizeFieldType(field.type),
+      rect: normalizeRectangle(field.rect),
+      fontSize: field.fontSize || 11,
+      align: field.align || "left",
+      shrink: field.shrink !== false,
+    }))
+    .sort((a, b) => {
+      // Sort by page, then by Y position (top to bottom)
+      if (a.page !== b.page) return a.page - b.page;
+      return a.rect[1] - b.rect[1];
+    });
+}
+
+// Helper function to normalize field types
+function normalizeFieldType(type) {
+  const typeMap = {
+    text: "text",
+    input: "text",
+    string: "text",
+    checkbox: "checkbox",
+    check: "checkbox",
+    radio: "radio",
+    select: "select",
+    dropdown: "select",
+    textarea: "textarea",
+    area: "textarea",
+  };
+
+  // Harden the function to handle missing/odd values
+  if (!type || typeof type !== "string") {
+    return "text"; // Default fallback
+  }
+
+  const normalized = typeMap[type.toLowerCase()] || "text";
+  return normalized;
+}
+
+// Helper function to normalize rectangle coordinates
+function normalizeRectangle(rect) {
+  if (!Array.isArray(rect) || rect.length !== 4) {
+    return [0, 0, 100, 20]; // Default rectangle
+  }
+
+  // Ensure coordinates are numbers and in correct order
+  const [x1, y1, x2, y2] = rect.map((coord) => Number(coord) || 0);
+
+  return [
+    Math.min(x1, x2),
+    Math.min(y1, y2),
+    Math.max(x1, x2),
+    Math.max(y1, y2),
+  ];
+}
 
 const PORT = 3000;
 app.listen(PORT, () => {
