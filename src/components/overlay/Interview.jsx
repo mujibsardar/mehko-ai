@@ -6,6 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import { useAuthModal } from "../../providers/AuthModalProvider";
 import ReportButton from "../generic/ReportButton";
 import ReportIssueModal from "../modals/ReportIssueModal";
+import "./Interview.scss";
 
 const API = "http://127.0.0.1:8000";
 
@@ -356,15 +357,11 @@ export function InterviewView({ app, form, application, step }) {
   }
 
   return (
-    <div style={{ padding: 0, maxWidth: 900 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-        <div>
-          <h2 style={{ margin: "0 0 8px 0", fontSize: "1.5rem", color: "#111827" }}>
-            PDF Form: {form}
-          </h2>
-          <p style={{ margin: 0, color: "#6b7280", fontSize: "0.875rem" }}>
-            Fill out the form fields below to generate your completed PDF
-          </p>
+    <div className="pdf-form-container">
+      <div className="pdf-form-header">
+        <div className="header-content">
+          <h2>PDF Form: {form}</h2>
+          <p>Fill out the form fields below to generate your completed PDF</p>
         </div>
         
         {user && (
@@ -379,42 +376,11 @@ export function InterviewView({ app, form, application, step }) {
       </div>
 
       {/* PDF Preview Toggle Button */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "16px",
-          padding: "12px 0",
-          borderBottom: "1px solid #e5e7eb",
-        }}
-      >
+      <div className="pdf-preview-toggle">
         <button
           type="button"
           onClick={() => setIsPdfPreviewOpen(true)}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            padding: "8px 16px",
-            background: "#f8fafc",
-            border: "1px solid #e2e8f0",
-            borderRadius: "8px",
-            color: "#475569",
-            fontSize: "14px",
-            fontWeight: "500",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.background = "#f1f5f9";
-            e.target.style.borderColor = "#cbd5e1";
-            e.target.style.color = "#334155";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.background = "#f8fafc";
-            e.target.style.borderColor = "#e2e8f0";
-            e.target.style.color = "#475569";
-          }}
+          className="preview-button"
           title="Open PDF Preview"
         >
           <svg
@@ -435,17 +401,14 @@ export function InterviewView({ app, form, application, step }) {
         </button>
       </div>
 
-      <form onSubmit={onSubmit} style={{ display: "grid", gap: 12 }}>
+      <form onSubmit={onSubmit} className="pdf-form">
         {group.map(([page, fields]) => (
-          <fieldset
-            key={page}
-            style={{ border: "1px solid #eee", padding: 12 }}
-          >
-            <legend>Page {Number(page) + 1}</legend>
-            <div style={{ display: "grid", gap: 8 }}>
+          <fieldset key={page} className="form-page">
+            <legend className="page-legend">Page {Number(page) + 1}</legend>
+            <div className="fields-container">
               {fields.map((f) => (
-                <div key={f.id} style={{ display: "grid", gap: 4 }}>
-                  <label htmlFor={f.id} style={{ fontWeight: 600 }}>
+                <div key={f.id} className="form-field">
+                  <label htmlFor={f.id} className="field-label">
                     {f.label || f.id}
                   </label>
 
@@ -459,6 +422,7 @@ export function InterviewView({ app, form, application, step }) {
                       }
                       onFocus={() => handleFieldFocus(f.id)}
                       onBlur={handleFieldBlur}
+                      className="checkbox-input"
                     />
                   ) : (
                     <input
@@ -469,11 +433,7 @@ export function InterviewView({ app, form, application, step }) {
                       placeholder={f.description || ""}
                       onFocus={() => handleFieldFocus(f.id)}
                       onBlur={handleFieldBlur}
-                      style={{
-                        padding: "8px 10px",
-                        border: "1px solid #ccc",
-                        borderRadius: 6,
-                      }}
+                      className="text-input"
                     />
                   )}
                 </div>
@@ -482,17 +442,8 @@ export function InterviewView({ app, form, application, step }) {
           </fieldset>
         ))}
 
-        <div style={{ display: "flex", gap: 8 }}>
-          <button
-            type="submit"
-            style={{
-              padding: "10px 14px",
-              borderRadius: 8,
-              border: "1px solid #ccc",
-              background: "#f7f7f7",
-              cursor: "pointer",
-            }}
-          >
+        <div className="form-actions">
+          <button type="submit" className="submit-button">
             Download Filled PDF
           </button>
         </div>

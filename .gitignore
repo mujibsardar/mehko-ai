@@ -69,3 +69,6 @@ temp/
 *.tgz
 *.rar
 *.7z
+# Build output
+dist/
+dist-*/
