@@ -267,7 +267,12 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
 
-    console.log("Processing PDF upload:", req.file.originalname, "Size:", req.file.size);
+    console.log(
+      "Processing PDF upload:",
+      req.file.originalname,
+      "Size:",
+      req.file.size
+    );
 
     const pdfFile = req.file;
 
@@ -292,8 +297,10 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
         // Analyze with OpenAI Vision API
         const pageFields = await analyzePageWithAI(base64Image, pageIndex);
         allFields.push(...pageFields);
-        
-        console.log(`Page ${pageIndex + 1} returned ${pageFields.length} fields`);
+
+        console.log(
+          `Page ${pageIndex + 1} returned ${pageFields.length} fields`
+        );
       } catch (pageError) {
         console.error(`Error analyzing page ${pageIndex + 1}:`, pageError);
         // Continue with other pages instead of crashing
@@ -316,7 +323,7 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
     res.status(500).json({
       error: "Failed to analyze PDF",
       details: error.message,
-      fallback: "Please try again or contact support"
+      fallback: "Please try again or contact support",
     });
   }
 });
@@ -325,62 +332,65 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
 async function convertPDFToImages(pdfBuffer) {
   try {
     console.log("Converting PDF to images using pdf2pic...");
-    
-    const { fromBuffer } = require('pdf2pic');
-    const sharp = require('sharp');
-    const fs = require('fs');
-    
+
+    const { fromBuffer } = require("pdf2pic");
+    const sharp = require("sharp");
+    const fs = require("fs");
+
     // Ensure temp directory exists
-    if (!fs.existsSync('./temp')) {
-      fs.mkdirSync('./temp', { recursive: true });
+    if (!fs.existsSync("./temp")) {
+      fs.mkdirSync("./temp", { recursive: true });
       console.log("Created temp directory");
     }
-    
+
     // Configure pdf2pic options
     const options = {
-      density: 300,        // High resolution for better AI analysis
+      density: 300, // High resolution for better AI analysis
       saveFilename: "page",
       savePath: "./temp",
       format: "png",
-      width: 2048,         // Max width for OpenAI Vision API
-      height: 2048         // Max height for OpenAI Vision API
+      width: 2048, // Max width for OpenAI Vision API
+      height: 2048, // Max height for OpenAI Vision API
     };
-    
+
     // Use fromBuffer instead of fromPath
     const convert = fromBuffer(pdfBuffer, options);
-    
+
     // Get all pages at once
     const pages = await convert.bulk(-1); // -1 means all pages
     console.log(`PDF has ${pages.length} pages`);
-    
+
     const imageBuffers = [];
-    
+
     // Process each page result
     for (let i = 0; i < pages.length; i++) {
       try {
         const page = pages[i];
         console.log(`Processing page ${i + 1}, path: ${page.path}`);
-        
+
         if (page && page.path && fs.existsSync(page.path)) {
           // Read the image file into a buffer
           const imageBuffer = fs.readFileSync(page.path);
           console.log(`Page ${i + 1} image size: ${imageBuffer.length} bytes`);
-          
+
           // Process with sharp to ensure proper format and size
           const processedImage = await sharp(imageBuffer)
             .png()
-            .resize(2048, 2048, { fit: 'inside', withoutEnlargement: true })
+            .resize(2048, 2048, { fit: "inside", withoutEnlargement: true })
             .toBuffer();
-          
+
           imageBuffers.push(processedImage);
           console.log(`Page ${i + 1} converted successfully`);
-          
+
           // Clean up the temp image file immediately
           try {
             fs.unlinkSync(page.path);
             console.log(`Page ${i + 1} temp file cleaned up`);
           } catch (cleanupError) {
-            console.log(`Warning: Could not clean up page ${i + 1} temp file:`, cleanupError.message);
+            console.log(
+              `Warning: Could not clean up page ${i + 1} temp file:`,
+              cleanupError.message
+            );
           }
         } else {
           console.log(`Page ${i + 1} missing path or file doesn't exist`);
@@ -390,10 +400,11 @@ async function convertPDFToImages(pdfBuffer) {
         // Continue with other pages
       }
     }
-    
-    console.log(`Successfully converted ${imageBuffers.length} pages to images`);
+
+    console.log(
+      `Successfully converted ${imageBuffers.length} pages to images`
+    );
     return imageBuffers;
-    
   } catch (error) {
     console.error("PDF conversion error:", error);
     // Fallback: return empty array instead of crashing
@@ -588,12 +599,12 @@ app.listen(PORT, () => {
 });
 
 // Global error handler for unhandled errors
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   // Don't crash the server, just log the error
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   // Don't crash the server, just log the error
 });

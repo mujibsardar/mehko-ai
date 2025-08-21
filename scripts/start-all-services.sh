@@ -44,7 +44,7 @@ timeout 60s bash -c '
 echo "🚀 Starting FastAPI server on port 8000..."
 cd python
 source venv/bin/activate
-nohup uvicorn main:app --host 0.0.0.0 --port 8000 --reload > ../fastapi.log 2>&1 &
+nohup uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload > ../fastapi.log 2>&1 &
 FASTAPI_PID=$!
 cd ..
 
@@ -65,10 +65,8 @@ echo $NODE_PID >> .service-pids
 echo ""
 echo "⚛️  Starting React dev server..."
 echo "🚀 Starting React dev server on port 5173..."
-cd frontend
-nohup npm run dev > ../react.log 2>&1 &
+nohup npm run dev > react.log 2>&1 &
 REACT_PID=$!
-cd ..
 
 # Save PID
 echo $REACT_PID >> .service-pids
