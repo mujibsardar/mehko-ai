@@ -14,6 +14,7 @@ import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
 import useProgress from "../../hooks/useProgress";
 import { InterviewView } from "../overlay/Interview";
+import { pinApplication } from "../../firebase/userData";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();
@@ -122,6 +123,7 @@ export default function DashboardApp() {
     setActiveApplicationId(application.id);
     setActiveSection("overview");
     setCurrentStepId(null);
+    pinApplication(user?.uid, application.id);
   };
   const handleApplicationSwitch = (applicationId) => {
     setActiveApplicationId(applicationId);
