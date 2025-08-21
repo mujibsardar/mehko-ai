@@ -326,13 +326,15 @@ async function convertPDFToImages(pdfBuffer) {
   try {
     console.log("Converting PDF to images using pdf2pic...");
     
-    const { fromPath } = require('pdf2pic');
+    const { fromBuffer } = require('pdf2pic');
     const sharp = require('sharp');
-    
-    // Create a temporary file path for the PDF buffer
-    const tempPdfPath = `./temp_${Date.now()}.pdf`;
     const fs = require('fs');
-    fs.writeFileSync(tempPdfPath, pdfBuffer);
+    
+    // Ensure temp directory exists
+    if (!fs.existsSync('./temp')) {
+      fs.mkdirSync('./temp', { recursive: true });
+      console.log("Created temp directory");
+    }
     
     // Configure pdf2pic options
     const options = {
@@ -344,56 +346,49 @@ async function convertPDFToImages(pdfBuffer) {
       height: 2048         // Max height for OpenAI Vision API
     };
     
-    const convert = fromPath(tempPdfPath, options);
+    // Use fromBuffer instead of fromPath
+    const convert = fromBuffer(pdfBuffer, options);
     
-    // Get page count
-    const pageCount = await convert.bulk(-1); // -1 means all pages
-    console.log(`PDF has ${pageCount.length} pages`);
+    // Get all pages at once
+    const pages = await convert.bulk(-1); // -1 means all pages
+    console.log(`PDF has ${pages.length} pages`);
     
     const imageBuffers = [];
     
-    // Convert each page to image buffer
-    for (let i = 0; i < pageCount.length; i++) {
+    // Process each page result
+    for (let i = 0; i < pages.length; i++) {
       try {
-        console.log(`Attempting to convert page ${i + 1}...`);
-        const pageImage = await convert(i + 1, { returnBuffer: true }); // Return buffer instead of saving to file
-        console.log(`Page ${i + 1} result:`, {
-          hasPageImage: !!pageImage,
-          hasData: !!(pageImage && pageImage.data),
-          pageImageType: typeof pageImage,
-          pageImageKeys: pageImage ? Object.keys(pageImage) : 'null'
-        });
+        const page = pages[i];
+        console.log(`Processing page ${i + 1}, path: ${page.path}`);
         
-        if (pageImage && pageImage.data) {
+        if (page && page.path && fs.existsSync(page.path)) {
+          // Read the image file into a buffer
+          const imageBuffer = fs.readFileSync(page.path);
+          console.log(`Page ${i + 1} image size: ${imageBuffer.length} bytes`);
+          
           // Process with sharp to ensure proper format and size
-          const processedImage = await sharp(pageImage.data)
+          const processedImage = await sharp(imageBuffer)
             .png()
             .resize(2048, 2048, { fit: 'inside', withoutEnlargement: true })
             .toBuffer();
           
           imageBuffers.push(processedImage);
           console.log(`Page ${i + 1} converted successfully`);
+          
+          // Clean up the temp image file immediately
+          try {
+            fs.unlinkSync(page.path);
+            console.log(`Page ${i + 1} temp file cleaned up`);
+          } catch (cleanupError) {
+            console.log(`Warning: Could not clean up page ${i + 1} temp file:`, cleanupError.message);
+          }
         } else {
-          console.log(`Page ${i + 1} conversion failed: no valid image data`);
+          console.log(`Page ${i + 1} missing path or file doesn't exist`);
         }
       } catch (pageError) {
-        console.error(`Error converting page ${i + 1}:`, pageError);
+        console.error(`Error processing page ${i + 1}:`, pageError);
         // Continue with other pages
       }
-    }
-    
-    // Clean up temp files
-    try {
-      fs.unlinkSync(tempPdfPath);
-      // Clean up temp images
-      for (let i = 0; i < pageCount.length; i++) {
-        const tempImagePath = `./temp/page_${i + 1}.png`;
-        if (fs.existsSync(tempImagePath)) {
-          fs.unlinkSync(tempImagePath);
-        }
-      }
-    } catch (cleanupError) {
-      console.log("Cleanup warning:", cleanupError.message);
     }
     
     console.log(`Successfully converted ${imageBuffers.length} pages to images`);
