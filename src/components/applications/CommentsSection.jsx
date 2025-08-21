@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { fetchComments, addComment } from "../../firebase/comments";
+import { fetchComments, addComment, addReaction, removeReaction } from "../../firebase/comments";
 import useAuth from "../../hooks/useAuth";
 
 import "./CommentsSection.scss";
+
+// Common emojis for quick reactions
+const QUICK_EMOJIS = ["👍", "❤️", "😊", "🎉", "👏", "🔥", "💯", "🚀"];
 
 function CommentsSection({ application }) {
   const [comments, setComments] = useState([]);
@@ -27,6 +30,32 @@ function CommentsSection({ application }) {
 
     setText("");
     fetchComments(application.id).then(setComments);
+  };
+
+  const handleReaction = async (commentId, emoji) => {
+    if (!user) return;
+    
+    const comment = comments.find(c => c.id === commentId);
+    const hasReacted = comment?.reactions?.[user.uid]?.includes(emoji);
+    
+    if (hasReacted) {
+      await removeReaction(application.id, commentId, user.uid, emoji);
+    } else {
+      await addReaction(application.id, commentId, user.uid, emoji);
+    }
+    
+    // Refresh comments to get updated reactions
+    fetchComments(application.id).then(setComments);
+  };
+
+  const getReactionCount = (reactions, emoji) => {
+    if (!reactions) return 0;
+    return Object.values(reactions).flat().filter(r => r === emoji).length;
+  };
+
+  const hasUserReacted = (reactions, emoji) => {
+    if (!reactions || !user) return false;
+    return reactions[user.uid]?.includes(emoji) || false;
   };
 
   return (
@@ -66,6 +95,42 @@ function CommentsSection({ application }) {
               </span>
             </div>
             <p className="comment-text">{c.text}</p>
+            
+            {/* Emoji Reactions */}
+            <div className="comment-reactions">
+              {QUICK_EMOJIS.map((emoji) => {
+                const count = getReactionCount(c.reactions, emoji);
+                const isActive = hasUserReacted(c.reactions, emoji);
+                
+                if (count === 0) return null;
+                
+                return (
+                  <button
+                    key={emoji}
+                    className={`reaction-btn ${isActive ? 'active' : ''}`}
+                    onClick={() => handleReaction(c.id, emoji)}
+                    title={`${emoji} ${count}`}
+                  >
+                    <span className="emoji">{emoji}</span>
+                    <span className="count">{count}</span>
+                  </button>
+                );
+              })}
+              
+              {/* Add Reaction Button */}
+              <button
+                className="add-reaction-btn"
+                onClick={() => {
+                  const emoji = prompt("Enter an emoji:");
+                  if (emoji && emoji.trim()) {
+                    handleReaction(c.id, emoji.trim());
+                  }
+                }}
+                title="Add reaction"
+              >
+                +
+              </button>
+            </div>
           </li>
         ))}
       </ul>
