@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import useAuth from "../../hooks/useAuth";
 import AuthModal from "../auth/AuthModal";
+import { useAuthModal } from "../../providers/AuthModalProvider";
 
 export default function Header() {
   const { user, logout } = useAuth();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { isOpen, openAuthModal, closeAuthModal } = useAuthModal();
 
   const handleLogout = async () => {
     await logout();
@@ -26,7 +27,7 @@ export default function Header() {
         {!user ? (
           <div style={styles.authBox}>
             <button
-              onClick={() => setIsAuthModalOpen(true)}
+              onClick={openAuthModal}
               style={styles.authButton}
             >
               Sign In
@@ -46,8 +47,8 @@ export default function Header() {
 
       {/* Auth Modal */}
       <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
+        isOpen={isOpen}
+        onClose={closeAuthModal}
         onSuccess={handleAuthSuccess}
       />
     </header>

@@ -1,6 +1,7 @@
 // src/components/overlay/Mapper.jsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 // API prefix
 const API = "/api";
@@ -23,6 +24,32 @@ const rectPxToPt = (r = [0, 0, 0, 0]) => [
 ];
 
 export default function Mapper() {
+  const { user, loading } = useAuth();
+
+  // Check if user is authenticated and is admin
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (!user || user.email !== "avansardar@outlook.com") {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-4">Admin privileges required.</p>
+          <p className="text-sm text-gray-500">Only authorized users can access this area.</p>
+          <Link to="/dashboard" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+            Return to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   // Support both route param styles: /admin/mapper/:app/:form and /admin/mapper/:appId/:formId
   const params = useParams();
   const app = params.app || params.appId;

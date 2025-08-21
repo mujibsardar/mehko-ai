@@ -6,6 +6,7 @@ import { DataProvider } from "./providers/DataProvider";
 import { FeedbacksProvider } from "./providers/FeedbacksProvider";
 import { WindowProvider } from "./providers/WindowProvider";
 import { AuthProvider } from "./hooks/useAuth";
+import { AuthModalProvider } from "./providers/AuthModalProvider";
 
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
@@ -19,9 +20,11 @@ createRoot(document.getElementById("root")).render(
         <WindowProvider>
           <BrowserRouter>
             <AuthProvider>
-              <Preloader>
-                <App />
-              </Preloader>
+              <AuthModalProvider>
+                <Preloader>
+                  <App />
+                </Preloader>
+              </AuthModalProvider>
             </AuthProvider>
           </BrowserRouter>
         </WindowProvider>
