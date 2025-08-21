@@ -4,15 +4,18 @@ import { useParams, useLocation } from "react-router-dom";
 import PDFPreviewPanel from "../applications/PDFPreviewPanel";
 import useAuth from "../../hooks/useAuth";
 import { useAuthModal } from "../../providers/AuthModalProvider";
+import ReportButton from "../generic/ReportButton";
+import ReportIssueModal from "../modals/ReportIssueModal";
 
 const API = "http://127.0.0.1:8000";
 
-export function InterviewView({ app, form }) {
+export function InterviewView({ app, form, application, step }) {
   const [overlay, setOverlay] = useState({ fields: [] });
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(true);
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [currentFieldId, setCurrentFieldId] = useState(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const { user } = useAuth();
   const location = useLocation();
   const { openAuthModal } = useAuthModal();
@@ -77,6 +80,15 @@ export function InterviewView({ app, form }) {
     }
     return [...g.entries()].sort((a, b) => a[0] - b[0]);
   }, [overlay]);
+
+  const handleReportClick = () => {
+    if (!user) return;
+    setIsReportModalOpen(true);
+  };
+
+  const handleReportSubmitted = (reportData) => {
+    console.log("PDF step report submitted:", reportData);
+  };
 
   if (loading) return <div style={{ padding: 16 }}>Loading…</div>;
 
@@ -345,6 +357,27 @@ export function InterviewView({ app, form }) {
 
   return (
     <div style={{ padding: 0, maxWidth: 900 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+        <div>
+          <h2 style={{ margin: "0 0 8px 0", fontSize: "1.5rem", color: "#111827" }}>
+            PDF Form: {form}
+          </h2>
+          <p style={{ margin: 0, color: "#6b7280", fontSize: "0.875rem" }}>
+            Fill out the form fields below to generate your completed PDF
+          </p>
+        </div>
+        
+        {user && (
+          <ReportButton 
+            onClick={handleReportClick}
+            size="small"
+            variant="subtle"
+          >
+            Report Issue
+          </ReportButton>
+        )}
+      </div>
+
       {/* PDF Preview Toggle Button */}
       <div
         style={{
@@ -472,6 +505,14 @@ export function InterviewView({ app, form }) {
         currentFieldId={currentFieldId}
         formId={form}
         appId={app}
+      />
+
+      <ReportIssueModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        application={application}
+        step={step}
+        onReportSubmitted={handleReportSubmitted}
       />
     </div>
   );

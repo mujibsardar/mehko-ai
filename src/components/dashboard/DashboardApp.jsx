@@ -340,6 +340,8 @@ export default function DashboardApp() {
           stepId={step.id || step._id}
           formName={step.formName}
           hideCompleteToggle
+          application={activeApplication}
+          step={step}
         />
       );
     }
@@ -350,7 +352,9 @@ export default function DashboardApp() {
           <InterviewView
             key={`${activeApplication.id}:${step.formId}`}
             app={activeApplication.id}
-            form={step.formId} // <- FIX
+            form={step.formId}
+            application={activeApplication}
+            step={step}
           />
         </div>
       );
@@ -362,6 +366,7 @@ export default function DashboardApp() {
           step={step}
           applicationId={activeApplication.id}
           hideCompleteToggle
+          application={activeApplication}
         />
       );
     }

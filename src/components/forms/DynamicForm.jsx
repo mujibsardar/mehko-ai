@@ -6,6 +6,8 @@ import {
   pinApplication,
 } from "../../firebase/userData";
 import useProgress from "../../hooks/useProgress";
+import ReportButton from "../generic/ReportButton";
+import ReportIssueModal from "../modals/ReportIssueModal";
 import "./DynamicForm.scss";
 
 export default function DynamicForm({
@@ -13,6 +15,8 @@ export default function DynamicForm({
   formName,
   stepId,
   hideCompleteToggle = false,
+  application,
+  step,
 }) {
   const { user } = useAuth();
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
@@ -24,6 +28,7 @@ export default function DynamicForm({
   const [formData, setFormData] = useState({});
   const [status, setStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
   const [isLoading, setIsLoading] = useState(true);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchFieldNamesAndData = async () => {
@@ -99,20 +104,44 @@ export default function DynamicForm({
     }
   };
 
+  const handleReportClick = () => {
+    if (!user) return;
+    setIsReportModalOpen(true);
+  };
+
+  const handleReportSubmitted = (reportData) => {
+    console.log("Form step report submitted:", reportData);
+  };
+
   if (!user) return <p>Please log in to use this feature.</p>;
 
   if (isLoading) {
     return (
-      <div className="form-loading">
-        <div className="spinner" />
-        <p>Loading form...</p>
+      <div className="dynamic-form">
+        <div className="form-header">
+          <h2>Loading form...</h2>
+        </div>
+        <div className="loading">Loading form fields...</div>
       </div>
     );
   }
 
   return (
-    <div className={`dynamic-form ${className}`}>
-      <form className="dynamic-form" onSubmit={(e) => e.preventDefault()}>
+    <div className="dynamic-form">
+      <div className="form-header">
+        <h2>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h2>
+        {user && (
+          <ReportButton
+            onClick={handleReportClick}
+            size="small"
+            variant="subtle"
+          >
+            Report Issue
+          </ReportButton>
+        )}
+      </div>
+
+      <form onSubmit={(e) => e.preventDefault()}>
         {!hideCompleteToggle && (
           <div className="step-complete-checkbox">
             <label>
@@ -131,8 +160,8 @@ export default function DynamicForm({
             </label>
           </div>
         )}
-        <div className="dynamic-form-header">
-          <h4>{formName.replace(".pdf", "").replace(/[_-]/g, " ")}</h4>
+
+        <div className="form-status">
           <span className={`status ${status}`}>
             {status === "saving"
               ? "Saving..."
@@ -146,7 +175,7 @@ export default function DynamicForm({
 
         {fieldNames.map((field, index) => {
           return (
-            <div key={`${field.label}-${index}`} className="dynamic-form-field">
+            <div key={`${field.label}-${index}`} className="form-field">
               <label>{field.label || field.name}</label>
               <input
                 type="text"
@@ -170,6 +199,14 @@ export default function DynamicForm({
           </button>
         </div>
       </form>
+
+      <ReportIssueModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        application={application}
+        step={step}
+        onReportSubmitted={handleReportSubmitted}
+      />
     </div>
   );
 }

@@ -4,77 +4,126 @@
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-}
 
-.dynamic-form-field {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 1.5rem;
 
-.dynamic-form-field label {
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  font-size: 0.95rem;
-}
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+      flex: 1;
+      min-width: 0;
+    }
+  }
 
-.dynamic-form-field input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-}
+  .form-status {
+    margin-bottom: 1rem;
+    
+    .status {
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
 
-.dynamic-form button[type="submit"] {
-  margin-top: 1rem;
-  padding: 0.5rem 1.25rem;
-  background-color: #007bff;
-  color: white;
-  font-weight: 500;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+      &.saving {
+        background-color: #fef3c7;
+        color: #92400e;
+      }
 
-.dynamic-form button[type="submit"]:hover {
-  background-color: #0056b3;
-}
+      &.saved {
+        background-color: #d1fae5;
+        color: #065f46;
+      }
 
-.step-complete-checkbox {
-  margin-top: 1.5rem;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+      &.error {
+        background-color: #fee2e2;
+        color: #991b1b;
+      }
+    }
+  }
 
-.field-description {
-  font-size: 0.75rem;
-  color: #666;
-}
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
 
-.form-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  color: #555;
-}
+    label {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+      color: #374151;
+    }
 
-.spinner {
-  width: 36px;
-  height: 36px;
-  border: 4px solid #ccc;
-  border-top: 4px solid #4caf50;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
+    input {
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease;
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+
+    button {
+      padding: 0.75rem 1.25rem;
+      background-color: #ffffff;
+      color: #374151;
+      font-weight: 500;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: #f9fafb;
+        border-color: #9ca3af;
+      }
+
+      &:first-child {
+        background-color: #f3f4f6;
+        color: #6b7280;
+
+        &:hover {
+          background-color: #e5e7eb;
+        }
+      }
+    }
+  }
+
+  .step-complete-checkbox {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #374151;
+  }
+
+  .field-description {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+
+  .loading {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
   }
 }
 

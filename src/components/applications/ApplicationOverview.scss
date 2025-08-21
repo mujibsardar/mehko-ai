@@ -6,28 +6,47 @@
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   line-height: 1.6;
-}
 
-.application-view h2 {
-  font-size: 2rem;
-  font-weight: 800;
-  margin: 0 0 8px 0;
-  color: #111;
-}
+  .application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
 
-.application-view p {
-  font-size: 1rem;
-  color: #4b5563;
-  margin: 0 0 20px 0;
-}
+    .header-content {
+      flex: 1;
+      min-width: 0;
 
-.application-view .application-steps {
-  margin-top: 20px;
+      h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        color: #111;
+      }
+
+      p {
+        font-size: 1rem;
+        color: #4b5563;
+        margin: 0;
+      }
+    }
+
+    .header-actions {
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+  }
+
+  .application-steps {
+    margin-top: 20px;
+  }
 }
 
 .application-steps .steps-list {
   padding-left: 1.25rem;
 }
+
 .application-steps .steps-list li {
   margin-bottom: 8px;
   line-height: 1.5;

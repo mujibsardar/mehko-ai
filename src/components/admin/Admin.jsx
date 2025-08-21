@@ -10,11 +10,13 @@ import {
   getDocs,
   collection,
 } from "firebase/firestore";
+import ReportsViewer from "./ReportsViewer";
 
 const API = "/api"; // <-- prefix all backend calls
 
 export default function Admin() {
   const { user, loading } = useAuth();
+  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports"
 
   // Check if user is authenticated and is admin
   if (loading) {
@@ -29,10 +31,17 @@ export default function Admin() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
+          <h1 className="text-2xl font-bold text-red-600 mb-4">
+            Access Denied
+          </h1>
           <p className="text-gray-600 mb-4">Admin privileges required.</p>
-          <p className="text-sm text-gray-500">Only authorized users can access this area.</p>
-          <Link to="/dashboard" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <p className="text-sm text-gray-500">
+            Only authorized users can access this area.
+          </p>
+          <Link
+            to="/dashboard"
+            className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
             Return to Dashboard
           </Link>
         </div>
@@ -258,42 +267,71 @@ export default function Admin() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <h3 style={{ margin: 0 }}>Applications</h3>
+          <h3 style={{ margin: 0 }}>Admin Panel</h3>
+        </div>
+
+        <div style={{ marginTop: 16 }}>
           <button
-            onClick={loadApps}
-            title="Refresh"
-            style={{ marginLeft: "auto" }}
+            onClick={() => setActiveTab("apps")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              marginBottom: "8px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "apps" ? "#eef2ff" : "#fff",
+              color: activeTab === "apps" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
           >
-            ⟳
+            Applications
+          </button>
+          <button
+            onClick={() => setActiveTab("reports")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "reports" ? "#eef2ff" : "#fff",
+              color: activeTab === "reports" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
+          >
+            Issue Reports
           </button>
         </div>
 
-        <div style={{ marginTop: 8 }}>
-          <button onClick={newApp} style={{ width: "100%" }}>
-            + New Application
-          </button>
-        </div>
-
-        <ul style={{ listStyle: "none", padding: 0, marginTop: 12 }}>
-          {apps.map((a) => (
-            <li key={a.id} style={{ marginBottom: 6 }}>
-              <button
-                onClick={() => selectApp(a.id)}
-                style={{
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "6px 8px",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 8,
-                  background: selectedAppId === a.id ? "#eef2ff" : "#fff",
-                }}
-              >
-                <div style={{ fontWeight: 600 }}>{a.title || a.id}</div>
-                <div style={{ fontSize: 12, color: "#6b7280" }}>{a.id}</div>
+        {activeTab === "apps" && (
+          <>
+            <div style={{ marginTop: 8 }}>
+              <button onClick={newApp} style={{ width: "100%" }}>
+                + New Application
               </button>
-            </li>
-          ))}
-        </ul>
+            </div>
+
+            <ul style={{ listStyle: "none", padding: 0, marginTop: 12 }}>
+              {apps.map((a) => (
+                <li key={a.id} style={{ marginBottom: 6 }}>
+                  <button
+                    onClick={() => selectApp(a.id)}
+                    style={{
+                      width: "100%",
+                      textAlign: "left",
+                      padding: "6px 8px",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 8,
+                      background: selectedAppId === a.id ? "#eef2ff" : "#fff",
+                    }}
+                  >
+                    <div style={{ fontWeight: 600 }}>{a.title || a.id}</div>
+                    <div style={{ fontSize: 12, color: "#6b7280" }}>{a.id}</div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </aside>
 
       {/* Main panel */}
@@ -310,11 +348,13 @@ export default function Admin() {
             gap: 12,
           }}
         >
-          <h2 style={{ margin: 0, flex: 1 }}>Admin Dashboard</h2>
+          <h2 style={{ margin: 0, flex: 1 }}>
+            {activeTab === "apps" ? "Admin Dashboard" : "Issue Reports"}
+          </h2>
           <Link to="/dashboard" style={{ fontSize: 13 }}>
             ← Back to Dashboard
           </Link>
-          {status && (
+          {activeTab === "apps" && status && (
             <div
               style={{
                 marginLeft: 8,
@@ -331,244 +371,262 @@ export default function Admin() {
           )}
         </div>
 
-        {/* App form */}
-        <section
-          style={{
-            border: "1px solid #eee",
-            borderRadius: 12,
-            padding: 12,
-            marginTop: 12,
-            background: "#fff",
-          }}
-        >
-          <h3 style={{ marginTop: 0 }}>Application</h3>
-          <div style={{ display: "grid", gap: 8 }}>
-            <input
-              placeholder="app id (e.g., san_diego_mehko)"
-              value={appId}
-              onChange={(e) => setAppId(e.target.value)}
-            />
-            <input
-              placeholder="title (e.g., San Diego MEHKO)"
-              value={appTitle}
-              onChange={(e) => setAppTitle(e.target.value)}
-            />
-            <input
-              placeholder="root domain (e.g., sandiegocounty.gov)"
-              value={rootDomain}
-              onChange={(e) => setRootDomain(e.target.value)}
-            />
-            <textarea
-              placeholder="description"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ resize: "vertical" }}
-            />
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={saveAppMeta}>Save App</button>
-              {/* Removed old "Mapper (example)" link */}
-            </div>
-          </div>
-        </section>
-
-        {/* Steps list */}
-        {selectedApp && (
-          <section
-            style={{
-              border: "1px solid #eee",
-              borderRadius: 12,
-              padding: 12,
-              marginTop: 12,
-              background: "#fff",
-            }}
-          >
-            <h3 style={{ marginTop: 0 }}>Existing Steps</h3>
-            {steps.length === 0 ? (
-              <p style={{ color: "#6b7280" }}>No steps yet.</p>
-            ) : (
-              <ol style={{ paddingLeft: 18 }}>
-                {steps.map((s, i) => (
-                  <li key={s.id} style={{ marginBottom: 8 }}>
-                    <div
-                      style={{
-                        border: "1px solid #e5e7eb",
-                        borderRadius: 8,
-                        padding: 8,
-                        background: "#fafafa",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                        }}
-                      >
-                        <strong style={{ flex: 1 }}>
-                          {i + 1}. {s.title}{" "}
-                          <span style={{ color: "#6b7280" }}>({s.type})</span>
-                        </strong>
-                        <button
-                          onClick={() => deleteStep(s.id)}
-                          style={{ color: "#dc2626", borderColor: "#fecaca" }}
-                          title="Delete step"
-                        >
-                          Delete
-                        </button>
-                      </div>
-
-                      {s.type === "pdf" && (
-                        <div style={{ fontSize: 13, color: "#374151" }}>
-                          formId: <code>{s.formId}</code> |{" "}
-                          <Link to={`/admin/mapper/${appId}/${s.formId}`}>
-                            Mapper
-                          </Link>{" "}
-                          |{" "}
-                          <Link to={`/admin/interview/${appId}/${s.formId}`}>
-                            Interview
-                          </Link>
-                        </div>
-                      )}
-                      {s.type === "form" && (
-                        <div style={{ fontSize: 13, color: "#374151" }}>
-                          formName: <code>{s.formName}</code>
-                        </div>
-                      )}
-                      {s.content && (
-                        <div
-                          style={{
-                            marginTop: 4,
-                            fontSize: 13,
-                            color: "#6b7280",
-                          }}
-                        >
-                          {s.content}
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </section>
-        )}
-
-        {/* Add steps (queue) */}
-        <section
-          style={{
-            border: "1px solid #eee",
-            borderRadius: 12,
-            padding: 12,
-            marginTop: 12,
-            background: "#fff",
-            marginBottom: 24,
-          }}
-        >
-          <h3 style={{ marginTop: 0 }}>Add Steps</h3>
-          <div style={{ display: "grid", gap: 8, alignItems: "start" }}>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <select
-                value={newType}
-                onChange={(e) => setNewType(e.target.value)}
-              >
-                <option value="info">Info</option>
-                <option value="form">Form</option>
-                <option value="pdf">PDF</option>
-              </select>
-              <input
-                placeholder="step title"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-              />
-            </div>
-
-            <textarea
-              placeholder="step description / content (optional for form/pdf)"
-              rows={2}
-              value={newContent}
-              onChange={(e) => setNewContent(e.target.value)}
-              style={{ resize: "vertical" }}
-            />
-
-            {newType === "form" && (
-              <input
-                placeholder="formName (e.g., MEHKO_SOP-English.pdf)"
-                value={newFormName}
-                onChange={(e) => setNewFormName(e.target.value)}
-              />
-            )}
-
-            {newType === "pdf" && (
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        {activeTab === "reports" ? (
+          <ReportsViewer />
+        ) : (
+          <>
+            {/* App form */}
+            <section
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 12,
+                padding: 12,
+                marginTop: 12,
+                background: "#fff",
+              }}
+            >
+              <h3 style={{ marginTop: 0 }}>Application</h3>
+              <div style={{ display: "grid", gap: 8 }}>
                 <input
-                  placeholder="formId (e.g., MEHKO_SOP-English)"
-                  value={newFormId}
-                  onChange={(e) => setNewFormId(e.target.value)}
+                  placeholder="app id (e.g., san_diego_mehko)"
+                  value={appId}
+                  onChange={(e) => setAppId(e.target.value)}
                 />
                 <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => setNewPdfFile(e.target.files?.[0] || null)}
+                  placeholder="title (e.g., San Diego MEHKO)"
+                  value={appTitle}
+                  onChange={(e) => setAppTitle(e.target.value)}
                 />
+                <input
+                  placeholder="root domain (e.g., sandiegocounty.gov)"
+                  value={rootDomain}
+                  onChange={(e) => setRootDomain(e.target.value)}
+                />
+                <textarea
+                  placeholder="description"
+                  rows={3}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  style={{ resize: "vertical" }}
+                />
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={saveAppMeta}>Save App</button>
+                </div>
               </div>
-            )}
+            </section>
 
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={addStepToQueue}>+ Add to Queue</button>
-              <button
-                onClick={saveQueuedSteps}
-                disabled={!appId || queuedSteps.length === 0}
-              >
-                Save Queued Steps
-              </button>
-              <div
-                style={{ alignSelf: "center", fontSize: 13, color: "#6b7280" }}
-              >
-                {queuedSteps.length} queued
-              </div>
-            </div>
-
-            {queuedSteps.length > 0 && (
-              <div
+            {/* Steps list */}
+            {selectedApp && (
+              <section
                 style={{
-                  marginTop: 8,
-                  border: "1px dashed #e5e7eb",
-                  borderRadius: 8,
-                  padding: 8,
+                  border: "1px solid #eee",
+                  borderRadius: 12,
+                  padding: 12,
+                  marginTop: 12,
+                  background: "#fff",
                 }}
               >
-                <strong>Queued</strong>
-                <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
-                  {queuedSteps.map((q, i) => (
-                    <li key={i} style={{ marginBottom: 6 }}>
-                      {q.title} <em>({q.type})</em>
-                      {q.type === "pdf" && (
-                        <>
-                          {" "}
-                          — formId: <code>{q.formId}</code>
-                        </>
-                      )}
-                      {q.type === "form" && (
-                        <>
-                          {" "}
-                          — formName: <code>{q.formName}</code>
-                        </>
-                      )}
-                      <button
-                        onClick={() => removeQueued(i)}
-                        style={{ marginLeft: 8, fontSize: 12 }}
-                        title="Remove from queue"
-                      >
-                        remove
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                <h3 style={{ marginTop: 0 }}>Existing Steps</h3>
+                {steps.length === 0 ? (
+                  <p style={{ color: "#6b7280" }}>No steps yet.</p>
+                ) : (
+                  <ol style={{ paddingLeft: 18 }}>
+                    {steps.map((s, i) => (
+                      <li key={s.id} style={{ marginBottom: 8 }}>
+                        <div
+                          style={{
+                            border: "1px solid #e5e7eb",
+                            borderRadius: 8,
+                            padding: 8,
+                            background: "#fafafa",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 8,
+                            }}
+                          >
+                            <strong style={{ flex: 1 }}>
+                              {i + 1}. {s.title}{" "}
+                              <span style={{ color: "#6b7280" }}>
+                                ({s.type})
+                              </span>
+                            </strong>
+                            <button
+                              onClick={() => deleteStep(s.id)}
+                              style={{
+                                color: "#dc2626",
+                                borderColor: "#fecaca",
+                              }}
+                              title="Delete step"
+                            >
+                              Delete
+                            </button>
+                          </div>
+
+                          {s.type === "pdf" && (
+                            <div style={{ fontSize: 13, color: "#374151" }}>
+                              formId: <code>{s.formId}</code> |{" "}
+                              <Link to={`/admin/mapper/${appId}/${s.formId}`}>
+                                Mapper
+                              </Link>{" "}
+                              |{" "}
+                              <Link
+                                to={`/admin/interview/${appId}/${s.formId}`}
+                              >
+                                Interview
+                              </Link>
+                            </div>
+                          )}
+                          {s.type === "form" && (
+                            <div style={{ fontSize: 13, color: "#374151" }}>
+                              formName: <code>{s.formName}</code>
+                            </div>
+                          )}
+                          {s.content && (
+                            <div
+                              style={{
+                                marginTop: 4,
+                                fontSize: 13,
+                                color: "#6b7280",
+                              }}
+                            >
+                              {s.content}
+                            </div>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </section>
             )}
-          </div>
-        </section>
+
+            {/* Add steps (queue) */}
+            <section
+              style={{
+                border: "1px solid #eee",
+                borderRadius: 12,
+                padding: 12,
+                marginTop: 12,
+                background: "#fff",
+                marginBottom: 24,
+              }}
+            >
+              <h3 style={{ marginTop: 0 }}>Add Steps</h3>
+              <div style={{ display: "grid", gap: 8, alignItems: "start" }}>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <select
+                    value={newType}
+                    onChange={(e) => setNewType(e.target.value)}
+                  >
+                    <option value="info">Info</option>
+                    <option value="form">Form</option>
+                    <option value="pdf">PDF</option>
+                  </select>
+                  <input
+                    placeholder="step title"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                  />
+                </div>
+
+                <textarea
+                  placeholder="step description / content (optional for form/pdf)"
+                  rows={2}
+                  value={newContent}
+                  onChange={(e) => setNewContent(e.target.value)}
+                  style={{ resize: "vertical" }}
+                />
+
+                {newType === "form" && (
+                  <input
+                    placeholder="formName (e.g., MEHKO_SOP-English.pdf)"
+                    value={newFormName}
+                    onChange={(e) => setNewFormName(e.target.value)}
+                  />
+                )}
+
+                {newType === "pdf" && (
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    <input
+                      placeholder="formId (e.g., MEHKO_SOP-English)"
+                      value={newFormId}
+                      onChange={(e) => setNewFormId(e.target.value)}
+                    />
+                    <input
+                      type="file"
+                      accept="application/pdf"
+                      onChange={(e) =>
+                        setNewPdfFile(e.target.files?.[0] || null)
+                      }
+                    />
+                  </div>
+                )}
+
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button onClick={addStepToQueue}>+ Add to Queue</button>
+                  <button
+                    onClick={saveQueuedSteps}
+                    disabled={!appId || queuedSteps.length === 0}
+                  >
+                    Save Queued Steps
+                  </button>
+                  <div
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 13,
+                      color: "#6b7280",
+                    }}
+                  >
+                    {queuedSteps.length} queued
+                  </div>
+                </div>
+
+                {queuedSteps.length > 0 && (
+                  <div
+                    style={{
+                      marginTop: 8,
+                      border: "1px dashed #e5e7eb",
+                      borderRadius: 8,
+                      padding: 8,
+                    }}
+                  >
+                    <strong>Queued</strong>
+                    <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
+                      {queuedSteps.map((q, i) => (
+                        <li key={i} style={{ marginBottom: 6 }}>
+                          {q.title} <em>({q.type})</em>
+                          {q.type === "pdf" && (
+                            <>
+                              {" "}
+                              — formId: <code>{q.formId}</code>
+                            </>
+                          )}
+                          {q.type === "form" && (
+                            <>
+                              {" "}
+                              — formName: <code>{q.formName}</code>
+                            </>
+                          )}
+                          <button
+                            onClick={() => removeQueued(i)}
+                            style={{ marginLeft: 8, fontSize: 12 }}
+                            title="Remove from queue"
+                          >
+                            remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </section>
+          </>
+        )}
       </main>
     </div>
   );
