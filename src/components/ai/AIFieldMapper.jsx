@@ -30,6 +30,8 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
+    console.log("File selected:", file); // Debug log
+    
     if (!file || !file.type.includes("pdf")) {
       setError("Please select a valid PDF file");
       return;
@@ -43,24 +45,35 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
     try {
       // Step 1: Upload PDF and get AI analysis
       setProgress(20);
+      console.log("Starting PDF upload..."); // Debug log
+      
       const formData = new FormData();
       formData.append("pdf", file);
 
+      console.log("Sending request to:", "http://localhost:3000/api/ai-analyze-pdf"); // Debug log
+      
       const uploadResponse = await fetch("http://localhost:3000/api/ai-analyze-pdf", {
         method: "POST",
         body: formData,
       });
 
+      console.log("Upload response status:", uploadResponse.status); // Debug log
+      console.log("Upload response ok:", uploadResponse.ok); // Debug log
+
       if (!uploadResponse.ok) {
-        throw new Error("Failed to upload PDF for analysis");
+        const errorText = await uploadResponse.text();
+        console.error("Upload failed with response:", errorText); // Debug log
+        throw new Error(`Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`);
       }
 
       const analysisData = await uploadResponse.json();
+      console.log("Analysis data received:", analysisData); // Debug log
       setProgress(60);
 
       // Step 2: Process AI suggestions
       setCurrentStep("mapping");
       const suggestions = processAISuggestions(analysisData.fields);
+      console.log("Processed suggestions:", suggestions); // Debug log
       setAiSuggestions(suggestions);
       setProgress(80);
 
@@ -69,9 +82,11 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       const highConfidenceFields = suggestions.filter(
         (f) => f.confidence > 0.8
       );
+      console.log("High confidence fields:", highConfidenceFields); // Debug log
       setSelectedFields(highConfidenceFields.map((f) => f.id));
       setProgress(100);
     } catch (err) {
+      console.error("Error in handleFileUpload:", err); // Debug log
       setError(err.message);
       setCurrentStep("idle");
     } finally {

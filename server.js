@@ -267,7 +267,12 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
 
-    console.log("Processing PDF upload:", req.file.originalname, "Size:", req.file.size);
+    console.log(
+      "Processing PDF upload:",
+      req.file.originalname,
+      "Size:",
+      req.file.size
+    );
 
     const pdfFile = req.file;
 
@@ -292,8 +297,10 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
         // Analyze with OpenAI Vision API
         const pageFields = await analyzePageWithAI(base64Image, pageIndex);
         allFields.push(...pageFields);
-        
-        console.log(`Page ${pageIndex + 1} returned ${pageFields.length} fields`);
+
+        console.log(
+          `Page ${pageIndex + 1} returned ${pageFields.length} fields`
+        );
       } catch (pageError) {
         console.error(`Error analyzing page ${pageIndex + 1}:`, pageError);
         // Continue with other pages instead of crashing
@@ -316,30 +323,112 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
     res.status(500).json({
       error: "Failed to analyze PDF",
       details: error.message,
-      fallback: "Please try again or contact support"
+      fallback: "Please try again or contact support",
     });
   }
 });
 
 // Helper function to convert PDF to images
 async function convertPDFToImages(pdfBuffer) {
-  // This would integrate with a PDF processing library like pdf2pic or similar
-  // For now, returning a mock implementation
-  console.log("Converting PDF to images...");
+  try {
+    console.log("Converting PDF to images using pdf2pic...");
 
-  // Mock: In real implementation, you'd use:
-  // const pdf2pic = require('pdf2pic');
-  // const options = { density: 300, saveFilename: "page", savePath: "./temp" };
-  // const convert = pdf2pic.convert(pdfBuffer, options);
+    // Import pdf2pic dynamically since we're in ES module
+    const { fromPath } = await import("pdf2pic");
 
-  // Create a larger test image buffer for testing (16x16 instead of 1x1)
-  const testImageBuffer = Buffer.from(
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjY0NjdGNjM5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjY0NjdGNjQ5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNjQ2N0Y2MTlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNjQ2N0Y2MjlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAABAAEAAAAj/AAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3MkzIAA7",
-    "base64"
-  );
+    // Create a temporary PDF file
+    const fs = await import("fs");
+    const path = await import("path");
+    const os = await import("os");
 
-  console.log("Created test image buffer for AI analysis");
-  return [testImageBuffer];
+    const tempDir = os.tmpdir();
+    const tempPdfPath = path.join(tempDir, `temp_${Date.now()}.pdf`);
+
+    // Write PDF buffer to temp file
+    fs.writeFileSync(tempPdfPath, pdfBuffer);
+
+    // Configure pdf2pic options
+    const options = {
+      density: 300, // Higher DPI for better quality
+      saveFilename: "page", // Base filename for pages
+      savePath: tempDir, // Save to temp directory
+      format: "png", // Output format
+      width: 2048, // Max width
+      height: 2048, // Max height
+    };
+
+    // Convert PDF to images
+    const convert = fromPath(tempPdfPath, options);
+    const pageCount = await convert.bulk(-1); // Convert all pages
+
+    console.log(`PDF converted to ${pageCount.length} pages`);
+    console.log("Page count result:", pageCount);
+
+    // Read the generated images and convert to buffers
+    const imageBuffers = [];
+
+    // pdf2pic creates files with names like "page.1.png", "page.2.png", etc.
+    for (let i = 0; i < pageCount.length; i++) {
+      // Try different possible filename patterns - pdf2pic uses dots, not underscores
+      const possibleNames = [
+        `page.${i + 1}.png`, // Actual format: page.1.png, page.2.png
+        `page.${i + 1}.jpg`,
+        `page.${i + 1}.jpeg`,
+        `page_${i + 1}.png`, // Fallback formats
+        `page_${i + 1}.jpg`,
+        `page${i + 1}.png`,
+        `page${i + 1}.jpg`,
+      ];
+
+      let imageFound = false;
+      for (const filename of possibleNames) {
+        const imagePath = path.join(tempDir, filename);
+        console.log(`Checking for image: ${imagePath}`);
+
+        if (fs.existsSync(imagePath)) {
+          console.log(`Found image: ${imagePath}`);
+          const imageBuffer = fs.readFileSync(imagePath);
+          imageBuffers.push(imageBuffer);
+
+          // Clean up temp image file
+          fs.unlinkSync(imagePath);
+          imageFound = true;
+          break;
+        }
+      }
+
+      if (!imageFound) {
+        console.log(
+          `No image found for page ${i + 1}, checking temp directory contents:`
+        );
+        const tempFiles = fs.readdirSync(tempDir);
+        const imageFiles = tempFiles.filter(
+          (f) =>
+            f.includes("page") &&
+            (f.endsWith(".png") || f.endsWith(".jpg") || f.endsWith(".jpeg"))
+        );
+        console.log("Available image files:", imageFiles);
+      }
+    }
+
+    // Clean up temp PDF file
+    fs.unlinkSync(tempPdfPath);
+
+    console.log(
+      `Successfully converted ${imageBuffers.length} pages to images`
+    );
+    return imageBuffers;
+  } catch (error) {
+    console.error("Error converting PDF to images:", error);
+
+    // Fallback: return a simple test image if conversion fails
+    console.log("Falling back to test image...");
+    const testImageBuffer = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+      "base64"
+    );
+    return [testImageBuffer];
+  }
 }
 
 // Helper function to analyze page with OpenAI Vision API
@@ -529,12 +618,12 @@ app.listen(PORT, () => {
 });
 
 // Global error handler for unhandled errors
-process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error) => {
+  console.error("Uncaught Exception:", error);
   // Don't crash the server, just log the error
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
   // Don't crash the server, just log the error
 });
