@@ -36,6 +36,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 const CACHE_PATH = path.resolve("form-label-cache.json");
 
 // Load cache from file
@@ -262,29 +267,42 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
 
+    console.log("Processing PDF upload:", req.file.originalname, "Size:", req.file.size);
+
     const pdfFile = req.file;
 
     // File type is already validated by multer
 
     // Convert PDF to images for Vision API analysis
     const pdfImages = await convertPDFToImages(pdfFile.buffer);
+    console.log("Converted PDF to", pdfImages.length, "images");
 
     // Analyze each page with AI
     const allFields = [];
 
     for (let pageIndex = 0; pageIndex < pdfImages.length; pageIndex++) {
-      const imageBuffer = pdfImages[pageIndex];
+      try {
+        const imageBuffer = pdfImages[pageIndex];
 
-      // Convert buffer to base64 for OpenAI
-      const base64Image = imageBuffer.toString("base64");
+        // Convert buffer to base64 for OpenAI
+        const base64Image = imageBuffer.toString("base64");
 
-      // Analyze with OpenAI Vision API
-      const pageFields = await analyzePageWithAI(base64Image, pageIndex);
-      allFields.push(...pageFields);
+        console.log(`Analyzing page ${pageIndex + 1}/${pdfImages.length}`);
+
+        // Analyze with OpenAI Vision API
+        const pageFields = await analyzePageWithAI(base64Image, pageIndex);
+        allFields.push(...pageFields);
+        
+        console.log(`Page ${pageIndex + 1} returned ${pageFields.length} fields`);
+      } catch (pageError) {
+        console.error(`Error analyzing page ${pageIndex + 1}:`, pageError);
+        // Continue with other pages instead of crashing
+      }
     }
 
     // Post-process and validate fields
     const processedFields = postProcessFields(allFields);
+    console.log("Total processed fields:", processedFields.length);
 
     res.json({
       success: true,
@@ -294,9 +312,11 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
     });
   } catch (error) {
     console.error("AI PDF analysis error:", error);
+    // Return a graceful error response instead of crashing
     res.status(500).json({
       error: "Failed to analyze PDF",
       details: error.message,
+      fallback: "Please try again or contact support"
     });
   }
 });
@@ -312,9 +332,9 @@ async function convertPDFToImages(pdfBuffer) {
   // const options = { density: 300, saveFilename: "page", savePath: "./temp" };
   // const convert = pdf2pic.convert(pdfBuffer, options);
 
-  // Create a simple PNG image buffer for testing
+  // Create a larger test image buffer for testing (16x16 instead of 1x1)
   const testImageBuffer = Buffer.from(
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QjY0NjdGNjM5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QjY0NjdGNjQ5QjA0MTFFQjg3QURCRjM5N0RCM0MyMkIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCNjQ2N0Y2MTlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCNjQ2N0Y2MjlCMDQxMUVCODdBREJGMzk3REIzQzIyQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAABAAEAAAAj/AAEIHEiwoMGDCBMqXMiwocOHECNKnEixosWLGDNq3Mixo8ePIEOKHEmypMmTKFOqXMmypcuXMGPKnEmzps2bOHPq3MkzIAA7",
     "base64"
   );
 
@@ -506,4 +526,15 @@ function normalizeRectangle(rect) {
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🧠 Mock AI server running on http://localhost:${PORT}`);
+});
+
+// Global error handler for unhandled errors
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  // Don't crash the server, just log the error
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't crash the server, just log the error
 });
