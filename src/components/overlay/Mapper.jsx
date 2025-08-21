@@ -127,7 +127,25 @@ export default function Mapper() {
       overlay.fields
         .filter((f) => Number(f.page || 0) === Number(page))
         .forEach((f) => {
-          const [x0, y0, x1, y1] = f.rect;
+          let [x0, y0, x1, y1] = f.rect;
+
+          // If we have normalized ratios, convert them to preview pixels
+          if (
+            f.rectRatio &&
+            Array.isArray(f.rectRatio) &&
+            f.rectRatio.length === 4
+          ) {
+            const [rx1, ry1, rx2, ry2] = f.rectRatio;
+            const imgWidth = img.width;
+            const imgHeight = img.height;
+
+            // Convert ratios to preview pixels (top-left origin)
+            x0 = rx1 * imgWidth;
+            y0 = ry1 * imgHeight;
+            x1 = rx2 * imgWidth;
+            y1 = ry2 * imgHeight;
+          }
+
           ctx.strokeStyle = f.id === selectedId ? "#e00" : "#00e";
           ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
         });
@@ -206,10 +224,25 @@ export default function Mapper() {
     // Persist a copy converted to POINTS
     const overlayToSave = {
       ...overlay,
-      fields: (overlay.fields || []).map((f) => ({
-        ...f,
-        rect: rectPxToPt(f.rect),
-      })),
+      fields: (overlay.fields || []).map((f) => {
+        // AI fields already have PDF points in f.rect, manually drawn fields need conversion
+        let rectToSave = f.rect;
+
+        if (f.rectRatio) {
+          // AI field - use the PDF points that were already converted
+          rectToSave = f.rect;
+        } else {
+          // Manually drawn field - convert from preview pixels to PDF points
+          rectToSave = rectPxToPt(f.rect);
+        }
+
+        return {
+          ...f,
+          rect: rectToSave,
+          // Remove rectRatio from saved data to avoid confusion
+          rectRatio: undefined,
+        };
+      }),
     };
     const fd = new FormData();
     fd.append("overlay_json", JSON.stringify(overlayToSave));

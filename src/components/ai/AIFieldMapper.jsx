@@ -81,11 +81,12 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
 
   const processAISuggestions = (aiFields) => {
     return aiFields.map((field, index) => ({
-      id: `ai_field_${index + 1}`,
+      id: field.id || `ai_field_${index + 1}`, // Use descriptive ID from backend
       label: field.label || `Field ${index + 1}`,
       page: field.page || 0,
       type: field.type || "text",
-      rect: field.rect || [0, 0, 100, 20],
+      rect: field.rect || [0, 0, 100, 20], // Use PDF points from backend
+      rectRatio: field.rectRatio, // Keep normalized ratios for drawing
       fontSize: field.fontSize || 11,
       align: field.align || "left",
       shrink: field.shrink !== false,
@@ -124,7 +125,8 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
             label: f.label,
             page: f.page,
             type: f.type,
-            rect: f.rect,
+            rect: f.rect, // PDF points for saving
+            rectRatio: f.rectRatio, // Normalized ratios for drawing
             fontSize: f.fontSize,
             align: f.align,
             shrink: f.shrink,

@@ -307,15 +307,27 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
       }
     }
 
-    // Post-process and validate fields
-    const processedFields = postProcessFields(allFields);
+    // Post-process and validate fields with coordinate conversion
+    const processedFields = postProcessFields(allFields, pdfImages.length);
     console.log("Total processed fields:", processedFields.length);
+
+    // Include image dimensions for coordinate conversion
+    const imageDimensions = pdfImages.map((img, index) => ({
+      pageIndex: index,
+      imageWidthPx: 2048, // Sharp resize target
+      imageHeightPx: 2048, // Sharp resize target
+      // Note: PDF dimensions would need to be extracted from the original PDF
+      // For now, using standard US Letter dimensions as fallback
+      pageWidthPt: 612,
+      pageHeightPt: 792
+    }));
 
     res.json({
       success: true,
       fields: processedFields,
       totalPages: pdfImages.length,
       totalFields: processedFields.length,
+      imageDimensions: imageDimensions
     });
   } catch (error) {
     console.error("AI PDF analysis error:", error);
@@ -426,7 +438,7 @@ async function analyzePageWithAI(base64Image, pageIndex) {
               text: `Analyze this PDF page and identify all form fields. For each field, provide:
               1. Field type (text, checkbox, radio, select, etc.)
               2. Field label/name (what the field is for)
-              3. Approximate position (x, y coordinates)
+              3. Position as normalized ratios relative to image dimensions (0.0 to 1.0)
               4. Confidence level (0.0-1.0)
               5. Reasoning for your classification
               
@@ -438,12 +450,14 @@ async function analyzePageWithAI(base64Image, pageIndex) {
                   {
                     "type": "text",
                     "label": "Full Name",
-                    "rect": [x1, y1, x2, y2],
+                    "rect_ratio": [x1/W, y1/H, x2/W, y2/H],
                     "confidence": 0.95,
                     "reasoning": "This appears to be a text input field labeled 'Full Name'"
                   }
                 ]
               }
+              
+              IMPORTANT: Use rect_ratio with normalized coordinates where (0,0) is top-left of image and (1,1) is bottom-right. This ensures consistent positioning regardless of image resolution.
               
               When unsure or no fields visible → return {"fields": []}. Focus on identifying fillable form fields, not static text or labels.`,
             },
@@ -533,18 +547,50 @@ async function analyzePageWithAI(base64Image, pageIndex) {
 }
 
 // Helper function to post-process AI field suggestions
-function postProcessFields(fields) {
+function postProcessFields(fields, totalPages) {
   return fields
     .filter((field) => field.confidence > 0.3) // Filter out low-confidence fields
-    .map((field, index) => ({
-      ...field,
-      id: `ai_field_${index + 1}`,
-      type: normalizeFieldType(field.type),
-      rect: normalizeRectangle(field.rect),
-      fontSize: field.fontSize || 11,
-      align: field.align || "left",
-      shrink: field.shrink !== false,
-    }))
+    .map((field, index) => {
+      // Convert normalized ratios to PDF points if available
+      let rectPt = [0, 0, 100, 20]; // Default rectangle
+      let rectRatio = null;
+      
+      if (field.rect_ratio && Array.isArray(field.rect_ratio) && field.rect_ratio.length === 4) {
+        // Convert ratios to PDF points (bottom-left origin)
+        const [x1_ratio, y1_ratio, x2_ratio, y2_ratio] = field.rect_ratio;
+        
+        // Standard US Letter dimensions (612 x 792 points)
+        const pageWidthPt = 612;
+        const pageHeightPt = 792;
+        
+        // Convert to PDF points with Y-flip (bottom-left origin)
+        rectPt = [
+          x1_ratio * pageWidthPt,                    // x1
+          pageHeightPt * (1 - y2_ratio),             // y1 (flipped)
+          x2_ratio * pageWidthPt,                    // x2  
+          pageHeightPt * (1 - y1_ratio)              // y2 (flipped)
+        ];
+        
+        // Keep the normalized ratios for frontend drawing
+        rectRatio = field.rect_ratio;
+        
+        console.log(`Field "${field.label}" converted: ratios [${x1_ratio.toFixed(3)}, ${y1_ratio.toFixed(3)}, ${x2_ratio.toFixed(3)}, ${y2_ratio.toFixed(3)}] -> points [${rectPt[0].toFixed(1)}, ${rectPt[1].toFixed(1)}, ${rectPt[2].toFixed(1)}, ${rectPt[3].toFixed(1)}]`);
+      } else if (field.rect && Array.isArray(field.rect) && field.rect.length === 4) {
+        // Fallback to existing rect format
+        rectPt = normalizeRectangle(field.rect);
+      }
+      
+      return {
+        ...field,
+        id: generateDescriptiveId(field.label, field.type),
+        type: normalizeFieldType(field.type),
+        rect: rectPt, // Use converted PDF points
+        rectRatio: rectRatio, // Keep normalized ratios for frontend
+        fontSize: field.fontSize || 11,
+        align: field.align || "left",
+        shrink: field.shrink !== false,
+      };
+    })
     .sort((a, b) => {
       // Sort by page, then by Y position (top to bottom)
       if (a.page !== b.page) return a.page - b.page;
@@ -591,6 +637,32 @@ function normalizeRectangle(rect) {
     Math.max(x1, x2),
     Math.max(y1, y2),
   ];
+}
+
+// Helper function to generate descriptive IDs from field labels
+function generateDescriptiveId(label, type) {
+  if (!label || typeof label !== 'string') {
+    return `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  // Convert label to a clean, descriptive ID
+  let id = label
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .trim();
+  
+  // Add type suffix for clarity
+  if (type && type !== 'text') {
+    id += `_${type}`;
+  }
+  
+  // Ensure ID is not empty
+  if (!id) {
+    id = `field_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  return id;
 }
 
 const PORT = 3000;
