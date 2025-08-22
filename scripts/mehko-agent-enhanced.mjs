@@ -322,7 +322,8 @@ class EnhancedMEHKOAgent {
       // Step 3: Extract content from PDFs and important external links
       console.log("🔗 Extracting content from PDFs and external links...");
       const externalContent = await this.extractExternalContent(
-        mainPageContent.forms
+        mainPageContent.forms,
+        false // Disable web search - use only on-site links
       );
 
       // Step 4: Combine all content from multiple sources
@@ -690,7 +691,7 @@ class EnhancedMEHKOAgent {
     return scoredLinks.sort((a, b) => b.score - a.score).slice(0, 10); // Limit to top 10 most promising links
   }
 
-  async extractExternalContent(links) {
+  async extractExternalContent(links, includeWebSearch = true) {
     const externalContent = [];
     const maxExternalSources = 5; // Limit to prevent excessive processing
 
@@ -747,14 +748,18 @@ class EnhancedMEHKOAgent {
       }
     }
 
-    // Add web search results for missing specific information
-    console.log("🌐 Performing web search for additional MEHKO information...");
-    const webSearchResults = await this.performWebSearch(
-      this.currentCountyName
-    );
-    if (webSearchResults && webSearchResults.length > 0) {
-      externalContent.push(...webSearchResults);
-      console.log(`✅ Added ${webSearchResults.length} web search results`);
+    // Add web search results for missing specific information (optional)
+    if (includeWebSearch) {
+      console.log(
+        "🌐 Performing web search for additional MEHKO information..."
+      );
+      const webSearchResults = await this.performWebSearch(
+        this.currentCountyName
+      );
+      if (webSearchResults && webSearchResults.length > 0) {
+        externalContent.push(...webSearchResults);
+        console.log(`✅ Added ${webSearchResults.length} web search results`);
+      }
     }
 
     return externalContent;
@@ -1092,6 +1097,7 @@ class EnhancedMEHKOAgent {
         max_tokens: 1500, // Reduced to stay within context limits
         presence_penalty: 0.1,
         frequency_penalty: 0.1,
+        // response_format: { type: "json_object" }, // Not supported in current model
       });
 
       const response = completion.choices[0].message.content;
@@ -1110,7 +1116,39 @@ class EnhancedMEHKOAgent {
         // Extract JSON from response
         const jsonMatch = response.match(/\{[\s\S]*\}/);
         if (jsonMatch) {
-          return JSON.parse(jsonMatch[0]);
+          const app = JSON.parse(jsonMatch[0]);
+
+          // Quality gate: check if AI provided specific, actionable content
+          const qualityCheck = this.qualityGate(app);
+          if (!qualityCheck.ok) {
+            console.warn("❗ Quality gate failed:", qualityCheck.errors);
+
+            // Retry once with a focused prompt that only includes extractedKeyInfo + top PDF text
+            console.log("🔄 Retrying with focused prompt...");
+            const focusedPrompt = this.buildFocusedPrompt(rawContent);
+            const retry = await this.openai.chat.completions.create({
+              model: "gpt-4",
+              messages: [
+                { role: "system", content: "Return JSON only." },
+                { role: "user", content: focusedPrompt },
+              ],
+              temperature: 0.1,
+              max_tokens: 1400,
+              // response_format: { type: "json_object" }, // Not supported in current model
+            });
+
+            const retryResponse = retry.choices[0].message.content;
+            const retryMatch = retryResponse.match(/\{[\s\S]*\}/);
+            if (retryMatch) {
+              console.log("✅ Retry successful with focused prompt");
+              return JSON.parse(retryMatch[0]);
+            } else {
+              throw new Error("Retry failed: No valid JSON in response");
+            }
+          }
+
+          console.log("✅ Quality gate passed");
+          return app;
         } else {
           throw new Error("No valid JSON found in response");
         }
@@ -1260,7 +1298,7 @@ class EnhancedMEHKOAgent {
           // Calculate relevance after extracting results
           const resultsWithRelevance = results.map((result) => ({
             ...result,
-            relevance: this.calculateRelevance(result.title, result.snippet)
+            relevance: this.calculateRelevance(result.title, result.snippet),
           }));
 
           // Filter and add relevant results
@@ -1349,23 +1387,35 @@ class EnhancedMEHKOAgent {
     try {
       const urlObj = new URL(url);
       const hostname = urlObj.hostname.toLowerCase();
-      
+
       // Extract county name from common patterns
-      if (hostname.includes('sandiego')) return 'San Diego';
-      if (hostname.includes('lacounty') || hostname.includes('lacounty.gov')) return 'Los Angeles';
-      if (hostname.includes('orangecounty') || hostname.includes('ocgov.com')) return 'Orange';
-      if (hostname.includes('riverside') || hostname.includes('rivco.org')) return 'Riverside';
-      if (hostname.includes('sanbernardino') || hostname.includes('sbcounty.gov')) return 'San Bernardino';
-      if (hostname.includes('ventura') || hostname.includes('ventura.org')) return 'Ventura';
-      if (hostname.includes('kern') || hostname.includes('kerncounty.com')) return 'Kern';
-      if (hostname.includes('fresno') || hostname.includes('co.fresno.ca.us')) return 'Sacramento';
-      if (hostname.includes('sacramento') || hostname.includes('saccounty.net')) return 'Sacramento';
-      if (hostname.includes('alameda') || hostname.includes('acgov.org')) return 'Alameda';
-      
+      if (hostname.includes("sandiego")) return "San Diego";
+      if (hostname.includes("lacounty") || hostname.includes("lacounty.gov"))
+        return "Los Angeles";
+      if (hostname.includes("orangecounty") || hostname.includes("ocgov.com"))
+        return "Orange";
+      if (hostname.includes("riverside") || hostname.includes("rivco.org"))
+        return "Riverside";
+      if (
+        hostname.includes("sanbernardino") ||
+        hostname.includes("sbcounty.gov")
+      )
+        return "San Bernardino";
+      if (hostname.includes("ventura") || hostname.includes("ventura.org"))
+        return "Ventura";
+      if (hostname.includes("kern") || hostname.includes("kerncounty.com"))
+        return "Kern";
+      if (hostname.includes("fresno") || hostname.includes("co.fresno.ca.us"))
+        return "Sacramento";
+      if (hostname.includes("sacramento") || hostname.includes("saccounty.net"))
+        return "Sacramento";
+      if (hostname.includes("alameda") || hostname.includes("acgov.org"))
+        return "Alameda";
+
       // Default fallback
-      return 'County';
+      return "County";
     } catch (error) {
-      return 'County';
+      return "County";
     }
   }
 
@@ -1385,62 +1435,66 @@ class EnhancedMEHKOAgent {
       rawContent.externalContent.forEach((content) => {
         if (
           content.type === "pdf" &&
-          content.content &&
-          typeof content.content === "string"
+          content.content
         ) {
-          const text = content.content;
+          // Extract text from PDF content object
+          const text = 
+            (content.content.fullText) ||
+            (content.content.mainContent) ||
+            (typeof content.content === "string" ? content.content : "");
+          
+          if (text && text.length >= 50) {
+            // Extract fees
+            const feeMatches = text.match(/\$[\d,]+(?:\.\d{2})?/g);
+            if (feeMatches) {
+              extractedInfo.fees.push(...feeMatches);
+            }
 
-          // Extract fees
-          const feeMatches = text.match(/\$[\d,]+(?:\.\d{2})?/g);
-          if (feeMatches) {
-            extractedInfo.fees.push(...feeMatches);
-          }
+            // Extract requirements
+            const reqMatches = text.match(
+              /(?:required|must|shall)\s+[^\.]{10,100}/gi
+            );
+            if (reqMatches) {
+              extractedInfo.requirements.push(...reqMatches);
+            }
 
-          // Extract requirements
-          const reqMatches = text.match(
-            /(?:required|must|shall)\s+[^\.]{10,100}/gi
-          );
-          if (reqMatches) {
-            extractedInfo.requirements.push(...reqMatches);
-          }
+            // Extract contact info
+            const phoneMatches = text.match(/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/g);
+            if (phoneMatches) {
+              extractedInfo.contact.push(...phoneMatches);
+            }
 
-          // Extract contact info
-          const phoneMatches = text.match(/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/g);
-          if (phoneMatches) {
-            extractedInfo.contact.push(...phoneMatches);
-          }
+            const emailMatches = text.match(
+              /[\w\.\-@]+@[\w\.\-]+\.[a-zA-Z]{2,}/g
+            );
+            if (emailMatches) {
+              extractedInfo.contact.push(...emailMatches);
+            }
 
-          const emailMatches = text.match(
-            /[\w\.\-@]+@[\w\.\-]+\.[a-zA-Z]{2,}/g
-          );
-          if (emailMatches) {
-            extractedInfo.contact.push(...emailMatches);
-          }
+            // Extract limits
+            const limitMatches = text.match(
+              /(?:maximum|limit|up to|not exceed)\s+[\d,]+[^\.]{0,50}/gi
+            );
+            if (limitMatches) {
+              extractedInfo.limits.push(...limitMatches);
+            }
 
-          // Extract limits
-          const limitMatches = text.match(
-            /(?:maximum|limit|up to|not exceed)\s+[\d,]+[^\.]{0,50}/gi
-          );
-          if (limitMatches) {
-            extractedInfo.limits.push(...limitMatches);
-          }
+            // Extract timelines
+            const timeMatches = text.match(
+              /\d+\s+(?:days?|weeks?|months?)[^\.]{0,50}/gi
+            );
+            if (timeMatches) {
+              extractedInfo.timelines.push(...timeMatches);
+            }
 
-          // Extract timelines
-          const timeMatches = text.match(
-            /\d+\s+(?:days?|weeks?|months?)[^\.]{0,50}/gi
-          );
-          if (timeMatches) {
-            extractedInfo.timelines.push(...timeMatches);
+            // Extract document names
+            const docMatches = text.match(
+              /(?:form|application|document|checklist|guide)[^\.]{0,100}/gi
+            );
+            if (docMatches) {
+              extractedInfo.documents.push(...docMatches);
+            }
           }
-
-          // Extract document names
-          const docMatches = text.match(
-            /(?:form|application|document|checklist|guide)[^\.]{0,100}/gi
-          );
-          if (docMatches) {
-            extractedInfo.documents.push(...docMatches);
-          }
-        }
       });
     }
 
@@ -1712,6 +1766,16 @@ Extract this level of detail from the provided content!`;
       totalSources: rawContent.totalSources || 1,
     };
 
+    // >>> CRITICAL: Make sure the model sees the mined facts from PDFs
+    truncated.extractedKeyInfo = rawContent.extractedKeyInfo || {
+      fees: [],
+      requirements: [],
+      contact: [],
+      limits: [],
+      timelines: [],
+      documents: [],
+    };
+
     // Add root domain pages (prioritize by importance)
     if (rawContent.rootDomainPages && rawContent.rootDomainPages.length > 0) {
       const prioritizedPages = this.prioritizePagesForPrompt(
@@ -1748,15 +1812,18 @@ Extract this level of detail from the provided content!`;
       );
 
       for (const content of prioritizedExternal) {
+        // Fix: Extract actual text instead of "[object Object]"
+        const text =
+          content.content?.fullText ||
+          content.content?.mainContent ||
+          (typeof content.content === "string" ? content.content : "");
+
         const externalContent = {
           url: content.url || "",
           type: content.type || "web",
-          title: content.title || "",
-          content: this.truncateText(
-            content.content || "",
-            content.type === "pdf" ? 1200 : 600
-          ),
-          keyInfo: content.keyInfo || {},
+          title: content.source || content.title || "",
+          text: this.truncateText(text, content.type === "pdf" ? 1600 : 800),
+          keyInfo: content.content?.keyInfo || content.keyInfo || {},
         };
 
         truncated.externalContent.push(externalContent);
@@ -1887,6 +1954,41 @@ Extract this level of detail from the provided content!`;
     console.log(`📊 Aggressive truncation: ${finalSize} characters`);
 
     return aggressive;
+  }
+
+  qualityGate(app) {
+    const errors = [];
+    const get = (id) => app.steps.find((s) => s.id === id)?.content || "";
+
+    // Check for specific fees in submit_application
+    const hasMoney = /\$\s?\d/.test(get("submit_application"));
+    if (!hasMoney) errors.push("missing specific fees in submit_application");
+
+    // Check for contact info in contact step
+    const hasContact = /@|\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/.test(get("contact"));
+    if (!hasContact) errors.push("missing phone/email in contact");
+
+    // Check for meal/revenue limits in planning or operate steps
+    const hasLimits = /(30|90|100,?000)/.test(
+      get("operate_comply") + get("planning_overview")
+    );
+    if (!hasLimits) errors.push("missing meal/revenue limits");
+
+    const ok = errors.length === 0;
+    return { ok, errors };
+  }
+
+  buildFocusedPrompt(raw) {
+    const pdfs = (raw.externalContent || [])
+      .filter((s) => s.type === "pdf")
+      .slice(0, 3);
+    return `Use ONLY the facts below to fill missing specifics. Return JSON matching the schema previously shown.
+
+EXTRACTED_KEY_INFO:
+${JSON.stringify(raw.extractedKeyInfo || {}, null, 2)}
+
+TOP_PDF_TEXTS:
+${pdfs.map((p, i) => `#${i + 1} ${p.url}\n${p.text || ""}`).join("\n\n")}`;
   }
 
   validateApplication(app) {
