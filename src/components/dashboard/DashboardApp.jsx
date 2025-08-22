@@ -225,6 +225,9 @@ export default function DashboardApp() {
           padding: 12,
           background: "#fff",
           boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+          width: "100%",
+          minWidth: 0,
+          overflow: "hidden",
         }}
       >
         <div
@@ -232,6 +235,7 @@ export default function DashboardApp() {
             display: "flex",
             alignItems: "center",
             gap: 8,
+            flexWrap: "wrap",
           }}
         >
           <button
@@ -245,6 +249,7 @@ export default function DashboardApp() {
               background: "#fff",
               cursor: canPrev ? "pointer" : "not-allowed",
               opacity: canPrev ? 1 : 0.5,
+              flexShrink: 0,
             }}
           >
             ←
@@ -280,6 +285,7 @@ export default function DashboardApp() {
               background: "#fff",
               cursor: canNext ? "pointer" : "not-allowed",
               opacity: canNext ? 1 : 0.5,
+              flexShrink: 0,
             }}
           >
             →
@@ -288,40 +294,38 @@ export default function DashboardApp() {
           <button
             onClick={toggleComplete}
             style={{
-              marginLeft: 8,
-              padding: "8px 12px",
+              padding: "6px 12px",
               borderRadius: 10,
-              border: "1px solid " + (stepIsComplete ? "#10b981" : "#d1d5db"),
-              background: stepIsComplete ? "#ecfdf5" : "#fff",
-              color: stepIsComplete ? "#065f46" : "#374151",
+              border: "1px solid #e5e7eb",
+              background: stepIsComplete ? "#10b981" : "#fff",
+              color: stepIsComplete ? "#fff" : "#374151",
               cursor: "pointer",
               fontSize: 13,
-              whiteSpace: "nowrap",
+              fontWeight: 500,
+              flexShrink: 0,
             }}
-            title="Toggle completion"
           >
-            {stepIsComplete
-              ? "Completed ✓"
-              : currentStep.action_required
-              ? "Mark Complete"
-              : "Mark Read"}
+            {stepIsComplete ? "✓ Complete" : "Mark Complete"}
           </button>
         </div>
 
+        {/* Progress bar */}
         <div
-          role="progressbar"
-          aria-valuenow={pct}
-          aria-valuemin={0}
-          aria-valuemax={100}
           style={{
-            height: 6,
-            background: "#f3f4f6",
-            borderRadius: 999,
+            width: "100%",
+            height: 4,
+            background: "#e5e7eb",
+            borderRadius: 2,
             overflow: "hidden",
           }}
         >
           <div
-            style={{ width: `${pct}%`, height: "100%", background: "#5b9df9" }}
+            style={{
+              width: `${pct}%`,
+              height: "100%",
+              background: "#10b981",
+              transition: "width 0.3s ease",
+            }}
           />
         </div>
       </div>
@@ -348,7 +352,15 @@ export default function DashboardApp() {
 
     if (step.type === "pdf") {
       return (
-        <div style={{ display: "grid", gap: 8 }}>
+        <div
+          style={{
+            display: "grid",
+            gap: 8,
+            width: "100%",
+            minWidth: 0,
+            overflow: "hidden",
+          }}
+        >
           <InterviewView
             key={`${activeApplication.id}:${step.formId}`}
             app={activeApplication.id}
@@ -430,7 +442,10 @@ export default function DashboardApp() {
           }}
         >
           {/* Main content */}
-          <main className="main-content" style={{ minWidth: 0 }}>
+          <main
+            className="main-content"
+            style={{ minWidth: 0, width: "100%", overflow: "auto" }}
+          >
             <BreadcrumbBar />
 
             {selectedApplications.length === 0 || !activeApplication ? (
@@ -466,9 +481,23 @@ export default function DashboardApp() {
                 )}
 
                 {activeSection === "steps" && (
-                  <div style={{ display: "grid", gap: 12 }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gap: 12,
+                      width: "100%",
+                      minWidth: 0,
+                    }}
+                  >
                     <StepNavigator />
-                    <div style={{ minHeight: 200 }}>
+                    <div
+                      style={{
+                        minHeight: 200,
+                        width: "100%",
+                        minWidth: 0,
+                        overflow: "auto",
+                      }}
+                    >
                       <StepContent />
                     </div>
                   </div>

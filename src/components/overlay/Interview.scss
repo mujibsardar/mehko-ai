@@ -1,10 +1,20 @@
 .pdf-form-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 80px 0;
+  padding: 24px;
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: visible;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  * {
+    box-sizing: border-box;
+  }
 
   .pdf-form-header {
     display: flex;
@@ -14,6 +24,7 @@
     margin-bottom: 24px;
     padding-bottom: 20px;
     border-bottom: 1px solid #e5e7eb;
+    flex-wrap: wrap;
 
     .header-content {
       flex: 1;
@@ -25,6 +36,10 @@
         font-weight: 700;
         color: #111827;
         line-height: 1.3;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        max-width: 100%;
       }
 
       p {
@@ -56,6 +71,7 @@
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
 
       &:hover {
         background: #f1f5f9;
@@ -73,20 +89,23 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    width: 100%;
 
     .form-page {
       border: 1px solid #e5e7eb;
       border-radius: 8px;
-      padding: 20px;
+      padding: 24px;
       background: #fafafa;
-      margin: 0;
+      margin: 0 0 16px 0;
+      width: 100%;
+      box-sizing: border-box;
 
       .page-legend {
         font-weight: 600;
         color: #374151;
         font-size: 1rem;
         padding: 0 8px;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         background: #ffffff;
         border-radius: 4px;
       }
@@ -95,17 +114,22 @@
         display: flex;
         flex-direction: column;
         gap: 16px;
+        width: 100%;
 
         .form-field {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
+          width: 100%;
+          padding: 12px 0;
 
           .field-label {
             font-weight: 600;
             color: #374151;
             font-size: 0.875rem;
             line-height: 1.4;
+            word-break: break-word;
+            margin-bottom: 2px;
           }
 
           .text-input {
@@ -117,6 +141,10 @@
             transition: border-color 0.2s ease;
             width: 100%;
             box-sizing: border-box;
+            min-width: 0;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
             &:focus {
               outline: none;
@@ -142,12 +170,13 @@
     .form-actions {
       display: flex;
       justify-content: flex-start;
-      padding-top: 20px;
+      padding: 24px 0 32px 0;
       border-top: 1px solid #e5e7eb;
-      margin-top: 20px;
+      margin-top: 24px;
+      width: 100%;
 
       .submit-button {
-        padding: 12px 24px;
+        padding: 14px 28px;
         background: #3b82f6;
         color: #ffffff;
         border: 1px solid #3b82f6;
@@ -157,15 +186,19 @@
         cursor: pointer;
         transition: all 0.2s ease;
         min-width: 160px;
+        white-space: nowrap;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
         &:hover {
           background: #2563eb;
           border-color: #2563eb;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         &:active {
           background: #1d4ed8;
           transform: translateY(1px);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
       }
     }
@@ -173,13 +206,12 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .pdf-form-container {
-    padding: 16px;
-    margin: 0 8px;
+    padding: 20px;
+    margin: 0;
 
     .pdf-form-header {
-      flex-direction: column;
       gap: 16px;
 
       .header-content {
@@ -188,15 +220,41 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .pdf-form-container {
+    padding: 16px;
+    margin: 0 0 60px 0;
+    border-radius: 8px;
+
+    .pdf-form-header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      .header-content {
+        h2 {
+          font-size: 1.25rem;
+        }
+      }
+    }
+
+    .pdf-preview-toggle {
+      justify-content: center;
+    }
 
     .pdf-form {
       .form-page {
-        padding: 16px;
+        padding: 20px;
 
         .fields-container {
           gap: 12px;
 
           .form-field {
+            padding: 10px 0;
+            
             .text-input {
               padding: 8px 10px;
               font-size: 16px; // Better for mobile
@@ -206,9 +264,15 @@
       }
 
       .form-actions {
+        justify-content: center;
+        padding: 20px 0 24px 0;
+        margin-top: 20px;
+        
         .submit-button {
           width: 100%;
           min-width: auto;
+          max-width: 300px;
+          padding: 12px 24px;
         }
       }
     }
@@ -218,14 +282,24 @@
 @media (max-width: 480px) {
   .pdf-form-container {
     padding: 12px;
-    margin: 0 4px;
+    margin: 0 0 50px 0;
+    border-radius: 6px;
 
     .pdf-form {
       .form-page {
-        padding: 12px;
+        padding: 16px;
 
         .page-legend {
           font-size: 0.875rem;
+        }
+      }
+
+      .form-actions {
+        padding: 16px 0 20px 0;
+        
+        .submit-button {
+          padding: 10px 20px;
+          font-size: 14px;
         }
       }
     }
