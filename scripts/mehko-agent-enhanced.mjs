@@ -301,6 +301,21 @@ class EnhancedMEHKOAgent {
         console.log("⚠️  No additional root domain pages discovered");
       }
 
+      // Step 2.5: Extract specific information from key pages
+      console.log("💰 Extracting specific information from key pages...");
+      const keyPageInfo = await this.extractKeyPageInformation(rootDomainPages);
+
+      if (keyPageInfo.fees.length > 0) {
+        console.log(
+          `  💰 Fee information found: ${keyPageInfo.fees.join(", ")}`
+        );
+      }
+      if (keyPageInfo.contact.length > 0) {
+        console.log(
+          `  📞 Contact information found: ${keyPageInfo.contact.join(", ")}`
+        );
+      }
+
       // Step 3: Extract content from PDFs and important external links
       console.log("🔗 Extracting content from PDFs and external links...");
       const externalContent = await this.extractExternalContent(
@@ -311,6 +326,7 @@ class EnhancedMEHKOAgent {
       const combinedContent = {
         ...mainPageContent,
         rootDomainPages: rootDomainPages,
+        keyPageInfo: keyPageInfo,
         externalContent: externalContent,
         totalSources: 1 + rootDomainPages.length + externalContent.length,
       };
@@ -537,6 +553,87 @@ class EnhancedMEHKOAgent {
     return discoveredPages;
   }
 
+  async extractKeyPageInformation(pages) {
+    const keyInfo = {
+      fees: [],
+      contact: [],
+      requirements: [],
+      forms: [],
+    };
+
+    for (const page of pages) {
+      // Extract fees from fee-related pages
+      if (
+        page.title.toLowerCase().includes("fee schedule") ||
+        page.title.toLowerCase().includes("fees")
+      ) {
+        const feeText = page.mainContent;
+        const feePatterns = [
+          /\$[\d,]+(?:\.\d{2})?/g,
+          /fee[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+          /cost[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+        ];
+        feePatterns.forEach((pattern) => {
+          const matches = feeText.match(pattern);
+          if (matches) {
+            keyInfo.fees.push(...matches);
+          }
+        });
+      }
+
+      // Extract contact information from contact-related pages
+      if (
+        page.title.toLowerCase().includes("contact") ||
+        page.title.toLowerCase().includes("hours")
+      ) {
+        const contactText = page.mainContent;
+        const contactPatterns = [
+          /[\d\-\(\)\s]{10,}/g, // Phone number patterns
+          /[\w\.\-@]+\@[\w\.\-]+\.[a-zA-Z]{2,}/g, // Email patterns
+          /address[:\s]+[^\.]+/gi, // Address patterns
+        ];
+        contactPatterns.forEach((pattern) => {
+          const matches = contactText.match(pattern);
+          if (matches) {
+            keyInfo.contact.push(...matches);
+          }
+        });
+      }
+
+      // Extract requirements from requirement-related pages
+      if (
+        page.title.toLowerCase().includes("requirements") ||
+        page.title.toLowerCase().includes("documentation")
+      ) {
+        const requirementPatterns = [
+          /required\s+documents?/gi,
+          /must\s+include/gi,
+          /shall\s+provide/gi,
+          /documentation\s+required/gi,
+        ];
+        requirementPatterns.forEach((pattern) => {
+          const matches = page.mainContent.match(pattern);
+          if (matches) {
+            keyInfo.requirements.push(...matches);
+          }
+        });
+      }
+
+      // Extract form information from form-related pages
+      if (
+        page.title.toLowerCase().includes("forms") ||
+        page.title.toLowerCase().includes("application")
+      ) {
+        // Use the forms array that was already extracted during page crawling
+        if (page.forms && page.forms.length > 0) {
+          keyInfo.forms.push(...page.forms);
+        }
+      }
+    }
+
+    return keyInfo;
+  }
+
   prioritizeLinks(links, rootDomain) {
     // Score links based on importance and relevance
     const scoredLinks = links.map((link) => {
@@ -632,7 +729,7 @@ class EnhancedMEHKOAgent {
             content: content,
             extractedAt: new Date().toISOString(),
           });
-          console.log(`    ✅ Extracted ${content.length} characters`);
+          console.log(`    ✅ Extracted ${content.fullText.length} characters`);
         }
 
         // Be respectful with delays
@@ -654,38 +751,190 @@ class EnhancedMEHKOAgent {
     try {
       console.log(`    📄 Attempting to extract PDF content from: ${pdfUrl}`);
 
-      // Navigate to PDF URL
+      // First try using our Python backend for PDF extraction
+      const pythonExtraction = await this.extractPDFWithPython(pdfUrl);
+      if (pythonExtraction && pythonExtraction.fullText.length > 100) {
+        console.log(
+          `    ✅ Successfully extracted ${pythonExtraction.fullText.length} characters using Python backend`
+        );
+        return pythonExtraction;
+      }
+
+      console.log(
+        `    ⚠️  Python extraction failed, falling back to browser method`
+      );
+
+      // Fallback to browser-based extraction
       await this.page.goto(pdfUrl, {
         waitUntil: "networkidle2",
         timeout: 15000,
       });
 
-      // Check if it's actually a PDF
-      const contentType = await this.page.evaluate(() => {
-        const meta = document.querySelector('meta[http-equiv="Content-Type"]');
-        return meta ? meta.content : "";
-      });
+      // Wait for PDF to load
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      if (contentType.includes("application/pdf")) {
-        // For PDFs, we'll try to extract text if possible
-        // Note: This is limited by browser PDF rendering capabilities
-        const pdfText = await this.page.evaluate(() => {
-          // Try to extract text from PDF viewer
-          const textElements = document.querySelectorAll("*");
-          let text = "";
+      // Enhanced PDF text extraction
+      const pdfContent = await this.page.evaluate(() => {
+        // Try multiple approaches to extract text from PDF
+        const extractTextFromElements = () => {
+          // Look for text in various PDF viewer elements
+          const textSelectors = [
+            'embed[type="application/pdf"]',
+            'object[type="application/pdf"]',
+            'iframe[src*=".pdf"]',
+            ".pdf-viewer",
+            ".pdf-content",
+            "canvas",
+            'div[role="document"]',
+            "body",
+          ];
 
-          for (const element of textElements) {
-            if (element.textContent && element.textContent.trim()) {
-              text += element.textContent.trim() + " ";
+          let extractedText = "";
+
+          for (const selector of textSelectors) {
+            const elements = document.querySelectorAll(selector);
+            for (const element of elements) {
+              if (element.textContent && element.textContent.trim()) {
+                const text = element.textContent.trim();
+                if (text.length > 100) {
+                  // Only use substantial content
+                  extractedText += text + " ";
+                }
+              }
             }
           }
 
-          return text.substring(0, 2000); // Limit PDF content
-        });
+          return extractedText.trim();
+        };
 
-        return pdfText || "PDF content (text extraction limited)";
+        // Try to extract text from the entire document
+        let pdfText = extractTextFromElements();
+
+        // If we got substantial text, clean and structure it
+        if (pdfText.length > 200) {
+          // Clean up the text
+          pdfText = pdfText
+            .replace(/\s+/g, " ") // Normalize whitespace
+            .replace(/\n+/g, " ") // Replace newlines with spaces
+            .replace(/\t+/g, " ") // Replace tabs with spaces
+            .trim();
+
+          // Extract key information patterns
+          const extractKeyInfo = (text) => {
+            const info = {
+              fees: [],
+              requirements: [],
+              contact: [],
+              timelines: [],
+              limits: [],
+            };
+
+            // Look for fee patterns
+            const feePatterns = [
+              /\$[\d,]+(?:\.\d{2})?/g, // $123.45 or $1,234.56
+              /fee[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+              /cost[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+              /payment[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+            ];
+
+            feePatterns.forEach((pattern) => {
+              const matches = text.match(pattern);
+              if (matches) {
+                info.fees.push(...matches);
+              }
+            });
+
+            // Look for requirement patterns
+            const requirementPatterns = [
+              /required\s+documents?/gi,
+              /must\s+include/gi,
+              /shall\s+provide/gi,
+              /documentation\s+required/gi,
+            ];
+
+            requirementPatterns.forEach((pattern) => {
+              const matches = text.match(pattern);
+              if (matches) {
+                info.requirements.push(...matches);
+              }
+            });
+
+            // Look for contact patterns
+            const contactPatterns = [
+              /phone\s*:?\s*[\d\-\(\)\s]+/gi,
+              /email\s*:?\s*[\w\.\-@]+/gi,
+              /address\s*:?\s*[^\.]+/gi,
+              /hours\s*:?\s*[^\.]+/gi,
+            ];
+
+            contactPatterns.forEach((pattern) => {
+              const matches = text.match(pattern);
+              if (matches) {
+                info.contact.push(...matches);
+              }
+            });
+
+            // Look for timeline patterns
+            const timelinePatterns = [
+              /\d+\s+(?:days?|weeks?|months?)/gi,
+              /within\s+\d+\s+(?:days?|weeks?|months?)/gi,
+              /processing\s+time/gi,
+              /response\s+time/gi,
+            ];
+
+            timelinePatterns.forEach((pattern) => {
+              const matches = text.match(pattern);
+              if (matches) {
+                info.timelines.push(...matches);
+              }
+            });
+
+            // Look for limit patterns
+            const limitPatterns = [
+              /maximum\s+[\d,]+/gi,
+              /limit\s+of\s+[\d,]+/gi,
+              /up\s+to\s+[\d,]+/gi,
+              /not\s+exceed\s+[\d,]+/gi,
+            ];
+
+            limitPatterns.forEach((pattern) => {
+              const matches = text.match(pattern);
+              if (matches) {
+                info.limits.push(...matches);
+              }
+            });
+
+            return info;
+          };
+
+          const keyInfo = extractKeyInfo(pdfText);
+
+          return {
+            fullText: pdfText.substring(0, 3000), // Limit full text
+            keyInfo: keyInfo,
+            extractedAt: new Date().toISOString(),
+          };
+        }
+
+        return {
+          fullText: pdfText.substring(0, 500),
+          keyInfo: {},
+          extractedAt: new Date().toISOString(),
+        };
+      });
+
+      if (pdfContent.fullText && pdfContent.fullText.length > 100) {
+        console.log(
+          `    ✅ Successfully extracted ${pdfContent.fullText.length} characters from PDF`
+        );
+        if (Object.keys(pdfContent.keyInfo).length > 0) {
+          console.log(`    🔍 Key information found:`, pdfContent.keyInfo);
+        }
+        return pdfContent;
       } else {
-        // Not a PDF, treat as regular page
+        console.log(
+          `    ⚠️  Limited PDF content extracted, treating as regular page`
+        );
         return await this.extractWebPageContent(pdfUrl);
       }
     } catch (error) {
@@ -720,44 +969,80 @@ class EnhancedMEHKOAgent {
             : text;
         };
 
+        // Enhanced extraction for forms pages
+        const extractFormsPageInfo = () => {
+          const info = {
+            fees: [],
+            contact: [],
+            requirements: [],
+            forms: [],
+          };
+
+          // Look for fee information
+          const feeText = extractText("body", 2000);
+          const feePatterns = [
+            /\$[\d,]+(?:\.\d{2})?/g,
+            /fee[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+            /cost[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+          ];
+
+          feePatterns.forEach((pattern) => {
+            const matches = feeText.match(pattern);
+            if (matches) {
+              info.fees.push(...matches);
+            }
+          });
+
+          // Look for contact information
+          const contactSelectors = [
+            ".contact, .contact-info, address",
+            '[class*="contact"], [class*="phone"], [class*="email"]',
+            'p:contains("phone"), p:contains("email"), p:contains("address")',
+          ];
+
+          contactSelectors.forEach((selector) => {
+            try {
+              const elements = document.querySelectorAll(selector);
+              elements.forEach((el) => {
+                const text = el.textContent.trim();
+                if (
+                  text.includes("@") ||
+                  text.match(/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/)
+                ) {
+                  info.contact.push(text);
+                }
+              });
+            } catch (e) {
+              // Ignore selector errors
+            }
+          });
+
+          // Look for form links and descriptions
+          const formLinks = document.querySelectorAll(
+            'a[href*=".pdf"], a[href*="form"]'
+          );
+          info.forms = Array.from(formLinks).map((link) => ({
+            text: link.textContent.trim(),
+            href: link.href,
+            description: link.title || link.textContent.trim(),
+          }));
+
+          return info;
+        };
+
         return {
           title:
             document
               .querySelector("h1, .title, .page-title")
               ?.textContent?.trim() || "",
-          mainContent: extractText(
-            "main, .content, .main-content, article, .page-content, .text-content",
-            800
-          ),
-          fees: extractText(
-            '.fees, .cost, .payment, [class*="fee"], [class*="cost"], [class*="price"]',
-            300
-          ),
-          requirements: extractText(
-            '.requirements, .checklist, .steps, [class*="requirement"], [class*="checklist"]',
-            400
-          ),
-          contact: extractText(
-            '.contact, .contact-info, address, [class*="contact"], [class*="phone"], [class*="email"]',
-            300
-          ),
+          mainContent: extractText("body", 800),
+          formsPageInfo: extractFormsPageInfo(),
+          extractedAt: new Date().toISOString(),
         };
       });
 
       await externalPage.close();
-
-      // Combine the extracted content
-      const combinedText = [
-        content.title,
-        content.mainContent,
-        content.fees,
-        content.requirements,
-        content.contact,
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      return combinedText;
+      return content;
     } catch (error) {
       console.log(`    ⚠️  Web page extraction failed: ${error.message}`);
       return null;
@@ -768,6 +1053,14 @@ class EnhancedMEHKOAgent {
     console.log("🤖 Generating application with GPT-4...");
 
     const prompt = this.buildEnhancedPrompt(rawContent, url, countyName);
+
+    // Estimate tokens before sending to OpenAI
+    const estimatedTokens = this.estimateTokenCount(prompt);
+    console.log(`📊 Estimated tokens: ${estimatedTokens.toLocaleString()}`);
+
+    if (estimatedTokens > 6000) {
+      console.log(`⚠️  Warning: High token count may cause rate limiting`);
+    }
 
     try {
       const completion = await this.openai.chat.completions.create({
@@ -816,13 +1109,107 @@ class EnhancedMEHKOAgent {
     }
   }
 
+  estimateTokenCount(text) {
+    // Rough estimation: 1 token ≈ 4 characters for English text
+    // This is a conservative estimate to stay under limits
+    return Math.ceil(text.length / 3.5);
+  }
+
+  async extractPDFWithPython(pdfUrl) {
+    try {
+      // Use our Python backend to extract PDF content
+      const response = await fetch(
+        "http://localhost:8000/extract-pdf-content",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            pdf_url: pdfUrl,
+            extract_key_info: true,
+          }),
+          timeout: 30000, // 30 second timeout
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Python extraction failed: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success && result.text && result.text.length > 50) {
+        // Structure the response similar to browser extraction
+        return {
+          fullText: result.text.substring(0, 3000), // Limit for token management
+          keyInfo: {
+            fees: this.extractPatterns(result.text, [
+              /\$[\d,]+(?:\.\d{2})?/g,
+              /fee[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+              /cost[s]?\s*:?\s*\$?[\d,]+(?:\.\d{2})?/gi,
+            ]),
+            requirements: this.extractPatterns(result.text, [
+              /required\s+documents?/gi,
+              /must\s+include/gi,
+              /shall\s+provide/gi,
+              /documentation\s+required/gi,
+            ]),
+            contact: this.extractPatterns(result.text, [
+              /phone\s*:?\s*[\d\-\(\)\s]{10,}/gi,
+              /email\s*:?\s*[\w\.\-@]+@[\w\.\-]+/gi,
+              /address\s*:?\s*[^\.]{10,}/gi,
+            ]),
+            timelines: this.extractPatterns(result.text, [
+              /\d+\s+(?:days?|weeks?|months?)/gi,
+              /within\s+\d+\s+(?:days?|weeks?|months?)/gi,
+              /processing\s+time[^\.]{0,50}/gi,
+            ]),
+            limits: this.extractPatterns(result.text, [
+              /maximum\s+[\d,]+/gi,
+              /limit\s+of\s+[\d,]+/gi,
+              /up\s+to\s+[\d,]+/gi,
+              /not\s+exceed\s+[\d,]+/gi,
+            ]),
+          },
+          extractedAt: new Date().toISOString(),
+        };
+      }
+
+      return null;
+    } catch (error) {
+      console.log(`    ⚠️  Python PDF extraction failed: ${error.message}`);
+      return null;
+    }
+  }
+
+  extractPatterns(text, patterns) {
+    const results = [];
+    patterns.forEach((pattern) => {
+      const matches = text.match(pattern);
+      if (matches) {
+        results.push(...matches);
+      }
+    });
+    return [...new Set(results)]; // Remove duplicates
+  }
+
   buildEnhancedPrompt(rawContent, url, countyName) {
+    // Truncate content to stay under token limits
+    const truncatedContent = this.truncateContentForPrompt(rawContent);
+
+    console.log(
+      `📊 Content size after truncation: ${
+        JSON.stringify(truncatedContent).length
+      } characters`
+    );
+
     return `Create a complete MEHKO application JSON for ${
       countyName || "this county"
     } website. Use ALL the information provided from the main page, root domain pages, AND external sources.
 
 WEBSITE CONTENT:
-${JSON.stringify(rawContent, null, 2)}
+${JSON.stringify(truncatedContent, null, 2)}
 
 REQUIRED OUTPUT:
 Generate a JSON object with this EXACT structure:
@@ -926,10 +1313,22 @@ CRITICAL REQUIREMENTS:
 - Prioritize information from root domain pages (same county website) as most authoritative
 - Prioritize information from external sources (PDFs, guides, forms) when available
 - Extract SPECIFIC details like fees, meal limits, revenue caps, contact info, requirements
-- Avoid generic phrases like "Please refer to the official website" - provide actual information
-- Include direct links to forms, PDFs, and important resources
+- MANDATORY: Avoid generic phrases like "Please refer to the official website" - provide actual information
+- MANDATORY: Include direct links to forms, PDFs, and important resources
+- MANDATORY: If specific fee amounts are found, include them exactly (e.g., "$150 application fee")
+- MANDATORY: If meal limits are found, specify them (e.g., "maximum 30 meals per day")
+- MANDATORY: If revenue caps are found, state them (e.g., "annual gross sales not to exceed $50,000")
+- MANDATORY: Include specific contact numbers, email addresses, and office hours when available
+- MANDATORY: List specific required documents, not just "required documents"
 - If specific information is missing from county sources, use California state-level information as fallback
 - Make content actionable and specific - users should be able to take immediate action
+
+QUALITY STANDARDS:
+- Each step should contain concrete, actionable information
+- Include specific dollar amounts, timeframes, and limits whenever available
+- Provide direct download links for forms and documents
+- Include complete contact information (phone, email, address, hours)
+- State specific requirements rather than general categories
 
 CONTENT GUIDELINES:
 - For fees: Include specific dollar amounts, payment methods, and any discounts
@@ -939,14 +1338,240 @@ CONTENT GUIDELINES:
 - For timelines: Include specific timeframes for processing, inspections, and approvals
 - For limits: Specify meal limits, revenue caps, and any other operational restrictions
 
+PDF CONTENT UTILIZATION:
+- Pay special attention to the "keyInfo" extracted from PDFs
+- Use fee amounts found in PDFs (look for patterns like $123.45, $1,234.56)
+- Extract specific requirements mentioned in PDFs
+- Use contact information found in PDFs
+- Include timelines and limits found in PDF content
+- If PDF content contains structured information, use it to fill in missing details
+
 SOURCE PRIORITY:
 1. Root domain pages (same county website) - Most authoritative
-2. PDFs and forms from county website - Most detailed
+2. PDFs and forms from county website - Most detailed (use extracted content!)
 3. Main page content - Good overview
 4. External sources - Supplementary information
 5. California state information - Fallback for missing details
 
-Remember: The goal is to create an application that users can actually use to get their MEHKO permit, not just a list of links to visit. Extract and synthesize the actual information they need.`;
+Remember: The goal is to create an application that users can actually use to get their MEHKO permit, not just a list of links to visit. Extract and synthesize the actual information they need. Use the PDF content we've extracted to provide specific, actionable details.
+
+EXAMPLES OF GOOD VS BAD CONTENT:
+
+BAD (Generic): "You will need to pay fees as outlined in the fee schedule."
+GOOD (Specific): "Application fee: $150. Annual permit fee: $300. Late renewal penalty: $50."
+
+BAD (Vague): "Complete the required training programs."
+GOOD (Specific): "Complete Food Handler Certification ($15, available online at county.gov/food-safety). Valid for 3 years."
+
+BAD (Unhelpful): "Contact the department for more information."
+GOOD (Actionable): "Contact: Jane Smith at (555) 123-4567, email: mehko@county.gov. Office hours: Mon-Fri 8am-5pm."
+
+BAD (General): "Submit required documents."
+GOOD (Specific): "Required documents: 1) Completed application form, 2) Food handler certificate, 3) Site diagram showing kitchen layout, 4) Standard Operating Procedures (SOP) form."
+
+Extract this level of detail from the provided content!`;
+  }
+
+  truncateContentForPrompt(rawContent) {
+    // Target: Keep content under 15,000 characters to stay well under token limits
+    const MAX_CONTENT_SIZE = 15000;
+
+    // Start with essential main page content
+    const truncated = {
+      mainPage: {
+        title: rawContent.title || "",
+        mainContent: this.truncateText(rawContent.mainContent || "", 2000),
+        forms: rawContent.forms || [],
+        contact: rawContent.contact || "",
+        fees: rawContent.fees || "",
+        requirements: rawContent.requirements || "",
+        regulations: rawContent.regulations || "",
+        url: rawContent.url || "",
+        domain: rawContent.domain || "",
+      },
+      keyInformation: {
+        fees: rawContent.keyPageInfo?.fees || [],
+        contact: rawContent.keyPageInfo?.contact || [],
+        requirements: rawContent.keyPageInfo?.requirements || [],
+        forms: rawContent.keyPageInfo?.forms || [],
+      },
+      rootDomainPages: [],
+      externalContent: [],
+      totalSources: rawContent.totalSources || 1,
+    };
+
+    // Add root domain pages (prioritize by importance)
+    if (rawContent.rootDomainPages && rawContent.rootDomainPages.length > 0) {
+      const prioritizedPages = this.prioritizePagesForPrompt(
+        rawContent.rootDomainPages
+      );
+
+      for (const page of prioritizedPages) {
+        const pageContent = {
+          title: page.title || "",
+          url: page.url || "",
+          mainContent: this.truncateText(page.mainContent || "", 800),
+          forms: page.forms || [],
+          contact: page.contact || "",
+          fees: page.fees || "",
+          requirements: page.requirements || "",
+        };
+
+        truncated.rootDomainPages.push(pageContent);
+
+        // Check if we're approaching the limit
+        if (JSON.stringify(truncated).length > MAX_CONTENT_SIZE * 0.8) {
+          console.log(
+            `⚠️  Content approaching limit, truncating root domain pages`
+          );
+          break;
+        }
+      }
+    }
+
+    // Add external content (prioritize PDFs and forms)
+    if (rawContent.externalContent && rawContent.externalContent.length > 0) {
+      const prioritizedExternal = this.prioritizeExternalForPrompt(
+        rawContent.externalContent
+      );
+
+      for (const content of prioritizedExternal) {
+        const externalContent = {
+          url: content.url || "",
+          type: content.type || "web",
+          title: content.title || "",
+          content: this.truncateText(content.content || "", 600),
+          keyInfo: content.keyInfo || {},
+        };
+
+        truncated.externalContent.push(externalContent);
+
+        // Check if we're approaching the limit
+        if (JSON.stringify(truncated).length > MAX_CONTENT_SIZE * 0.9) {
+          console.log(
+            `⚠️  Content approaching limit, truncating external content`
+          );
+          break;
+        }
+      }
+    }
+
+    const finalSize = JSON.stringify(truncated).length;
+    console.log(
+      `📊 Content truncated from ${
+        JSON.stringify(rawContent).length
+      } to ${finalSize} characters`
+    );
+
+    if (finalSize > MAX_CONTENT_SIZE) {
+      console.log(
+        `⚠️  Content still too large, applying aggressive truncation`
+      );
+      return this.aggressiveTruncation(truncated, MAX_CONTENT_SIZE);
+    }
+
+    return truncated;
+  }
+
+  prioritizePagesForPrompt(pages) {
+    // Sort pages by importance for the prompt
+    return pages.sort((a, b) => {
+      let scoreA = 0;
+      let scoreB = 0;
+
+      // Higher priority for pages with specific content
+      if (a.fees && a.fees.length > 0) scoreA += 10;
+      if (b.fees && b.fees.length > 0) scoreB += 10;
+
+      if (a.requirements && a.requirements.length > 0) scoreA += 8;
+      if (b.requirements && b.requirements.length > 0) scoreB += 8;
+
+      if (a.contact && a.contact.length > 0) scoreA += 6;
+      if (b.contact && b.contact.length > 0) scoreB += 6;
+
+      if (a.forms && a.forms.length > 0) scoreA += 5;
+      if (b.forms && b.forms.length > 0) scoreB += 5;
+
+      // Higher priority for pages with longer content (more information)
+      scoreA += Math.min(a.mainContent?.length || 0, 1000) / 100;
+      scoreB += Math.min(b.mainContent?.length || 0, 1000) / 100;
+
+      return scoreB - scoreA; // Higher scores first
+    });
+  }
+
+  prioritizeExternalForPrompt(externalContent) {
+    // Sort external content by importance
+    return externalContent.sort((a, b) => {
+      let scoreA = 0;
+      let scoreB = 0;
+
+      // PDFs get highest priority
+      if (a.type === "pdf") scoreA += 15;
+      if (b.type === "pdf") scoreB += 15;
+
+      // Forms get high priority
+      if (a.type === "form") scoreA += 12;
+      if (b.type === "form") scoreB += 12;
+
+      // Content with key info gets priority
+      if (a.keyInfo && Object.keys(a.keyInfo).length > 0) scoreA += 8;
+      if (b.keyInfo && Object.keys(b.keyInfo).length > 0) scoreB += 8;
+
+      // Longer content gets priority
+      scoreA += Math.min(a.content?.length || 0, 800) / 100;
+      scoreB += Math.min(b.content?.length || 0, 800) / 100;
+
+      return scoreB - scoreA; // Higher scores first
+    });
+  }
+
+  truncateText(text, maxLength) {
+    // Ensure text is a string and handle edge cases
+    if (!text) return "";
+    if (typeof text !== "string") {
+      text = String(text);
+    }
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + "...";
+  }
+
+  aggressiveTruncation(content, maxSize) {
+    // If content is still too large, apply aggressive truncation
+    const aggressive = { ...content };
+
+    // Truncate main content more aggressively
+    if (aggressive.mainPage.mainContent.length > 1000) {
+      aggressive.mainPage.mainContent =
+        aggressive.mainPage.mainContent.substring(0, 1000) + "...";
+    }
+
+    // Limit root domain pages to top 3
+    if (aggressive.rootDomainPages.length > 3) {
+      aggressive.rootDomainPages = aggressive.rootDomainPages.slice(0, 3);
+    }
+
+    // Limit external content to top 2
+    if (aggressive.externalContent.length > 2) {
+      aggressive.externalContent = aggressive.externalContent.slice(0, 2);
+    }
+
+    // Truncate all text fields more aggressively
+    aggressive.rootDomainPages.forEach((page) => {
+      page.mainContent = this.truncateText(page.mainContent, 400);
+      page.contact = this.truncateText(page.contact, 200);
+      page.fees = this.truncateText(page.fees, 200);
+      page.requirements = this.truncateText(page.requirements, 300);
+    });
+
+    aggressive.externalContent.forEach((content) => {
+      content.content = this.truncateText(content.content, 300);
+    });
+
+    const finalSize = JSON.stringify(aggressive).length;
+    console.log(`📊 Aggressive truncation: ${finalSize} characters`);
+
+    return aggressive;
   }
 
   validateApplication(app) {
