@@ -39,7 +39,7 @@ echo ""
 
 if [ ! -f "react.log" ]; then
     echo "❌ react.log not found in $(pwd)"
-    echo "💡 Make sure React dev server is running: npm run dev"
+    echo "💡 Make sure React dev server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
     read -n 1
@@ -67,7 +67,7 @@ echo ""
 
 if [ ! -f "node.log" ]; then
     echo "❌ node.log not found in $(pwd)"
-    echo "💡 Make sure Node.js server is running: node server.js"
+    echo "💡 Make sure Node.js server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
     read -n 1
@@ -95,7 +95,7 @@ echo ""
 
 if [ ! -f "fastapi.log" ]; then
     echo "❌ fastapi.log not found in $(pwd)"
-    echo "💡 Make sure FastAPI server is running: uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload"
+    echo "💡 Make sure FastAPI server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
     read -n 1
@@ -152,23 +152,23 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     # Try different terminal emulators
     if command -v gnome-terminal &> /dev/null; then
         echo -e "${CYAN}📱 Opening React Dev Server log tab...${NC}"
-        gnome-terminal --tab --title="React Dev Server Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - React Dev Server Logs'; echo '==================================='; echo '📱 Monitoring: react.log'; echo '📍 Port: 5173'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting React log monitoring...'; echo ''; if [ ! -f 'react.log' ]; then echo '❌ react.log not found'; echo '💡 Make sure React dev server is running: npm run dev'; read -n 1; exit 1; fi; echo '✅ Found react.log - starting monitoring...'; echo ''; tail -f react.log; exec bash"
+        gnome-terminal --tab --title="React Dev Server Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - React Dev Server Logs'; echo '==================================='; echo '📱 Monitoring: react.log'; echo '📍 Port: 5173'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting React log monitoring...'; echo ''; if [ ! -f 'react.log' ]; then echo '❌ react.log not found'; echo '💡 Make sure React dev server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found react.log - starting monitoring...'; echo ''; tail -f react.log; exec bash"
         
         echo -e "${GREEN}🔧 Opening Node.js Server log tab...${NC}"
-        gnome-terminal --tab --title="Node.js Server Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Node.js Server Logs'; echo '================================='; echo '🔧 Monitoring: node.log'; echo '📍 Port: 3000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting Node.js log monitoring...'; echo ''; if [ ! -f 'node.log' ]; then echo '❌ node.log not found'; echo '💡 Make sure Node.js server is running: node server.js'; read -n 1; exit 1; fi; echo '✅ Found node.log - starting monitoring...'; echo ''; tail -f node.log; exec bash"
+        gnome-terminal --tab --title="Node.js Server Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Node.js Server Logs'; echo '================================='; echo '🔧 Monitoring: node.log'; echo '📍 Port: 3000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting Node.js log monitoring...'; echo ''; if [ ! -f 'node.log' ]; then echo '❌ node.log not found'; echo '💡 Make sure Node.js server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found node.log - starting monitoring...'; echo ''; tail -f node.log; exec bash"
         
         echo -e "${YELLOW}🐍 Opening Python FastAPI log tab...${NC}"
-        gnome-terminal --tab --title="Python FastAPI Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Python FastAPI Logs'; echo '================================='; echo '🐍 Monitoring: fastapi.log'; echo '📍 Port: 8000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting FastAPI log monitoring...'; echo ''; if [ ! -f 'fastapi.log' ]; then echo '❌ fastapi.log not found'; echo '💡 Make sure FastAPI server is running: uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload'; read -n 1; exit 1; fi; echo '✅ Found fastapi.log - starting monitoring...'; echo ''; tail -f fastapi.log; exec bash"
+        gnome-terminal --tab --title="Python FastAPI Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Python FastAPI Logs'; echo '================================='; echo '🐍 Monitoring: fastapi.log'; echo '📍 Port: 8000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting FastAPI log monitoring...'; echo ''; if [ ! -f 'fastapi.log' ]; then echo '❌ fastapi.log not found'; echo '💡 Make sure FastAPI server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found fastapi.log - starting monitoring...'; echo ''; tail -f fastapi.log; exec bash"
         
     elif command -v konsole &> /dev/null; then
         echo -e "${CYAN}📱 Opening React Dev Server log tab...${NC}"
-        konsole --new-tab --title "React Dev Server Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - React Dev Server Logs'; echo '==================================='; echo '📱 Monitoring: react.log'; echo '📍 Port: 5173'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting React log monitoring...'; echo ''; if [ ! -f 'react.log' ]; then echo '❌ react.log not found'; echo '💡 Make sure React dev server is running: npm run dev'; read -n 1; exit 1; fi; echo '✅ Found react.log - starting monitoring...'; echo ''; tail -f react.log; exec bash"
+        konsole --new-tab --title "React Dev Server Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - React Dev Server Logs'; echo '==================================='; echo '📱 Monitoring: react.log'; echo '📍 Port: 5173'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting React log monitoring...'; echo ''; if [ ! -f 'react.log' ]; then echo '❌ react.log not found'; echo '💡 Make sure React dev server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found react.log - starting monitoring...'; echo ''; tail -f react.log; exec bash"
         
         echo -e "${GREEN}🔧 Opening Node.js Server log tab...${NC}"
-        konsole --new-tab --title "Node.js Server Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Node.js Server Logs'; echo '================================='; echo '🔧 Monitoring: node.log'; echo '📍 Port: 3000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting Node.js log monitoring...'; echo ''; if [ ! -f 'node.log' ]; then echo '❌ node.log not found'; echo '💡 Make sure Node.js server is running: node server.js'; read -n 1; exit 1; fi; echo '✅ Found node.log - starting monitoring...'; echo ''; tail -f node.log; exec bash"
+        konsole --new-tab --title "Node.js Server Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Node.js Server Logs'; echo '================================='; echo '🔧 Monitoring: node.log'; echo '📍 Port: 3000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting Node.js log monitoring...'; echo ''; if [ ! -f 'node.log' ]; then echo '❌ node.log not found'; echo '💡 Make sure Node.js server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found node.log - starting monitoring...'; echo ''; tail -f node.log; exec bash"
         
         echo -e "${YELLOW}🐍 Opening Python FastAPI log tab...${NC}"
-        konsole --new-tab --title "Python FastAPI Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Python FastAPI Logs'; echo '================================='; echo '🐍 Monitoring: fastapi.log'; echo '📍 Port: 8000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting FastAPI log monitoring...'; echo ''; if [ ! -f 'fastapi.log' ]; then echo '❌ fastapi.log not found'; echo '💡 Make sure FastAPI server is running: uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload'; read -n 1; exit 1; fi; echo '✅ Found fastapi.log - starting monitoring...'; echo ''; tail -f fastapi.log; exec bash"
+        konsole --new-tab --title "Python FastAPI Logs" -e bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Python FastAPI Logs'; echo '================================='; echo '🐍 Monitoring: fastapi.log'; echo '📍 Port: 8000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting FastAPI log monitoring...'; echo ''; if [ ! -f 'fastapi.log' ]; then echo '❌ fastapi.log not found'; echo '💡 Make sure FastAPI server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found fastapi.log - starting monitoring...'; echo ''; tail -f fastapi.log; exec bash"
         
     else
         echo -e "${CYAN}⚠️  No supported terminal emulator found. Running in current terminal instead.${NC}"
