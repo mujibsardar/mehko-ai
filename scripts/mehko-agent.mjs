@@ -265,8 +265,7 @@ async function main() {
   }
 }
 
-if (require.main === module) {
-  main();
-}
+// ES module main execution
+main();
 
 export { CostEffectiveMEHKOAgent };
