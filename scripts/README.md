@@ -40,7 +40,7 @@ node scripts/mehko-agent.mjs "https://county-website-url.com/mehko"
 ### Example
 
 ```bash
-node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html"
+node scripts/mehko-agent.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen"
 ```
 
 ## What It Does
@@ -52,7 +52,7 @@ node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd
 
 ## Output
 
-Creates a file like `generated_san_diego_mehko.json` in the `generated/` directory.
+Creates a file like `generated_orange_county_mehko.json` in the `generated/` directory.
 
 ## Integration
 

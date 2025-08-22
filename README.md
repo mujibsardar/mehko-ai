@@ -174,7 +174,7 @@ The AI agent system automatically crawls county websites to extract MEHKO permit
 
 ```bash
 # Single county processing
-node scripts/mehko-agent-enhanced.mjs "https://sandiegocounty.gov/mehko" "San Diego"
+node scripts/mehko-agent-enhanced.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen" "Orange County"
 
 # Batch processing
 node scripts/mehko-agent-enhanced.mjs --batch data/county-batch.json

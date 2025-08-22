@@ -777,9 +777,9 @@ class EnhancedMEHKOAgent {
 
       // Simple DuckDuckGo search implementation
       const searchQueries = [
-        "San Diego County MEHKO permit fees 2024",
-        "San Diego County MEHKO requirements training",
-        "San Diego County MEHKO application process timeline",
+        "Orange County MEHKO permit fees 2024",
+        "Orange County MEHKO requirements training",
+        "Orange County MEHKO application process timeline",
       ];
 
       const searchResults = [];
@@ -1477,7 +1477,7 @@ class EnhancedMEHKOAgent {
       const hostname = urlObj.hostname.toLowerCase();
 
       // Extract county name from common patterns
-      if (hostname.includes("sandiego")) return "San Diego";
+      if (hostname.includes("orange")) return "Orange County";
       if (hostname.includes("lacounty") || hostname.includes("lacounty.gov"))
         return "Los Angeles";
       if (hostname.includes("orangecounty") || hostname.includes("ocgov.com"))

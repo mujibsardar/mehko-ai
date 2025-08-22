@@ -4,13 +4,13 @@
 
 ### **Tier 1 - Major Metropolitan Areas**
 
-1. **San Diego County** ✅ (Already started)
+1. **Orange County**
 
-   - Population: ~3.3M
-   - URL: https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html
-   - Status: Ready for AI agent processing
+   - Population: ~3.2M
+   - Search: "Orange County MEHKO home kitchen operations"
+   - Likely URL: https://www.ocgov.com/gov/health/eh/food/home-kitchen
 
-2. **Orange County**
+2. **Riverside County**
 
    - Population: ~3.2M
    - Search: "Orange County MEHKO home kitchen operations"
@@ -80,11 +80,11 @@
 
 ## 🚀 **AI Agent Processing Order**
 
-1. **San Diego** (test case) ✅
-2. **Orange County** (high population, near LA)
-3. **Riverside County** (fastest growing)
-4. **Sacramento County** (state capital)
-5. **Fresno County** (central location)
+1. **Orange County** (high population, near LA)
+2. **Riverside County** (fastest growing)
+3. **Sacramento County** (state capital)
+4. **Fresno County** (central location)
+5. **San Bernardino County** (high population)
 
 ## 💡 **Optimization Notes**
 

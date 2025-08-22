@@ -10,8 +10,8 @@ The MEHKO AI Agent automatically crawls county government websites and generates
 # Process one county
 node scripts/mehko-agent-enhanced.mjs "https://county.gov/mehko" "County Name"
 
-# Example: San Diego County
-node scripts/mehko-agent-enhanced.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html" "San Diego County"
+# Example: Orange County
+node scripts/mehko-agent-enhanced.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen" "Orange County"
 ```
 
 ### **Batch Processing**
@@ -78,8 +78,7 @@ node scripts/mehko-agent-enhanced.mjs --batch data/county-batch.json
 ## 🎯 **Target Counties**
 
 ### **Priority 1 (High Population)**
-1. **San Diego County** - 3.3M population ✅
-2. **Orange County** - 3.2M population
+1. **Orange County** - 3.2M population
 3. **Riverside County** - 2.5M population
 4. **Sacramento County** - 1.6M population
 5. **Fresno County** - 1.0M population
@@ -214,11 +213,11 @@ DEBUG=* node scripts/mehko-agent-enhanced.mjs "url" "name"
 
 ### **Successful Generation**
 ```bash
-# Process San Diego County
-node scripts/mehko-agent-enhanced.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html" "San Diego County"
+# Process Orange County
+node scripts/mehko-agent-enhanced.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen" "Orange County"
 
-# Output: generated_sandiego_mehko.json
-# Add to manifest: node scripts/add-county.mjs generated_sandiego_mehko.json
+# Output: generated_orange_county_mehko.json
+# Add to manifest: node scripts/add-county.mjs generated_orange_county_mehko.json
 ```
 
 ### **Batch Processing**

@@ -20,5 +20,29 @@
       "Excludes Pasadena, Long Beach, and Vernon",
       "Must submit a sample menu and SOP with the application"
     ]
+  },
+  "sandiego_mehko": {
+    "id": "sandiego_mehko",
+    "title": "San Diego County MEHKO",
+    "description": "San Diego MEHKO program. Up to 30 meals/day (90/week) and $100,000 gross sales cap; with approved pushcarts: 80/day (200/week) and $150,000 cap.",
+    "pdfForms": [
+      {
+        "name": "Standard Operating Procedures (SOP)",
+        "file": "SANDIEGO_SOP-English.pdf"
+      },
+      {
+        "name": "Health Permit Application (Form 152)",
+        "file": "SANDIEGO_PERMITAPP_152.pdf"
+      }
+    ],
+    "formFolder": "src/data/forms/sandiego_mehko",
+    "aiEnabled": true,
+    "commentsEnabled": true,
+    "notes": [
+      "Up to 30 meals/day (90/week) and $100,000 gross sales cap",
+      "With approved pushcarts: 80/day (200/week) and $150,000 cap",
+      "Same-day service only - no leftovers to next day",
+      "Must operate from primary residence only"
+    ]
   }
 }

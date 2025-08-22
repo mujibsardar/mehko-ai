@@ -105,9 +105,9 @@
   },
   {
     "id": "sandiego_mehko",
-    "title": "San Diego MEHKO",
-    "description": "Home Kitchen Operations in San Diego County",
-    "rootDomain": "www.sandiegocounty.gov",
+    "title": "San Diego County MEHKO",
+    "description": "San Diego MEHKO program. Up to 30 meals/day (90/week) and $100,000 gross sales cap; with approved pushcarts: 80/day (200/week) and $150,000 cap.",
+    "rootDomain": "sandiegocounty.gov",
     "supportTools": {
       "aiEnabled": true,
       "commentsEnabled": true
@@ -119,7 +119,7 @@
         "type": "info",
         "action_required": false,
         "fill_pdf": false,
-        "content": "Prior to 2012, under the California Retail Food Code (CRFC), food sold to consumers was require..."
+        "content": "- Confirm MEHKOs are allowed countywide (they are) and you must operate from your **primary residence** (no second homes/RVs). If renting or in an HOA, verify your lease/CC&Rs allow a home business. \n- **Operating limits:** Up to **30 meals/day** and **90/week**; **gross annual sales ≤ $100,000** (indexed to CPI). If you also operate up to **two pushcarts (CMFOs)** approved as part of your MEHKO, limits increase to **80/day** and **200/week** with **$150,000** cap (indexed). Keep sales logs.\n- **Same-day service only:** Prepare and serve on the **same day**; no leftovers to next day.\n- **Food constraints:** No raw milk, no raw oysters, no ROP/vacuum sealing/canning, no HACCP-required processes (smoking for preservation, curing, acidification, etc.). Alcohol requires ABC license.\n- **Animals & kids:** Must be kept out of kitchen/dining during prep/service.\n- **May serve as commissary for up to two CMFOs you own** (with written DEHQ approval).\n"
       },
       {
         "id": "approvals_training",
@@ -127,7 +127,12 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "Required approvals, training programs, licensing can be found on the county website."
+        "content": "- **Landlord/HOA/Zoning:** Get landlord/HOA approval if applicable. For land use/zoning questions, contact **County PDS Zoning** (general line **(858) 565-5981**) or your city planning dept.\n- **Food Safety Manager (CFPM):** The MEHKO operator must pass an **approved Food Safety Manager** exam **before** applying. Keep certificate on site.\n- **Food Handler Cards:** Anyone (besides the operator) who handles food must obtain a **Food Handler Card within 10 days** of starting work; keep proof on site.\n- **Optional:** If doing any structural work, check with your local **Building Department** first. \n",
+        "actions": [
+          { "label": "Ask AI about CFPM options", "type": "ai", "aiPrompt": "Help me choose an ANSI-CFP Food Safety Manager course near San Diego and explain time, cost, and passing tips." },
+          { "label": "Search courses", "type": "search", "engine": "duckduckgo", "query": "ANSI-CFP Food Safety Manager certification San Diego" },
+          { "label": "Search food handler training", "type": "search", "engine": "duckduckgo", "query": "San Diego County approved food handler card course" }
+        ]
       },
       {
         "id": "prepare_docs",
@@ -135,7 +140,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "List of required documents and where to get them can be found on the county website."
+        "content": "- **MEHKO Standard Operating Procedures (SOP)** — complete in **Step 4**.\n- **Public Health Permit Application (Form 152)** — complete in **Step 5**.\n- **Proposed menu** (same-day prep/service; list any CMFO use).\n- **CFPM certificate** (operator).\n- **Food Handler Cards** (any employees; obtain within 10 days of starting).\n- **Water testing results** (*only if on a private well* — full panel).\n- **Optional/if applicable:** CMFO details if you will operate pushcarts under your MEHKO.\n"
       },
       {
         "id": "sop_form",
@@ -145,25 +150,25 @@
         "appId": "sandiego_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "SOP form instructions with download link: https://www.sandiegocounty.gov/content/dam/sdc/deh/fhd/food/mehko/mehkosop.pdf"
+        "content": "Complete the SOP form for your home kitchen (food flow, sanitizing, allergen controls, same-day service, pet/kid controls, waste, delivery, etc.). This is a required document. (If another step references SOP, see **Step 4**.)"
       },
       {
         "id": "permit_application_form",
-        "title": "Health Permit Application",
+        "title": "Health Permit Application (Form 152)",
         "type": "pdf",
-        "formId": "SANDIEGO_PERMIT-Form",
+        "formId": "SANDIEGO_PERMITAPP_152",
         "appId": "sandiego_mehko",
         "action_required": true,
         "fill_pdf": true,
-        "content": "Main permit application instructions with download link: https://www.sandiegocounty.gov/content/dam/sdc/deh/fhd/food/pdf/publications_permitapp152.pdf"
+        "content": "Fill out the **DEHQ Public Health Permit Application (Form 152)** for a new MEHKO. Include owner info, site address (primary residence), and select the MEHKO category. (If another step mentions the application, see **Step 5**.)"
       },
       {
         "id": "submit_application",
-        "title": "Submit Application & Fees",
+        "title": "Submit Application & Pay Fees",
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "Submission process, fees, and payment methods can be found on the county website."
+        "content": "- **What to submit:** (1) **Form 152** (Step 5), (2) **MEHKO SOP** (Step 4), (3) **Menu**, (4) **CFPM certificate**, (5) **Food Handler cards** if applicable, (6) **Well water test** if on private well.\n- **Where/how to submit & pay:**\n  - **Online payment:** pay fees at **dehqpay.com**.\n  - **Email submissions & questions:** **FHDpermits@sdcounty.ca.gov**.\n  - **In person:** DEHQ, **5500 Overland Ave, Suite 170, San Diego, CA 92123**.\n  - **Mail:** DEHQ, **P.O. Box 129261, San Diego, CA 92112-9261** (allow **up to 2 weeks** for mail processing).\n- **Fees (MEHKO – Food Facility Permit Fees):** **Initial permit: $673**; **Annual renewal: $335**; **Updated SOP review: Varies**; Complaint response and re-inspection fees may apply.\n"
       },
       {
         "id": "inspection",
@@ -171,15 +176,15 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "Inspection process and requirements can be found on the county website."
+        "content": "- After DEHQ approves your application/SOP, they will **schedule an initial inspection at your residence**.\n- Be ready to demonstrate: same-day preparation/service; temperature control; sanitation; handwash and utensil facilities; allergen and contamination controls; pet/child separation during operations; delivery/pick-up controls; and any CMFO procedures.\n- **Ongoing:** Expect **one routine inspection per year**; additional reinspections/complaint responses as needed (fees may apply).\n"
       },
       {
         "id": "receive_permit",
-        "title": "Receive Permit",
+        "title": "Receive Your Permit",
         "type": "info",
         "action_required": false,
         "fill_pdf": false,
-        "content": "Timeline and process for receiving permit can be found on the county website."
+        "content": "- **Review timeline:** If your application is **complete and detailed**, DEHQ's review is **up to 20 calendar days**. If revisions are required, allow **+10 days** for re-review.\n- Permit is issued **after the initial inspection verifies compliance**. Display your permit (or a legible copy) during hours of operation.\n"
       },
       {
         "id": "operate_comply",
@@ -187,7 +192,7 @@
         "type": "info",
         "action_required": true,
         "fill_pdf": false,
-        "content": "Ongoing compliance and renewal requirements can be found on the county website."
+        "content": "- **Limits:** **≤30 meals/day, ≤90/week; ≤$100,000 gross sales/year** (CPI-adjusted). With approved CMFO pushcarts as part of your MEHKO: **≤80/day, ≤200/week; ≤$150,000/year** (CPI-adjusted). Keep **meal/sales logs**.\n- **Same-day only:** No next-day leftovers. Prepare and serve all food the same day.\n- **No prohibited processes/products:** No raw milk/raw oysters; no ROP/vac sealing/canning; no smoking/curing/acidification as preservation; no HACCP processes without specific allowance; no unlicensed ice cream manufacture; alcohol only with **ABC** license.\n- **Labeling/packaging:** You may portion meals for same-day pick-up/delivery; **no reduced-oxygen packaging**.\n- **Changes:** Menu or operation changes may require an **updated SOP**—contact DEHQ before changing.\n"
       },
       {
         "id": "contact",
@@ -195,7 +200,7 @@
         "type": "info",
         "action_required": false,
         "fill_pdf": false,
-        "content": "Program contact information including phone, email, website, hours can be found on the county website."
+        "content": "**Department of Environmental Health & Quality (DEHQ)**\n- Phone (program/FAQs): **(858) 505-6900**\n- Permits email: **FHDpermits@sdcounty.ca.gov**\n- Office: **5500 Overland Ave, Suite 170, San Diego, CA 92123**\n- Mailing: **P.O. Box 129261, San Diego, CA 92112-9261**\n- Website: **sdcdehq.org** (Food & Housing Division)\n- **Zoning questions:** County PDS **(858) 565-5981** or your city planning department.\n"
       }
     ]
   }

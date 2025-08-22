@@ -261,7 +261,7 @@ async function main() {
   if (args.length !== 1) {
     console.error("Usage: node scripts/mehko-agent.mjs <county-url>");
     console.error(
-      'Example: node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html"'
+      'Example: node scripts/mehko-agent.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen"'
     );
     process.exit(1);
   }

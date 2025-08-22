@@ -1,36 +1,29 @@
 [
   {
-    "name": "San Diego County",
-    "url": "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html",
-    "priority": 1,
-    "population": 3300000,
-    "notes": "Already identified MEHKO program page"
-  },
-  {
     "name": "Orange County",
     "url": "https://www.ocgov.com/gov/health/eh/food/home-kitchen",
-    "priority": 2,
+    "priority": 1,
     "population": 3200000,
     "notes": "High population, near LA County"
   },
   {
     "name": "Riverside County",
     "url": "https://www.rivco.org/health/food/home-kitchen",
-    "priority": 3,
+    "priority": 2,
     "population": 2500000,
     "notes": "Fastest growing county in CA"
   },
   {
     "name": "Sacramento County",
     "url": "https://www.saccounty.gov/health/eh/food/home-kitchen",
-    "priority": 4,
+    "priority": 3,
     "population": 1600000,
     "notes": "State capital, likely has program"
   },
   {
     "name": "Fresno County",
     "url": "https://www.co.fresno.ca.us/departments/public-health/eh/food/home-kitchen",
-    "priority": 5,
+    "priority": 4,
     "population": 1000000,
     "notes": "Central Valley hub"
   }

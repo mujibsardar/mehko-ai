@@ -15,7 +15,7 @@ async function addCounty() {
   if (args.length !== 1) {
     console.error("Usage: node scripts/add-county.mjs <county-json-file>");
     console.error(
-      "Example: node scripts/add-county.mjs generated_sandiego_mehko.json"
+      "Example: node scripts/add-county.mjs generated_orange_county_mehko.json"
     );
     console.error("Note: Generated files are in the 'generated/' directory");
     process.exit(1);

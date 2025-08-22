@@ -393,12 +393,12 @@ export default function Admin() {
                   onChange={(e) => setAppId(e.target.value)}
                 />
                 <input
-                  placeholder="title (e.g., San Diego MEHKO)"
+                  placeholder="title (e.g., Orange County MEHKO)"
                   value={appTitle}
                   onChange={(e) => setAppTitle(e.target.value)}
                 />
                 <input
-                  placeholder="root domain (e.g., sandiegocounty.gov)"
+                  placeholder="root domain (e.g., ocgov.com)"
                   value={rootDomain}
                   onChange={(e) => setRootDomain(e.target.value)}
                 />
