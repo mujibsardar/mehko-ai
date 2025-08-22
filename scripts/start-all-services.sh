@@ -52,7 +52,8 @@ pip install -r requirements.txt
 
 # Start FastAPI server in background with logging
 echo -e "${GREEN}🚀 Starting FastAPI server on port 8000...${NC}"
-uvicorn server.main:app --host 0.0.0.0 --port 8000 --reload > fastapi.log 2>&1 &
+# Remove --reload flag to reduce CPU usage, add workers for better performance
+uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 1 --limit-concurrency 100 --limit-max-requests 1000 > logs/fastapi.log 2>&1 &
 PYTHON_PID=$!
 cd ..
 
@@ -62,7 +63,7 @@ sleep 3
 # Start Node.js server
 echo -e "${YELLOW}🟢 Starting Node.js server...${NC}"
 echo -e "${GREEN}🚀 Starting Node.js server on port 3000...${NC}"
-node server.js > node.log 2>&1 &
+node server.js > logs/node.log 2>&1 &
 NODE_PID=$!
 
 # Wait a moment for Node server to start
@@ -71,7 +72,7 @@ sleep 2
 # Start React dev server
 echo -e "${YELLOW}⚛️  Starting React dev server...${NC}"
 echo -e "${GREEN}🚀 Starting React dev server on port 5173...${NC}"
-npm run dev > react.log 2>&1 &
+npm run dev > logs/react.log 2>&1 &
 REACT_PID=$!
 
 # Wait for all services to start
@@ -120,7 +121,7 @@ echo ""
 echo -e "${GREEN}🚀 You're all set! Happy coding! 🚀${NC}"
 
 # Save PIDs to a file for easy stopping
-echo "$PYTHON_PID $NODE_PID $REACT_PID" > .service-pids
+echo "$PYTHON_PID $NODE_PID $REACT_PID" > temp/.service-pids
 
 # Return to terminal
 exec $SHELL

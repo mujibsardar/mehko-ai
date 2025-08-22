@@ -44,9 +44,9 @@ check_service 5173 "React Dev Server" || echo -e "${YELLOW}💡 React not runnin
 
 # Create log files if they don't exist
 echo -e "${YELLOW}📝 Ensuring log files exist...${NC}"
-create_log_file "fastapi.log" "Python FastAPI"
-create_log_file "node.log" "Node.js Server"
-create_log_file "react.log" "React Dev Server"
+create_log_file "logs/fastapi.log" "Python FastAPI"
+create_log_file "logs/node.log" "Node.js Server"
+create_log_file "logs/react.log" "React Dev Server"
 
 echo ""
 
@@ -67,7 +67,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 cd "$PROJECT_DIR"
 echo "🚀 MEHKO AI - React Dev Server Logs"
 echo "==================================="
-echo "📱 Monitoring: react.log"
+echo "📱 Monitoring: logs/react.log"
 echo "📍 Port: 5173"
 echo ""
 echo "Press Ctrl+C to stop monitoring"
@@ -75,8 +75,8 @@ echo ""
 echo "Starting React log monitoring..."
 echo ""
 
-if [ ! -f "react.log" ]; then
-    echo "❌ react.log not found in $(pwd)"
+if [ ! -f "logs/react.log" ]; then
+    echo "❌ logs/react.log not found in $(pwd)"
     echo "💡 Make sure React dev server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
@@ -84,9 +84,9 @@ if [ ! -f "react.log" ]; then
     exit 1
 fi
 
-echo "✅ Found react.log - starting monitoring..."
+echo "✅ Found logs/react.log - starting monitoring..."
 echo ""
-tail -f react.log
+tail -f logs/react.log
 # Keep the script running
 while true; do sleep 1; done
 EOF
@@ -97,7 +97,7 @@ EOF
 cd "$PROJECT_DIR"
 echo "🚀 MEHKO AI - Node.js Server Logs"
 echo "================================="
-echo "🔧 Monitoring: node.log"
+echo "🔧 Monitoring: logs/node.log"
 echo "📍 Port: 3000"
 echo ""
 echo "Press Ctrl+C to stop monitoring"
@@ -105,8 +105,8 @@ echo ""
 echo "Starting Node.js log monitoring..."
 echo ""
 
-if [ ! -f "node.log" ]; then
-    echo "❌ node.log not found in $(pwd)"
+if [ ! -f "logs/node.log" ]; then
+    echo "❌ logs/node.log not found in $(pwd)"
     echo "💡 Make sure Node.js server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
@@ -114,9 +114,9 @@ if [ ! -f "node.log" ]; then
     exit 1
 fi
 
-echo "✅ Found node.log - starting monitoring..."
+echo "✅ Found logs/node.log - starting monitoring..."
 echo ""
-tail -f node.log
+tail -f logs/node.log
 # Keep the script running
 while true; do sleep 1; done
 EOF
@@ -127,7 +127,7 @@ EOF
 cd "$PROJECT_DIR"
 echo "🚀 MEHKO AI - Python FastAPI Logs"
 echo "================================="
-echo "🐍 Monitoring: fastapi.log"
+echo "🐍 Monitoring: logs/fastapi.log"
 echo "📍 Port: 8000"
 echo ""
 echo "Press Ctrl+C to stop monitoring"
@@ -135,8 +135,8 @@ echo ""
 echo "Starting FastAPI log monitoring..."
 echo ""
 
-if [ ! -f "fastapi.log" ]; then
-    echo "❌ fastapi.log not found in $(pwd)"
+if [ ! -f "logs/fastapi.log" ]; then
+    echo "❌ logs/fastapi.log not found in $(pwd)"
     echo "💡 Make sure FastAPI server is running: ./scripts/start-all-services.sh"
     echo ""
     echo "Press any key to exit..."
@@ -144,9 +144,9 @@ if [ ! -f "fastapi.log" ]; then
     exit 1
 fi
 
-echo "✅ Found fastapi.log - starting monitoring..."
+echo "✅ Found logs/fastapi.log - starting monitoring..."
 echo ""
-tail -f fastapi.log
+tail -f logs/fastapi.log
 # Keep the script running
 while true; do sleep 1; done
 EOF
@@ -228,7 +228,7 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo ""
         echo "Starting log monitoring..."
         echo ""
-        tail -f react.log node.log fastapi.log
+        tail -f logs/react.log logs/node.log logs/fastapi.log
     fi
 else
     echo -e "${CYAN}⚠️  Unsupported OS. Running in current terminal instead.${NC}"
@@ -244,15 +244,15 @@ else
     echo ""
     echo "Starting log monitoring..."
     echo ""
-    tail -f react.log node.log fastapi.log
+            tail -f logs/react.log logs/node.log logs/fastapi.log
 fi
 
 echo ""
 echo -e "${GREEN}✅ Three separate log monitoring windows/tabs have been opened!${NC}"
 echo -e "${CYAN}💡 Each window/tab monitors a single service:${NC}"
-echo -e "  📱 React Dev Server (Port 5173) - react.log"
-echo -e "  🔧 Node.js Server (Port 3000) - node.log"
-echo -e "  🐍 Python FastAPI (Port 8000) - fastapi.log"
+echo -e "  📱 React Dev Server (Port 5173) - logs/react.log"
+echo -e "  🔧 Node.js Server (Port 3000) - logs/node.log"
+echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
 echo ""
 if ! check_service 8000 "Python FastAPI" >/dev/null 2>&1 || ! check_service 3000 "Node.js Server" >/dev/null 2>&1 || ! check_service 5173 "React Dev Server" >/dev/null 2>&1; then
     echo -e "${YELLOW}⚠️  Some services are not running. To start all services:${NC}"

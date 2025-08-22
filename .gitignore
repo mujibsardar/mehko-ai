@@ -8,13 +8,28 @@ python/venv
 venv/
 
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+# Runtime data
+temp/
+.service-pids
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Configuration files with sensitive data
+config/serviceAccountKey.json
+config/*.key
+config/*.pem
+config/*.p12
+config/*.crt
 
 node_modules
 dist-ssr

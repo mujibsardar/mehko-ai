@@ -12,7 +12,9 @@ const require = createRequire(import.meta.url);
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // 🔥 Firebase Admin Init
-const serviceAccount = JSON.parse(fs.readFileSync("./serviceAccountKey.json"));
+const serviceAccount = JSON.parse(
+  fs.readFileSync("./config/serviceAccountKey.json")
+);
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 
