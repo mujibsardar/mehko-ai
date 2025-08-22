@@ -1076,7 +1076,7 @@ class EnhancedMEHKOAgent {
           },
         ],
         temperature: 0.1, // Low temperature for consistency
-        max_tokens: 2000, // Increased for more detailed content
+        max_tokens: 1500, // Reduced to stay within context limits
         presence_penalty: 0.1,
         frequency_penalty: 0.1,
       });
@@ -1338,13 +1338,15 @@ CONTENT GUIDELINES:
 - For timelines: Include specific timeframes for processing, inspections, and approvals
 - For limits: Specify meal limits, revenue caps, and any other operational restrictions
 
-PDF CONTENT UTILIZATION:
-- Pay special attention to the "keyInfo" extracted from PDFs
-- Use fee amounts found in PDFs (look for patterns like $123.45, $1,234.56)
-- Extract specific requirements mentioned in PDFs
-- Use contact information found in PDFs
-- Include timelines and limits found in PDF content
-- If PDF content contains structured information, use it to fill in missing details
+PDF CONTENT UTILIZATION - HIGHEST PRIORITY:
+- MANDATORY: PDF content contains the most detailed and authoritative information
+- MANDATORY: If PDF content includes fees, use EXACT amounts (e.g., "$150 application fee", not "pay fees")
+- MANDATORY: If PDF content includes requirements, list them SPECIFICALLY (e.g., "Submit: 1) Application form, 2) Site diagram, 3) Food handler certificate")
+- MANDATORY: If PDF content includes contact info, use EXACT details (e.g., "Contact: John Smith at (555) 123-4567, email: mehko@county.gov")
+- MANDATORY: If PDF content includes limits, state them EXACTLY (e.g., "Maximum 30 meals per day", "Annual revenue cap: $50,000")
+- MANDATORY: If PDF content includes timelines, use EXACT timeframes (e.g., "Processing time: 10-15 business days")
+- MANDATORY: Prioritize PDF content over website content when both are available
+- MANDATORY: Use PDF content to fill in ALL missing details in the application steps
 
 SOURCE PRIORITY:
 1. Root domain pages (same county website) - Most authoritative
@@ -1354,6 +1356,16 @@ SOURCE PRIORITY:
 5. California state information - Fallback for missing details
 
 Remember: The goal is to create an application that users can actually use to get their MEHKO permit, not just a list of links to visit. Extract and synthesize the actual information they need. Use the PDF content we've extracted to provide specific, actionable details.
+
+CRITICAL INSTRUCTION:
+Before generating the application, carefully analyze ALL PDF content provided. Look for:
+1. Specific dollar amounts (fees, costs, payments)
+2. Exact requirements and documents needed
+3. Specific contact information (names, phone numbers, emails)
+4. Operational limits and restrictions
+5. Processing timelines and deadlines
+
+If you find this information in PDFs, use it EXACTLY. Do not paraphrase or generalize. Users need to know exactly what to do, how much to pay, and who to contact.
 
 EXAMPLES OF GOOD VS BAD CONTENT:
 
@@ -1373,8 +1385,8 @@ Extract this level of detail from the provided content!`;
   }
 
   truncateContentForPrompt(rawContent) {
-    // Target: Keep content under 15,000 characters to stay well under token limits
-    const MAX_CONTENT_SIZE = 15000;
+    // Target: Keep content under 12,000 characters to stay well under GPT-4's 8,192 token limit
+    const MAX_CONTENT_SIZE = 12000;
 
     // Start with essential main page content
     const truncated = {
@@ -1440,7 +1452,10 @@ Extract this level of detail from the provided content!`;
           url: content.url || "",
           type: content.type || "web",
           title: content.title || "",
-          content: this.truncateText(content.content || "", 600),
+          content: this.truncateText(
+            content.content || "",
+            content.type === "pdf" ? 1200 : 600
+          ),
           keyInfo: content.keyInfo || {},
         };
 
@@ -1501,26 +1516,26 @@ Extract this level of detail from the provided content!`;
   }
 
   prioritizeExternalForPrompt(externalContent) {
-    // Sort external content by importance
+    // Sort external content by importance - PDFs get absolute priority
     return externalContent.sort((a, b) => {
       let scoreA = 0;
       let scoreB = 0;
 
-      // PDFs get highest priority
-      if (a.type === "pdf") scoreA += 15;
-      if (b.type === "pdf") scoreB += 15;
+      // PDFs get absolute highest priority - they contain the most detailed info
+      if (a.type === "pdf") scoreA += 50;
+      if (b.type === "pdf") scoreB += 50;
 
       // Forms get high priority
-      if (a.type === "form") scoreA += 12;
-      if (b.type === "form") scoreB += 12;
+      if (a.type === "form") scoreA += 25;
+      if (b.type === "form") scoreB += 25;
 
       // Content with key info gets priority
-      if (a.keyInfo && Object.keys(a.keyInfo).length > 0) scoreA += 8;
-      if (b.keyInfo && Object.keys(b.keyInfo).length > 0) scoreB += 8;
+      if (a.keyInfo && Object.keys(a.keyInfo).length > 0) scoreA += 20;
+      if (b.keyInfo && Object.keys(b.keyInfo).length > 0) scoreB += 20;
 
-      // Longer content gets priority
-      scoreA += Math.min(a.content?.length || 0, 800) / 100;
-      scoreB += Math.min(b.content?.length || 0, 800) / 100;
+      // Content length gets priority (but less than type)
+      scoreA += Math.min(a.content?.length || 0, 800) / 200;
+      scoreB += Math.min(b.content?.length || 0, 800) / 200;
 
       return scoreB - scoreA; // Higher scores first
     });
