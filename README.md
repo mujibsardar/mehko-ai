@@ -1,279 +1,437 @@
+# 🏠 MEHKO AI - Home Kitchen Operations Permit System
 
-# [<img src="readme-assets/logo.png"> React Portfolio](https://ryanbalieiro.github.io/react-portfolio-template/) by Ryan Balieiro
+> **Streamlining the process of obtaining Home Kitchen Operations (MEHKO) permits across California counties through intelligent automation and AI-powered assistance.**
 
-A sleek, futuristic portfolio template for developers – built with **React** and **Bootstrap 5**.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
+[![React](https://img.shields.io/badge/React-18+-61dafb.svg)](https://reactjs.org/)
 
-![alt tag1](readme-assets/promo.png)
+## 🎯 **Project Overview**
 
-Key features:
-- Lightweight and fully responsive.
-- Adapts perfectly to mobile screens.
-- Multi-language support included.
-- Comes with both dark and light theme options.
-- A variety of components to highlight your work experience, education, skills, portfolio, and more.
-- Uses **Vite** for packaging.
-- Emails with **EmailJS** - no backend needed!
+MEHKO AI is a comprehensive web application that helps entrepreneurs navigate the complex process of obtaining Home Kitchen Operations permits. The system currently supports Los Angeles County and is designed to scale to 10+ California counties through AI-powered content extraction and intelligent form generation.
 
-## [Live Preview](https://ryanbalieiro.github.io/react-portfolio-template/)
+### **Key Features**
 
-Check out the live version of the template deployed **[here on GitHub Pages](https://ryanbalieiro.github.io/react-portfolio-template/)**.
+- 🏛️ **Multi-County Support** - Scalable architecture for California counties
+- 🤖 **AI-Powered Content Extraction** - Intelligent crawling of official websites
+- 📱 **Modern React Frontend** - Responsive, user-friendly interface
+- 🔧 **Python FastAPI Backend** - High-performance PDF processing
+- 📊 **Firebase Integration** - Real-time data and user management
+- 🚀 **Automated Workflows** - Streamlined permit application process
 
-### 1. Base layout
-The layout uses a fixed central view with a left sidebar, adjusting perfectly across various monitor resolutions, from 4:3 to ultra-wide.
+## 🏗️ **Architecture Overview**
 
-![alt tag1](readme-assets/demo.png)
-
-### 2. Desktop Screenshots
-The main view transitions smoothly when a new page is selected from the sidebar, giving a page-flipping effect. The sidebar is also toggleable, allowing the content area to expand for a larger viewing space.
-
-![alt tag1](readme-assets/desktop.png)
-
-### 3. Mobile Screenshots
-On mobile, the layout groups the portfolio sections into categories and transforms into a tabbed interface with a bottom navigation.
-
-![alt tag1](readme-assets/mobile.png)
-
-## Installation
-
-1. Clone the repo:
 ```
-git clone https://github.com/ryanbalieiro/react-portfolio-template
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   React Frontend │    │  Node.js Server │    │ Python FastAPI  │
+│   (Port 5173)   │◄──►│   (Port 3000)   │◄──►│   (Port 8000)   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │                       │                       │
+         ▼                       ▼                       ▼
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Firebase      │    │   PDF Processing │    │   AI Agent      │
+│   Firestore     │    │   & Overlays     │    │   Content Gen   │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-2. Go to the root directory of the project and install all dependencies with npm:
-```
+## 🚀 **Quick Start**
+
+### **Prerequisites**
+
+- **Node.js** 18+ and **npm**
+- **Python** 3.8+
+- **Firebase** project with Firestore enabled
+- **OpenAI API** key for AI agent functionality
+
+### **1. Clone & Setup**
+
+```bash
+git clone <repository-url>
+cd mehko-ai
+
+# Install dependencies
 npm install
+pip install -r python/requirements.txt
+
+# Copy environment configuration
+cp .env.example .env
+# Edit .env with your API keys and Firebase config
 ```
 
-3. Run the project in developer mode:
-```
-npm run dev
-```
+### **2. Configuration**
 
-4. To temporarily deactivate the preload animation during theme adjustments, go to `public/data/settings.json` and modify the following field:
+Create a `.env` file in the root directory:
 
-```
-"preloader": {
-    "enabled": false,
-    (...)
-},
-```
+```env
+# OpenAI API
+OPENAI_API_KEY=your_openai_api_key_here
 
-## Template Customization
-
-### 1. Changing the content
-
-All portfolio content, including text and images, is located in the `public` folder at the root level. Within this folder, you'll find two key directories:
-
-- `public/data` ➔ Contains JSON files with the portfolio's texts and general configurations.
-- `public/images`➔ Contains all the images used in the portfolio.
-
-To customize the content of the portfolio, simply edit the JSON files and swap out the images as needed. It's that easy!
-
-### 2. Customizing the colors
-
-You can easily adjust the theme colors by editing the SCSS variables in `src/styles/_variables.scss`. This file contains the portfolio's static colors as well as the color palettes for both the light and dark themes. 
-
-Simply modify these variables to customize the layout to your liking.
-
-### 3. Adding and removing languages
-
-To add or remove languages, open `public/data/settings.json` and modify the `supportedLanguages` field as needed. Use the `default` property to specify the fallback language that should be used if the application doesn't support the user's preferred language.
-
-```json
-{
-    "supportedLanguages": [
-        {
-            "name": "English",
-            "id": "en",
-            "flagUrl": "images/flags/en.png",
-            "default": true
-        },
-
-        {
-            "name": "日本語",
-            "id": "ja",
-            "flagUrl": "images/flags/ja.png"
-        }
-    ]
-}
+# Firebase (if using service account)
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_PRIVATE_KEY=your_private_key
+FIREBASE_CLIENT_EMAIL=your_client_email
 ```
 
-The `public/images/flags/` folder already contains a collection of flags for commonly used languages. If you require a specific flag icon that isn't there, you can download it [here](https://www.flaticon.com/packs/countrys-flags) for free.
+### **3. Start All Services**
 
-To **deactivate support** for multiple languages, keep only a single language within the array. This will automatically hide the language picker menu.
+```bash
+# Start all services (Python, Node.js, React)
+./scripts/start-all-services.sh
 
-### 4. Adding, removing and reordering sections
+# Monitor logs in separate terminals
+./scripts/watch-logs.sh
 
-Inside the `public/data/structure.json` file, you will find two arrays: one for **sections** and the other for **categories**. Every section **must** be linked to a corresponding category, which is essential for grouping sections in the mobile navigation.
-
-Adding, removing or reordering the sections can be achieved by making modifications to the `sections` array:
-
-```json
-{
-    "sections": [
-        {
-            "id": "about",
-            "categoryId": "home",
-            "jsonPath": "/data/sections/cover.json",
-            "faIcon": "fa-solid fa-address-card"
-        },
-        
-        {
-            "id": "education",
-            "categoryId": "background",
-            "jsonPath": "/data/sections/education.json",
-            "faIcon": "fa-solid fa-graduation-cap"
-        }
-    ]
-}
+# Stop all services
+./scripts/stop-all-services.sh
 ```
 
-Each section entry comprises the following fields:
+### **4. Access Applications**
 
-- ***id*** ➔ A unique identifier for the section.
-- ***categoryId*** ➔ Specifies the category to which the section belongs (used for grouping sections in the mobile navigation).
-- ***jsonPath*** ➔ The file containing the section's content.
-- ***faIcon*** ➔ The FontAwesome icon associated with the section.
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
 
-### 5. Editing the section content
-
-You can customize the content of a section by editing its corresponding JSON file.
-
-Each section JSON file contains two main fields:
-- `locales` ➔ Translations for the section's general information, such as the title.
-- `articles` ➔ A list of components that render the section and its respective content.
-
-You can add or remove articles from sections by editing the items of the `articles` array: 
-
-```json
-{
-    "articles": [
-        {
-            "component": "ArticleTestimonials",
-            "locales": {},
-            "items": []
-        },
-
-        {
-            "component": "ArticleInfoBlock",
-            "locales": {},
-            "items": []
-        }
-    ]
-}
-```
-
-**Important note**: each type of article may require a different item structure, so refer to existing examples for guidance on how to structure the JSON object for each type of component.
-
-### 6. Localizing texts
-
-Place your translations for **static texts** in `public/data/strings.json`. This file serves as a central hub for all your global localization needs, making your translations accessible via the helper method `getString`:
-
-```js
-import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-const {getString} = useLanguage()
-
-const translation = getString("close")
-console.log(translation) // Will print "Close" (en) or "Cerrar" (es)
-```
-
-For translations specific to sections, you can create a custom `locales` field inside the section's JSON file: 
-
-```json
-{
-    "locales": {
-        "en": {
-            "hello": "Hello!",
-            "age": "Age"
-        },
-        
-        "es": {
-            "hello": "Hola!",
-            "age": "Edad"
-        }
-    }
-}
-```
-
-And then, use the following helper function to fetch the translation for the user's preferred language:
-
-```js
-import {useLanguage} from "/src/providers/LanguageProvider.jsx"
-const {getTranslation} = useLanguage()
-
-const hello = getTranslation(section.content.locales, "hello")
-console.log(hello) // Will print "Hello!" (en) or "Hola!" (es)
-```
-
-### 7. Contact form configuration
-
-The contact form component integrates `EmailJS`. EmailJS is a free service that allows you to send emails using JavaScript - without the need for a backend.
-
-To configure your contact form, follow these steps:
-
-- Create an EmailJS account (https://www.emailjs.com/)
-- In your EmailJS account panel, create an email service, which configures the provider that will send the emails (e.g., your Gmail or iCloud account).
-- Next, on your dashboard, create a new email template like this one:
+## 📁 **Project Structure**
 
 ```
-You got a new message from {{from_name}} ({{from_email}}):
-
-Subject: {{custom_subject}}
-
-{{message}}
+mehko-ai/
+├── 📱 src/                    # React frontend source
+├── 🐍 python/                 # Python backend & FastAPI
+├── 🔧 scripts/                # Automation & utility scripts
+├── 📊 data/                   # Application data & configuration
+├── 📚 docs/                   # Project documentation
+├── 📝 logs/                   # Service log files
+├── ⚙️  config/                 # Configuration files
+├── 🗂️  temp/                   # Temporary runtime files
+├── 🤖 generated/              # AI-generated county applications
+└── 🛠️  tools/                  # Development utilities
 ```
 
-- Now, open `settings.json` in your project and fill in the `emailjs` dictionary with your account info:
-```json
-{
-    "emailjs": {
-        "publicKey": "YOUR_EMAIL_JS_PUBLIC_KEY",
-        "serviceId": "YOUR_EMAIL_JS_SERVICE_ID",
-        "templateId": "YOUR_EMAIL_JS_TEMPLATE_ID"
-    }
-}
+### **Key Directories Explained**
+
+| Directory      | Purpose          | Key Files                        |
+| -------------- | ---------------- | -------------------------------- |
+| **`src/`**     | React frontend   | Components, hooks, providers     |
+| **`python/`**  | Backend services | FastAPI server, PDF processing   |
+| **`scripts/`** | Automation       | Service management, AI agent     |
+| **`data/`**    | Application data | County manifests, configurations |
+| **`docs/`**    | Documentation    | Guides, research, agent features |
+
+## 🛠️ **Development Workflow**
+
+### **Starting Development**
+
+```bash
+# Start all services in development mode
+./scripts/start-all-services.sh
+
+# Watch logs in separate terminals
+./scripts/watch-logs.sh
+
+# Make changes to code (hot reload enabled)
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8000
 ```
 
-- Finally, submit your first email! The message will be delivered to both the inbox of the email you used to create your EmailJS account and the "Email History" section in the EmailJS dashboard.
+### **AI Agent Development**
 
-## Deployment
+```bash
+# Test the enhanced AI agent
+node scripts/test-enhanced-agent.mjs
 
-Open `vite.config.js` and set the base directory for your application. This setting defines the main path that your website will be hosted under.
+# Process a new county
+node scripts/mehko-agent-enhanced.mjs "https://county.gov/mehko" "County Name"
 
-```js
-export default defineConfig({
-  base: '/react-portfolio-template/',
-  plugins: [react()],
-})
+# Batch process multiple counties
+node scripts/mehko-agent-enhanced.mjs --batch data/county-batch.json
 ```
 
-In simple terms, if you consider GitHub hosting the GitHub Pages site for this repo at the URL `https://ryanbalieiro.github.io/react-portfolio-template/`, the correct base directory to set is `/react-portfolio-template/`.
+### **Adding New Counties**
 
-If you're deploying to Netlify or your own custom domain where your website is located at the root, you can leave the `base` setting as `'/'`.
+1. **Identify target county** and MEHKO page URL
+2. **Run AI agent** to extract information
+3. **Review generated JSON** in `generated/` directory
+4. **Add to manifest** using `scripts/add-county.mjs`
+5. **Test application** in the frontend
 
-To compile your project for production, execute:
+## 🤖 **AI Agent System**
 
+### **Overview**
+
+The AI agent system automatically crawls county websites to extract MEHKO permit information and generate structured JSON applications.
+
+### **Key Capabilities**
+
+- **Multi-Source Content Extraction** - Main page + PDFs + external links
+- **Intelligent Link Categorization** - Forms, guides, requirements, fees
+- **Content Credibility Scoring** - Source hierarchy and validation
+- **Fallback Information Strategies** - Baseline + county-specific data
+- **Batch Processing** - Multiple counties in sequence
+
+### **Usage Examples**
+
+```bash
+# Single county processing
+node scripts/mehko-agent-enhanced.mjs "https://sandiegocounty.gov/mehko" "San Diego"
+
+# Batch processing
+node scripts/mehko-agent-enhanced.mjs --batch data/county-batch.json
+
+# Test mode (no API calls)
+node scripts/test-enhanced-agent.mjs
 ```
+
+### **Output Structure**
+
+Generated applications include:
+
+- **County Information** - Name, contact details, website
+- **Permit Requirements** - Eligibility, documentation needed
+- **Fee Structure** - Application fees, renewal costs
+- **Process Steps** - Application workflow, timeline
+- **Contact Information** - Phone, email, office locations
+- **Source Attribution** - Information credibility and sources
+
+## 🔧 **Technical Stack**
+
+### **Frontend**
+
+- **React 18** - Modern component-based UI
+- **SCSS** - Advanced CSS preprocessing
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+
+### **Backend**
+
+- **Python 3.8+** - Core backend language
+- **FastAPI** - High-performance web framework
+- **Uvicorn** - ASGI server with performance optimizations
+- **PyMuPDF** - PDF processing and manipulation
+
+### **AI & Automation**
+
+- **OpenAI GPT-4** - Content generation and analysis
+- **Puppeteer** - Web scraping and automation
+- **Node.js** - Script execution and automation
+
+### **Data & Storage**
+
+- **Firebase Firestore** - Real-time database
+- **JSON** - Configuration and data exchange
+- **Git** - Version control and collaboration
+
+## 📊 **Performance & Monitoring**
+
+### **Service Management**
+
+```bash
+# Check service status
+./scripts/status-all-services.sh
+
+# Monitor CPU usage
+./scripts/check-cpu.sh
+
+# Watch all logs
+./scripts/watch-logs.sh
+```
+
+### **Performance Optimization**
+
+- **Uvicorn workers** - Optimized for production load
+- **Concurrency limits** - Controlled resource usage
+- **Request limits** - Prevent resource exhaustion
+- **CPU monitoring** - Real-time performance tracking
+
+## 🧪 **Testing & Quality**
+
+### **Frontend Testing**
+
+```bash
+# Run unit tests
+npm test
+
+# Run smoke tests
+npm run test:smoke
+
+# Build for production
 npm run build
-``` 
+```
 
-This command triggers a series of processes that package your code, assets, and other necessary files, ultimately creating a production-ready version of your project. After running the command, you'll find the compiled files within the `dist` folder. 
+### **Backend Testing**
 
-## About
+```bash
+# Python tests
+cd python
+python -m pytest
 
-This template was created by and is maintained by **[Ryan Balieiro](https://ryanbalieiro.com/)**.
+# API testing
+curl http://localhost:8000/health
+```
 
-It's based on the **[React](https://reactjs.org/)** framework created by Jordan Walke, and the **[Bootstrap](https://getbootstrap.com/)** framework created by Mark Otto and Jacob Thorton.
+### **AI Agent Testing**
 
-Additional frameworks and plugins used include:
-- **Font Awesome**: A library of free vector icons.
-- **Smooth Scrollbar**: A customizable scrollbar plugin.
-- **Swiper**: A powerful library for creating touch sliders.
-- **EmailJS**: A free service that allows you to send emails using JavaScript.
+```bash
+# Test agent functionality
+node scripts/test-enhanced-agent.mjs
 
-## Copyright and License
+# Validate generated output
+node scripts/validate-county.mjs generated/county_name.json
+```
 
-Code released under the [MIT](https://github.com/StartBootstrap/startbootstrap-agency/blob/master/LICENSE) license, providing complete freedom for utilization. Feel free to enhance and adapt it to suit your needs.
+## 🚀 **Deployment**
 
-Oh... and if you like this template, don't forget to **give it a ⭐** :)
+### **Production Setup**
+
+```bash
+# Use production-optimized scripts
+./scripts/start-production.sh
+
+# Environment variables
+export ENVIRONMENT=production
+export NODE_ENV=production
+```
+
+### **Service Configuration**
+
+- **Frontend**: Vite production build
+- **Backend**: Uvicorn with workers and limits
+- **Monitoring**: Log aggregation and performance tracking
+
+## 🤝 **Contributing**
+
+### **Development Guidelines**
+
+1. **Create feature branches** for new work
+2. **Follow existing patterns** for consistency
+3. **Update documentation** for new features
+4. **Test thoroughly** before committing
+5. **Use conventional commits** for clear history
+
+### **Branch Strategy**
+
+- **`main`** - Production-ready code
+- **`feature/*`** - New features and enhancements
+- **`bugfix/*`** - Bug fixes and patches
+- **`hotfix/*`** - Critical production fixes
+
+### **Code Style**
+
+- **JavaScript/React**: ESLint + Prettier
+- **Python**: PEP 8 + Black
+- **SCSS**: Consistent naming conventions
+- **Shell**: POSIX-compliant scripts
+
+## 📚 **Documentation**
+
+### **Key Documents**
+
+- **[PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md)** - Directory organization
+- **[docs/AI_AGENT_INSTRUCTIONS.md](./docs/AI_AGENT_INSTRUCTIONS.md)** - AI agent usage
+- **[docs/ENHANCED_AGENT_FEATURES.md](./docs/ENHANCED_AGENT_FEATURES.md)** - Agent capabilities
+- **[docs/AI_PDF_IMPLEMENTATION_GUIDE.md](./docs/AI_PDF_IMPLEMENTATION_GUIDE.md)** - PDF processing
+
+### **API Documentation**
+
+- **FastAPI Docs**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **OpenAPI Schema**: http://localhost:8000/openapi.json
+
+## 🐛 **Troubleshooting**
+
+### **Common Issues**
+
+#### **Services Won't Start**
+
+```bash
+# Check if ports are in use
+lsof -i :8000,3000,5173
+
+# Kill existing processes
+./scripts/stop-all-services.sh
+
+# Check logs for errors
+tail -f logs/*.log
+```
+
+#### **AI Agent Issues**
+
+```bash
+# Verify API key
+echo $OPENAI_API_KEY
+
+# Test agent connectivity
+node scripts/test-enhanced-agent.mjs
+
+# Check Puppeteer installation
+node -e "console.log(require('puppeteer'))"
+```
+
+#### **Performance Issues**
+
+```bash
+# Monitor CPU usage
+./scripts/check-cpu.sh
+
+# Check service status
+./scripts/status-all-services.sh
+
+# Review log files
+./scripts/watch-logs.sh
+```
+
+### **Getting Help**
+
+1. **Check logs** in `logs/` directory
+2. **Review documentation** in `docs/` directory
+3. **Test individual components** using test scripts
+4. **Check service status** using monitoring scripts
+
+## 📈 **Roadmap**
+
+### **Phase 1: Core Infrastructure** ✅
+
+- [x] Multi-service architecture
+- [x] AI agent foundation
+- [x] Project organization
+- [x] Performance monitoring
+
+### **Phase 2: Enhanced AI Agent** 🚧
+
+- [x] Multi-source content extraction
+- [x] Credibility scoring system
+- [x] Intelligent fallbacks
+- [ ] Advanced PDF processing
+- [ ] Content validation
+
+### **Phase 3: County Expansion** 📋
+
+- [ ] 10+ California counties
+- [ ] Automated county discovery
+- [ ] Content quality assurance
+- [ ] User feedback integration
+
+### **Phase 4: Advanced Features** 🔮
+
+- [ ] Machine learning improvements
+- [ ] Predictive analytics
+- [ ] Mobile applications
+- [ ] API marketplace
+
+## 📄 **License**
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 **Acknowledgments**
+
+- **California Department of Public Health** for MEHKO program guidance
+- **OpenAI** for GPT-4 API access
+- **Firebase** for backend infrastructure
+- **Open source community** for tools and libraries
+
+---
+
+**Ready to streamline MEHKO permit applications? Start with the [Quick Start](#-quick-start) guide above! 🚀**
+
+_For detailed technical information, see the [docs/](./docs/) directory._
