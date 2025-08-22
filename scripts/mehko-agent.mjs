@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import puppeteer from 'puppeteer';
-import fs from 'fs';
-import OpenAI from 'openai';
-import path from 'path';
-import url from 'url';
+import puppeteer from "puppeteer";
+import fs from "fs";
+import OpenAI from "openai";
+import path from "path";
+import url from "url";
+import dotenv from "dotenv";
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -21,76 +22,83 @@ class CostEffectiveMEHKOAgent {
 
   async generateCountyApplication(url) {
     console.log(`🕷️ Crawling: ${url}`);
-    
+
     try {
       // Step 1: Extract raw content efficiently
       const rawContent = await this.extractRawContent(url);
-      
+
       // Step 2: Single GPT-4 call to generate complete application
-      const countyJson = await this.generateCompleteApplication(rawContent, url);
-      
+      const countyJson = await this.generateCompleteApplication(
+        rawContent,
+        url
+      );
+
       return countyJson;
-      
     } catch (error) {
-      console.error('❌ Agent failed:', error.message);
+      console.error("❌ Agent failed:", error.message);
       throw error;
     }
   }
 
   async extractRawContent(url) {
-    await this.page.goto(url, { waitUntil: 'networkidle2' });
-    
+    await this.page.goto(url, { waitUntil: "networkidle2" });
+
     // Extract all relevant content in one go
     const content = await this.page.evaluate(() => {
       const extractText = (selector) => {
         const elements = document.querySelectorAll(selector);
-        return Array.from(elements).map(el => el.textContent.trim()).join(' ');
+        return Array.from(elements)
+          .map((el) => el.textContent.trim())
+          .join(" ");
       };
 
       return {
-        title: document.querySelector('h1, .title, .page-title')?.textContent?.trim() || '',
-        mainContent: extractText('main, .content, .main-content, article'),
+        title:
+          document
+            .querySelector("h1, .title, .page-title")
+            ?.textContent?.trim() || "",
+        mainContent: extractText("main, .content, .main-content, article"),
         forms: extractText('a[href*=".pdf"], .forms, .applications'),
-        contact: extractText('.contact, .contact-info, address'),
-        fees: extractText('.fees, .cost, .payment'),
-        requirements: extractText('.requirements, .checklist, .steps'),
+        contact: extractText(".contact, .contact-info, address"),
+        fees: extractText(".fees, .cost, .payment"),
+        requirements: extractText(".requirements, .checklist, .steps"),
         url: window.location.href,
-        domain: window.location.hostname
+        domain: window.location.hostname,
       };
     });
-    
+
     return content;
   }
 
   async generateCompleteApplication(rawContent, url) {
     // Single GPT-4 call to generate the complete application
     const prompt = this.buildEfficientPrompt(rawContent, url);
-    
+
     const completion = await this.openai.chat.completions.create({
       model: "gpt-4",
       messages: [
         {
           role: "system",
-          content: `You are an expert at creating MEHKO application JSON files. Generate a complete, accurate county application following this exact structure.`
+          content: `You are an expert at creating MEHKO application JSON files. Generate a complete, accurate county application following this exact structure.`,
         },
         {
-          role: "user", 
-          content: prompt
-        }
+          role: "user",
+          content: prompt,
+        },
       ],
       temperature: 0.1, // Low temperature for consistency
-      max_tokens: 2000
+      max_tokens: 2000,
     });
 
     const response = completion.choices[0].message.content;
-    
+
     try {
       // Extract JSON from response
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
       } else {
-        throw new Error('No valid JSON found in response');
+        throw new Error("No valid JSON found in response");
       }
     } catch (error) {
       throw new Error(`Failed to parse GPT response: ${error.message}`);
@@ -221,44 +229,49 @@ Return ONLY the JSON object, no other text.`;
 
 // Main execution
 async function main() {
+  // Load environment variables from .env file
+  dotenv.config();
+
   const args = process.argv.slice(2);
-  
+
   if (args.length !== 1) {
-    console.error('Usage: node scripts/mehko-agent.mjs <county-url>');
-    console.error('Example: node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html"');
+    console.error("Usage: node scripts/mehko-agent.mjs <county-url>");
+    console.error(
+      'Example: node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd/food/homekitchenoperations.html"'
+    );
     process.exit(1);
   }
-  
+
   const url = args[0];
   const apiKey = process.env.OPENAI_API_KEY;
-  
+
   if (!apiKey) {
-    console.error('❌ OPENAI_API_KEY environment variable required');
-    console.error('Set it with: export OPENAI_API_KEY="your_api_key_here"');
+    console.error("❌ OPENAI_API_KEY not found");
+    console.error("Create a .env file in your project root with:");
+    console.error("OPENAI_API_KEY=your_api_key_here");
     process.exit(1);
   }
 
   const agent = new CostEffectiveMEHKOAgent(apiKey);
-  
+
   try {
-    console.log('🚀 Starting MEHKO AI Agent...');
+    console.log("🚀 Starting MEHKO AI Agent...");
     await agent.initialize();
-    
+
     const countyJson = await agent.generateCountyApplication(url);
-    
+
     // Save the generated JSON
     const filename = `generated_${countyJson.id}.json`;
-    const outputPath = path.join(__dirname, '..', filename);
+    const outputPath = path.join(__dirname, "..", filename);
     fs.writeFileSync(outputPath, JSON.stringify(countyJson, null, 2));
-    
+
     console.log(`✅ Generated: ${filename}`);
     console.log(`🏛️ County: ${countyJson.title}`);
     console.log(`🆔 ID: ${countyJson.id}`);
     console.log(`💰 Cost: ~$0.06-0.12 per county (single GPT-4 call)`);
     console.log(`📁 File saved to: ${outputPath}`);
-    
   } catch (error) {
-    console.error('❌ Agent failed:', error.message);
+    console.error("❌ Agent failed:", error.message);
     process.exit(1);
   } finally {
     await agent.close();

@@ -14,9 +14,18 @@ npm install
 
 ### 2. Set OpenAI API Key
 
+Create a `.env` file in your project root:
 ```bash
-export OPENAI_API_KEY="your_openai_api_key_here"
+# Create .env file
+echo "OPENAI_API_KEY=your_actual_api_key_here" > .env
 ```
+
+Or manually create `.env` with:
+```
+OPENAI_API_KEY=your_actual_api_key_here
+```
+
+**Note**: The `.env` file is already in `.gitignore` for security.
 
 ## Usage
 
