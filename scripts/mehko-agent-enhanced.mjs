@@ -1194,6 +1194,86 @@ class EnhancedMEHKOAgent {
     return [...new Set(results)]; // Remove duplicates
   }
 
+  preprocessPDFContent(rawContent) {
+    // Extract and structure key information from PDFs before sending to AI
+    const extractedInfo = {
+      fees: [],
+      requirements: [],
+      contact: [],
+      limits: [],
+      timelines: [],
+      documents: []
+    };
+
+    // Process external content (PDFs)
+    if (rawContent.externalContent && rawContent.externalContent.length > 0) {
+      rawContent.externalContent.forEach(content => {
+        if (content.type === 'pdf' && content.content && typeof content.content === 'string') {
+          const text = content.content;
+          
+          // Extract fees
+          const feeMatches = text.match(/\$[\d,]+(?:\.\d{2})?/g);
+          if (feeMatches) {
+            extractedInfo.fees.push(...feeMatches);
+          }
+          
+          // Extract requirements
+          const reqMatches = text.match(/(?:required|must|shall)\s+[^\.]{10,100}/gi);
+          if (reqMatches) {
+            extractedInfo.requirements.push(...reqMatches);
+          }
+          
+          // Extract contact info
+          const phoneMatches = text.match(/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/g);
+          if (phoneMatches) {
+            extractedInfo.contact.push(...phoneMatches);
+          }
+          
+          const emailMatches = text.match(/[\w\.\-@]+@[\w\.\-]+\.[a-zA-Z]{2,}/g);
+          if (emailMatches) {
+            extractedInfo.contact.push(...emailMatches);
+          }
+          
+          // Extract limits
+          const limitMatches = text.match(/(?:maximum|limit|up to|not exceed)\s+[\d,]+[^\.]{0,50}/gi);
+          if (limitMatches) {
+            extractedInfo.limits.push(...limitMatches);
+          }
+          
+          // Extract timelines
+          const timeMatches = text.match(/\d+\s+(?:days?|weeks?|months?)[^\.]{0,50}/gi);
+          if (timeMatches) {
+            extractedInfo.timelines.push(...timeMatches);
+          }
+          
+          // Extract document names
+          const docMatches = text.match(/(?:form|application|document|checklist|guide)[^\.]{0,100}/gi);
+          if (docMatches) {
+            extractedInfo.documents.push(...docMatches);
+          }
+        }
+      });
+    }
+
+    // Remove duplicates and clean up
+    Object.keys(extractedInfo).forEach(key => {
+      extractedInfo[key] = [...new Set(extractedInfo[key])].slice(0, 5); // Limit to top 5
+    });
+
+    // Add extracted info to rawContent for the AI to use
+    rawContent.extractedKeyInfo = extractedInfo;
+    
+    console.log(`🔍 Pre-processed PDF content - Found:`);
+    console.log(`  💰 Fees: ${extractedInfo.fees.length}`);
+    console.log(`  📋 Requirements: ${extractedInfo.requirements.length}`);
+    console.log(`  📞 Contact: ${extractedInfo.contact.length}`);
+    console.log(`  ⚠️  Limits: ${extractedInfo.limits.length}`);
+    console.log(`  ⏰ Timelines: ${extractedInfo.timelines.length}`);
+    console.log(`  📄 Documents: ${extractedInfo.documents.length}`);
+
+    return rawContent;
+  }
+
   buildEnhancedPrompt(rawContent, url, countyName) {
     // Truncate content to stay under token limits
     const truncatedContent = this.truncateContentForPrompt(rawContent);
@@ -1218,7 +1298,7 @@ Generate a JSON object with this EXACT structure:
   "id": "county_name_mehko",
   "title": "County Name MEHKO",
   "description": "Brief description with key details like meal limits, revenue caps, and any unique requirements",
-  "rootDomain": "county.gov",
+  "rootDomain": "county.gov", // Must be clean domain without protocol or www
   "supportTools": { "aiEnabled": true, "commentsEnabled": true },
   "steps": [
     {
@@ -1357,15 +1437,35 @@ SOURCE PRIORITY:
 
 Remember: The goal is to create an application that users can actually use to get their MEHKO permit, not just a list of links to visit. Extract and synthesize the actual information they need. Use the PDF content we've extracted to provide specific, actionable details.
 
-CRITICAL INSTRUCTION:
+CRITICAL INSTRUCTION - GENERATE ACTIONABLE CONTENT:
 Before generating the application, carefully analyze ALL PDF content provided. Look for:
 1. Specific dollar amounts (fees, costs, payments)
 2. Exact requirements and documents needed
 3. Specific contact information (names, phone numbers, emails)
-4. Operational limits and restrictions
+4. Operational limits and restrictions (meal limits, revenue caps)
 5. Processing timelines and deadlines
 
 If you find this information in PDFs, use it EXACTLY. Do not paraphrase or generalize. Users need to know exactly what to do, how much to pay, and who to contact.
+
+MANDATORY: Use the "extractedKeyInfo" data that has been pre-processed from PDFs. This contains:
+- Specific fees found in PDFs
+- Exact requirements extracted from PDFs  
+- Contact information found in PDFs
+- Operational limits found in PDFs
+- Timelines found in PDFs
+- Document names found in PDFs
+
+DO NOT generate generic content when specific information is available in extractedKeyInfo!
+
+CONTENT STRUCTURE REQUIREMENTS:
+- Planning Overview: List SPECIFIC requirements, limits, allowed foods, NOT generic legal references
+- Approvals & Training: Explain the ACTUAL process, not just reference forms
+- Prepare Docs: List EXACT documents needed, reference the PDF steps clearly
+- PDF Steps: Make it clear these are the forms users actually fill out
+- Submit Application: Include specific fees, submission methods, contact info
+- Inspection: Include specific requirements, checklist, follow-up process
+- Receive Permit: Include specific timeline, delivery method
+- Operate & Comply: Include specific limits, renewal requirements, compliance rules
 
 EXAMPLES OF GOOD VS BAD CONTENT:
 
@@ -1381,12 +1481,21 @@ GOOD (Actionable): "Contact: Jane Smith at (555) 123-4567, email: mehko@county.g
 BAD (General): "Submit required documents."
 GOOD (Specific): "Required documents: 1) Completed application form, 2) Food handler certificate, 3) Site diagram showing kitchen layout, 4) Standard Operating Procedures (SOP) form."
 
+BAD (Confusing): "You will need to obtain a Health Permit from the Department."
+GOOD (Clear): "Complete the Health Permit Application form (Step 5) and Standard Operating Procedures form (Step 4). Submit both forms with payment to receive your permit."
+
+BAD (Unclear): "Prepare the necessary documents for your application."
+GOOD (Specific): "Required documents: 1) Health Permit Application (complete in Step 5), 2) Standard Operating Procedures (complete in Step 4), 3) Food handler certificate, 4) Site diagram"
+
 Extract this level of detail from the provided content!`;
   }
 
   truncateContentForPrompt(rawContent) {
     // Target: Keep content under 12,000 characters to stay well under GPT-4's 8,192 token limit
     const MAX_CONTENT_SIZE = 12000;
+    
+    // Pre-process PDF content to extract key information
+    const processedContent = this.preprocessPDFContent(rawContent);
 
     // Start with essential main page content
     const truncated = {
@@ -1399,7 +1508,7 @@ Extract this level of detail from the provided content!`;
         requirements: rawContent.requirements || "",
         regulations: rawContent.regulations || "",
         url: rawContent.url || "",
-        domain: rawContent.domain || "",
+        domain: (rawContent.domain || "").replace(/^www\./, "").replace(/^https?:\/\//, ""),
       },
       keyInformation: {
         fees: rawContent.keyPageInfo?.fees || [],
