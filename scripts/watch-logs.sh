@@ -32,6 +32,7 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}📺 Opening three separate terminal windows/tabs for each service log...${NC}"
@@ -151,7 +152,37 @@ tail -f logs/fastapi.log
 while true; do sleep 1; done
 EOF
 
-    chmod +x "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT"
+    # CPU Performance Monitor script
+    CPU_SCRIPT=$(mktemp)
+    cat > "$CPU_SCRIPT" << EOF
+#!/bin/bash
+cd "$PROJECT_DIR"
+echo "🚀 MEHKO AI - CPU Performance Monitor"
+echo "====================================="
+echo "💻 Continuous CPU, Memory & Process Monitoring"
+echo "📍 Updates every 5 seconds"
+echo ""
+echo "Press Ctrl+C to stop monitoring"
+echo ""
+echo "Starting CPU performance monitoring..."
+echo ""
+
+# Check if Python script exists
+if [ ! -f "scripts/monitor-server.py" ]; then
+    echo "❌ scripts/monitor-server.py not found"
+    echo "💡 Make sure the monitoring script exists"
+    echo ""
+    echo "Press any key to exit..."
+    read -n 1
+    exit 1
+fi
+
+echo "✅ Found monitoring script - starting continuous monitoring..."
+echo ""
+source python/.venv/bin/activate && python scripts/monitor-server.py --continuous
+EOF
+
+    chmod +x "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$CPU_SCRIPT"
     
     # Open three separate terminal windows
     echo -e "${CYAN}📱 Opening React Dev Server log window...${NC}"
@@ -185,8 +216,19 @@ tell application "Terminal"
 end tell
 EOF
 
+    sleep 1
+    
+    echo -e "${CYAN}💻 Opening CPU Performance Monitor window...${NC}"
+    osascript << EOF
+tell application "Terminal"
+    do script "bash '$CPU_SCRIPT'"
+    set custom title of front window to "CPU Performance Monitor"
+    activate
+end tell
+EOF
+
     # Clean up temp scripts after a longer delay to ensure they're executed
-    (sleep 30 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT") &
+    (sleep 30 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$CPU_SCRIPT") &
 
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo -e "${GREEN}🐧 Linux detected - opening three terminal windows${NC}"
@@ -248,11 +290,12 @@ else
 fi
 
 echo ""
-echo -e "${GREEN}✅ Three separate log monitoring windows/tabs have been opened!${NC}"
-echo -e "${CYAN}💡 Each window/tab monitors a single service:${NC}"
-echo -e "  📱 React Dev Server (Port 5173) - logs/react.log"
-echo -e "  🔧 Node.js Server (Port 3000) - logs/node.log"
-echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
+    echo -e "${GREEN}✅ Four separate monitoring windows/tabs have been opened!${NC}"
+    echo -e "${CYAN}💡 Each window/tab monitors a specific service or metric:${NC}"
+    echo -e "  📱 React Dev Server (Port 5173) - logs/react.log"
+    echo -e "  🔧 Node.js Server (Port 3000) - logs/node.log"
+    echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
+    echo -e "  💻 CPU Performance Monitor - Real-time system metrics"
 echo ""
 if ! check_service 8000 "Python FastAPI" >/dev/null 2>&1 || ! check_service 3000 "Node.js Server" >/dev/null 2>&1 || ! check_service 5173 "React Dev Server" >/dev/null 2>&1; then
     echo -e "${YELLOW}⚠️  Some services are not running. To start all services:${NC}"
