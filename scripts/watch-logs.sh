@@ -3,6 +3,30 @@
 # Script hardening - exit on any error
 set -euo pipefail
 
+# Function to check if a service is running
+check_service() {
+    local port=$1
+    local service_name=$2
+    if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ $service_name is running on port $port${NC}"
+        return 0
+    else
+        echo -e "${RED}❌ $service_name is not running on port $port${NC}"
+        return 1
+    fi
+}
+
+# Function to create log file if it doesn't exist
+create_log_file() {
+    local log_file=$1
+    local service_name=$2
+    if [ ! -f "$log_file" ]; then
+        echo -e "${YELLOW}📝 Creating $log_file for $service_name...${NC}"
+        touch "$log_file"
+        echo "$(date): $service_name log file created" > "$log_file"
+    fi
+}
+
 # Colors for output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
@@ -11,6 +35,20 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}📺 Opening three separate terminal windows/tabs for each service log...${NC}"
+
+# Check service status first
+echo -e "${YELLOW}🔍 Checking service status...${NC}"
+check_service 8000 "Python FastAPI" || echo -e "${YELLOW}💡 FastAPI not running - logs will be minimal${NC}"
+check_service 3000 "Node.js Server" || echo -e "${YELLOW}💡 Node.js not running - logs will be minimal${NC}"
+check_service 5173 "React Dev Server" || echo -e "${YELLOW}💡 React not running - logs will be minimal${NC}"
+
+# Create log files if they don't exist
+echo -e "${YELLOW}📝 Ensuring log files exist...${NC}"
+create_log_file "fastapi.log" "Python FastAPI"
+create_log_file "node.log" "Node.js Server"
+create_log_file "react.log" "React Dev Server"
+
+echo ""
 
 # Check if we're on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -49,6 +87,8 @@ fi
 echo "✅ Found react.log - starting monitoring..."
 echo ""
 tail -f react.log
+# Keep the script running
+while true; do sleep 1; done
 EOF
 
     # Node.js Server log script
@@ -77,6 +117,8 @@ fi
 echo "✅ Found node.log - starting monitoring..."
 echo ""
 tail -f node.log
+# Keep the script running
+while true; do sleep 1; done
 EOF
 
     # Python FastAPI log script
@@ -105,6 +147,8 @@ fi
 echo "✅ Found fastapi.log - starting monitoring..."
 echo ""
 tail -f fastapi.log
+# Keep the script running
+while true; do sleep 1; done
 EOF
 
     chmod +x "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT"
@@ -113,7 +157,7 @@ EOF
     echo -e "${CYAN}📱 Opening React Dev Server log window...${NC}"
     osascript << EOF
 tell application "Terminal"
-    do script "$REACT_SCRIPT"
+    do script "bash '$REACT_SCRIPT'"
     set custom title of front window to "React Dev Server Logs"
     activate
 end tell
@@ -124,7 +168,7 @@ EOF
     echo -e "${GREEN}🔧 Opening Node.js Server log window...${NC}"
     osascript << EOF
 tell application "Terminal"
-    do script "$NODE_SCRIPT"
+    do script "bash '$NODE_SCRIPT'"
     set custom title of front window to "Node.js Server Logs"
     activate
 end tell
@@ -135,14 +179,14 @@ EOF
     echo -e "${YELLOW}🐍 Opening Python FastAPI log window...${NC}"
     osascript << EOF
 tell application "Terminal"
-    do script "$FASTAPI_SCRIPT"
+    do script "bash '$FASTAPI_SCRIPT'"
     set custom title of front window to "Python FastAPI Logs"
     activate
 end tell
 EOF
 
-    # Clean up temp scripts after a delay
-    (sleep 10 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT") &
+    # Clean up temp scripts after a longer delay to ensure they're executed
+    (sleep 30 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT") &
 
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo -e "${GREEN}🐧 Linux detected - opening three terminal windows${NC}"
@@ -210,4 +254,12 @@ echo -e "  📱 React Dev Server (Port 5173) - react.log"
 echo -e "  🔧 Node.js Server (Port 3000) - node.log"
 echo -e "  🐍 Python FastAPI (Port 8000) - fastapi.log"
 echo ""
-echo -e "${YELLOW}💡 Make sure all services are running first with: ${NC}./scripts/start-all-services.sh"
+if ! check_service 8000 "Python FastAPI" >/dev/null 2>&1 || ! check_service 3000 "Node.js Server" >/dev/null 2>&1 || ! check_service 5173 "React Dev Server" >/dev/null 2>&1; then
+    echo -e "${YELLOW}⚠️  Some services are not running. To start all services:${NC}"
+    echo -e "${YELLOW}   ./scripts/start-all-services.sh${NC}"
+    echo ""
+    echo -e "${CYAN}💡 The log windows will show minimal output until services start.${NC}"
+    echo -e "${CYAN}   Start the services and the logs will automatically populate!${NC}"
+else
+    echo -e "${GREEN}🎉 All services are running! Logs should be active.${NC}"
+fi
