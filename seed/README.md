@@ -5,14 +5,14 @@
 ### Emulator
 
 export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
-node seed/seed-apps.mjs --path seed/apps --emulator --dry-run
-node seed/seed-apps.mjs --path seed/apps --emulator
+node seed/seed-apps.mjs --file data/manifest.json --emulator --dry-run
+node seed/seed-apps.mjs --file data/manifest.json --emulator
 
 ### Prod
 
 export GOOGLE_APPLICATION_CREDENTIALS=/abs/path/serviceAccount.json
-node seed/seed-apps.mjs --path seed/apps
-node seed/seed-apps.mjs --file seed/apps/sierra_county_mehko.json --only sierra_county_mehko
+node seed/seed-apps.mjs --file data/manifest.json
+node seed/seed-apps.mjs --file data/manifest.json --only los_angeles_mehko
 
 ## Flags
 
@@ -23,7 +23,7 @@ node seed/seed-apps.mjs --file seed/apps/sierra_county_mehko.json --only sierra_
 
 ## JSON Shape
 
-See `seed/apps/*.json`. Validation enforces:
+See `data/manifest.json`. Validation enforces:
 
 - id /^[a-z0-9_]+$/; title, description, rootDomain strings
 - supportTools.{aiEnabled,commentsEnabled} booleans

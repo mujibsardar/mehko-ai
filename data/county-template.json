@@ -1,0 +1,93 @@
+{
+  "id": "county_name_mehko",
+  "title": "County Name MEHKO",
+  "description": "Brief description of the county's MEHKO program including key details like meal limits, revenue caps, etc.",
+  "rootDomain": "county.gov",
+  "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "Planning content with links to official resources and guides"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "Required approvals, training programs, and licensing information"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "List of required documents and where to get them"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "FORM_ID_HERE",
+      "appId": "county_name_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "SOP form instructions with download link to official template"
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "PERMIT_FORM_ID_HERE",
+      "appId": "county_name_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "Main permit application instructions with download link"
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "Submission process, fees, and payment methods"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "Inspection process and requirements"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "Timeline and process for receiving the permit"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "Ongoing compliance requirements and renewal information"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "Program contact information including phone, email, website, and hours"
+    }
+  ]
+}
