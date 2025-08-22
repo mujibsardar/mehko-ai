@@ -219,24 +219,26 @@ class EnhancedMEHKOAgent {
         const extractEnhancedContent = () => {
           // Try multiple selectors for different content types
           const contentSelectors = [
-            'main, .content, .main-content, article, .page-content',
-            '.text-content, .body-content, .post-content',
-            '.entry-content, .content-area, .main-text',
-            'p, .description, .summary, .overview'
+            "main, .content, .main-content, article, .page-content",
+            ".text-content, .body-content, .post-content",
+            ".entry-content, .content-area, .main-text",
+            "p, .description, .summary, .overview",
           ];
-          
-          let content = '';
+
+          let content = "";
           for (const selector of contentSelectors) {
             const elements = document.querySelectorAll(selector);
             if (elements.length > 0) {
               content = Array.from(elements)
-                .map(el => el.textContent.trim())
-                .join(' ');
+                .map((el) => el.textContent.trim())
+                .join(" ");
               break;
             }
           }
-          
-          return content.length > 1000 ? content.substring(0, 1000) + '...' : content;
+
+          return content.length > 1000
+            ? content.substring(0, 1000) + "..."
+            : content;
         };
 
         return {
@@ -278,17 +280,39 @@ class EnhancedMEHKOAgent {
         } characters`
       );
 
-      // Step 2: Extract content from PDFs and important external links
+      // Step 2: Discover and crawl additional pages within the same root domain
+      console.log("🔍 Discovering additional pages within root domain...");
+      const rootDomainPages = await this.discoverRootDomainPages(
+        url,
+        mainPageContent.forms
+      );
+
+      // Debug: Show what we discovered
+      if (rootDomainPages.length > 0) {
+        console.log(`📊 Root domain pages discovered:`);
+        rootDomainPages.forEach((page, index) => {
+          console.log(
+            `  ${index + 1}. ${page.title || "Untitled"} (${page.url})`
+          );
+          console.log(`     Content: ${page.mainContent.substring(0, 100)}...`);
+          console.log(`     Forms: ${page.forms.length} links found`);
+        });
+      } else {
+        console.log("⚠️  No additional root domain pages discovered");
+      }
+
+      // Step 3: Extract content from PDFs and important external links
       console.log("🔗 Extracting content from PDFs and external links...");
       const externalContent = await this.extractExternalContent(
         mainPageContent.forms
       );
 
-      // Step 3: Combine all content
+      // Step 4: Combine all content from multiple sources
       const combinedContent = {
         ...mainPageContent,
+        rootDomainPages: rootDomainPages,
         externalContent: externalContent,
-        totalSources: 1 + externalContent.length,
+        totalSources: 1 + rootDomainPages.length + externalContent.length,
       };
 
       console.log(
@@ -300,6 +324,270 @@ class EnhancedMEHKOAgent {
     } catch (error) {
       throw new Error(`Failed to extract content: ${error.message}`);
     }
+  }
+
+  async discoverRootDomainPages(baseUrl, initialLinks) {
+    const rootDomain = new URL(baseUrl).hostname;
+    const visitedUrls = new Set();
+    const pagesToVisit = [];
+    const discoveredPages = [];
+
+    // Prioritize links by importance and type
+    const prioritizedLinks = this.prioritizeLinks(initialLinks, rootDomain);
+
+    // Add prioritized links to the queue
+    pagesToVisit.push(...prioritizedLinks.map((link) => link.href));
+
+    // Limit the number of pages to visit to prevent excessive crawling
+    const maxPagesToVisit = 8; // Reasonable limit for cost control
+    let pagesVisited = 0;
+
+    console.log(
+      `🔍 Will visit up to ${maxPagesToVisit} pages within ${rootDomain}`
+    );
+
+    while (pagesToVisit.length > 0 && pagesVisited < maxPagesToVisit) {
+      const currentUrl = pagesToVisit.shift();
+      if (visitedUrls.has(currentUrl)) {
+        continue;
+      }
+      visitedUrls.add(currentUrl);
+      pagesVisited++;
+
+      try {
+        console.log(
+          `  📄 Visiting page ${pagesVisited}/${maxPagesToVisit}: ${currentUrl}`
+        );
+
+        await this.page.goto(currentUrl, {
+          waitUntil: "networkidle2",
+          timeout: 15000,
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const currentPageContent = await this.page.evaluate(() => {
+          const extractText = (selector, maxLength = 500) => {
+            const elements = document.querySelectorAll(selector);
+            let text = Array.from(elements)
+              .map((el) => el.textContent.trim())
+              .join(" ");
+            return text.length > maxLength
+              ? text.substring(0, maxLength) + "..."
+              : text;
+          };
+
+          const extractLinks = () => {
+            const links = document.querySelectorAll(
+              'a[href*=".pdf"], a[href*="form"], a[href*="application"], a[href*="permit"], a[href*="guide"], a[href*="checklist"], a[href*="requirements"]'
+            );
+            return Array.from(links)
+              .map((link) => ({
+                text: link.textContent.trim().substring(0, 100),
+                href: link.href,
+                isDownload:
+                  link.href.includes(".pdf") || link.href.includes("download"),
+                type: categorizeLink(link.href, link.textContent),
+              }))
+              .slice(0, 20);
+          };
+
+          const extractForms = () => {
+            const forms = document.querySelectorAll(
+              'form, [class*="form"], [id*="form"]'
+            );
+            return Array.from(forms)
+              .map((form) => ({
+                action: form.action || "",
+                method: form.method || "GET",
+                fields: Array.from(
+                  form.querySelectorAll("input, select, textarea")
+                )
+                  .map((field) => ({
+                    type: field.type || "text",
+                    name: field.name || "",
+                    placeholder: field.placeholder || "",
+                  }))
+                  .slice(0, 10),
+              }))
+              .slice(0, 5);
+          };
+
+          // Helper function to categorize links
+          const categorizeLink = (href, text) => {
+            const lowerHref = href.toLowerCase();
+            const lowerText = text.toLowerCase();
+
+            if (lowerHref.includes(".pdf")) return "pdf";
+            if (lowerText.includes("form") || lowerText.includes("application"))
+              return "form";
+            if (lowerText.includes("guide") || lowerText.includes("manual"))
+              return "guide";
+            if (
+              lowerText.includes("checklist") ||
+              lowerText.includes("requirements")
+            )
+              return "requirements";
+            if (
+              lowerText.includes("fee") ||
+              lowerText.includes("cost") ||
+              lowerText.includes("payment")
+            )
+              return "fees";
+            if (
+              lowerText.includes("contact") ||
+              lowerText.includes("phone") ||
+              lowerText.includes("email")
+            )
+              return "contact";
+            return "other";
+          };
+
+          // Enhanced content extraction with better selectors
+          const extractEnhancedContent = () => {
+            const contentSelectors = [
+              "main, .content, .main-content, article, .page-content",
+              ".text-content, .body-content, .post-content",
+              ".entry-content, .content-area, .main-text",
+              "p, .description, .summary, .overview",
+            ];
+
+            let content = "";
+            for (const selector of contentSelectors) {
+              const elements = document.querySelectorAll(selector);
+              if (elements.length > 0) {
+                content = Array.from(elements)
+                  .map((el) => el.textContent.trim())
+                  .join(" ");
+                break;
+              }
+            }
+
+            return content.length > 1000
+              ? content.substring(0, 1000) + "..."
+              : content;
+          };
+
+          return {
+            title:
+              document
+                .querySelector("h1, .title, .page-title, .main-title")
+                ?.textContent?.trim() || "",
+            mainContent: extractEnhancedContent(),
+            forms: extractLinks(),
+            formElements: extractForms(),
+            contact: extractText(
+              '.contact, .contact-info, address, [class*="contact"], [class*="phone"], [class*="email"]',
+              400
+            ),
+            fees: extractText(
+              '.fees, .cost, .payment, [class*="fee"], [class*="cost"], [class*="price"]',
+              300
+            ),
+            requirements: extractText(
+              '.requirements, .checklist, .steps, [class*="requirement"], [class*="checklist"]',
+              500
+            ),
+            regulations: extractText(
+              '.regulations, .rules, .guidelines, [class*="regulation"], [class*="rule"]',
+              400
+            ),
+            url: window.location.href,
+            domain: window.location.hostname,
+            lastUpdated:
+              document
+                .querySelector("time, .date, .updated")
+                ?.textContent?.trim() || "",
+          };
+        });
+
+        discoveredPages.push(currentPageContent);
+
+        // Add new high-priority links to the queue, but don't exceed our limit
+        const newLinks = currentPageContent.forms
+          .filter(
+            (link) =>
+              link.type === "pdf" ||
+              link.type === "form" ||
+              link.type === "guide" ||
+              link.type === "requirements" ||
+              link.type === "fees"
+          )
+          .map((link) => link.href)
+          .filter(
+            (href) =>
+              !visitedUrls.has(href) && pagesToVisit.length < maxPagesToVisit
+          );
+
+        pagesToVisit.push(...newLinks);
+
+        // Be respectful with delays
+        if (pagesToVisit.length > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Failed to visit ${currentUrl}: ${error.message}`);
+        // Continue with other sources
+      }
+    }
+
+    console.log(
+      `✅ Discovered ${discoveredPages.length} pages within root domain`
+    );
+    return discoveredPages;
+  }
+
+  prioritizeLinks(links, rootDomain) {
+    // Score links based on importance and relevance
+    const scoredLinks = links.map((link) => {
+      let score = 0;
+
+      // Type-based scoring
+      switch (link.type) {
+        case "pdf":
+          score += 10; // PDFs are very valuable
+          break;
+        case "form":
+          score += 8; // Forms are highly important
+          break;
+        case "fees":
+          score += 7; // Fee information is crucial
+          break;
+        case "requirements":
+          score += 6; // Requirements are important
+          break;
+        case "guide":
+          score += 5; // Guides are helpful
+          break;
+        case "contact":
+          score += 3; // Contact info is useful
+          break;
+        default:
+          score += 1;
+      }
+
+      // Domain-based scoring (prioritize same root domain)
+      if (link.href.includes(rootDomain)) {
+        score += 5;
+      }
+
+      // Text-based scoring
+      const lowerText = link.text.toLowerCase();
+      if (lowerText.includes("mehko") || lowerText.includes("home kitchen")) {
+        score += 4;
+      }
+      if (lowerText.includes("application") || lowerText.includes("permit")) {
+        score += 3;
+      }
+      if (lowerText.includes("fee") || lowerText.includes("cost")) {
+        score += 3;
+      }
+
+      return { ...link, score };
+    });
+
+    // Sort by score (highest first) and return top links
+    return scoredLinks.sort((a, b) => b.score - a.score).slice(0, 10); // Limit to top 10 most promising links
   }
 
   async extractExternalContent(links) {
@@ -531,7 +819,7 @@ class EnhancedMEHKOAgent {
   buildEnhancedPrompt(rawContent, url, countyName) {
     return `Create a complete MEHKO application JSON for ${
       countyName || "this county"
-    } website. Use ALL the information provided from the main page AND external sources.
+    } website. Use ALL the information provided from the main page, root domain pages, AND external sources.
 
 WEBSITE CONTENT:
 ${JSON.stringify(rawContent, null, 2)}
@@ -634,32 +922,31 @@ Generate a JSON object with this EXACT structure:
 }
 
 CRITICAL REQUIREMENTS:
-- Use information from BOTH the main page AND external sources (PDFs, guides, forms)
-- Prioritize information from external sources when available (they often contain more detailed requirements)
-- Generate unique formId values (e.g., COUNTY_SOP-English, COUNTY_PERMIT-Form)
-- Include actual fees, limits, and requirements found in ANY source
-- Make appId match the generated id field exactly
-- Ensure all 10 steps are complete and accurate
-- Use real contact information and official links from ANY source
-- If information is missing, use reasonable defaults based on typical MEHKO programs
-- Include any unique requirements or restrictions specific to this county
-- Make sure the county name in the title and id matches the actual county
-- Cross-reference information between sources for accuracy
-- Pay special attention to fees, requirements, and contact info from PDFs and external pages
-
-INFORMATION PRIORITY:
-1. **External sources (PDFs, guides, forms)** - Most detailed and accurate
-2. **Main page content** - General overview and navigation
-3. **Inferred information** - Reasonable defaults when specific info is missing
+- Use information from ALL sources: main page, root domain pages, AND external sources
+- Prioritize information from root domain pages (same county website) as most authoritative
+- Prioritize information from external sources (PDFs, guides, forms) when available
+- Extract SPECIFIC details like fees, meal limits, revenue caps, contact info, requirements
+- Avoid generic phrases like "Please refer to the official website" - provide actual information
+- Include direct links to forms, PDFs, and important resources
+- If specific information is missing from county sources, use California state-level information as fallback
+- Make content actionable and specific - users should be able to take immediate action
 
 CONTENT GUIDELINES:
-- If main page content is available, use it to provide meaningful descriptions
-- If external sources contain specific information (fees, requirements, contact), prioritize that
-- For missing information, provide helpful, actionable content based on typical MEHKO programs
-- Always include the actual forms and links found on the website
-- Make content specific to the county when possible, generic when necessary
+- For fees: Include specific dollar amounts, payment methods, and any discounts
+- For requirements: List specific documents, training programs, and qualifications needed
+- For contact info: Include phone numbers, email addresses, office hours, and locations
+- For forms: Provide direct download links and specific instructions for completion
+- For timelines: Include specific timeframes for processing, inspections, and approvals
+- For limits: Specify meal limits, revenue caps, and any other operational restrictions
 
-Return ONLY the JSON object, no other text.`;
+SOURCE PRIORITY:
+1. Root domain pages (same county website) - Most authoritative
+2. PDFs and forms from county website - Most detailed
+3. Main page content - Good overview
+4. External sources - Supplementary information
+5. California state information - Fallback for missing details
+
+Remember: The goal is to create an application that users can actually use to get their MEHKO permit, not just a list of links to visit. Extract and synthesize the actual information they need.`;
   }
 
   validateApplication(app) {
