@@ -1,261 +1,500 @@
 .ai-chat {
-  display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  padding: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
 
-  // Header (avatar + welcome + pill)
+  // Sticky Header - Sleek and modern with modern grey theme
   &__header {
-    display: flex; align-items: center; gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
     padding: 16px;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 12px rgba(107, 114, 128, 0.15);
+    
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
+
   &__avatar {
-    width: 40px; height: 40px; border-radius: 999px;
-    display: grid; place-items: center; background: #3b82f6; 
-    font-size: 20px; color: white; border: 2px solid #1d4ed8;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    color: white;
+    box-shadow: 0 3px 12px rgba(102, 126, 234, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
   }
-  &__title { 
-    line-height: 1.3; 
+
+  &__title {
     flex: 1;
-  }
-  &__welcome { 
-    font-weight: 700; color: #1e293b; font-size: 16px;
-  }
-  &__subtitle { 
-    font-size: 14px; color: #64748b; margin-top: 2px;
+    line-height: 1.3;
   }
 
+  &__welcome {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
 
-  // Form-specific actions section
-  &__form-actions {
-    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;
-    padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  }
-  &__form-actions-title {
-    font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 16px;
-    display: flex; align-items: center; gap: 8px;
-    &::before {
-      content: "📋"; font-size: 18px;
-    }
-  }
-  &__form-actions-grid {
-    display: grid; gap: 16px;
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  &__subtitle {
+    font-size: 12px;
+    color: #e5e7eb;
+    font-weight: 500;
+    
+    strong {
+      color: #ffffff;
+      font-weight: 700;
     }
   }
 
-  // Form cards
-  &__form-card {
-    border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px;
-    background: #fafbfc; transition: all 0.2s ease;
+  // Content Area - Scrollable with proper height handling
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0; // Critical for flex child overflow
+    max-height: calc(100% - 120px); // Reserve space for header and composer
     
-    &:hover {
-      border-color: #cbd5e1; background: #f8fafc;
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
     }
-  }
-  &__form-card-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px;
-    
-    h4 {
-      margin: 0; font-size: 16px; font-weight: 600; color: #1e293b;
-      flex: 1; padding-right: 12px;
+    &::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 3px;
     }
-  }
-  &__form-select-btn {
-    border: 2px solid #cbd5e1; background: #ffffff; border-radius: 8px;
-    padding: 6px 12px; font-size: 12px; cursor: pointer; font-weight: 500;
-    transition: all 0.2s ease; white-space: nowrap;
-    
-    &:hover {
-      border-color: #94a3b8; background: #f8fafc;
-    }
-    
-    &.active {
-      background: #3b82f6; border-color: #1d4ed8; color: white;
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
       &:hover {
-        background: #2563eb;
+        background: #9ca3af;
       }
     }
   }
-  &__form-card-content {
-    animation: slideDown 0.3s ease-out;
-  }
-  &__form-quick-tasks {
-    display: grid; gap: 8px; margin-bottom: 16px;
-  }
-  &__form-task-btn {
-    width: 100%; text-align: left; border: 1px solid #e2e8f0; 
-    background: #ffffff; border-radius: 8px; padding: 10px 12px; 
-    font-size: 13px; cursor: pointer; transition: all 0.2s ease;
-    
-    &:hover {
-      background: #f1f5f9; border-color: #cbd5e1; transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-  }
-  &__form-actions-buttons {
-    display: flex; gap: 8px; flex-wrap: wrap;
+
+  // Form Selection - Modern cards with white theme
+  &__form-actions {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
-  // Form context indicator
-  &__form-context {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    border: 1px solid #93c5fd; border-radius: 12px; padding: 16px;
-    animation: slideDown 0.3s ease-out;
-  }
-  &__form-context-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 8px;
+  &__form-actions-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     
-    span {
-      font-weight: 600; color: #1e40af;
+    &::before {
+      content: "📋";
+      font-size: 16px;
     }
   }
-  &__form-context-clear {
-    background: #ffffff; border: 1px solid #93c5fd; border-radius: 6px;
-    padding: 4px 8px; font-size: 12px; cursor: pointer; color: #1e40af;
+
+  &__form-actions-grid {
+    display: grid;
+    gap: 10px;
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+  }
+
+  &__form-card {
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 14px;
+    background: #ffffff;
     transition: all 0.2s ease;
     
     &:hover {
-      background: #f1f5f9; border-color: #3b82f6;
+      border-color: #6b7280;
+      background: #f8fafc;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
     }
   }
-  &__form-context-info {
-    font-size: 13px; color: #1e40af; line-height: 1.4;
+
+  &__form-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    
+    h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+      flex: 1;
+      padding-right: 10px;
+    }
   }
 
-  // Quick tasks card (soft box like Jobright)
+  &__form-select-btn {
+    border: 2px solid #d1d5db;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    color: #374151;
+    
+    &:hover {
+      border-color: #6b7280;
+      background: #6b7280;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    
+    &.active {
+      background: #6b7280;
+      border-color: #6b7280;
+      color: #ffffff;
+      font-weight: 600;
+      
+      &:hover {
+        background: #4b5563;
+      }
+    }
+  }
+
+  &__form-card-content {
+    animation: slideDown 0.2s ease-out;
+  }
+
+  &__form-quick-tasks {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+
+  &__form-task-btn {
+    width: 100%;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #374151;
+    
+    &:hover {
+      background: #6b7280;
+      border-color: #6b7280;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  // Guide Card - Modern design with white theme
   &__guide-card {
-    border: 1px solid #e2e8f0; background: #ffffff; border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
-  &__guide-title { 
-    font-size: 16px; color: #1e293b; margin-bottom: 16px; font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
+
+  &__guide-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
     &::before {
-      content: "💡"; font-size: 18px;
+      content: "✨";
+      font-size: 16px;
     }
   }
-  &__guide-list { 
-    display: grid; grid-auto-rows: min-content; gap: 8px; 
-    list-style: none; padding: 0; margin: 0; margin-bottom: 16px;
+
+  &__guide-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
+
   &__guide-chip {
-    width: 100%; text-align: left;
-    border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 10px;
-    padding: 10px 14px; font-size: 13px; cursor: pointer; 
-    transition: all 0.2s ease; font-weight: 500;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #374151;
     
-    &:hover { 
-      background: #f1f5f9; border-color: #cbd5e1; transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    &:hover {
+      background: #6b7280;
+      border-color: #6b7280;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
   }
 
+  // Form Context - Modern info box with white theme
+  &__form-context {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    padding: 14px;
+    color: white;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+  }
 
+  &__form-context-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    font-weight: 600;
+    
+    strong {
+      color: white;
+    }
+  }
 
-  // Messages area - Much larger and better scrolling
+  &__form-context-clear {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 4px;
+    padding: 3px 6px;
+    color: white;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+  }
+
+  &__form-context-info {
+    font-size: 12px;
+    line-height: 1.3;
+    opacity: 0.9;
+  }
+
+  // Chat History - Modern messaging with white theme
   &__history {
-    overflow-y: auto; min-height: 400px; max-height: none; padding: 16px;
-    border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     flex: 1;
-    display: flex; flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    overflow-y: auto;
+    min-height: 120px; // Reduced to fit within constraints
+    max-height: 200px; // Limit height to prevent overflow
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f3f4f6;
+      border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+      &:hover {
+        background: #9ca3af;
+      }
+    }
   }
 
+  // Message styling
   .chat-msg {
-    display: grid; gap: 6px; margin: 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 85%;
     
-    .chat-bubble {
-      max-width: 85%;
-      padding: 12px 16px; border-radius: 16px; font-size: 14px; 
-      line-height: 1.4; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-      word-wrap: break-word;
+    &.user {
+      align-self: flex-end;
+      align-items: flex-end;
+      
+      .chat-bubble {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: #ffffff;
+        border-bottom-right-radius: 4px;
+      }
+      
+      .timestamp {
+        text-align: right;
+      }
     }
-    .timestamp { 
-      font-size: 11px; color: #94a3b8; margin-left: 4px;
+    
+    &.ai {
+      align-self: flex-start;
+      align-items: flex-start;
+      
+      .chat-bubble {
+        background: #ffffff;
+        color: #374151;
+        border: 1px solid #e5e7eb;
+        border-bottom-left-radius: 4px;
+      }
+      
+      .timestamp {
+        text-align: left;
+      }
     }
-  }
-  .chat-msg.user .chat-bubble {
-    margin-left: auto; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); 
-    border: 1px solid #93c5fd; color: #1e40af;
-  }
-  .chat-msg.ai .chat-bubble {
-    background: #f8fafc; border: 1px solid #e2e8f0; color: #1e293b;
   }
 
-  // Composer
+  .chat-bubble {
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    line-height: 1.3;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .timestamp {
+    font-size: 9px;
+    color: #6b7280;
+    font-weight: 500;
+  }
+
+  // Composer - Sticky bottom with white theme and proper spacing
   &__composer {
-    display: flex; gap: 12px; align-items: flex-end; padding: 16px;
-    background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    
-    textarea {
-      flex: 1; min-height: 48px; max-height: 120px; resize: vertical;
-      padding: 12px 16px; border-radius: 12px; border: 2px solid #e2e8f0; 
-      background: #ffffff; font-size: 14px; line-height: 1.4;
-      transition: border-color 0.2s ease;
-      
-      &:focus {
-        outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      }
-      
-      &::placeholder {
-        color: #94a3b8;
-      }
-    }
-    
-    button {
-      border-radius: 12px; padding: 12px 20px; cursor: pointer;
-      border: 2px solid #3b82f6; background: #3b82f6; color: white;
-      font-weight: 600; font-size: 14px; transition: all 0.2s ease;
-      min-width: 80px;
-      
-      &:hover:not(:disabled) {
-        background: #2563eb; border-color: #1d4ed8; transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
-      }
-      
-      &:disabled { 
-        opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none;
-      }
-    }
-  }
-
-  &__login { 
-    padding: 20px; font-size: 14px; color: #64748b; text-align: center;
-    background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: auto; // Push to bottom
   }
 
   &__input-section {
-    margin-bottom: 1rem;
+    margin-bottom: 8px;
   }
 
   &__form-guidance {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 0.75rem 1rem;
+    padding: 10px 12px;
     border-radius: 8px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.4;
+    margin-bottom: 8px;
+    font-size: 12px;
+    line-height: 1.3;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
     
     strong {
-      color: #fff;
+      color: white;
+      font-weight: 600;
     }
   }
 
   &__input-container {
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
     align-items: flex-end;
+  }
+
+  &__input-container textarea {
+    flex: 1;
+    min-height: 36px;
+    max-height: 80px;
+    resize: vertical;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    background: #ffffff;
+    font-size: 12px;
+    line-height: 1.3;
+    color: #374151;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      outline: none;
+      border-color: #6b7280;
+      box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
+    }
+    
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  &__input-container button {
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 2px solid #6b7280;
+    background: #6b7280;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.2s ease;
+    min-width: 70px;
+    white-space: nowrap;
+    
+    &:hover:not(:disabled) {
+      background: #4b5563;
+      border-color: #4b5563;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(107, 114, 128, 0.2);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // Login state
+  &__login {
+    padding: 24px 12px;
+    font-size: 13px;
+    color: #6b7280;
+    text-align: center;
+    background: #f9fafb;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    margin: 12px;
   }
 }
 
@@ -263,7 +502,7 @@
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
   to {
     opacity: 1;
@@ -271,18 +510,32 @@
   }
 }
 
-// Responsive adjustments
+// Responsive design
 @media (max-width: 768px) {
   .ai-chat {
-    padding: 12px;
-    gap: 12px;
+    border-radius: 8px;
+    
+    &__header {
+      padding: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    
+    &__content {
+      padding: 8px;
+      gap: 8px;
+      max-height: calc(100% - 100px); // Adjust for mobile
+    }
     
     &__form-actions-grid {
       grid-template-columns: 1fr;
     }
     
     &__form-card-header {
-      flex-direction: column; align-items: flex-start; gap: 12px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
       
       h4 {
         padding-right: 0;
@@ -290,11 +543,28 @@
     }
     
     &__composer {
-      flex-direction: column; align-items: stretch;
+      padding: 8px;
+      position: sticky;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+    }
+    
+    &__input-container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
       
       button {
         align-self: flex-end;
+        width: auto;
       }
+    }
+    
+    &__history {
+      min-height: 80px; // Reduced for mobile constraints
+      max-height: 120px;
+      padding: 10px;
     }
   }
 }

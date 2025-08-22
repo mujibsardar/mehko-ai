@@ -546,7 +546,6 @@ export default function DashboardApp() {
                 borderLeft: "1px solid #eee",
                 paddingLeft: 12,
                 position: "sticky",
-                top: 70,
                 // Full height column
                 height: "calc(100vh - 90px)",
                 display: "flex",

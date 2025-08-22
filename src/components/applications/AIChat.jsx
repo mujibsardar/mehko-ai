@@ -361,62 +361,65 @@ export default function AIChat({
         </div>
       </div>
 
-      {/* Form Selection and Quick Actions */}
-      <FormSpecificQuickActions />
+      {/* Content Area - Scrollable */}
+      <div className="ai-chat__content">
+        {/* Form Selection and Quick Actions */}
+        <FormSpecificQuickActions />
 
-      {/* General Quick tasks */}
-      <div className="ai-chat__guide-card">
-        <div className="ai-chat__guide-title">
-          General Tasks I can assist you with:
+        {/* General Quick tasks */}
+        <div className="ai-chat__guide-card">
+          <div className="ai-chat__guide-title">
+            General Tasks I can assist you with:
+          </div>
+          <ul className="ai-chat__guide-list">
+            {quickTasks.map((t) => (
+              <li key={t.title}>
+                <button
+                  className="ai-chat__guide-chip"
+                  onClick={() => send(t.prompt)}
+                >
+                  {t.title}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ul className="ai-chat__guide-list">
-          {quickTasks.map((t) => (
-            <li key={t.title}>
+
+        {/* Selected Form Context */}
+        {selectedForm && (
+          <div className="ai-chat__form-context">
+            <div className="ai-chat__form-context-header">
+              <span>
+                📋 Working on: <strong>{selectedForm.title}</strong>
+              </span>
               <button
-                className="ai-chat__guide-chip"
-                onClick={() => send(t.prompt)}
+                className="ai-chat__form-context-clear"
+                onClick={() => setSelectedForm(null)}
               >
-                {t.title}
+                ✕ Clear
               </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Selected Form Context */}
-      {selectedForm && (
-        <div className="ai-chat__form-context">
-          <div className="ai-chat__form-context-header">
-            <span>
-              📋 Working on: <strong>{selectedForm.title}</strong>
-            </span>
-            <button
-              className="ai-chat__form-context-clear"
-              onClick={() => setSelectedForm(null)}
-            >
-              ✕ Clear
-            </button>
-          </div>
-          <div className="ai-chat__form-context-info">
-            Ask me anything specific about this form. I'll provide targeted help
-            based on the form content and your progress.
-          </div>
-        </div>
-      )}
-
-      {/* History */}
-      <div className="ai-chat__history">
-        {messages.map((m, i) => (
-          <div key={i} className={`chat-msg ${m.sender}`}>
-            <div className="chat-bubble">{m.text}</div>
-            <div className="timestamp">
-              {(
-                m.timestamp?.toDate?.() || new Date(m.timestamp)
-              ).toLocaleTimeString()}
+            </div>
+            <div className="ai-chat__form-context-info">
+              Ask me anything specific about this form. I'll provide targeted help
+              based on the form content and your progress.
             </div>
           </div>
-        ))}
-        <div ref={chatEndRef} />
+        )}
+
+        {/* History */}
+        <div className="ai-chat__history">
+          {messages.map((m, i) => (
+            <div key={i} className={`chat-msg ${m.sender}`}>
+              <div className="chat-bubble">{m.text}</div>
+              <div className="timestamp">
+                {(
+                  m.timestamp?.toDate?.() || new Date(m.timestamp)
+                ).toLocaleTimeString()}
+              </div>
+            </div>
+          ))}
+          <div ref={chatEndRef} />
+        </div>
       </div>
 
       {/* Composer */}
