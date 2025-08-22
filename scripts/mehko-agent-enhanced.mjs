@@ -40,6 +40,9 @@ class EnhancedMEHKOAgent {
   async processCounty(url, countyName = null) {
     console.log(`\n🕷️ Processing county: ${countyName || url}`);
 
+    // Store county name for web search
+    this.currentCountyName = countyName || this.extractCountyFromUrl(url);
+
     try {
       // Step 1: Extract raw content efficiently
       const rawContent = await this.extractRawContent(url);
@@ -744,6 +747,16 @@ class EnhancedMEHKOAgent {
       }
     }
 
+    // Add web search results for missing specific information
+    console.log("🌐 Performing web search for additional MEHKO information...");
+    const webSearchResults = await this.performWebSearch(
+      this.currentCountyName
+    );
+    if (webSearchResults && webSearchResults.length > 0) {
+      externalContent.push(...webSearchResults);
+      console.log(`✅ Added ${webSearchResults.length} web search results`);
+    }
+
     return externalContent;
   }
 
@@ -1194,6 +1207,168 @@ class EnhancedMEHKOAgent {
     return [...new Set(results)]; // Remove duplicates
   }
 
+  async performWebSearch(countyName = "San Diego") {
+    try {
+      const searchQueries = [
+        `${countyName} County MEHKO permit fees 2024`,
+        `${countyName} County MEHKO requirements training`,
+        `${countyName} County MEHKO application process timeline`,
+        `${countyName} County MEHKO meal limits revenue caps`,
+        `${countyName} County MEHKO contact phone email`,
+      ];
+
+      const searchResults = [];
+
+      for (const query of searchQueries) {
+        console.log(`  🔍 Searching: "${query}"`);
+
+        try {
+          // Use DuckDuckGo search (no API key needed)
+          const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(
+            query
+          )}`;
+
+          // Create a new page for search to avoid conflicts
+          const searchPage = await this.browser.newPage();
+          await searchPage.setUserAgent(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          );
+
+          await searchPage.goto(searchUrl, {
+            waitUntil: "networkidle2",
+            timeout: 15000,
+          });
+
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+
+          // Extract search results
+          const results = await searchPage.evaluate(() => {
+            const links = Array.from(document.querySelectorAll(".result__a"));
+            const snippets = Array.from(
+              document.querySelectorAll(".result__snippet")
+            );
+
+            return links.slice(0, 3).map((link, index) => ({
+              title: link.textContent.trim(),
+              url: link.href,
+              snippet: snippets[index]
+                ? snippets[index].textContent.trim()
+                : "",
+            }));
+          });
+
+          // Calculate relevance after extracting results
+          const resultsWithRelevance = results.map((result) => ({
+            ...result,
+            relevance: this.calculateRelevance(result.title, result.snippet)
+          }));
+
+          // Filter and add relevant results
+          const relevantResults = resultsWithRelevance
+            .filter((result) => result.relevance > 0.3) // Only add if relevance > 30%
+            .map((result) => ({
+              source: `Web Search: ${query}`,
+              url: result.url,
+              content: {
+                fullText: result.snippet,
+                title: result.title,
+                url: result.url,
+              },
+              extractedAt: new Date().toISOString(),
+              relevance: result.relevance,
+            }));
+
+          searchResults.push(...relevantResults);
+
+          await searchPage.close();
+
+          // Be respectful with delays
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        } catch (error) {
+          console.log(
+            `    ⚠️  Web search failed for "${query}": ${error.message}`
+          );
+        }
+      }
+
+      // Sort by relevance and limit results
+      const sortedResults = searchResults
+        .sort((a, b) => b.relevance - a.relevance)
+        .slice(0, 5); // Top 5 most relevant results
+
+      console.log(
+        `  📊 Web search completed: ${sortedResults.length} relevant results found`
+      );
+      return sortedResults;
+    } catch (error) {
+      console.log(`  ⚠️  Web search failed: ${error.message}`);
+      return [];
+    }
+  }
+
+  calculateRelevance(title, snippet) {
+    const text = `${title} ${snippet}`.toLowerCase();
+    let score = 0;
+
+    // Keywords that indicate relevant MEHKO information
+    const relevantKeywords = [
+      "mehko",
+      "microenterprise",
+      "home kitchen",
+      "permit",
+      "fee",
+      "cost",
+      "requirement",
+      "training",
+      "certification",
+      "timeline",
+      "deadline",
+      "meal limit",
+      "revenue cap",
+      "inspection",
+      "contact",
+      "phone",
+      "email",
+    ];
+
+    relevantKeywords.forEach((keyword) => {
+      if (text.includes(keyword)) {
+        score += 0.1;
+      }
+    });
+
+    // Bonus for specific information
+    if (/\$\d+/.test(text)) score += 0.2; // Contains dollar amounts
+    if (/\d+\s*(?:days?|weeks?|months?)/.test(text)) score += 0.2; // Contains timelines
+    if (/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/.test(text)) score += 0.2; // Contains phone numbers
+
+    return Math.min(score, 1.0); // Cap at 1.0
+  }
+
+  extractCountyFromUrl(url) {
+    try {
+      const urlObj = new URL(url);
+      const hostname = urlObj.hostname.toLowerCase();
+      
+      // Extract county name from common patterns
+      if (hostname.includes('sandiego')) return 'San Diego';
+      if (hostname.includes('lacounty') || hostname.includes('lacounty.gov')) return 'Los Angeles';
+      if (hostname.includes('orangecounty') || hostname.includes('ocgov.com')) return 'Orange';
+      if (hostname.includes('riverside') || hostname.includes('rivco.org')) return 'Riverside';
+      if (hostname.includes('sanbernardino') || hostname.includes('sbcounty.gov')) return 'San Bernardino';
+      if (hostname.includes('ventura') || hostname.includes('ventura.org')) return 'Ventura';
+      if (hostname.includes('kern') || hostname.includes('kerncounty.com')) return 'Kern';
+      if (hostname.includes('fresno') || hostname.includes('co.fresno.ca.us')) return 'Sacramento';
+      if (hostname.includes('sacramento') || hostname.includes('saccounty.net')) return 'Sacramento';
+      if (hostname.includes('alameda') || hostname.includes('acgov.org')) return 'Alameda';
+      
+      // Default fallback
+      return 'County';
+    } catch (error) {
+      return 'County';
+    }
+  }
+
   preprocessPDFContent(rawContent) {
     // Extract and structure key information from PDFs before sending to AI
     const extractedInfo = {
@@ -1202,52 +1377,66 @@ class EnhancedMEHKOAgent {
       contact: [],
       limits: [],
       timelines: [],
-      documents: []
+      documents: [],
     };
 
     // Process external content (PDFs)
     if (rawContent.externalContent && rawContent.externalContent.length > 0) {
-      rawContent.externalContent.forEach(content => {
-        if (content.type === 'pdf' && content.content && typeof content.content === 'string') {
+      rawContent.externalContent.forEach((content) => {
+        if (
+          content.type === "pdf" &&
+          content.content &&
+          typeof content.content === "string"
+        ) {
           const text = content.content;
-          
+
           // Extract fees
           const feeMatches = text.match(/\$[\d,]+(?:\.\d{2})?/g);
           if (feeMatches) {
             extractedInfo.fees.push(...feeMatches);
           }
-          
+
           // Extract requirements
-          const reqMatches = text.match(/(?:required|must|shall)\s+[^\.]{10,100}/gi);
+          const reqMatches = text.match(
+            /(?:required|must|shall)\s+[^\.]{10,100}/gi
+          );
           if (reqMatches) {
             extractedInfo.requirements.push(...reqMatches);
           }
-          
+
           // Extract contact info
           const phoneMatches = text.match(/\d{3}[-.\s]?\d{3}[-.\s]?\d{4}/g);
           if (phoneMatches) {
             extractedInfo.contact.push(...phoneMatches);
           }
-          
-          const emailMatches = text.match(/[\w\.\-@]+@[\w\.\-]+\.[a-zA-Z]{2,}/g);
+
+          const emailMatches = text.match(
+            /[\w\.\-@]+@[\w\.\-]+\.[a-zA-Z]{2,}/g
+          );
           if (emailMatches) {
             extractedInfo.contact.push(...emailMatches);
           }
-          
+
           // Extract limits
-          const limitMatches = text.match(/(?:maximum|limit|up to|not exceed)\s+[\d,]+[^\.]{0,50}/gi);
+          const limitMatches = text.match(
+            /(?:maximum|limit|up to|not exceed)\s+[\d,]+[^\.]{0,50}/gi
+          );
           if (limitMatches) {
             extractedInfo.limits.push(...limitMatches);
           }
-          
+
           // Extract timelines
-          const timeMatches = text.match(/\d+\s+(?:days?|weeks?|months?)[^\.]{0,50}/gi);
+          const timeMatches = text.match(
+            /\d+\s+(?:days?|weeks?|months?)[^\.]{0,50}/gi
+          );
           if (timeMatches) {
             extractedInfo.timelines.push(...timeMatches);
           }
-          
+
           // Extract document names
-          const docMatches = text.match(/(?:form|application|document|checklist|guide)[^\.]{0,100}/gi);
+          const docMatches = text.match(
+            /(?:form|application|document|checklist|guide)[^\.]{0,100}/gi
+          );
           if (docMatches) {
             extractedInfo.documents.push(...docMatches);
           }
@@ -1256,13 +1445,13 @@ class EnhancedMEHKOAgent {
     }
 
     // Remove duplicates and clean up
-    Object.keys(extractedInfo).forEach(key => {
+    Object.keys(extractedInfo).forEach((key) => {
       extractedInfo[key] = [...new Set(extractedInfo[key])].slice(0, 5); // Limit to top 5
     });
 
     // Add extracted info to rawContent for the AI to use
     rawContent.extractedKeyInfo = extractedInfo;
-    
+
     console.log(`🔍 Pre-processed PDF content - Found:`);
     console.log(`  💰 Fees: ${extractedInfo.fees.length}`);
     console.log(`  📋 Requirements: ${extractedInfo.requirements.length}`);
@@ -1493,7 +1682,7 @@ Extract this level of detail from the provided content!`;
   truncateContentForPrompt(rawContent) {
     // Target: Keep content under 12,000 characters to stay well under GPT-4's 8,192 token limit
     const MAX_CONTENT_SIZE = 12000;
-    
+
     // Pre-process PDF content to extract key information
     const processedContent = this.preprocessPDFContent(rawContent);
 
@@ -1508,7 +1697,9 @@ Extract this level of detail from the provided content!`;
         requirements: rawContent.requirements || "",
         regulations: rawContent.regulations || "",
         url: rawContent.url || "",
-        domain: (rawContent.domain || "").replace(/^www\./, "").replace(/^https?:\/\//, ""),
+        domain: (rawContent.domain || "")
+          .replace(/^www\./, "")
+          .replace(/^https?:\/\//, ""),
       },
       keyInformation: {
         fees: rawContent.keyPageInfo?.fees || [],
