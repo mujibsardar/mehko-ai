@@ -89,16 +89,16 @@ else
     echo -e "${GREEN}🗑️  Service PIDs file removed${NC}"
 fi
 
-# Additional cleanup - kill any remaining processes on our ports
+# Additional cleanup - only kill processes that were started by our script
 echo ""
-echo -e "${YELLOW}🧹 Final cleanup - checking for any remaining processes...${NC}"
+echo -e "${YELLOW}🧹 Final cleanup - checking for any remaining script-started processes...${NC}"
 
-# Kill any remaining processes on our ports
+# Kill any remaining processes on our expected ports
 for port in 8000 3000 5173; do
     REMAINING_PID=$(lsof -ti:$port)
     if [ ! -z "$REMAINING_PID" ]; then
         echo -e "${YELLOW}🔫 Force killing remaining process on port $port (PID: $REMAINING_PID)...${NC}"
-        kill -KILL $REMAINING_PID 2>/dev/null
+        kill -KILL $REMAINING_PID 2>/dev/null || true
     fi
 done
 

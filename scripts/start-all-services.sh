@@ -33,32 +33,34 @@ echo ""
 
 # Start Python FastAPI server
 echo -e "${YELLOW}🐍 Starting Python FastAPI server...${NC}"
-cd python
-if [ ! -d "venv" ] && [ ! -d ".venv" ]; then
-    echo -e "${YELLOW}📦 Creating Python virtual environment...${NC}"
-    python3 -m venv venv
-fi
 
-# Activate virtual environment
-if [ -d "venv" ]; then
-    source venv/bin/activate
-elif [ -d ".venv" ]; then
-    source .venv/bin/activate
+# Check if virtual environment exists and create if needed
+if [ ! -d "python/.venv" ] && [ ! -d "python/venv" ]; then
+    echo -e "${YELLOW}📦 Creating Python virtual environment...${NC}"
+    cd python
+    python3 -m venv .venv
+    cd ..
 fi
 
 # Install requirements if needed
 echo -e "${YELLOW}📦 Installing/updating Python dependencies...${NC}"
+cd python
+if [ -d ".venv" ]; then
+    source .venv/bin/activate
+elif [ -d "venv" ]; then
+    source venv/bin/activate
+fi
 pip install -r requirements.txt
+cd ..
 
 # Start FastAPI server in background with logging
 echo -e "${GREEN}🚀 Starting FastAPI server on port 8000...${NC}"
-# Remove --reload flag to reduce CPU usage, add workers for better performance
-uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 1 --limit-concurrency 100 --limit-max-requests 1000 > logs/fastapi.log 2>&1 &
+# Start uvicorn from the project root, specifying the python directory for module resolution
+(cd python && source .venv/bin/activate && uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 1 --limit-concurrency 100 --limit-max-requests 1000 > ../logs/fastapi.log 2>&1) &
 PYTHON_PID=$!
-cd ..
 
 # Wait a moment for Python server to start
-sleep 3
+sleep 5
 
 # Start Node.js server
 echo -e "${YELLOW}🟢 Starting Node.js server...${NC}"
@@ -107,13 +109,15 @@ fi
 
 echo ""
 echo -e "${GREEN}🎉 All services have been started!${NC}"
+echo -e "${BLUE}💡 Services are running in the background.${NC}"
+echo -e "${BLUE}💡 Use './scripts/watch-logs.sh' to monitor the logs${NC}"
+echo -e "${BLUE}💡 Use './scripts/stop-all-services.sh' to stop all services${NC}"
 echo ""
 echo -e "${BLUE}📱 Services running:${NC}"
 echo -e "  • Python FastAPI: ${GREEN}http://localhost:8000${NC}"
 echo -e "  • Node.js Server: ${GREEN}http://localhost:3000${NC}"
 echo -e "  • React App:      ${GREEN}http://localhost:5173${NC}"
 echo ""
-echo -e "${YELLOW}💡 To stop all services, run: ${NC}./scripts/stop-all-services.sh"
 echo -e "${YELLOW}💡 To restart all services, run: ${NC}./scripts/restart-all-services.sh"
 echo -e "${YELLOW}💡 To watch logs, run: ${NC}./scripts/watch-logs.sh"
 echo -e "${YELLOW}💡 Or manually kill PIDs: ${NC}Python: $PYTHON_PID, Node: $NODE_PID, React: $REACT_PID"
@@ -122,6 +126,3 @@ echo -e "${GREEN}🚀 You're all set! Happy coding! 🚀${NC}"
 
 # Save PIDs to a file for easy stopping
 echo "$PYTHON_PID $NODE_PID $REACT_PID" > temp/.service-pids
-
-# Return to terminal
-exec $SHELL
