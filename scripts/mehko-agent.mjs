@@ -43,13 +43,28 @@ class CostEffectiveMEHKOAgent {
   async extractRawContent(url) {
     await this.page.goto(url, { waitUntil: "networkidle2" });
 
-    // Extract all relevant content in one go
+    // Extract focused, relevant content to stay within token limits
     const content = await this.page.evaluate(() => {
-      const extractText = (selector) => {
+      const extractText = (selector, maxLength = 500) => {
         const elements = document.querySelectorAll(selector);
-        return Array.from(elements)
+        let text = Array.from(elements)
           .map((el) => el.textContent.trim())
           .join(" ");
+        return text.length > maxLength
+          ? text.substring(0, maxLength) + "..."
+          : text;
+      };
+
+      const extractLinks = () => {
+        const links = document.querySelectorAll(
+          'a[href*=".pdf"], a[href*="form"], a[href*="application"]'
+        );
+        return Array.from(links)
+          .map((link) => ({
+            text: link.textContent.trim().substring(0, 100),
+            href: link.href,
+          }))
+          .slice(0, 10); // Limit to 10 most relevant links
       };
 
       return {
@@ -57,11 +72,20 @@ class CostEffectiveMEHKOAgent {
           document
             .querySelector("h1, .title, .page-title")
             ?.textContent?.trim() || "",
-        mainContent: extractText("main, .content, .main-content, article"),
-        forms: extractText('a[href*=".pdf"], .forms, .applications'),
-        contact: extractText(".contact, .contact-info, address"),
-        fees: extractText(".fees, .cost, .payment"),
-        requirements: extractText(".requirements, .checklist, .steps"),
+        mainContent: extractText("main, .content, .main-content, article", 800),
+        forms: extractLinks(),
+        contact: extractText(
+          ".contact, .contact-info, address, [class*='contact']",
+          300
+        ),
+        fees: extractText(
+          ".fees, .cost, .payment, [class*='fee'], [class*='cost']",
+          200
+        ),
+        requirements: extractText(
+          ".requirements, .checklist, .steps, [class*='requirement']",
+          400
+        ),
         url: window.location.href,
         domain: window.location.hostname,
       };
@@ -87,7 +111,7 @@ class CostEffectiveMEHKOAgent {
         },
       ],
       temperature: 0.1, // Low temperature for consistency
-      max_tokens: 2000,
+      max_tokens: 1500,
     });
 
     const response = completion.choices[0].message.content;
@@ -260,9 +284,9 @@ async function main() {
 
     const countyJson = await agent.generateCountyApplication(url);
 
-    // Save the generated JSON
+    // Save the generated JSON to generated/ directory
     const filename = `generated_${countyJson.id}.json`;
-    const outputPath = path.join(__dirname, "..", filename);
+    const outputPath = path.join(__dirname, "..", "generated", filename);
     fs.writeFileSync(outputPath, JSON.stringify(countyJson, null, 2));
 
     console.log(`✅ Generated: ${filename}`);

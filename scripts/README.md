@@ -15,12 +15,14 @@ npm install
 ### 2. Set OpenAI API Key
 
 Create a `.env` file in your project root:
+
 ```bash
 # Create .env file
 echo "OPENAI_API_KEY=your_actual_api_key_here" > .env
 ```
 
 Or manually create `.env` with:
+
 ```
 OPENAI_API_KEY=your_actual_api_key_here
 ```
@@ -50,13 +52,14 @@ node scripts/mehko-agent.mjs "https://www.sandiegocounty.gov/content/sdc/deh/fhd
 
 ## Output
 
-Creates a file like `generated_san_diego_mehko.json` in your project root.
+Creates a file like `generated_san_diego_mehko.json` in the `generated/` directory.
 
 ## Integration
 
 After generation, use the add-county script to add it to your manifest:
 
 ```bash
+# The script automatically looks in the generated/ directory
 node scripts/add-county.mjs generated_san_diego_mehko.json
 ```
 

@@ -14,10 +14,20 @@ async function addCounty() {
 
   if (args.length !== 1) {
     console.error("Usage: node scripts/add-county.mjs <county-json-file>");
+    console.error(
+      "Example: node scripts/add-county.mjs generated_sandiego_mehko.json"
+    );
+    console.error("Note: Generated files are in the 'generated/' directory");
     process.exit(1);
   }
 
-  const countyFile = args[0];
+  let countyFile = args[0];
+
+  // If just filename provided, assume it's in generated/ directory
+  if (!countyFile.includes("/") && !countyFile.includes("\\")) {
+    countyFile = path.join(__dirname, "../generated", countyFile);
+  }
+
   const manifestPath = path.join(__dirname, "../data/manifest.json");
 
   try {

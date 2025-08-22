@@ -35,6 +35,9 @@ dist-ssr
 .env
 .env.*
 
+# AI generated county applications
+generated/
+
 # Compressed files
 *.zip
 *.tar.gz
