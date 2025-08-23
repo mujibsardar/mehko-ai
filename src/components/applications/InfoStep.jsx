@@ -248,6 +248,65 @@ function InfoStep({
       });
     };
 
+    // Function to render checklist items with enhanced step references
+    const renderChecklistItem = (item, itemIndex) => {
+      const trimmedItem = item.trim();
+      if (trimmedItem.startsWith("- ☐")) {
+        const text = trimmedItem.replace("- ☐", "").trim();
+        
+        // Check if this item contains a step reference
+        const stepReferenceMatch = text.match(/go to Step (\d+): (.+?)(?:\s|$)/);
+        
+        if (stepReferenceMatch) {
+          const stepNumber = stepReferenceMatch[1];
+          const stepTitle = stepReferenceMatch[2];
+          
+          return (
+            <div key={itemIndex} className="checklist-item checklist-item--with-step">
+              <div className="checkbox-placeholder">☐</div>
+              <div className="checklist-content">
+                <span className="checklist-text">
+                  {text.replace(/go to Step \d+: .+?(?:\s|$)/, '')}
+                </span>
+                <button 
+                  className="step-reference-button"
+                  onClick={() => {
+                    // Find the step by number and navigate to it
+                    const targetStepIndex = parseInt(stepNumber) - 1;
+                    if (application?.steps && application.steps[targetStepIndex]) {
+                      const targetStep = application.steps[targetStepIndex];
+                      // Trigger step navigation (this would need to be passed down from parent)
+                      if (window.location.pathname.includes('/dashboard')) {
+                        // If we're in dashboard, we can't navigate directly, show a message
+                        alert(`Navigate to Step ${stepNumber}: ${stepTitle} in the sidebar`);
+                      }
+                    }
+                  }}
+                  title={`Go to Step ${stepNumber}: ${stepTitle}`}
+                >
+                  <span className="step-number">Step {stepNumber}</span>
+                  <span className="step-title">{stepTitle}</span>
+                  <span className="step-arrow">→</span>
+                </button>
+              </div>
+            </div>
+          );
+        }
+        
+        // Regular checklist item without step reference
+        return (
+          <div key={itemIndex} className="checklist-item">
+            <div className="checkbox-placeholder">☐</div>
+            <span
+              className="checklist-text"
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}
+            />
+          </div>
+        );
+      }
+      return null;
+    };
+
     return (
       <div
         key={index}
@@ -259,22 +318,9 @@ function InfoStep({
 
         {isChecklist ? (
           <div className="checklist-content">
-            {section.content.split("\n").map((item, itemIndex) => {
-              const trimmedItem = item.trim();
-              if (trimmedItem.startsWith("- ☐")) {
-                const text = trimmedItem.replace("- ☐", "").trim();
-                return (
-                  <div key={itemIndex} className="checklist-item">
-                    <div className="checkbox-placeholder">☐</div>
-                    <span
-                      className="checklist-text"
-                      dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}
-                    />
-                  </div>
-                );
-              }
-              return null;
-            })}
+            {section.content.split("\n").map((item, itemIndex) => 
+              renderChecklistItem(item, itemIndex)
+            )}
           </div>
         ) : isCostTime ? (
           <div className="cost-time-content">

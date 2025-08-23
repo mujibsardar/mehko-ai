@@ -1,0 +1,153 @@
+{
+  "id": "lake_county_mehko",
+  "title": "Lake County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Plan Check $135/hr (1 hr minimum); Annual Permit $269. No third‑party delivery; on-site, pickup, or direct delivery only.",
+  "rootDomain": "lakecountyca.gov",
+  "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "What to do: Confirm you can run a MEHKO at home and understand core limits.\n\nWhy it matters: You must operate within MEHKO rules to be approved and stay compliant.\n\nWhat you need:\n- ☐ Residence in Lake County\n- ☐ Menu and daily/weekly production plan\n- ☐ Basic kitchen setup meeting food safety practices\n\nWhere/how: Review Lake County's MEHKO page and ordinance; limits are summarized here.\n\nCost & time: $0 · 10–30 minutes planning\n\nReady when: You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+      "searchTerms": [
+        "Lake County MEHKO daily meal limits",
+        "Lake County MEHKO weekly meal limits",
+        "Lake County home kitchen operations rules"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\nWhy it matters: Food safety certification is required and property rules may apply.\n\nWhat you need:\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Landlord/HOA OK if applicable\n- ☐ City business license if required in your jurisdiction\n\nWhere/how: Take an ANSI-approved CFPM course; check local business license rules.\n\nCost & time: ~$60–$90 · 1–2 days total\n\nReady when: You have a CFPM certificate and any property/business approvals.",
+      "searchTerms": [
+        "ANSI-CFP Food Protection Manager Lake County",
+        "Lake County renter permission MEHKO",
+        "Lake County business license home food operation"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Gather the documents you'll submit with your application.\n\nWhy it matters: Incomplete submissions delay approval and inspection.\n\nWhat you need:\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\nWhere/how: Organize files (PDFs/photos) for upload or printing.\n\nCost & time: $0 · 30–60 minutes\n\nReady when: All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "Lake County MEHKO SOP requirements",
+        "Lake County MEHKO application documents",
+        "Lake County home kitchen operations forms"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "LAKE_MEHKO_SOP-English",
+      "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1124/MEHKO-Standard-Operating-Procedures-PDF",
+      "appId": "lake_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "What to do: Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\nWhy it matters: This shows the county how you will keep food safe at home.\n\nWhat you need:\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\nWhere/how: Complete the SOP form in this step.\n\nCost & time: $0 · 30–60 minutes\n\nReady when: SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Lake County MEHKO SOP template",
+        "Lake County food safety SOP requirements",
+        "MEHKO Standard Operating Procedures Lake County"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "LAKE_MEHKO_PermitApplication",
+      "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1125/Permit-Application-PDF",
+      "appId": "lake_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "What to do: Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\nWhy it matters: This is the official request to operate a MEHKO.\n\nWhat you need:\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 4: Standard Operating Procedures (SOP)\n\nWhere/how: Complete the application in this step.\n\nCost & time: $0 to fill · 15–30 minutes\n\nReady when: Application is complete and matches your SOP.",
+      "searchTerms": [
+        "Lake County MEHKO permit application",
+        "Lake County Health Permit Application form",
+        "Lake County home kitchen operations application"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Submit the completed forms and pay required fees.\n\nWhy it matters: The county processes your permit after complete submission and payment.\n\nWhat you need:\n- ☐ Completed Application — go to Step 5: Health Permit Application\n- ☐ Completed SOP — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ CFPM certificate\n- ☐ Payment method for fees\n\nWhere/how: Submit to Environmental Health; see county website for current submission options.\n\nCost & time: Plan Check $135/hr (1 hr min); Annual Permit $269 · 10–20 minutes\n\nReady when: County confirms receipt and payment.",
+      "searchTerms": [
+        "Lake County MEHKO application fee",
+        "Lake County Environmental Health submission",
+        "Lake County MEHKO payment methods"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Coordinate a home kitchen inspection with Environmental Health.\n\nWhy it matters: Passing inspection is required before operating.\n\nWhat you need:\n- ☐ Kitchen ready per your SOP\n- ☐ Thermometer, sanitizer, handwash setup\n- ☐ All required equipment functional\n\nWhere/how: The department will provide scheduling details after application review.\n\nCost & time: Included in application fees · 1–2 hours on site\n\nReady when: You receive a pass and any corrections are resolved.",
+      "searchTerms": [
+        "Lake County MEHKO inspection checklist",
+        "Lake County home kitchen inspection preparation",
+        "Lake County Environmental Health inspection MEHKO"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "What to do: Get your MEHKO permit after passing inspection and keep it on hand.\n\nWhy it matters: You must have a valid permit to operate.\n\nWhat you need:\n- ☐ Final approval notice\n- ☐ Permit document\n\nWhere/how: Issued by Environmental Health after inspection approval.\n\nCost & time: $0 (after application fee) · timeline varies by case\n\nReady when: You have the permit and any conditions noted by the inspector.",
+      "searchTerms": [
+        "Lake County MEHKO permit issuance",
+        "Lake County permit processing timeline",
+        "Lake County Environmental Health permit status"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Follow your SOP and MEHKO limits; renew as required.\n\nWhy it matters: Staying within rules protects customers and your permit status.\n\nWhat you need:\n- ☐ Daily/weekly meal logs under limits\n- ☐ Temperature & cleaning records\n- ☐ Permit renewal reminder\n\nWhere/how: Keep simple records; contact the department if your menu or volume changes.\n\nCost & time: Renewal fees apply · ongoing\n\nReady when: You track meals, keep records, and schedule renewal on time.",
+      "searchTerms": [
+        "Lake County MEHKO meal tracking requirements",
+        "Lake County MEHKO renewal process",
+        "Lake County home kitchen operations compliance"
+      ],
+      "appId": "lake_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "What to do: Use the contact information below for questions and assistance.\n\nWhy it matters: County staff can help with specific questions about your application.\n\nWhat you need:\n- ☐ Phone number or email for questions\n- ☐ Office hours and location\n- ☐ Website for additional resources\n\nWhere/how: Contact the Environmental Health division at 922 Bevins Court, Lakeport, CA 95453; phone (707) 263-1164. Visit Lake County's MEHKO webpage for current info.\n\nCost & time: $0 · varies by question complexity\n\nReady when: You have the information you need to proceed.",
+      "searchTerms": [
+        "Lake County Environmental Health contact",
+        "Lake County MEHKO program phone",
+        "Lake County home kitchen operations office"
+      ],
+      "appId": "lake_county_mehko"
+    }
+  ]
+}

@@ -39,7 +39,7 @@
       "type": "info",
       "action_required": true,
       "fill_pdf": false,
-      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ SOP form — see Step sop_form\n- ☐ Health Permit Application — see Step permit_application_form\n- ☐ CFPM certificate (from training step)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
       "searchTerms": [
         "[County Name] MEHKO SOP requirements",
         "[County Name] MEHKO application documents",
@@ -72,7 +72,7 @@
       "appId": "county_name_mehko",
       "action_required": true,
       "fill_pdf": true,
-      "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP (see Step sop_form)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+      "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
       "searchTerms": [
         "[County Name] MEHKO permit application",
         "[County Name] Health Permit Application form",
@@ -85,7 +85,7 @@
       "type": "info",
       "action_required": true,
       "fill_pdf": false,
-      "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Application (see Step permit_application_form)\n- ☐ Completed SOP (see Step sop_form)\n- ☐ CFPM certificate\n- ☐ Payment method for fees\n\n**Where/how:** Submit to Environmental Health; check county website for submission methods.\n\n**Cost & time:** [FEE_AMOUNT] · 10–20 minutes\n\n**Ready when:** County confirms receipt and payment.",
+      "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Application — go to Step 5: Health Permit Application\n- ☐ Completed SOP — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ CFPM certificate\n- ☐ Payment method for fees\n\n**Where/how:** Submit to Environmental Health; check county website for submission methods.\n\n**Cost & time:** [FEE_AMOUNT] · 10–20 minutes\n\n**Ready when:** County confirms receipt and payment.",
       "searchTerms": [
         "[County Name] MEHKO application fee",
         "[County Name] Environmental Health submission",

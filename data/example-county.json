@@ -1,7 +1,7 @@
 {
   "id": "example_county_mehko",
   "title": "Example County MEHKO",
-  "description": "This is an example county MEHKO application for demonstration purposes. It shows the required structure for bulk import.",
+  "description": "Example County MEHKO permit application with improved formatting and clearer step references.",
   "rootDomain": "examplecounty.gov",
   "supportTools": {
     "aiEnabled": true,
@@ -14,7 +14,13 @@
       "type": "info",
       "action_required": false,
       "fill_pdf": false,
-      "content": "Planning content with links to official resources and guides for Example County"
+      "content": "**What to do:** Review the MEHKO program overview and understand the requirements.\n\n**Why it matters:** Understanding the program helps you prepare properly and avoid delays.\n\n**What you need:**\n- ☐ Basic understanding of MEHKO rules\n- ☐ Kitchen setup assessment\n- ☐ Menu planning ideas\n\n**Where/how:** Review county MEHKO overview; visit the county website for current information.\n\n**Cost & time:** $0 · 15–30 minutes\n\n**Ready when:** You understand the basic requirements and have a plan for your operation.",
+      "searchTerms": [
+        "Example County MEHKO overview",
+        "Example County Home Kitchen Operations",
+        "Example County MEHKO requirements"
+      ],
+      "appId": "example_county_mehko"
     },
     {
       "id": "approvals_training",
@@ -22,7 +28,13 @@
       "type": "info",
       "action_required": true,
       "fill_pdf": false,
-      "content": "Required approvals, training programs, and licensing information for Example County"
+      "content": "**What to do:** Get required approvals and complete food safety training.\n\n**Why it matters:** These are mandatory requirements that must be completed before applying.\n\n**What you need:**\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Landlord/HOA approval (if renting)\n- ☐ City business license (if required)\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license requirements.\n\n**Cost & time:** $150–300 for CFPM · 2–4 weeks\n\n**Ready when:** You have your CFPM certificate and all required approvals.",
+      "searchTerms": [
+        "Example County CFPM training",
+        "Example County business license",
+        "Example County MEHKO approvals"
+      ],
+      "appId": "example_county_mehko"
     },
     {
       "id": "prepare_docs",
@@ -30,67 +42,45 @@
       "type": "info",
       "action_required": true,
       "fill_pdf": false,
-      "content": "List of required documents and where to get them in Example County"
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "Example County MEHKO SOP requirements",
+        "Example County MEHKO application documents",
+        "Example County Home Kitchen Operations forms"
+      ],
+      "appId": "example_county_mehko"
     },
     {
       "id": "sop_form",
       "title": "Standard Operating Procedures (SOP)",
       "type": "pdf",
-      "formId": "EXAMPLE_SOP_FORM",
+      "formId": "EXAMPLE_MEHKO_SOP-English",
+      "pdfUrl": "https://examplecounty.gov/forms/mehko-sop.pdf",
       "appId": "example_county_mehko",
       "action_required": true,
       "fill_pdf": true,
-      "content": "SOP form instructions with download link to official template for Example County"
+      "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Example County MEHKO SOP template",
+        "Example County food safety SOP requirements",
+        "MEHKO Standard Operating Procedures Example County"
+      ]
     },
     {
       "id": "permit_application_form",
       "title": "Health Permit Application",
       "type": "pdf",
-      "formId": "EXAMPLE_PERMIT_FORM",
+      "formId": "EXAMPLE_MEHKO_PermitApplication",
+      "pdfUrl": "https://examplecounty.gov/forms/mehko-permit.pdf",
       "appId": "example_county_mehko",
       "action_required": true,
       "fill_pdf": true,
-      "content": "Main permit application instructions with download link for Example County"
-    },
-    {
-      "id": "submit_application",
-      "title": "Submit Application & Fees",
-      "type": "info",
-      "action_required": true,
-      "fill_pdf": false,
-      "content": "Submission process, fees, and payment methods for Example County"
-    },
-    {
-      "id": "inspection",
-      "title": "Schedule & Pass Inspection",
-      "type": "info",
-      "action_required": true,
-      "fill_pdf": false,
-      "content": "Inspection process and requirements for Example County"
-    },
-    {
-      "id": "receive_permit",
-      "title": "Receive Permit",
-      "type": "info",
-      "action_required": false,
-      "fill_pdf": false,
-      "content": "Timeline and process for receiving the permit in Example County"
-    },
-    {
-      "id": "operate_comply",
-      "title": "Operate & Stay Compliant",
-      "type": "info",
-      "action_required": true,
-      "fill_pdf": false,
-      "content": "Ongoing compliance requirements and renewal information for Example County"
-    },
-    {
-      "id": "contact",
-      "title": "Contact Info",
-      "type": "info",
-      "action_required": false,
-      "fill_pdf": false,
-      "content": "Example County MEHKO program contact information including phone, email, website, and hours"
+      "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+      "searchTerms": [
+        "Example County MEHKO permit application",
+        "Example County Health Permit Application form",
+        "Example County Home Kitchen Operations application"
+      ]
     }
   ]
 }

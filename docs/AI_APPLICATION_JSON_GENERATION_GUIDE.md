@@ -34,9 +34,9 @@ This guide provides instructions for AI agents to generate JSON files for new co
 }
 ```
 
-## Content Guidelines
+## Content Structure
 
-### Step Content Structure (Plain Text Only)
+Every step should follow this exact format:
 
 ```
 What to do: [Clear action description]
@@ -45,7 +45,7 @@ Why it matters: [Brief explanation of importance]
 
 What you need:
 - ☐ [Requirement 1]
-- ☐ [Requirement 2]
+- ☐ [Requirement 2] 
 - ☐ [Requirement 3]
 
 Where/how: [Instructions on how to complete - can include website references]
@@ -53,6 +53,30 @@ Where/how: [Instructions on how to complete - can include website references]
 Cost & time: [Cost] · [Time estimate]
 
 Ready when: [Clear completion criteria]
+```
+
+**⚠️ CRITICAL: Step References in "What you need"**
+
+When referencing other steps in the "What you need" section, use this format:
+
+**❌ WRONG (Poor UX):**
+- ☐ SOP form — see Step sop_form
+- ☐ Health Permit Application — see Step permit_application_form
+
+**✅ CORRECT (Good UX):**
+- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)
+- ☐ Health Permit Application — go to Step 5: Health Permit Application
+
+**Step Reference Rules:**
+1. **Always use "go to Step X: [Step Title]"** format
+2. **Include the step number** (e.g., "Step 4")
+3. **Include the full step title** (e.g., "Standard Operating Procedures (SOP)")
+4. **Make it clear it's a clickable action** with "go to"
+5. **Never use internal step IDs** like "sop_form" or "permit_application_form"
+
+**Example of Good Step References:**
+```json
+"What you need:\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info"
 ```
 
 **Note:** For "Where/how" sections, you can include statements like "Visit [County Name]'s MEHKO webpage" or "Check the county website for current fees." The frontend will automatically detect these references and provide action buttons for visiting the website and searching for more information.
