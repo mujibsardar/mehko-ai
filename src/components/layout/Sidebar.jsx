@@ -1,8 +1,5 @@
 import useApplicationSidebarState from "../../hooks/useApplicationSidebarState";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
-import { useEffect, useState } from "react";
 
 import "./Sidebar.scss";
 
@@ -15,6 +12,7 @@ const Sidebar = ({
   onSelect,
   onStepSelect,
   selectedStepId,
+  completedSteps = [], // Add this prop
 }) => {
   const {
     collapsedApps,
@@ -26,29 +24,7 @@ const Sidebar = ({
     toggle,
   } = useApplicationSidebarState();
 
-  const { user, isAdmin } = useAuth();
-  const [progressByAppId, setProgressByAppId] = useState({});
-
-  useEffect(() => {
-    async function fetchProgress() {
-      if (!user || !applications.length) return;
-      const unsubscribers = [];
-      applications.forEach((app) => {
-        const ref = doc(db, "users", user.uid, "applicationProgress", app.id);
-        const unsub = onSnapshot(ref, (docSnap) => {
-          setProgressByAppId((prev) => ({
-            ...prev,
-            [app.id]: docSnap.exists()
-              ? docSnap.data().completedStepIds || []
-              : [],
-          }));
-        });
-        unsubscribers.push(unsub);
-      });
-      return () => unsubscribers.forEach((u) => u());
-    }
-    fetchProgress();
-  }, [user, applications]);
+  const { isAdmin } = useAuth();
 
   return (
     <div className="sidebar">
@@ -67,7 +43,6 @@ const Sidebar = ({
           const isAppCollapsed = collapsedApps[application.id];
           const areStepsCollapsed = collapsedSteps[application.id];
           const isSupportCollapsed = collapsedSupport[application.id];
-          const completedSteps = progressByAppId[application.id] || [];
           const totalSteps = application.steps?.length || 0;
           const completeCount = completedSteps.length;
           const percent =
@@ -98,9 +73,7 @@ const Sidebar = ({
                     <small>
                       {completeCount} of {totalSteps} steps complete
                     </small>
-                    <small className="progress-percent">
-                      {percent}%
-                    </small>
+                    <small className="progress-percent">{percent}%</small>
                   </div>
                 </div>
 
@@ -149,7 +122,8 @@ const Sidebar = ({
                       className={
                         activeSection === "overview" ? "active-nav" : ""
                       }
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setActiveSection("overview");
                         toggle(
                           setCollapsedSteps,
@@ -172,13 +146,14 @@ const Sidebar = ({
                     <li className="sidebar-section-label">
                       <span
                         className="collapsible-section"
-                        onClick={() =>
+                        onClick={(e) => {
+                          e.stopPropagation();
                           toggle(
                             setCollapsedSteps,
                             collapsedSteps,
                             application.id
-                          )
-                        }
+                          );
+                        }}
                       >
                         {areStepsCollapsed ? "▶" : "▼"} Steps
                       </span>
@@ -197,48 +172,35 @@ const Sidebar = ({
                   >
                     {!areStepsCollapsed &&
                       application.steps?.map((step, idx) => {
+                        // Use the same ID logic as DashboardApp
+                        const stepId = step.id || step._id || String(idx);
                         const isStepActive =
                           activeSection === "steps" &&
-                          selectedStepId === step.id;
+                          selectedStepId === stepId;
                         return (
                           <li
-                            key={step.id}
+                            key={stepId}
                             className={`step-item ${
                               isStepActive ? "active-nav" : ""
-                            }`}
-                            onClick={() =>
-                              onStepSelect && onStepSelect(step.id)
-                            }
+                            } ${completedSteps.includes(stepId) ? "completed" : ""}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (onStepSelect) {
+                                onStepSelect(stepId);
+                              }
+                            }}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <span>
+                            <div className="step-content">
+                              <span className="step-icon">
+                                {step.type === "form" ? "📝" : 
+                                 step.type === "pdf" ? "📄" : "ℹ️"}
+                              </span>
+                              <span className="step-title">
                                 Step {idx + 1}: {step.title}
                               </span>
-                              <div className="step-captions">
-                                {step.action_required && (
-                                  <span className="step-badge step-badge--action">
-                                    Requires Action
-                                  </span>
-                                )}
-                                {step.fill_pdf && (
-                                  <span className="step-badge step-badge--form">
-                                    PDF Form
-                                  </span>
-                                )}
-                                {!step.action_required && !step.fill_pdf && (
-                                  <span className="step-badge step-badge--info">
-                                    Info Only
-                                  </span>
-                                )}
-                              </div>
                             </div>
-                            {completedSteps.includes(step.id) && (
-                              <span className="checkmark">✔</span>
+                            {completedSteps.includes(stepId) && (
+                              <span className="step-status">✓</span>
                             )}
                           </li>
                         );
@@ -258,13 +220,14 @@ const Sidebar = ({
                         <li className="sidebar-section-label">
                           <span
                             className="collapsible-section"
-                            onClick={() =>
+                            onClick={(e) => {
+                              e.stopPropagation();
                               toggle(
                                 setCollapsedSupport,
                                 collapsedSupport,
                                 application.id
-                              )
-                            }
+                              );
+                            }}
                           >
                             {isSupportCollapsed ? "▶" : "▼"} Support
                           </span>
@@ -275,9 +238,13 @@ const Sidebar = ({
                             className={`sidebar-support-item ${
                               activeSection === "comments" ? "active-nav" : ""
                             }`}
-                            onClick={() => setActiveSection("comments")}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveSection("comments");
+                            }}
                           >
-                            Community Comments
+                            <span className="nav-icon">💭</span>
+                            <span className="nav-text">Community Comments</span>
                           </li>
                         )}
                       </ul>

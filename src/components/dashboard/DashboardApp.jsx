@@ -475,6 +475,7 @@ export default function DashboardApp() {
           onSelect={handleApplicationSwitch}
           onStepSelect={onStepSelect}
           selectedStepId={currentStepId}
+          completedSteps={completedSteps}
         />
 
         {/* Main + AI right panel */}
