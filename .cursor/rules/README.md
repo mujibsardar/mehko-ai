@@ -1,4 +1,33 @@
-# AI Assistant Rules for Mehko AI Project
+# 🤖 AI ASSISTANT RULES - READ FIRST!
+
+## 🚨 CRITICAL: ALWAYS FOLLOW THESE RULES
+
+**BEFORE making ANY changes to this project, you MUST:**
+
+1. **📖 READ ALL RULES** in this directory
+2. **❓ ASK PERMISSION** before any code changes
+3. **📋 EXPLAIN CHANGES** before proceeding
+4. **⏸️ WAIT FOR APPROVAL** before executing
+
+## 🚫 NEVER DO THIS
+- ❌ Make changes without permission
+- ❌ Assume changes are approved
+- ❌ Skip reading the rules
+- ❌ Proceed without explanation
+- ❌ Create files in project root
+
+## 📋 Required Workflow
+
+```
+🔧 PROPOSED CHANGES:
+├── File: [filename]
+├── Action: [create/modify/delete]
+├── Purpose: [why this change is needed]
+├── Impact: [what this will affect]
+└── Risk Level: [low/medium/high]
+
+❓ May I proceed with these changes?
+```
 
 ## Overview
 This directory contains comprehensive rules and guidelines that AI assistants must follow when working in the Mehko AI project. These rules address common issues and ensure consistent, safe, and organized development practices.

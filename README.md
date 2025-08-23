@@ -2,6 +2,19 @@
 
 > **Streamlining the process of obtaining Home Kitchen Operations (MEHKO) permits across California counties through intelligent automation and AI-powered assistance.**
 
+## 🤖 **AI ASSISTANT NOTICE - READ FIRST**
+
+**⚠️ CRITICAL: Before making ANY changes to this project, AI assistants MUST:**
+
+1. **📖 READ** `AI_INSTRUCTIONS.md` and `.cursor/rules/` directory
+2. **❓ ASK PERMISSION** before any code changes
+3. **📋 EXPLAIN CHANGES** before proceeding
+4. **⏸️ WAIT FOR APPROVAL** before executing
+
+**🚫 NEVER make changes without explicit permission!**
+
+**📚 Required reading:** `AI_INSTRUCTIONS.md` | `.cursor/rules/README.md`
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
