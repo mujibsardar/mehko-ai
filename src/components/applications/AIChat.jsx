@@ -32,6 +32,10 @@ export default function AIChat({
   const [pdfText, setPdfText] = useState({});
   const [pdfLinks, setPdfLinks] = useState({});
 
+  // UI state for collapsible sections
+  const [isFormHelpExpanded, setIsFormHelpExpanded] = useState(false);
+  const [isGeneralTasksExpanded, setIsGeneralTasksExpanded] = useState(false);
+
   // Handle context changes to pre-populate input
   useEffect(() => {
     if (context && context.subStepText) {
@@ -143,7 +147,7 @@ export default function AIChat({
         setMessages([
           {
             sender: "ai",
-            text: `Welcome! I'm here to help with ${application.title}. Ask me anything or pick a quick task below.`,
+            text: `Welcome! I'm here to help with ${application.title}. Ask me anything or pick a quick task above.`,
             timestamp: new Date(),
           },
         ]);
@@ -277,76 +281,96 @@ export default function AIChat({
 
     return (
       <div className="ai-chat__form-actions">
-        <div className="ai-chat__form-actions-title">Form-Specific Help:</div>
-        <div className="ai-chat__form-actions-grid">
-          {pdfFormSteps.map((step) => (
-            <div key={step.formId} className="ai-chat__form-card">
-              <div className="ai-chat__form-card-header">
-                <h4>{step.title}</h4>
-                <button
-                  className={`ai-chat__form-select-btn ${
-                    selectedForm?.formId === step.formId ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    setSelectedForm(
-                      selectedForm?.formId === step.formId ? null : step
-                    )
-                  }
-                >
-                  {selectedForm?.formId === step.formId
-                    ? "✓ Selected"
-                    : "Select Form"}
-                </button>
-              </div>
+        <button
+          className="ai-chat__section-toggle"
+          onClick={() => setIsFormHelpExpanded(!isFormHelpExpanded)}
+        >
+          <span className="ai-chat__section-toggle-icon">
+            {isFormHelpExpanded ? "▼" : "▶"}
+          </span>
+          <span className="ai-chat__section-toggle-text">
+            Form-Specific Help
+          </span>
+          <span className="ai-chat__section-toggle-count">
+            ({pdfFormSteps.length})
+          </span>
+        </button>
 
-              {selectedForm?.formId === step.formId && (
-                <div className="ai-chat__form-card-content">
-                  <div className="ai-chat__form-quick-tasks">
-                    {formSpecificTasks.map((task, index) => (
-                      <button
-                        key={index}
-                        className="ai-chat__form-task-btn"
-                        onClick={() => send(task.prompt, step)}
-                      >
-                        {task.title}
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="ai-chat__form-actions-buttons">
-                    <button
-                      className="ai-chat__guide-chip"
-                      onClick={() => {
-                        const link = pdfLinks[step.formId];
-                        if (link)
-                          window.open(
-                            link.url,
-                            "_blank",
-                            "noopener,noreferrer"
-                          );
-                      }}
-                    >
-                      📄 Open PDF
-                    </button>
-                    <button
-                      className="ai-chat__guide-chip"
-                      onClick={() => {
-                        const link = pdfLinks[step.formId];
-                        if (link)
-                          window.open(
-                            link.previewBase + "0",
-                            "_blank",
-                            "noopener,noreferrer"
-                          );
-                      }}
-                    >
-                      👁️ Preview
-                    </button>
-                  </div>
+        <div
+          className={`ai-chat__form-actions-content ${
+            isFormHelpExpanded ? "expanded" : "collapsed"
+          }`}
+        >
+          <div className="ai-chat__form-actions-grid">
+            {pdfFormSteps.map((step) => (
+              <div key={step.formId} className="ai-chat__form-card">
+                <div className="ai-chat__form-card-header">
+                  <h4>{step.title}</h4>
+                  <button
+                    className={`ai-chat__form-select-btn ${
+                      selectedForm?.formId === step.formId ? "active" : ""
+                    }`}
+                    onClick={() =>
+                      setSelectedForm(
+                        selectedForm?.formId === step.formId ? null : step
+                      )
+                    }
+                  >
+                    {selectedForm?.formId === step.formId
+                      ? "✓ Selected"
+                      : "Select Form"}
+                  </button>
                 </div>
-              )}
-            </div>
-          ))}
+
+                {selectedForm?.formId === step.formId && (
+                  <div className="ai-chat__form-card-content">
+                    <div className="ai-chat__form-quick-tasks">
+                      {formSpecificTasks.map((task, index) => (
+                        <button
+                          key={index}
+                          className="ai-chat__form-task-btn"
+                          onClick={() => send(task.prompt, step)}
+                        >
+                          {task.title}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="ai-chat__form-actions-buttons">
+                      <button
+                        className="ai-chat__guide-chip"
+                        onClick={() => {
+                          const link = pdfLinks[step.formId];
+                          if (link)
+                            window.open(
+                              link.url,
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                        }}
+                      >
+                        📄 Open PDF
+                      </button>
+                      <button
+                        className="ai-chat__guide-chip"
+                        onClick={() => {
+                          const link = pdfLinks[step.formId];
+                          if (link)
+                            window.open(
+                              link.previewBase + "0",
+                              "_blank",
+                              "noopener,noreferrer"
+                            );
+                        }}
+                      >
+                        👁️ Preview
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -377,21 +401,39 @@ export default function AIChat({
 
         {/* General Quick tasks */}
         <div className="ai-chat__guide-card">
-          <div className="ai-chat__guide-title">
-            General Tasks I can assist you with:
+          <button
+            className="ai-chat__section-toggle"
+            onClick={() => setIsGeneralTasksExpanded(!isGeneralTasksExpanded)}
+          >
+            <span className="ai-chat__section-toggle-icon">
+              {isGeneralTasksExpanded ? "▼" : "▶"}
+            </span>
+            <span className="ai-chat__section-toggle-text">
+              General Tasks I can assist you with
+            </span>
+            <span className="ai-chat__section-toggle-count">
+              ({quickTasks.length})
+            </span>
+          </button>
+
+          <div
+            className={`ai-chat__guide-content ${
+              isGeneralTasksExpanded ? "expanded" : "collapsed"
+            }`}
+          >
+            <ul className="ai-chat__guide-list">
+              {quickTasks.map((t) => (
+                <li key={t.title}>
+                  <button
+                    className="ai-chat__guide-chip"
+                    onClick={() => send(t.prompt)}
+                  >
+                    {t.title}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className="ai-chat__guide-list">
-            {quickTasks.map((t) => (
-              <li key={t.title}>
-                <button
-                  className="ai-chat__guide-chip"
-                  onClick={() => send(t.prompt)}
-                >
-                  {t.title}
-                </button>
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* Selected Form Context */}
@@ -409,8 +451,8 @@ export default function AIChat({
               </button>
             </div>
             <div className="ai-chat__form-context-info">
-              Ask me anything specific about this form. I'll provide targeted help
-              based on the form content and your progress.
+              Ask me anything specific about this form. I'll provide targeted
+              help based on the form content and your progress.
             </div>
           </div>
         )}
@@ -437,8 +479,8 @@ export default function AIChat({
           {selectedForm && (
             <div className="ai-chat__form-guidance">
               <strong>📝 Form Guidance:</strong> You're working on the{" "}
-              <strong>{selectedForm.title}</strong>. This form is completed
-              directly in the application - no PDF downloads needed!
+              <strong>{selectedForm.title}</strong>. Fill out this form in the
+              application, then download the completed PDF when finished.
             </div>
           )}
           <div className="ai-chat__input-container">
