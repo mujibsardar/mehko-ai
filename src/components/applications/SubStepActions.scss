@@ -148,6 +148,44 @@
   }
 }
 
+// Feedback counts - subtle display
+.feedback-counts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 4px 0;
+  
+  .count-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+    
+    svg {
+      opacity: 0.7;
+    }
+    
+    &.like-count {
+      color: #059669; // Green for likes
+      
+      svg {
+        color: #059669;
+      }
+    }
+    
+    &.dislike-count {
+      color: #dc2626; // Red for dislikes
+      
+      svg {
+        color: #dc2626;
+      }
+    }
+  }
+}
+
 // Responsive adjustments
 @media (max-width: 768px) {
   .sub-step-actions {

@@ -5,6 +5,7 @@ import {
   getSubStepFeedback,
   toggleSubStepLike,
   toggleSubStepDislike,
+  getSubStepFeedbackStats,
 } from "../../firebase/stepFeedback";
 
 function SubStepActions({
@@ -19,6 +20,10 @@ function SubStepActions({
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [feedbackStats, setFeedbackStats] = useState({
+    totalLikes: 0,
+    totalDislikes: 0,
+  });
 
   // Load existing feedback when component mounts
   useEffect(() => {
@@ -44,6 +49,14 @@ function SubStepActions({
       console.log("✅ Feedback loaded:", feedback);
       setLiked(feedback.liked || false);
       setDisliked(feedback.disliked || false);
+
+      // Load feedback stats
+      const stats = await getSubStepFeedbackStats(
+        applicationId,
+        stepId,
+        subStepIndex
+      );
+      setFeedbackStats(stats);
     } catch (error) {
       console.error("❌ Error loading feedback:", error);
     }
@@ -108,6 +121,20 @@ function SubStepActions({
       console.log("✅ Like updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
+      
+      // Update local feedback stats
+      if (newFeedback.liked) {
+        setFeedbackStats(prev => ({
+          ...prev,
+          totalLikes: prev.totalLikes + 1,
+          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0
+        }));
+      } else {
+        setFeedbackStats(prev => ({
+          ...prev,
+          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0
+        }));
+      }
     } catch (error) {
       console.error("❌ Error toggling like:", error);
       // Revert local state on error
@@ -146,6 +173,20 @@ function SubStepActions({
       console.log("✅ Dislike updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
+      
+      // Update local feedback stats
+      if (newFeedback.disliked) {
+        setFeedbackStats(prev => ({
+          ...prev,
+          totalDislikes: prev.totalDislikes + 1,
+          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0
+        }));
+      } else {
+        setFeedbackStats(prev => ({
+          ...prev,
+          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0
+        }));
+      }
     } catch (error) {
       console.error("❌ Error toggling dislike:", error);
       // Revert local state on error
@@ -235,6 +276,38 @@ function SubStepActions({
           </svg>
         </button>
       </div>
+
+      {/* Subtle Feedback Counts */}
+      {(feedbackStats.totalLikes > 0 || feedbackStats.totalDislikes > 0) && (
+        <div className="feedback-counts">
+          {feedbackStats.totalLikes > 0 && (
+            <span className="count-item like-count">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" />
+              </svg>
+              {feedbackStats.totalLikes}
+            </span>
+          )}
+          {feedbackStats.totalDislikes > 0 && (
+            <span className="count-item dislike-count">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2z" />
+              </svg>
+              {feedbackStats.totalDislikes}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

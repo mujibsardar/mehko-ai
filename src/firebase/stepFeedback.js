@@ -3,6 +3,7 @@ import {
   collection,
   addDoc,
   getDoc,
+  getDocs,
   doc,
   updateDoc,
   setDoc,
@@ -12,7 +13,12 @@ import {
 // Structure: applications/{applicationId}/steps/{stepId}/substeps/{subStepIndex}/feedback/{userId}
 // Each user can have one feedback record per sub-step
 
-export async function getSubStepFeedback(applicationId, stepId, subStepIndex, userId) {
+export async function getSubStepFeedback(
+  applicationId,
+  stepId,
+  subStepIndex,
+  userId
+) {
   try {
     const feedbackRef = doc(
       db,
@@ -26,11 +32,11 @@ export async function getSubStepFeedback(applicationId, stepId, subStepIndex, us
       userId
     );
     const feedbackDoc = await getDoc(feedbackRef);
-    
+
     if (feedbackDoc.exists()) {
       return feedbackDoc.data();
     }
-    
+
     // Return default feedback state if none exists
     return {
       liked: false,
@@ -47,7 +53,13 @@ export async function getSubStepFeedback(applicationId, stepId, subStepIndex, us
   }
 }
 
-export async function updateSubStepFeedback(applicationId, stepId, subStepIndex, userId, feedback) {
+export async function updateSubStepFeedback(
+  applicationId,
+  stepId,
+  subStepIndex,
+  userId,
+  feedback
+) {
   try {
     const feedbackRef = doc(
       db,
@@ -60,7 +72,7 @@ export async function updateSubStepFeedback(applicationId, stepId, subStepIndex,
       "feedback",
       userId
     );
-    
+
     // Use setDoc with merge to create or update the document
     await setDoc(
       feedbackRef,
@@ -70,7 +82,7 @@ export async function updateSubStepFeedback(applicationId, stepId, subStepIndex,
       },
       { merge: true }
     );
-    
+
     return true;
   } catch (error) {
     console.error("Error updating sub-step feedback:", error);
@@ -78,17 +90,33 @@ export async function updateSubStepFeedback(applicationId, stepId, subStepIndex,
   }
 }
 
-export async function toggleSubStepLike(applicationId, stepId, subStepIndex, userId) {
+export async function toggleSubStepLike(
+  applicationId,
+  stepId,
+  subStepIndex,
+  userId
+) {
   try {
-    const currentFeedback = await getSubStepFeedback(applicationId, stepId, subStepIndex, userId);
-    
+    const currentFeedback = await getSubStepFeedback(
+      applicationId,
+      stepId,
+      subStepIndex,
+      userId
+    );
+
     const newFeedback = {
       liked: !currentFeedback.liked,
       disliked: false, // Remove dislike when liking
       timestamp: serverTimestamp(),
     };
-    
-    await updateSubStepFeedback(applicationId, stepId, subStepIndex, userId, newFeedback);
+
+    await updateSubStepFeedback(
+      applicationId,
+      stepId,
+      subStepIndex,
+      userId,
+      newFeedback
+    );
     return newFeedback;
   } catch (error) {
     console.error("Error toggling sub-step like:", error);
@@ -96,17 +124,33 @@ export async function toggleSubStepLike(applicationId, stepId, subStepIndex, use
   }
 }
 
-export async function toggleSubStepDislike(applicationId, stepId, subStepIndex, userId) {
+export async function toggleSubStepDislike(
+  applicationId,
+  stepId,
+  subStepIndex,
+  userId
+) {
   try {
-    const currentFeedback = await getSubStepFeedback(applicationId, stepId, subStepIndex, userId);
-    
+    const currentFeedback = await getSubStepFeedback(
+      applicationId,
+      stepId,
+      subStepIndex,
+      userId
+    );
+
     const newFeedback = {
       liked: false, // Remove like when disliking
       disliked: !currentFeedback.disliked,
       timestamp: serverTimestamp(),
     };
-    
-    await updateSubStepFeedback(applicationId, stepId, subStepIndex, userId, newFeedback);
+
+    await updateSubStepFeedback(
+      applicationId,
+      stepId,
+      subStepIndex,
+      userId,
+      newFeedback
+    );
     return newFeedback;
   } catch (error) {
     console.error("Error toggling sub-step dislike:", error);
@@ -116,12 +160,21 @@ export async function toggleSubStepDislike(applicationId, stepId, subStepIndex, 
 
 // Legacy functions for backward compatibility (can be removed later)
 export async function getStepFeedback(applicationId, stepId, userId) {
-  console.warn("getStepFeedback is deprecated. Use getSubStepFeedback instead.");
+  console.warn(
+    "getStepFeedback is deprecated. Use getSubStepFeedback instead."
+  );
   return getSubStepFeedback(applicationId, stepId, "0", userId);
 }
 
-export async function updateStepFeedback(applicationId, stepId, userId, feedback) {
-  console.warn("updateStepFeedback is deprecated. Use updateSubStepFeedback instead.");
+export async function updateStepFeedback(
+  applicationId,
+  stepId,
+  userId,
+  feedback
+) {
+  console.warn(
+    "updateStepFeedback is deprecated. Use updateSubStepFeedback instead."
+  );
   return updateSubStepFeedback(applicationId, stepId, "0", userId, feedback);
 }
 
@@ -131,8 +184,53 @@ export async function toggleStepLike(applicationId, stepId, userId) {
 }
 
 export async function toggleStepDislike(applicationId, stepId, userId) {
-  console.warn("toggleStepDislike is deprecated. Use toggleSubStepDislike instead.");
+  console.warn(
+    "toggleStepDislike is deprecated. Use toggleSubStepDislike instead."
+  );
   return toggleSubStepDislike(applicationId, stepId, "0", userId);
+}
+
+export async function getSubStepFeedbackStats(
+  applicationId,
+  stepId,
+  subStepIndex
+) {
+  try {
+    // Query all feedback documents for this specific sub-step
+    const feedbackRef = collection(
+      db,
+      "applications",
+      applicationId,
+      "steps",
+      stepId,
+      "substeps",
+      subStepIndex.toString(),
+      "feedback"
+    );
+
+    const snapshot = await getDocs(feedbackRef);
+    let totalLikes = 0;
+    let totalDislikes = 0;
+
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.liked) totalLikes++;
+      if (data.disliked) totalDislikes++;
+    });
+
+    return {
+      totalLikes,
+      totalDislikes,
+      totalFeedback: snapshot.size,
+    };
+  } catch (error) {
+    console.error("Error fetching sub-step feedback stats:", error);
+    return {
+      totalLikes: 0,
+      totalDislikes: 0,
+      totalFeedback: 0,
+    };
+  }
 }
 
 export async function getStepFeedbackStats(applicationId, stepId) {
