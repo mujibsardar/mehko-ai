@@ -14,9 +14,20 @@ function SubStepActions({
   const [disliked, setDisliked] = useState(false);
 
   const handleInternetSearch = () => {
-    // Create a DuckDuckGo search query for the sub-step
-    const searchQuery = encodeURIComponent(`MEHKO ${subStepText}`);
-    const searchUrl = `https://duckduckgo.com/?q=${searchQuery}`;
+    // Simple search: MEHKO + jurisdiction + sub-step text
+    const jurisdiction = application?.title || application?.id || "";
+    let location = "";
+    if (jurisdiction.toLowerCase().includes("los angeles")) {
+      location = "Los Angeles County";
+    } else if (jurisdiction.toLowerCase().includes("san diego")) {
+      location = "San Diego County";
+    } else if (jurisdiction.toLowerCase().includes("county")) {
+      location = jurisdiction;
+    }
+    
+    const searchQuery = encodeURIComponent(`MEHKO ${location} ${subStepText}`);
+    const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
+    
     window.open(searchUrl, "_blank", "noopener,noreferrer");
   };
 
