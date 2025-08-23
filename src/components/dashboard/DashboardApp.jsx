@@ -55,6 +55,19 @@ export default function DashboardApp() {
   const activeApplication =
     selectedApplications.find((c) => c.id === activeApplicationId) || null;
 
+  // Debug logging to help identify the issue
+  useEffect(() => {
+    if (activeApplication) {
+      console.log("DashboardApp Debug - Active Application:", {
+        id: activeApplication.id,
+        title: activeApplication.title,
+        steps: activeApplication.steps,
+        hasSteps: Array.isArray(activeApplication.steps),
+        stepsLength: activeApplication.steps?.length || 0,
+      });
+    }
+  }, [activeApplication]);
+
   // progress
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,

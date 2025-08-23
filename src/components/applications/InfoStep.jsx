@@ -44,6 +44,16 @@ function InfoStep({
 
   const handleReportClick = () => {
     if (!user) return;
+
+    // Debug logging to help identify the issue
+    console.log("InfoStep Debug:", {
+      step: step,
+      application: application,
+      user: user,
+      stepId: stepId,
+      applicationId: applicationId,
+    });
+
     setIsReportModalOpen(true);
   };
 
@@ -407,9 +417,9 @@ function InfoStep({
       <ReportIssueModal
         isOpen={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}
-        onSubmit={handleReportSubmitted}
-        stepId={stepId}
-        applicationId={applicationId}
+        application={application}
+        step={step}
+        onReportSubmitted={handleReportSubmitted}
       />
     </div>
   );

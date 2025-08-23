@@ -27,6 +27,15 @@ export default function ReportIssueModal({
     setSubmitStatus("");
 
     try {
+      // Debug logging to help identify the issue
+      console.log("ReportModal Debug:", {
+        application: application,
+        step: step,
+        user: user,
+        applicationId: application?.id,
+        userId: user?.uid
+      });
+
       // Create report data with user information
       const reportData = {
         applicationId: application?.id,
@@ -43,7 +52,21 @@ export default function ReportIssueModal({
 
       // Validate required fields before submission
       if (!reportData.applicationId || !reportData.userId) {
+        console.error("Validation failed:", reportData);
         throw new Error("Missing required fields: applicationId or userId");
+      }
+
+      // Additional validation to ensure application object is properly structured
+      if (!application || typeof application !== 'object') {
+        throw new Error("Invalid application object");
+      }
+      
+      if (!application.id) {
+        throw new Error("Application missing ID field");
+      }
+      
+      if (!user || !user.uid) {
+        throw new Error("User not authenticated");
       }
 
       // Submit to Firestore
