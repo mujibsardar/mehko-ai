@@ -391,20 +391,21 @@ export default function DashboardApp() {
   // Handle comment requests from sub-steps
   const handleCommentRequest = (request) => {
     if (request.type === "ai_chat") {
-      // Set the AI chat context and switch to AI chat section
+      // Set the AI chat context but keep the current section
+      // AI chat is always available in the right panel or below main content
       setAiChatContext({
         subStepText: request.subStepText,
         stepId: request.stepId,
-        applicationId: request.applicationId
+        applicationId: request.applicationId,
       });
-      setActiveSection("ai_chat");
+      // Don't change activeSection - keep user on current view
       console.log("AI Chat requested for sub-step:", request.subStepText);
     } else if (request.type === "comment") {
       // Switch to comments section and create a comment about the sub-step
       setAiChatContext({
         subStepText: request.subStepText,
         stepId: request.stepId,
-        applicationId: request.applicationId
+        applicationId: request.applicationId,
       });
       setActiveSection("comments");
       console.log("Comment requested for sub-step:", request.subStepText);
@@ -537,8 +538,8 @@ export default function DashboardApp() {
                 )}
 
                 {activeSection === "comments" && activeApplication && (
-                  <CommentsSection 
-                    application={activeApplication} 
+                  <CommentsSection
+                    application={activeApplication}
                     context={aiChatContext}
                   />
                 )}

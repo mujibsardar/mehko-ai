@@ -121,18 +121,18 @@ function SubStepActions({
       console.log("✅ Like updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
-      
+
       // Update local feedback stats
       if (newFeedback.liked) {
-        setFeedbackStats(prev => ({
+        setFeedbackStats((prev) => ({
           ...prev,
           totalLikes: prev.totalLikes + 1,
-          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0
+          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
         }));
       } else {
-        setFeedbackStats(prev => ({
+        setFeedbackStats((prev) => ({
           ...prev,
-          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0
+          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
         }));
       }
     } catch (error) {
@@ -173,18 +173,18 @@ function SubStepActions({
       console.log("✅ Dislike updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
-      
+
       // Update local feedback stats
       if (newFeedback.disliked) {
-        setFeedbackStats(prev => ({
+        setFeedbackStats((prev) => ({
           ...prev,
           totalDislikes: prev.totalDislikes + 1,
-          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0
+          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
         }));
       } else {
-        setFeedbackStats(prev => ({
+        setFeedbackStats((prev) => ({
           ...prev,
-          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0
+          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
         }));
       }
     } catch (error) {
@@ -228,9 +228,7 @@ function SubStepActions({
           onClick={handleAIChat}
           title="Ask AI for help with this step"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-          </svg>
+          <span style={{ fontSize: "16px" }}>🤖</span>
         </button>
       </div>
 
