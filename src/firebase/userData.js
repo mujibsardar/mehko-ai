@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./firebase";
 
 export async function saveChatMessages(userId, applicationId, messages) {
@@ -33,4 +33,9 @@ export async function pinApplication(userId, applicationId, source = "form") {
     },
     { merge: true }
   );
+}
+
+export async function unpinApplication(userId, applicationId) {
+  const ref = doc(db, "users", userId, "pinnedApplications", applicationId);
+  await deleteDoc(ref);
 }

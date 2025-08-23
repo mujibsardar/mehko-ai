@@ -79,15 +79,13 @@ const Sidebar = ({
           // We intentionally HIDE AI assistant in the sidebar now.
 
           return (
-            <div 
-              key={application.id} 
+            <div
+              key={application.id}
               className="sidebar-item-wrapper"
               onClick={() => onSelect(application.id)}
             >
               <div className={`sidebar-item ${isActive ? "active" : ""}`}>
-                <div className="sidebar-app-title">
-                  {application.title}
-                </div>
+                <div className="sidebar-app-title">{application.title}</div>
 
                 <div className="sidebar-progress">
                   <div className="sidebar-progress-bar">
@@ -110,22 +108,27 @@ const Sidebar = ({
                   <div className="sidebar-controls">
                     <button
                       className="collapse-btn"
-                      onClick={() =>
-                        toggle(setCollapsedApps, collapsedApps, application.id)
-                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggle(setCollapsedApps, collapsedApps, application.id);
+                      }}
+                      title={isAppCollapsed ? "Expand" : "Collapse"}
                     >
                       {isAppCollapsed ? "▶" : "▼"}
                     </button>
-                    <button
-                      className="remove-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(application.id);
-                      }}
-                      title="Remove"
-                    >
-                      ✕
-                    </button>
+                    {/* Only show remove button if no progress has been made */}
+                    {completeCount === 0 && (
+                      <button
+                        className="remove-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRemove(application.id);
+                        }}
+                        title="Remove Application"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

@@ -40,10 +40,23 @@
   border-radius: 4px;
   transition: all 0.2s ease;
 }
+
 .remove-btn:hover,
 .collapse-btn:hover {
   opacity: 1;
   background: #f3f4f6;
+}
+
+/* Enhanced remove button styling */
+.remove-btn {
+  color: #dc2626;
+  border: 1px solid transparent;
+  
+  &:hover {
+    background: #fef2f2;
+    border-color: #fca5a5;
+    color: #b91c1c;
+  }
 }
 
 /* Progress styles */

@@ -14,7 +14,7 @@ import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
 import useProgress from "../../hooks/useProgress";
 import { InterviewView } from "../overlay/Interview";
-import { pinApplication } from "../../firebase/userData";
+import { pinApplication, unpinApplication } from "../../firebase/userData";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();
@@ -152,6 +152,7 @@ export default function DashboardApp() {
       setActiveSection("overview");
       setCurrentStepId(null);
     }
+    unpinApplication(user?.uid, applicationId);
   };
   const onStepSelect = (id) => {
     setActiveSection("steps");
@@ -521,7 +522,9 @@ export default function DashboardApp() {
                           cursor: "pointer",
                         }}
                       >
-                        Start application →
+                        {completedSteps.length > 0
+                          ? "Continue Application →"
+                          : "Start application →"}
                       </button>
                     )}
                   </div>
