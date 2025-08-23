@@ -159,6 +159,30 @@ export default function DashboardApp() {
     setCurrentStepId(id);
   };
 
+  // Find the first incomplete step for continuing applications
+  const getFirstIncompleteStepId = () => {
+    if (!steps.length) return null;
+    
+    console.log("Finding first incomplete step:", {
+      totalSteps: steps.length,
+      completedSteps,
+      steps: steps.map(s => ({ id: s.id, _id: s._id, title: s.title }))
+    });
+    
+    for (let i = 0; i < steps.length; i++) {
+      const step = steps[i];
+      const stepId = step.id || step._id || String(i);
+      if (!completedSteps.includes(stepId)) {
+        console.log(`First incomplete step found: Step ${i + 1} (${stepId})`);
+        return stepId;
+      }
+    }
+    
+    // If all steps are completed, return the first step
+    console.log("All steps completed, returning first step");
+    return firstStepId;
+  };
+
   // top bar (back + crumbs)
   const BreadcrumbBar = () => {
     if (!selectedApplications.length) return null;
@@ -512,7 +536,11 @@ export default function DashboardApp() {
                       <button
                         onClick={() => {
                           setActiveSection("steps");
-                          setCurrentStepId(firstStepId);
+                          // If continuing, go to first incomplete step; if starting, go to first step
+                          const targetStepId = completedSteps.length > 0 
+                            ? getFirstIncompleteStepId() 
+                            : firstStepId;
+                          setCurrentStepId(targetStepId);
                         }}
                         style={{
                           padding: "10px 14px",
