@@ -26,6 +26,25 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application, onComm
     console.log("Step report submitted:", reportData);
   };
 
+  // Enhanced content formatting function
+  const formatText = (text) => {
+    if (!text) return text;
+
+    // Replace markdown bold syntax with styled spans
+    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Replace markdown italic syntax
+    formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Replace markdown code syntax
+    formattedText = formattedText.replace(/`(.*?)`/g, '<code>$1</code>');
+    
+    // Replace markdown links [text](url)
+    formattedText = formattedText.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    
+    return formattedText;
+  };
+
   // Parse markdown content to identify sub-steps and add action buttons
   const renderContentWithActions = (content) => {
     if (!content) return null;
@@ -40,51 +59,13 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application, onComm
       if (trimmedLine.startsWith('-') || trimmedLine.startsWith('*')) {
         const subStepText = trimmedLine.substring(1).trim();
         
-        // Parse markdown links in the sub-step text
-        const renderSubStepText = (text) => {
-          // Simple regex to find markdown links [text](url)
-          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-          const parts = [];
-          let lastIndex = 0;
-          let match;
-          
-          while ((match = linkRegex.exec(text)) !== null) {
-            // Add text before the link
-            if (match.index > lastIndex) {
-              parts.push(text.slice(lastIndex, match.index));
-            }
-            
-            // Add the link
-            parts.push(
-              <a 
-                key={`link-${match.index}`}
-                href={match[2]} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="sub-step-link"
-              >
-                {match[1]}
-              </a>
-            );
-            
-            lastIndex = match.index + match[0].length;
-          }
-          
-          // Add remaining text after the last link
-          if (lastIndex < text.length) {
-            parts.push(text.slice(lastIndex));
-          }
-          
-          return parts.length > 0 ? parts : text;
-        };
-        
         return (
           <div key={index} className="sub-step-item">
             <div className="sub-step-content">
-              <span className="sub-step-bullet">•</span>
-              <span className="sub-step-text">
-                {renderSubStepText(subStepText)}
-              </span>
+              <div 
+                className="sub-step-text"
+                dangerouslySetInnerHTML={{ __html: formatText(subStepText) }}
+              />
             </div>
             <SubStepActions
               subStepText={subStepText}
@@ -97,12 +78,19 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application, onComm
         );
       }
       
-      // For non-sub-step lines, render as regular markdown
-      return (
-        <div key={index} className="content-line">
-          {trimmedLine}
-        </div>
-      );
+      // For non-sub-step lines, render as regular formatted content
+      if (trimmedLine) {
+        return (
+          <div key={index} className="content-line">
+            <div 
+              dangerouslySetInnerHTML={{ __html: formatText(trimmedLine) }}
+            />
+          </div>
+        );
+      }
+      
+      // Empty lines for spacing
+      return <div key={index} className="content-line empty-line"></div>;
     });
   };
 

@@ -1,61 +1,101 @@
 .info-step {
-  background: #fff;
-  padding: 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #f3f4f6;
   margin-top: 2rem;
   line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
   .step-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
 
     h2 {
       margin: 0;
-      font-size: 1.6rem;
-      color: #333;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
       flex: 1;
       min-width: 0;
+      letter-spacing: -0.025em;
+      line-height: 1.3;
     }
   }
 
   .step-content {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
+  // Modern sub-step design inspired by the examples
   .sub-step-item {
-    margin-bottom: 1rem;
-    padding: 12px;
-    background: #f9fafb;
-    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background: #ffffff;
+    border-radius: 12px;
     border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    
+    &:hover {
+      border-color: #d1d5db;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transform: translateY(-1px);
+    }
     
     .sub-step-content {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
-      
-      .sub-step-bullet {
-        color: #6b7280;
-        font-weight: bold;
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
+      margin-bottom: 1rem;
       
       .sub-step-text {
         flex: 1;
         color: #374151;
-        line-height: 1.5;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        font-weight: 400;
         
-        .sub-step-link {
+        // Enhanced text formatting styles
+        strong {
+          color: #111827;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+        }
+        
+        em {
+          color: #4b5563;
+          font-style: italic;
+          font-weight: 500;
+        }
+        
+        code {
+          background: #f3f4f6;
+          color: #dc2626;
+          padding: 0.125rem 0.25rem;
+          border-radius: 4px;
+          font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+          font-size: 0.875em;
+          font-weight: 500;
+          border: 1px solid #e5e7eb;
+        }
+        
+        a {
           color: #2563eb;
-          text-decoration: underline;
+          text-decoration: none;
+          font-weight: 500;
+          border-bottom: 1px solid transparent;
+          transition: all 0.2s ease;
           
           &:hover {
             color: #1d4ed8;
+            border-bottom-color: #1d4ed8;
           }
           
           &:visited {
@@ -66,39 +106,136 @@
     }
   }
 
+  // Regular content lines (non-sub-step content)
   .content-line {
-    margin-bottom: 0.5rem;
-    color: #374151;
-    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    padding: 0.75rem 0;
     
-    &:empty {
-      margin-bottom: 0.25rem;
+    &.empty-line {
+      margin-bottom: 0.5rem;
+      min-height: 0.5rem;
+    }
+    
+    // Enhanced text formatting for regular content
+    strong {
+      color: #374151;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    
+    em {
+      color: #4b5563;
+      font-style: italic;
+      font-weight: 500;
+    }
+    
+    code {
+      background: #f3f4f6;
+      color: #dc2626;
+      padding: 0.125rem 0.25rem;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+      font-size: 0.875em;
+      font-weight: 500;
+      border: 1px solid #e5e7eb;
+    }
+    
+    a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px solid transparent;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        color: #1d4ed8;
+        border-bottom-color: #1d4ed8;
+      }
+      
+      &:visited {
+        color: #4f46e5;
+      }
     }
   }
 
   p {
     font-size: 1rem;
-    color: #555;
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
   }
 
   .step-complete-checkbox {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f3f4f6;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: #374151;
+    
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 4px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:checked {
+        background: #10b981;
+        border-color: #10b981;
+      }
+      
+      &:hover {
+        border-color: #9ca3af;
+      }
+    }
   }
 
   a {
-    color: #2563eb !important; /* clean blue */
-    text-decoration: underline !important;
+    color: #2563eb !important;
+    text-decoration: none !important;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      color: #1d4ed8 !important;
+      border-bottom-color: #1d4ed8;
+    }
   }
+}
 
-  a:hover {
-    color: #1d4ed8 !important;
-  }
-
-  a:visited {
-    color: #4f46e5 !important;
+// Responsive design
+@media (max-width: 768px) {
+  .info-step {
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    
+    .step-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .sub-step-item {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      
+      .sub-step-content {
+        .sub-step-text {
+          font-size: 0.9rem;
+        }
+      }
+    }
   }
 }
