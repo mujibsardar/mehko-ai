@@ -231,6 +231,8 @@ export default function Admin() {
               aiEnabled: true,
               commentsEnabled: true,
             },
+            // Preserve all other fields from the JSON
+            ...appData,
           },
           { merge: true }
         );

@@ -13,6 +13,7 @@ function SubStepActions({
   stepId,
   applicationId,
   application,
+  step,
   onCommentRequest,
   subStepIndex,
 }) {
@@ -63,18 +64,68 @@ function SubStepActions({
   };
 
   const handleInternetSearch = () => {
-    // Simple search: MEHKO + jurisdiction + sub-step text
-    const jurisdiction = application?.title || application?.id || "";
-    let location = "";
-    if (jurisdiction.toLowerCase().includes("los angeles")) {
-      location = "Los Angeles County";
-    } else if (jurisdiction.toLowerCase().includes("san diego")) {
-      location = "San Diego County";
-    } else if (jurisdiction.toLowerCase().includes("county")) {
-      location = jurisdiction;
+    // Use searchTerms from the step if available, otherwise fall back to content
+    let searchText = "";
+
+    if (
+      step?.searchTerms &&
+      Array.isArray(step.searchTerms) &&
+      step.searchTerms.length > 0
+    ) {
+      // Use the first search term as the primary search
+      searchText = step.searchTerms[0];
+    } else if (subStepText) {
+      // Fallback to using the sub-step text (truncated)
+      searchText =
+        subStepText.length > 100
+          ? subStepText.substring(0, 100) + "..."
+          : subStepText;
+    } else {
+      searchText = "MEHKO application";
     }
 
-    const searchQuery = encodeURIComponent(`MEHKO ${location} ${subStepText}`);
+    let location = "";
+
+    // First try to get the county name from the title
+    if (application?.title) {
+      if (application.title.toLowerCase().includes("los angeles")) {
+        location = "Los Angeles County";
+      } else if (application.title.toLowerCase().includes("san diego")) {
+        location = "San Diego County";
+      } else if (application.title.toLowerCase().includes("alameda")) {
+        location = "Alameda County";
+      } else if (application.title.toLowerCase().includes("santa barbara")) {
+        location = "Santa Barbara County";
+      } else if (application.title.toLowerCase().includes("sonoma")) {
+        location = "Sonoma County";
+      } else if (application.title.toLowerCase().includes("county")) {
+        location = application.title;
+      }
+    }
+
+    // If no location found from title, use the application ID
+    if (!location && application?.id) {
+      location = application.id
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (m) => m.toUpperCase());
+    }
+
+    // Final fallback
+    if (!location) {
+      location = "MEHKO";
+    }
+
+    // Don't duplicate the county name if it's already in the search text
+    let finalSearchText = searchText;
+    if (location && searchText.toLowerCase().includes(location.toLowerCase())) {
+      // If the location is already in the search text, just use the search text
+      finalSearchText = searchText;
+    } else {
+      // Otherwise, combine location and search text
+      finalSearchText = `${location} ${searchText}`;
+    }
+    
+    const searchQuery = encodeURIComponent(finalSearchText);
     const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
 
     window.open(searchUrl, "_blank", "noopener,noreferrer");
@@ -84,9 +135,17 @@ function SubStepActions({
     // This will be handled by the parent component to open AI chat
     // with context about this specific sub-step
     if (onCommentRequest) {
+      // Use searchTerms for better AI context if available
+      const aiContext =
+        step?.searchTerms &&
+        Array.isArray(step.searchTerms) &&
+        step.searchTerms.length > 0
+          ? step.searchTerms.join(", ")
+          : subStepText;
+
       onCommentRequest({
         type: "ai_chat",
-        subStepText,
+        subStepText: aiContext,
         stepId,
         applicationId,
       });
