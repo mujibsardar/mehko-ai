@@ -26,6 +26,7 @@ export default function DashboardApp() {
   const [activeSection, setActiveSection] = useState("overview"); // 'overview' | 'steps' | 'comments'
   const [currentStepId, setCurrentStepId] = useState(null);
   const [enrichedApplication, setEnrichedApplication] = useState(null);
+  const [aiChatContext, setAiChatContext] = useState(null); // New state for AI chat context
 
   // layout breakpoints
   const [wide, setWide] = useState(
@@ -379,6 +380,7 @@ export default function DashboardApp() {
           applicationId={activeApplication.id}
           hideCompleteToggle
           application={activeApplication}
+          onCommentRequest={handleCommentRequest}
         />
       );
     }
@@ -386,12 +388,43 @@ export default function DashboardApp() {
     return <p>Unsupported step type.</p>;
   };
 
+  // Handle comment requests from sub-steps
+  const handleCommentRequest = (request) => {
+    if (request.type === "ai_chat") {
+      // Set the AI chat context and switch to AI chat section
+      setAiChatContext({
+        subStepText: request.subStepText,
+        stepId: request.stepId,
+        applicationId: request.applicationId
+      });
+      setActiveSection("ai_chat");
+      console.log("AI Chat requested for sub-step:", request.subStepText);
+    } else if (request.type === "comment") {
+      // Switch to comments section and create a comment about the sub-step
+      setAiChatContext({
+        subStepText: request.subStepText,
+        stepId: request.stepId,
+        applicationId: request.applicationId
+      });
+      setActiveSection("comments");
+      console.log("Comment requested for sub-step:", request.subStepText);
+    }
+  };
+
+  // Clear context when switching sections manually
+  const handleSectionChange = (newSection) => {
+    if (newSection !== activeSection) {
+      setAiChatContext(null); // Clear context when manually switching sections
+      setActiveSection(newSection);
+    }
+  };
+
   const MobileTabs = () => {
     if (!activeApplication || wide) return null; // only show on smaller screens
     const tab = (key, label) => (
       <button
         key={key}
-        onClick={() => setActiveSection(key)}
+        onClick={() => handleSectionChange(key)}
         style={{
           padding: "6px 10px",
           borderRadius: 8,
@@ -423,7 +456,7 @@ export default function DashboardApp() {
           activeApplicationId={activeApplicationId}
           onRemove={handleApplicationRemove}
           activeSection={activeSection}
-          setActiveSection={setActiveSection}
+          setActiveSection={handleSectionChange}
           onSelect={handleApplicationSwitch}
           onStepSelect={onStepSelect}
           selectedStepId={currentStepId}
@@ -504,7 +537,10 @@ export default function DashboardApp() {
                 )}
 
                 {activeSection === "comments" && activeApplication && (
-                  <CommentsSection application={activeApplication} />
+                  <CommentsSection 
+                    application={activeApplication} 
+                    context={aiChatContext}
+                  />
                 )}
 
                 {/* On narrow screens, show AI panel beneath main content */}
@@ -531,6 +567,7 @@ export default function DashboardApp() {
                           currentStep?.id || currentStep?._id || null
                         }
                         completedStepIds={completedSteps}
+                        context={aiChatContext}
                       />
                     </div>
                   </section>
@@ -591,6 +628,7 @@ export default function DashboardApp() {
                     currentStep={currentStep}
                     currentStepId={currentStep?.id || currentStep?._id || null}
                     completedStepIds={completedSteps}
+                    context={aiChatContext}
                   />
                 </div>
               </div>

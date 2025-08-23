@@ -1,12 +1,12 @@
 import { useState } from "react";
 import "./InfoStep.scss";
-import ReactMarkdown from "react-markdown";
 import useAuth from "../../hooks/useAuth";
 import useProgress from "../../hooks/useProgress";
 import ReportButton from "../generic/ReportButton";
 import ReportIssueModal from "../modals/ReportIssueModal";
+import SubStepActions from "./SubStepActions";
 
-function InfoStep({ step, applicationId, hideCompleteToggle, application }) {
+function InfoStep({ step, applicationId, hideCompleteToggle, application, onCommentRequest }) {
   const { user } = useAuth();
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,
@@ -26,6 +26,86 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application }) {
     console.log("Step report submitted:", reportData);
   };
 
+  // Parse markdown content to identify sub-steps and add action buttons
+  const renderContentWithActions = (content) => {
+    if (!content) return null;
+
+    // Split content into lines to identify sub-steps
+    const lines = content.split('\n');
+    
+    return lines.map((line, index) => {
+      const trimmedLine = line.trim();
+      
+      // Check if this line is a sub-step (starts with - or *)
+      if (trimmedLine.startsWith('-') || trimmedLine.startsWith('*')) {
+        const subStepText = trimmedLine.substring(1).trim();
+        
+        // Parse markdown links in the sub-step text
+        const renderSubStepText = (text) => {
+          // Simple regex to find markdown links [text](url)
+          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+          const parts = [];
+          let lastIndex = 0;
+          let match;
+          
+          while ((match = linkRegex.exec(text)) !== null) {
+            // Add text before the link
+            if (match.index > lastIndex) {
+              parts.push(text.slice(lastIndex, match.index));
+            }
+            
+            // Add the link
+            parts.push(
+              <a 
+                key={`link-${match.index}`}
+                href={match[2]} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="sub-step-link"
+              >
+                {match[1]}
+              </a>
+            );
+            
+            lastIndex = match.index + match[0].length;
+          }
+          
+          // Add remaining text after the last link
+          if (lastIndex < text.length) {
+            parts.push(text.slice(lastIndex));
+          }
+          
+          return parts.length > 0 ? parts : text;
+        };
+        
+        return (
+          <div key={index} className="sub-step-item">
+            <div className="sub-step-content">
+              <span className="sub-step-bullet">•</span>
+              <span className="sub-step-text">
+                {renderSubStepText(subStepText)}
+              </span>
+            </div>
+            <SubStepActions
+              subStepText={subStepText}
+              stepId={stepId}
+              applicationId={applicationId}
+              application={application}
+              onCommentRequest={onCommentRequest}
+            />
+          </div>
+        );
+      }
+      
+      // For non-sub-step lines, render as regular markdown
+      return (
+        <div key={index} className="content-line">
+          {trimmedLine}
+        </div>
+      );
+    });
+  };
+
   return (
     <div className="info-step">
       <div className="step-header">
@@ -42,15 +122,9 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application }) {
       </div>
 
       {step.content ? (
-        <ReactMarkdown
-          components={{
-            a: ({ node, ...props }) => (
-              <a {...props} target="_blank" rel="noopener noreferrer" />
-            ),
-          }}
-        >
-          {step.content}
-        </ReactMarkdown>
+        <div className="step-content">
+          {renderContentWithActions(step.content)}
+        </div>
       ) : (
         <p>No additional information available for this step.</p>
       )}

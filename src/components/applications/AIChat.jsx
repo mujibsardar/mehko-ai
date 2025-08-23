@@ -16,6 +16,7 @@ export default function AIChat({
   currentStep,
   currentStepId,
   completedStepIds = [],
+  context = null, // New parameter for sub-step context
 }) {
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
@@ -30,6 +31,14 @@ export default function AIChat({
 
   const [pdfText, setPdfText] = useState({});
   const [pdfLinks, setPdfLinks] = useState({});
+
+  // Handle context changes to pre-populate input
+  useEffect(() => {
+    if (context && context.subStepText) {
+      const prompt = `I need help with this sub-step: "${context.subStepText}". Can you provide more detailed guidance?`;
+      setInput(prompt);
+    }
+  }, [context]);
 
   // Normalize steps with completion so the model doesn't have to infer
   const computedSteps = useMemo(() => {

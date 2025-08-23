@@ -12,7 +12,7 @@ import "./CommentsSection.scss";
 // Common emojis for quick reactions - matching the screenshot
 const QUICK_EMOJIS = ["👍", "👎", "😊", "🎉", "😢", "❤️", "🚀", "👀"];
 
-function CommentsSection({ application }) {
+function CommentsSection({ application, context = null }) {
   const [comments, setComments] = useState([]);
   const [text, setText] = useState("");
   const [activeEmojiPicker, setActiveEmojiPicker] = useState(null); // Track which comment's emoji picker is open
@@ -23,6 +23,14 @@ function CommentsSection({ application }) {
     if (!application?.id) return;
     fetchComments(application.id).then(setComments);
   }, [application?.id]);
+
+  // Handle context changes to pre-populate comment
+  useEffect(() => {
+    if (context && context.subStepText) {
+      const commentText = `Question/comment about this sub-step: "${context.subStepText}"\n\n`;
+      setText(commentText);
+    }
+  }, [context]);
 
   // Close emoji picker when clicking outside
   useEffect(() => {
