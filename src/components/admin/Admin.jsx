@@ -16,7 +16,7 @@ const API = "/api"; // <-- prefix all backend calls
 
 export default function Admin() {
   const { user, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports"
+  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "bulk"
 
   // Check if user is authenticated and is admin
   if (loading) {
@@ -75,6 +75,19 @@ export default function Admin() {
   const [newPdfFile, setNewPdfFile] = useState(null); // for 'pdf'
   const [queuedSteps, setQueuedSteps] = useState([]); // [{...step, _file?: File}]
 
+  // Bulk import state
+  const [bulkFiles, setBulkFiles] = useState([]);
+  const [bulkPreview, setBulkPreview] = useState([]);
+  const [bulkStatus, setBulkStatus] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // PDF Download state
+  const [pdfDownloadUrl, setPdfDownloadUrl] = useState("");
+  const [pdfDownloadAppId, setPdfDownloadAppId] = useState("");
+  const [pdfDownloadFormId, setPdfDownloadFormId] = useState("");
+  const [pdfDownloadStatus, setPdfDownloadStatus] = useState("");
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+
   // UI feedback
   const [status, setStatus] = useState(""); // short inline status banner
 
@@ -118,6 +131,135 @@ export default function Admin() {
   useEffect(() => {
     loadApps();
   }, []);
+
+  // ----------- Bulk Import Functions -----------
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    const jsonFiles = files.filter(
+      (file) => file.type === "application/json" || file.name.endsWith(".json")
+    );
+    setBulkFiles((prev) => [...prev, ...jsonFiles]);
+  };
+
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files);
+    const jsonFiles = files.filter(
+      (file) => file.type === "application/json" || file.name.endsWith(".json")
+    );
+    setBulkFiles((prev) => [...prev, ...jsonFiles]);
+  };
+
+  const removeFile = (index) => {
+    setBulkFiles((prev) => prev.filter((_, i) => i !== index));
+    setBulkPreview((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const previewFiles = async () => {
+    if (bulkFiles.length === 0) return;
+
+    const previews = [];
+    for (const file of bulkFiles) {
+      try {
+        const content = await file.text();
+        const data = JSON.parse(content);
+        previews.push({
+          filename: file.name,
+          data: data,
+          valid:
+            data.id && data.title && data.steps && Array.isArray(data.steps),
+          error: null,
+        });
+      } catch (error) {
+        previews.push({
+          filename: file.name,
+          data: null,
+          valid: false,
+          error: error.message,
+        });
+      }
+    }
+    setBulkPreview(previews);
+  };
+
+  const processBulkImport = async () => {
+    if (bulkPreview.length === 0) return;
+
+    setIsProcessing(true);
+    setBulkStatus("Processing applications...");
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const preview of bulkPreview) {
+      if (!preview.valid) {
+        errorCount++;
+        continue;
+      }
+
+      try {
+        const appData = preview.data;
+
+        // Create backend folder structure
+        const r = await fetch(`${API}/apps`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            app: appData.id,
+            title: appData.title,
+            description: appData.description || "",
+            rootDomain: appData.rootDomain || "",
+          }),
+        });
+
+        if (!r.ok) {
+          const j = await r.json().catch(() => ({}));
+          throw new Error(j.detail || `Backend failed for ${appData.id}`);
+        }
+
+        // Save to Firestore
+        const ref = doc(db, "applications", appData.id);
+        await setDoc(
+          ref,
+          {
+            id: appData.id,
+            title: appData.title,
+            rootDomain: appData.rootDomain || "",
+            description: appData.description || "",
+            steps: appData.steps || [],
+            supportTools: appData.supportTools || {
+              aiEnabled: true,
+              commentsEnabled: true,
+            },
+          },
+          { merge: true }
+        );
+
+        successCount++;
+        setBulkStatus(`Processed ${successCount}/${bulkPreview.length}...`);
+      } catch (error) {
+        console.error(`Error processing ${preview.filename}:`, error);
+        errorCount++;
+      }
+    }
+
+    setIsProcessing(false);
+    setBulkStatus(
+      `✅ Import complete! ${successCount} successful, ${errorCount} failed`
+    );
+
+    // Refresh app list
+    await loadApps();
+
+    // Clear files after successful import
+    if (successCount > 0) {
+      setTimeout(() => {
+        setBulkFiles([]);
+        setBulkPreview([]);
+        setBulkStatus("");
+      }, 3000);
+    }
+  };
 
   // ----------- App create/update -----------
   async function saveAppMeta() {
@@ -254,6 +396,52 @@ export default function Admin() {
     pushStatus("🗑️ Step deleted");
   }
 
+  // ----------- PDF Download Functions -----------
+  const handlePdfDownload = async () => {
+    if (!pdfDownloadUrl || !pdfDownloadAppId || !pdfDownloadFormId) {
+      setPdfDownloadStatus("❌ Please fill in all fields");
+      return;
+    }
+
+    setIsDownloadingPdf(true);
+    setPdfDownloadStatus("Downloading PDF...");
+
+    try {
+      const response = await fetch("/api/download-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          url: pdfDownloadUrl,
+          appId: pdfDownloadAppId,
+          formId: pdfDownloadFormId,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.detail || "Failed to download PDF");
+      }
+
+      const result = await response.json();
+      setPdfDownloadStatus(
+        `✅ PDF downloaded successfully to applications/${pdfDownloadAppId}/forms/${pdfDownloadFormId}/form.pdf`
+      );
+
+      // Clear form after successful download
+      setTimeout(() => {
+        setPdfDownloadUrl("");
+        setPdfDownloadAppId("");
+        setPdfDownloadFormId("");
+        setPdfDownloadStatus("");
+      }, 3000);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      setPdfDownloadStatus(`❌ Error: ${error.message}`);
+    } finally {
+      setIsDownloadingPdf(false);
+    }
+  };
+
   // ----------- UI -----------
   return (
     <div style={{ display: "flex", height: "100vh", minHeight: 600 }}>
@@ -287,6 +475,21 @@ export default function Admin() {
             Applications
           </button>
           <button
+            onClick={() => setActiveTab("bulk")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              marginBottom: "8px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "bulk" ? "#eef2ff" : "#fff",
+              color: activeTab === "bulk" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
+          >
+            Bulk Import
+          </button>
+          <button
             onClick={() => setActiveTab("reports")}
             style={{
               width: "100%",
@@ -299,6 +502,21 @@ export default function Admin() {
             }}
           >
             Issue Reports
+          </button>
+          <button
+            onClick={() => setActiveTab("pdf-download")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: "8px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "pdf-download" ? "#eef2ff" : "#fff",
+              color: activeTab === "pdf-download" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
+          >
+            PDF Download
           </button>
         </div>
 
@@ -349,7 +567,10 @@ export default function Admin() {
           }}
         >
           <h2 style={{ margin: 0, flex: 1 }}>
-            {activeTab === "apps" ? "Admin Dashboard" : "Issue Reports"}
+            {activeTab === "apps" && "Admin Dashboard"}
+            {activeTab === "bulk" && "Bulk Import Applications"}
+            {activeTab === "reports" && "Issue Reports"}
+            {activeTab === "pdf-download" && "Download PDF Forms"}
           </h2>
           <Link to="/dashboard" style={{ fontSize: 13 }}>
             ← Back to Dashboard
@@ -369,10 +590,472 @@ export default function Admin() {
               {status}
             </div>
           )}
+          {activeTab === "bulk" && bulkStatus && (
+            <div
+              style={{
+                marginLeft: 8,
+                padding: "6px 10px",
+                background: bulkStatus.includes("✅") ? "#ecfdf5" : "#fef3c7",
+                border: bulkStatus.includes("✅")
+                  ? "1px solid #a7f3d0"
+                  : "1px solid #fde68a",
+                borderRadius: 8,
+                color: bulkStatus.includes("✅") ? "#065f46" : "#92400e",
+                fontSize: 13,
+              }}
+            >
+              {bulkStatus}
+            </div>
+          )}
+          {activeTab === "pdf-download" && pdfDownloadStatus && (
+            <div
+              style={{
+                marginLeft: 8,
+                padding: "6px 10px",
+                background: pdfDownloadStatus.includes("✅")
+                  ? "#ecfdf5"
+                  : "#fef3c7",
+                border: pdfDownloadStatus.includes("✅")
+                  ? "1px solid #a7f3d0"
+                  : "1px solid #fde68a",
+                borderRadius: 8,
+                color: pdfDownloadStatus.includes("✅") ? "#065f46" : "#92400e",
+                fontSize: 13,
+              }}
+            >
+              {pdfDownloadStatus}
+            </div>
+          )}
         </div>
 
         {activeTab === "reports" ? (
           <ReportsViewer />
+        ) : activeTab === "bulk" ? (
+          <div style={{ maxWidth: 800 }}>
+            {/* Bulk Import Instructions */}
+            <section
+              style={{
+                border: "1px solid #e5e7eb",
+                borderRadius: 12,
+                padding: 16,
+                marginTop: 12,
+                background: "#f9fafb",
+              }}
+            >
+              <h3 style={{ marginTop: 0, color: "#374151" }}>
+                📋 Bulk Import Instructions
+              </h3>
+              <div style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
+                <p>
+                  Upload one or more JSON files to create new county
+                  applications:
+                </p>
+                <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
+                  <li>
+                    Each JSON should follow the{" "}
+                    <code>county-template.json</code> structure
+                  </li>
+                  <li>Files will be validated before processing</li>
+                  <li>
+                    Applications will be created in both backend and Firestore
+                  </li>
+                  <li>Duplicate IDs will update existing applications</li>
+                </ul>
+                <p>
+                  <strong>Tip:</strong> Use the template in{" "}
+                  <code>data/county-template.json</code> as a starting point.
+                </p>
+              </div>
+            </section>
+
+            {/* File Upload Area */}
+            <section
+              style={{
+                border: "2px dashed #d1d5db",
+                borderRadius: 12,
+                padding: 24,
+                marginTop: 16,
+                background: "#fafafa",
+                textAlign: "center",
+                transition: "all 0.2s",
+              }}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleFileDrop}
+            >
+              <div style={{ fontSize: 48, marginBottom: 16 }}>📁</div>
+              <h3 style={{ margin: "0 0 8px", color: "#374151" }}>
+                Drop JSON files here
+              </h3>
+              <p style={{ margin: "0 0 16px", color: "#6b7280" }}>
+                or click to select files
+              </p>
+              <input
+                type="file"
+                multiple
+                accept=".json,application/json"
+                onChange={handleFileSelect}
+                style={{ display: "none" }}
+                id="file-input"
+              />
+              <label
+                htmlFor="file-input"
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  background: "#3b82f6",
+                  color: "white",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: 14,
+                }}
+              >
+                Select Files
+              </label>
+            </section>
+
+            {/* File List */}
+            {bulkFiles.length > 0 && (
+              <section
+                style={{
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 12,
+                  padding: 16,
+                  marginTop: 16,
+                  background: "#fff",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 16,
+                  }}
+                >
+                  <h3 style={{ margin: 0 }}>
+                    Selected Files ({bulkFiles.length})
+                  </h3>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      onClick={previewFiles}
+                      style={{
+                        padding: "6px 12px",
+                        background: "#10b981",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: 13,
+                      }}
+                    >
+                      Preview
+                    </button>
+                    <button
+                      onClick={() => {
+                        setBulkFiles([]);
+                        setBulkPreview([]);
+                      }}
+                      style={{
+                        padding: "6px 12px",
+                        background: "#ef4444",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: 13,
+                      }}
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gap: 8 }}>
+                  {bulkFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "8px 12px",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "6px",
+                        background: "#f9fafb",
+                      }}
+                    >
+                      <span style={{ fontSize: 14, color: "#374151" }}>
+                        {file.name}
+                      </span>
+                      <button
+                        onClick={() => removeFile(index)}
+                        style={{
+                          padding: "4px 8px",
+                          background: "#ef4444",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: 12,
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Preview Results */}
+            {bulkPreview.length > 0 && (
+              <section
+                style={{
+                  border: "1px solid #e5e7eb",
+                  borderRadius: 12,
+                  padding: 16,
+                  marginTop: 16,
+                  background: "#fff",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 16,
+                  }}
+                >
+                  <h3 style={{ margin: 0 }}>Preview Results</h3>
+                  <button
+                    onClick={processBulkImport}
+                    disabled={
+                      isProcessing ||
+                      bulkPreview.filter((p) => p.valid).length === 0
+                    }
+                    style={{
+                      padding: "8px 16px",
+                      background:
+                        isProcessing ||
+                        bulkPreview.filter((p) => p.valid).length === 0
+                          ? "#9ca3af"
+                          : "#3b82f6",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      cursor:
+                        isProcessing ||
+                        bulkPreview.filter((p) => p.valid).length === 0
+                          ? "not-allowed"
+                          : "pointer",
+                      fontSize: 14,
+                    }}
+                  >
+                    {isProcessing
+                      ? "Processing..."
+                      : `Import ${
+                          bulkPreview.filter((p) => p.valid).length
+                        } Applications`}
+                  </button>
+                </div>
+
+                <div style={{ display: "grid", gap: 12 }}>
+                  {bulkPreview.map((preview, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "8px",
+                        padding: "12px",
+                        background: preview.valid ? "#f0fdf4" : "#fef2f2",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          marginBottom: 8,
+                        }}
+                      >
+                        <span style={{ fontSize: 16 }}>
+                          {preview.valid ? "✅" : "❌"}
+                        </span>
+                        <strong
+                          style={{
+                            color: preview.valid ? "#065f46" : "#dc2626",
+                          }}
+                        >
+                          {preview.filename}
+                        </strong>
+                      </div>
+
+                      {preview.valid ? (
+                        <div style={{ fontSize: 13, color: "#374151" }}>
+                          <div>
+                            <strong>ID:</strong> {preview.data.id}
+                          </div>
+                          <div>
+                            <strong>Title:</strong> {preview.data.title}
+                          </div>
+                          <div>
+                            <strong>Domain:</strong>{" "}
+                            {preview.data.rootDomain || "Not specified"}
+                          </div>
+                          <div>
+                            <strong>Steps:</strong>{" "}
+                            {preview.data.steps?.length || 0} steps
+                          </div>
+                          {preview.data.description && (
+                            <div>
+                              <strong>Description:</strong>{" "}
+                              {preview.data.description.substring(0, 100)}...
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div style={{ fontSize: 13, color: "#dc2626" }}>
+                          <strong>Error:</strong>{" "}
+                          {preview.error || "Invalid JSON structure"}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        ) : activeTab === "pdf-download" ? (
+          <div style={{ maxWidth: 600 }}>
+            <div style={{ marginBottom: 16 }}>
+              <h3 style={{ marginTop: 0 }}>Download PDF Form</h3>
+              <p>Enter the application ID and form ID to download a PDF.</p>
+            </div>
+            <div style={{ display: "grid", gap: 8 }}>
+              <input
+                type="text"
+                placeholder="Application ID (e.g., sonoma_county_mehko)"
+                value={pdfDownloadAppId}
+                onChange={(e) => setPdfDownloadAppId(e.target.value)}
+                disabled={isDownloadingPdf}
+              />
+              <input
+                type="text"
+                placeholder="Form ID (e.g., MEHKO_SOP-English)"
+                value={pdfDownloadFormId}
+                onChange={(e) => setPdfDownloadFormId(e.target.value)}
+                disabled={isDownloadingPdf}
+              />
+              <input
+                type="url"
+                placeholder="PDF URL (e.g., https://sonomacounty.ca.gov/forms/mehko-sop.pdf)"
+                value={pdfDownloadUrl}
+                onChange={(e) => setPdfDownloadUrl(e.target.value)}
+                disabled={isDownloadingPdf}
+              />
+              <button
+                onClick={handlePdfDownload}
+                disabled={
+                  isDownloadingPdf ||
+                  !pdfDownloadUrl ||
+                  !pdfDownloadAppId ||
+                  !pdfDownloadFormId
+                }
+                style={{
+                  padding: "8px 16px",
+                  background:
+                    isDownloadingPdf ||
+                    !pdfDownloadUrl ||
+                    !pdfDownloadAppId ||
+                    !pdfDownloadFormId
+                      ? "#9ca3af"
+                      : "#3b82f6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor:
+                    isDownloadingPdf ||
+                    !pdfDownloadUrl ||
+                    !pdfDownloadAppId ||
+                    !pdfDownloadFormId
+                      ? "not-allowed"
+                      : "pointer",
+                  fontSize: 14,
+                }}
+              >
+                {isDownloadingPdf ? "Downloading..." : "Download PDF"}
+              </button>
+              {pdfDownloadStatus && (
+                <div
+                  style={{
+                    marginTop: 12,
+                    padding: "8px 12px",
+                    background: pdfDownloadStatus.includes("✅")
+                      ? "#ecfdf5"
+                      : "#fef3c7",
+                    border: pdfDownloadStatus.includes("✅")
+                      ? "1px solid #a7f3d0"
+                      : "1px solid #fde68a",
+                    borderRadius: 8,
+                    color: pdfDownloadStatus.includes("✅")
+                      ? "#065f46"
+                      : "#92400e",
+                    fontSize: 13,
+                  }}
+                >
+                  {pdfDownloadStatus}
+                </div>
+              )}
+            </div>
+            <div style={{ marginTop: 20 }}>
+              <h4 style={{ marginTop: 0 }}>How to use:</h4>
+              <ol style={{ paddingLeft: 20 }}>
+                <li>
+                  <strong>Application ID:</strong> The county identifier (e.g.,
+                  "sonoma_county_mehko")
+                </li>
+                <li>
+                  <strong>Form ID:</strong> The form identifier (e.g.,
+                  "MEHKO_SOP-English")
+                </li>
+                <li>
+                  <strong>PDF URL:</strong> Direct link to the PDF file
+                </li>
+                <li>
+                  Click "Download PDF" to save it to{" "}
+                  <code>
+                    applications/{pdfDownloadAppId}/forms/{pdfDownloadFormId}
+                    /form.pdf
+                  </code>
+                </li>
+                <li>
+                  Use the mapper tool to extract form fields from the downloaded
+                  PDF
+                </li>
+              </ol>
+            </div>
+            <div style={{ marginTop: 20 }}>
+              <h4 style={{ marginTop: 0 }}>Example:</h4>
+              <div style={{ paddingLeft: 20 }}>
+                <p>
+                  <strong>Application ID:</strong> sonoma_county_mehko
+                </p>
+                <p>
+                  <strong>Form ID:</strong> MEHKO_SOP-English
+                </p>
+                <p>
+                  <strong>PDF URL:</strong>{" "}
+                  https://sonomacounty.ca.gov/forms/mehko-sop.pdf
+                </p>
+                <p>
+                  <strong>Result:</strong> PDF saved to{" "}
+                  <code>
+                    applications/sonoma_county_mehko/forms/MEHKO_SOP-English/form.pdf
+                  </code>
+                </p>
+              </div>
+            </div>
+          </div>
         ) : (
           <>
             {/* App form */}

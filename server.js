@@ -328,6 +328,84 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
   }
 });
 
+// PDF Download endpoint
+app.post("/api/download-pdf", async (req, res) => {
+  const { url, appId, formId } = req.body;
+
+  if (!url || !appId || !formId) {
+    return res.status(400).json({ error: "Missing required fields: url, appId, formId" });
+  }
+
+  try {
+    // Validate appId format
+    if (!/^[a-z0-9_]+$/.test(appId)) {
+      return res.status(400).json({ error: "Invalid appId format. Use only lowercase letters, numbers, and underscores." });
+    }
+
+    // Validate formId format
+    if (!/^[A-Za-z0-9_-]+$/.test(formId)) {
+      return res.status(400).json({ error: "Invalid formId format. Use only letters, numbers, hyphens, and underscores." });
+    }
+
+    // Create directory structure
+    const appDir = path.join(__dirname, "applications", appId);
+    const formsDir = path.join(appDir, "forms");
+    const formDir = path.join(formsDir, formId);
+
+    // Ensure directories exist
+    await fs.promises.mkdir(appDir, { recursive: true });
+    await fs.promises.mkdir(formsDir, { recursive: true });
+    await fs.promises.mkdir(formDir, { recursive: true });
+
+    // Download PDF from URL
+    console.log(`Downloading PDF from: ${url}`);
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to download PDF: ${response.status} ${response.statusText}`);
+    }
+
+    // Check if response is actually a PDF
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/pdf")) {
+      console.warn(`Warning: Response may not be a PDF. Content-Type: ${contentType}`);
+    }
+
+    // Save PDF to local filesystem
+    const pdfPath = path.join(formDir, "form.pdf");
+    const pdfBuffer = await response.arrayBuffer();
+    await fs.promises.writeFile(pdfPath, Buffer.from(pdfBuffer));
+
+    // Create basic meta.json if it doesn't exist
+    const metaPath = path.join(formDir, "meta.json");
+    if (!fs.existsSync(metaPath)) {
+      const meta = {
+        name: formId,
+        type: "pdf",
+        downloadedAt: new Date().toISOString(),
+        sourceUrl: url,
+        size: pdfBuffer.byteLength
+      };
+      await fs.promises.writeFile(metaPath, JSON.stringify(meta, null, 2));
+    }
+
+    console.log(`PDF saved to: ${pdfPath}`);
+    res.json({ 
+      success: true, 
+      message: "PDF downloaded successfully",
+      path: `applications/${appId}/forms/${formId}/form.pdf`,
+      size: pdfBuffer.byteLength
+    });
+
+  } catch (error) {
+    console.error("Error downloading PDF:", error);
+    res.status(500).json({ 
+      error: "Failed to download PDF", 
+      detail: error.message 
+    });
+  }
+});
+
 // Helper function to convert PDF to images
 async function convertPDFToImages(pdfBuffer) {
   try {
