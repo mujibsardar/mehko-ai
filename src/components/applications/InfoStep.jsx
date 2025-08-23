@@ -73,6 +73,7 @@ function InfoStep({ step, applicationId, hideCompleteToggle, application, onComm
               applicationId={applicationId}
               application={application}
               onCommentRequest={onCommentRequest}
+              subStepIndex={index}
             />
           </div>
         );
