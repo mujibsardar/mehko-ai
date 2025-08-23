@@ -1,14 +1,14 @@
 import { db } from "./firebase";
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
   where,
   deleteDoc,
   doc,
-  updateDoc
+  updateDoc,
 } from "firebase/firestore";
 
 const REPORTS_COLLECTION = "reports";
@@ -30,17 +30,27 @@ const REPORTS_COLLECTION = "reports";
  */
 export async function submitReport(reportData) {
   try {
+    // Filter out null/undefined values to prevent Firebase errors
+    const cleanReportData = Object.fromEntries(
+      Object.entries(reportData).filter(
+        ([_, value]) => value !== null && value !== undefined
+      )
+    );
+
     const reportWithMetadata = {
-      ...reportData,
+      ...cleanReportData,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       status: "open", // open, in-progress, resolved, closed
       assignedTo: null,
       resolution: null,
-      resolvedAt: null
+      resolvedAt: null,
     };
 
-    const docRef = await addDoc(collection(db, REPORTS_COLLECTION), reportWithMetadata);
+    const docRef = await addDoc(
+      collection(db, REPORTS_COLLECTION),
+      reportWithMetadata
+    );
     return docRef.id;
   } catch (error) {
     console.error("Error submitting report:", error);
@@ -60,7 +70,7 @@ export async function submitReport(reportData) {
 export async function getReports(filters = {}) {
   try {
     let q = collection(db, REPORTS_COLLECTION);
-    
+
     // Apply filters
     if (filters.status) {
       q = query(q, where("status", "==", filters.status));
@@ -74,14 +84,14 @@ export async function getReports(filters = {}) {
     if (filters.applicationId) {
       q = query(q, where("applicationId", "==", filters.applicationId));
     }
-    
+
     // Always order by creation date (newest first)
     q = query(q, orderBy("createdAt", "desc"));
-    
+
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({
+    return querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
   } catch (error) {
     console.error("Error fetching reports:", error);
@@ -106,20 +116,25 @@ export async function getReportsByApplication(applicationId) {
  * @param {string} resolution - Resolution notes
  * @returns {Promise<void>}
  */
-export async function updateReportStatus(reportId, status, assignedTo = null, resolution = null) {
+export async function updateReportStatus(
+  reportId,
+  status,
+  assignedTo = null,
+  resolution = null
+) {
   try {
     const reportRef = doc(db, REPORTS_COLLECTION, reportId);
     const updateData = {
       status,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    
+
     if (assignedTo) updateData.assignedTo = assignedTo;
     if (resolution) updateData.resolution = resolution;
     if (status === "resolved" || status === "closed") {
       updateData.resolvedAt = new Date().toISOString();
     }
-    
+
     await updateDoc(reportRef, updateData);
   } catch (error) {
     console.error("Error updating report status:", error);
@@ -149,29 +164,32 @@ export async function deleteReport(reportId) {
 export async function getReportStats() {
   try {
     const allReports = await getReports();
-    
+
     const stats = {
       total: allReports.length,
       byStatus: {},
       byContext: {},
       bySeverity: {},
-      byApplication: {}
+      byApplication: {},
     };
-    
-    allReports.forEach(report => {
+
+    allReports.forEach((report) => {
       // Count by status
       stats.byStatus[report.status] = (stats.byStatus[report.status] || 0) + 1;
-      
+
       // Count by context
-      stats.byContext[report.context] = (stats.byContext[report.context] || 0) + 1;
-      
+      stats.byContext[report.context] =
+        (stats.byContext[report.context] || 0) + 1;
+
       // Count by severity
-      stats.bySeverity[report.severity] = (stats.bySeverity[report.severity] || 0) + 1;
-      
+      stats.bySeverity[report.severity] =
+        (stats.bySeverity[report.severity] || 0) + 1;
+
       // Count by application
-      stats.byApplication[report.applicationId] = (stats.byApplication[report.applicationId] || 0) + 1;
+      stats.byApplication[report.applicationId] =
+        (stats.byApplication[report.applicationId] || 0) + 1;
     });
-    
+
     return stats;
   } catch (error) {
     console.error("Error fetching report stats:", error);

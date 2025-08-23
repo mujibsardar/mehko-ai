@@ -115,21 +115,36 @@ export default function AIChat({
         if (step.type === "pdf" && step.formId) {
           // text
           try {
-            const r = await fetch(
-              `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/text`
-            );
+            const url = `http://127.0.0.1:8000/apps/${encodeURIComponent(
+              application.id
+            )}/forms/${encodeURIComponent(step.formId)}/text`;
+            console.log(`Fetching PDF text from: ${url}`);
+            const r = await fetch(url);
             if (r.ok) {
               const j = await r.json();
               textMap[step.formId] = Array.isArray(j.pages)
                 ? j.pages.join("\n\n---\n\n")
                 : "";
+              console.log(`Successfully loaded text for form: ${step.formId}`);
+            } else {
+              console.log(
+                `Form ${step.formId} not found on server (${r.status}) - this is normal if the form hasn't been uploaded yet`
+              );
             }
-          } catch {}
+          } catch (error) {
+            console.log(
+              `Could not fetch text for form ${step.formId}: ${error.message}`
+            );
+          }
           // links
           linkMap[step.formId] = {
             title: step.title || step.formId,
-            url: `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/pdf?inline=0`,
-            previewBase: `http://127.0.0.1:8000/apps/${application.id}/forms/${step.formId}/preview-page?page=`,
+            url: `http://127.0.0.1:8000/apps/${encodeURIComponent(
+              application.id
+            )}/forms/${encodeURIComponent(step.formId)}/pdf?inline=0`,
+            previewBase: `http://127.0.0.1:8000/apps/${encodeURIComponent(
+              application.id
+            )}/forms/${encodeURIComponent(step.formId)}/preview-page?page=`,
           };
         }
       }

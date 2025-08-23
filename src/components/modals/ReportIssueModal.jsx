@@ -3,18 +3,18 @@ import { submitReport } from "../../firebase/reports";
 import useAuth from "../../hooks/useAuth";
 import "./ReportIssueModal.scss";
 
-export default function ReportIssueModal({ 
-  isOpen, 
-  onClose, 
-  application, 
+export default function ReportIssueModal({
+  isOpen,
+  onClose,
+  application,
   step = null,
-  onReportSubmitted 
+  onReportSubmitted,
 }) {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
     issueType: "general",
     description: "",
-    severity: "medium"
+    severity: "medium",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("");
@@ -31,15 +31,20 @@ export default function ReportIssueModal({
       const reportData = {
         applicationId: application?.id,
         applicationTitle: application?.title,
-        stepId: step?.id || step?._id,
-        stepTitle: step?.title,
+        stepId: step?.id || step?._id || null, // Ensure stepId is never undefined
+        stepTitle: step?.title || null,
         issueType: formData.issueType,
         description: formData.description.trim(),
         severity: formData.severity,
         context: step ? "step" : "application",
         userId: user?.uid,
-        userEmail: user?.email
+        userEmail: user?.email,
       };
+
+      // Validate required fields before submission
+      if (!reportData.applicationId || !reportData.userId) {
+        throw new Error("Missing required fields: applicationId or userId");
+      }
 
       // Submit to Firestore
       const reportId = await submitReport(reportData);
@@ -47,7 +52,8 @@ export default function ReportIssueModal({
       setSubmitStatus("success");
       setTimeout(() => {
         onClose();
-        if (onReportSubmitted) onReportSubmitted({ ...reportData, id: reportId });
+        if (onReportSubmitted)
+          onReportSubmitted({ ...reportData, id: reportId });
       }, 1500);
     } catch (error) {
       console.error("Failed to submit report:", error);
@@ -59,7 +65,11 @@ export default function ReportIssueModal({
 
   const handleClose = () => {
     if (!isSubmitting) {
-      setFormData({ issueType: "general", description: "", severity: "medium" });
+      setFormData({
+        issueType: "general",
+        description: "",
+        severity: "medium",
+      });
       setSubmitStatus("");
       onClose();
     }
@@ -76,11 +86,14 @@ export default function ReportIssueModal({
 
   return (
     <div className="report-modal-overlay" onClick={handleClose}>
-      <div className="report-modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="report-modal-content"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="report-modal-header">
           <h3>Report an Issue</h3>
-          <button 
-            className="report-modal-close" 
+          <button
+            className="report-modal-close"
             onClick={handleClose}
             disabled={isSubmitting}
           >
@@ -99,7 +112,12 @@ export default function ReportIssueModal({
               <select
                 id="issueType"
                 value={formData.issueType}
-                onChange={(e) => setFormData(prev => ({ ...prev, issueType: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    issueType: e.target.value,
+                  }))
+                }
                 disabled={isSubmitting}
               >
                 <option value="general">General Issue</option>
@@ -116,7 +134,9 @@ export default function ReportIssueModal({
               <select
                 id="severity"
                 value={formData.severity}
-                onChange={(e) => setFormData(prev => ({ ...prev, severity: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, severity: e.target.value }))
+                }
                 disabled={isSubmitting}
               >
                 <option value="low">Low - Minor inconvenience</option>
@@ -131,7 +151,12 @@ export default function ReportIssueModal({
               <textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 placeholder="Please describe the issue you encountered..."
                 rows={4}
                 required
