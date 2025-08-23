@@ -931,26 +931,134 @@ export default function Admin() {
           <div style={{ maxWidth: 600 }}>
             <div style={{ marginBottom: 16 }}>
               <h3 style={{ marginTop: 0 }}>Download PDF Form</h3>
-              <p>Enter the application ID and form ID to download a PDF.</p>
+              <p>
+                Enter the application ID and form ID to download a PDF, or load
+                from an existing application.
+              </p>
+            </div>
+
+            {/* Load from Application Section */}
+            <div
+              style={{
+                border: "1px solid #e5e7eb",
+                borderRadius: "8px",
+                padding: "16px",
+                marginBottom: "16px",
+                background: "#f9fafb",
+              }}
+            >
+              <h4 style={{ marginTop: 0, marginBottom: "12px" }}>
+                Load from Application
+              </h4>
+              <div style={{ display: "grid", gap: "8px" }}>
+                <select
+                  value={selectedAppId || ""}
+                  onChange={(e) => {
+                    const appId = e.target.value;
+                    if (appId) {
+                      const app = apps.find((a) => a.id === appId);
+                      if (app) {
+                        // Find PDF steps and populate fields
+                        const pdfSteps =
+                          app.steps?.filter((s) => s.type === "pdf") || [];
+                        if (pdfSteps.length > 0) {
+                          setPdfDownloadAppId(app.id);
+                          setPdfDownloadFormId(pdfSteps[0].formId || "");
+                          setPdfDownloadUrl(pdfSteps[0].pdfUrl || "");
+                        }
+                      }
+                    }
+                  }}
+                  style={{
+                    padding: "8px",
+                    borderRadius: "4px",
+                    border: "1px solid #d1d5db",
+                  }}
+                >
+                  <option value="">Select an application...</option>
+                  {apps.map((app) => (
+                    <option key={app.id} value={app.id}>
+                      {app.title || app.id}
+                    </option>
+                  ))}
+                </select>
+                {selectedAppId && (
+                  <div style={{ fontSize: "13px", color: "#6b7280" }}>
+                    Found{" "}
+                    {apps
+                      .find((a) => a.id === selectedAppId)
+                      ?.steps?.filter((s) => s.type === "pdf").length || 0}{" "}
+                    PDF forms
+                  </div>
+                )}
+
+                {/* Show available PDF forms */}
+                {selectedAppId && (
+                  <div style={{ marginTop: "12px" }}>
+                    <h5 style={{ margin: "8px 0", fontSize: "14px" }}>
+                      Available PDF Forms:
+                    </h5>
+                    <div style={{ display: "grid", gap: "8px" }}>
+                      {apps
+                        .find((a) => a.id === selectedAppId)
+                        ?.steps?.filter((s) => s.type === "pdf")
+                        .map((step, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              padding: "8px",
+                              border: "1px solid #d1d5db",
+                              borderRadius: "4px",
+                              background: "#fff",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              setPdfDownloadFormId(step.formId || "");
+                              setPdfDownloadUrl(step.pdfUrl || "");
+                            }}
+                          >
+                            <div
+                              style={{ fontWeight: "600", fontSize: "13px" }}
+                            >
+                              {step.title}
+                            </div>
+                            <div style={{ fontSize: "12px", color: "#6b7280" }}>
+                              Form ID: {step.formId}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: "11px",
+                                color: "#9ca3af",
+                                wordBreak: "break-all",
+                              }}
+                            >
+                              {step.pdfUrl}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <div style={{ display: "grid", gap: 8 }}>
               <input
                 type="text"
-                placeholder="Application ID (e.g., sonoma_county_mehko)"
+                placeholder="Application ID (e.g., alameda_county_mehko)"
                 value={pdfDownloadAppId}
                 onChange={(e) => setPdfDownloadAppId(e.target.value)}
                 disabled={isDownloadingPdf}
               />
               <input
                 type="text"
-                placeholder="Form ID (e.g., MEHKO_SOP-English)"
+                placeholder="Form ID (e.g., ALAMEDA_MEHKO_SOP-English)"
                 value={pdfDownloadFormId}
                 onChange={(e) => setPdfDownloadFormId(e.target.value)}
                 disabled={isDownloadingPdf}
               />
               <input
                 type="url"
-                placeholder="PDF URL (e.g., https://sonomacounty.ca.gov/forms/mehko-sop.pdf)"
+                placeholder="PDF URL (e.g., https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf)"
                 value={pdfDownloadUrl}
                 onChange={(e) => setPdfDownloadUrl(e.target.value)}
                 disabled={isDownloadingPdf}
@@ -1040,19 +1148,19 @@ export default function Admin() {
               <h4 style={{ marginTop: 0 }}>Example:</h4>
               <div style={{ paddingLeft: 20 }}>
                 <p>
-                  <strong>Application ID:</strong> sonoma_county_mehko
+                  <strong>Application ID:</strong> alameda_county_mehko
                 </p>
                 <p>
-                  <strong>Form ID:</strong> MEHKO_SOP-English
+                  <strong>Form ID:</strong> ALAMEDA_MEHKO_SOP-English
                 </p>
                 <p>
                   <strong>PDF URL:</strong>{" "}
-                  https://sonomacounty.ca.gov/forms/mehko-sop.pdf
+                  https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf
                 </p>
                 <p>
                   <strong>Result:</strong> PDF saved to{" "}
                   <code>
-                    applications/sonoma_county_mehko/forms/MEHKO_SOP-English/form.pdf
+                    applications/alameda_county_mehko/forms/ALAMEDA_MEHKO_SOP-English/form.pdf
                   </code>
                 </p>
               </div>

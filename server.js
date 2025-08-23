@@ -333,22 +333,34 @@ app.post("/api/download-pdf", async (req, res) => {
   const { url, appId, formId } = req.body;
 
   if (!url || !appId || !formId) {
-    return res.status(400).json({ error: "Missing required fields: url, appId, formId" });
+    return res
+      .status(400)
+      .json({ error: "Missing required fields: url, appId, formId" });
   }
 
   try {
     // Validate appId format
     if (!/^[a-z0-9_]+$/.test(appId)) {
-      return res.status(400).json({ error: "Invalid appId format. Use only lowercase letters, numbers, and underscores." });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Invalid appId format. Use only lowercase letters, numbers, and underscores.",
+        });
     }
 
     // Validate formId format
     if (!/^[A-Za-z0-9_-]+$/.test(formId)) {
-      return res.status(400).json({ error: "Invalid formId format. Use only letters, numbers, hyphens, and underscores." });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Invalid formId format. Use only letters, numbers, hyphens, and underscores.",
+        });
     }
 
     // Create directory structure
-    const appDir = path.join(__dirname, "applications", appId);
+    const appDir = path.join(process.cwd(), "applications", appId);
     const formsDir = path.join(appDir, "forms");
     const formDir = path.join(formsDir, formId);
 
@@ -360,15 +372,19 @@ app.post("/api/download-pdf", async (req, res) => {
     // Download PDF from URL
     console.log(`Downloading PDF from: ${url}`);
     const response = await fetch(url);
-    
+
     if (!response.ok) {
-      throw new Error(`Failed to download PDF: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to download PDF: ${response.status} ${response.statusText}`
+      );
     }
 
     // Check if response is actually a PDF
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/pdf")) {
-      console.warn(`Warning: Response may not be a PDF. Content-Type: ${contentType}`);
+      console.warn(
+        `Warning: Response may not be a PDF. Content-Type: ${contentType}`
+      );
     }
 
     // Save PDF to local filesystem
@@ -384,24 +400,23 @@ app.post("/api/download-pdf", async (req, res) => {
         type: "pdf",
         downloadedAt: new Date().toISOString(),
         sourceUrl: url,
-        size: pdfBuffer.byteLength
+        size: pdfBuffer.byteLength,
       };
       await fs.promises.writeFile(metaPath, JSON.stringify(meta, null, 2));
     }
 
     console.log(`PDF saved to: ${pdfPath}`);
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: "PDF downloaded successfully",
       path: `applications/${appId}/forms/${formId}/form.pdf`,
-      size: pdfBuffer.byteLength
+      size: pdfBuffer.byteLength,
     });
-
   } catch (error) {
     console.error("Error downloading PDF:", error);
-    res.status(500).json({ 
-      error: "Failed to download PDF", 
-      detail: error.message 
+    res.status(500).json({
+      error: "Failed to download PDF",
+      detail: error.message,
     });
   }
 });
@@ -643,14 +658,14 @@ function normalizeAICoordinates(rect) {
 
   // Handle both formats: [x, y, width, height] and [x1, y1, x2, y2]
   let [x, y, width, height] = rect.map((coord) => Number(coord) || 0);
-  
+
   // If the coordinates look like they're already in [x1, y1, x2, y2] format
   // (i.e., if width/height are very large), convert them
   if (width > 1000 || height > 1000) {
     // Already in [x1, y1, x2, y2] format
     return [x, y, width, height];
   }
-  
+
   // Convert from [x, y, width, height] to [x1, y1, x2, y2]
   return [x, y, x + width, y + height];
 }
@@ -718,13 +733,13 @@ function normalizeRectangle(rect) {
   // Apply minimum size constraints for better usability
   const minWidth = 50;
   const minHeight = 20;
-  
+
   if (x2 - x1 < minWidth) {
     const centerX = (x1 + x2) / 2;
     x1 = centerX - minWidth / 2;
     x2 = centerX + minWidth / 2;
   }
-  
+
   if (y2 - y1 < minHeight) {
     const centerY = (y1 + y2) / 2;
     y1 = centerY - minHeight / 2;
