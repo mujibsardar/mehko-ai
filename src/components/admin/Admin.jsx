@@ -15,7 +15,7 @@ import ReportsViewer from "./ReportsViewer";
 const API = "/api"; // <-- prefix all backend calls
 
 export default function Admin() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "bulk"
 
   // Check if user is authenticated and is admin
@@ -27,7 +27,7 @@ export default function Admin() {
     );
   }
 
-  if (!user || user.email !== "avansardar@outlook.com") {
+  if (!user || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

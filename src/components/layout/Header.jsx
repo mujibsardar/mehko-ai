@@ -2,9 +2,10 @@ import React from "react";
 import useAuth from "../../hooks/useAuth";
 import AuthModal from "../auth/AuthModal";
 import { useAuthModal } from "../../providers/AuthModalProvider";
+import { Link } from "react-router-dom";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const { user, logout, isAdmin } = useAuth();
   const { isOpen, openAuthModal, closeAuthModal } = useAuthModal();
 
   const handleLogout = async () => {
@@ -26,15 +27,17 @@ export default function Header() {
       <div>
         {!user ? (
           <div style={styles.authBox}>
-            <button
-              onClick={openAuthModal}
-              style={styles.authButton}
-            >
+            <button onClick={openAuthModal} style={styles.authButton}>
               Sign In
             </button>
           </div>
         ) : (
           <div style={styles.authBox}>
+            {isAdmin && (
+              <Link to="/admin" style={styles.adminButton}>
+                Admin Dashboard
+              </Link>
+            )}
             <span style={{ marginRight: "1rem" }}>
               {user.displayName || user.email}
             </span>
@@ -82,6 +85,20 @@ const styles = {
     fontWeight: "600",
     transition: "all 0.2s ease",
     boxShadow: "0 2px 4px rgba(102, 126, 234, 0.2)",
+  },
+  adminButton: {
+    padding: "0.5rem 1.5rem",
+    background: "linear-gradient(135deg, #dc3545 0%, #c82333 100%)",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontSize: "0.9rem",
+    fontWeight: "600",
+    transition: "all 0.2s ease",
+    boxShadow: "0 2px 4px rgba(220, 53, 69, 0.2)",
+    textDecoration: "none",
+    display: "inline-block",
   },
   button: {
     padding: "0.25rem 0.75rem",

@@ -1,16 +1,15 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-const ADMIN_EMAIL = "avansardar@outlook.com";
-
 const ProtectedAdminRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const location = useLocation();
 
   // Debug logging
   console.log("ProtectedAdminRoute:", {
     user,
     loading,
+    isAdmin,
     location: location.pathname,
   });
 
@@ -24,11 +23,11 @@ const ProtectedAdminRoute = ({ children }) => {
     );
   }
 
-  // Check if user is authenticated and is the admin
-  if (!user || user.email !== ADMIN_EMAIL) {
+  // Check if user is authenticated and is admin
+  if (!user || !isAdmin) {
     console.log(
       "ProtectedAdminRoute: Access denied, redirecting to dashboard",
-      { user: user?.email, required: ADMIN_EMAIL }
+      { user: user?.email, isAdmin }
     );
     return <Navigate to="/dashboard" state={{ from: location }} replace />;
   }

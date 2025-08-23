@@ -17,7 +17,7 @@ export function InterviewView({ app, form, application, step }) {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [currentFieldId, setCurrentFieldId] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const location = useLocation();
   const { openAuthModal } = useAuthModal();
 
@@ -222,7 +222,7 @@ export function InterviewView({ app, form, application, step }) {
   }
 
   // Check if user is admin for admin routes
-  if (isAdminRoute && user.email !== "avansardar@outlook.com") {
+  if (isAdminRoute && !isAdmin) {
     return (
       <div
         style={{
@@ -363,9 +363,9 @@ export function InterviewView({ app, form, application, step }) {
           <h2>PDF Form: {form}</h2>
           <p>Fill out the form fields below to generate your completed PDF</p>
         </div>
-        
+
         {user && (
-          <ReportButton 
+          <ReportButton
             onClick={handleReportClick}
             size="small"
             variant="subtle"
