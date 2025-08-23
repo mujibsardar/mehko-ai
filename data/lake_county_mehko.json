@@ -3,7 +3,10 @@
   "title": "Lake County MEHKO",
   "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Plan Check $135/hr (1 hr minimum); Annual Permit $269. No third‑party delivery; on-site, pickup, or direct delivery only.",
   "rootDomain": "lakecountyca.gov",
-  "supportTools": { "aiEnabled": true, "commentsEnabled": true },
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
   "steps": [
     {
       "id": "planning_overview",

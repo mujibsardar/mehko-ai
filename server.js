@@ -5,6 +5,10 @@ import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
 
+// Firebase Admin SDK for Firestore
+import { initializeApp, cert } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+
 // import { PDFDocument } from "pdf-lib";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -12,6 +16,18 @@ const require = createRequire(import.meta.url);
 import OpenAI from "openai";
 import multer from "multer";
 dotenv.config();
+
+// Initialize Firebase Admin with service account
+const serviceAccountPath =
+  process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "config/serviceAccountKey.json";
+const serviceAccount = require(path.resolve(serviceAccountPath));
+
+initializeApp({
+  credential: cert(serviceAccount),
+});
+
+// Initialize Firestore
+const db = getFirestore();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -35,10 +51,219 @@ const upload = multer({
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+// Admin endpoint for processing county JSON files
+app.post("/api/admin/process-county", upload.none(), async (req, res) => {
+  try {
+    // Handle FormData - parse the multipart form data
+    const countyData = req.body.countyData;
+    const filename = req.body.filename;
+
+    if (!countyData) {
+      return res.status(400).json({ error: "No county data provided" });
+    }
+
+    // Parse and validate the county data
+    let county;
+    try {
+      county = JSON.parse(countyData);
+    } catch (error) {
+      return res.status(400).json({ error: "Invalid JSON format" });
+    }
+
+    // Validate required fields
+    const required = [
+      "id",
+      "title",
+      "description",
+      "rootDomain",
+      "supportTools",
+      "steps",
+    ];
+    const missing = required.filter((field) => !county[field]);
+
+    if (missing.length > 0) {
+      return res.status(400).json({
+        error: `Missing required fields: ${missing.join(", ")}`,
+      });
+    }
+
+    if (!Array.isArray(county.steps) || county.steps.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "County must have at least one step" });
+    }
+
+    // Validate PDF steps
+    const pdfSteps = county.steps.filter((step) => step.type === "pdf");
+    for (const step of pdfSteps) {
+      if (!step.formId || !step.pdfUrl) {
+        return res.status(400).json({
+          error: `PDF step ${step.id} missing formId or pdfUrl`,
+        });
+      }
+    }
+
+    // Save county JSON to data directory
+    const dataDir = path.resolve("data");
+    const countyFile = path.join(dataDir, `${county.id}.json`);
+
+    await fs.promises.writeFile(countyFile, JSON.stringify(county, null, 2));
+    console.log(`✅ Saved county data to ${countyFile}`);
+
+    // Load and update manifest
+    const manifestFile = path.join(dataDir, "manifest.json");
+    let manifest = [];
+
+    if (fs.existsSync(manifestFile)) {
+      const manifestContent = await fs.promises.readFile(manifestFile, "utf8");
+      manifest = JSON.parse(manifestContent);
+    }
+
+    // Check if county already exists
+    const existingIndex = manifest.findIndex((c) => c.id === county.id);
+    if (existingIndex !== -1) {
+      console.log(
+        `⚠️  County ${county.id} already exists in manifest, updating...`
+      );
+      manifest[existingIndex] = county;
+    } else {
+      console.log(`➕ Adding ${county.id} to manifest...`);
+      manifest.push(county);
+    }
+
+    // Save updated manifest
+    await fs.promises.writeFile(
+      manifestFile,
+      JSON.stringify(manifest, null, 2)
+    );
+    console.log(`✅ Manifest updated successfully`);
+
+    // Create application directory
+    const applicationsDir = path.resolve("applications");
+    const countyDir = path.join(applicationsDir, county.id);
+    const formsDir = path.join(countyDir, "forms");
+
+    await fs.promises.mkdir(countyDir, { recursive: true });
+    await fs.promises.mkdir(formsDir, { recursive: true });
+    console.log(`✅ Created application directory: ${countyDir}`);
+
+    // Download PDF forms
+    let downloadedCount = 0;
+    for (const step of pdfSteps) {
+      try {
+        const formDir = path.join(formsDir, step.formId);
+        await fs.promises.mkdir(formDir, { recursive: true });
+
+        // Create meta.json for the form
+        const metaData = {
+          id: step.formId,
+          title: step.title,
+          type: "pdf",
+          appId: county.id,
+          stepId: step.id,
+          pdfUrl: step.pdfUrl,
+          createdAt: new Date().toISOString(),
+        };
+
+        await fs.promises.writeFile(
+          path.join(formDir, "meta.json"),
+          JSON.stringify(metaData, null, 2)
+        );
+
+        // Download the PDF
+        console.log(`📥 Downloading PDF for ${step.title}...`);
+        const response = await fetch(step.pdfUrl);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const pdfBuffer = await response.arrayBuffer();
+        await fs.promises.writeFile(
+          path.join(formDir, "form.pdf"),
+          Buffer.from(pdfBuffer)
+        );
+
+        console.log(
+          `✅ Downloaded ${step.title} (${Math.round(
+            pdfBuffer.byteLength / 1024
+          )}KB)`
+        );
+        downloadedCount++;
+      } catch (error) {
+        console.error(`❌ Failed to download ${step.title}:`, error.message);
+        // Continue with other forms even if one fails
+      }
+    }
+
+    console.log(
+      `✅ PDF download process completed (${downloadedCount}/${pdfSteps.length} forms)`
+    );
+
+    // Insert county data into Firestore
+    try {
+      console.log(`🗄️  Inserting ${county.title} into Firestore...`);
+
+      // Add to applications collection
+      await db
+        .collection("applications")
+        .doc(county.id)
+        .set({
+          ...county,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          status: "active",
+          source: "admin-upload",
+        });
+
+      // Add each step to the steps subcollection
+      for (const step of county.steps) {
+        await db
+          .collection("applications")
+          .doc(county.id)
+          .collection("steps")
+          .doc(step.id)
+          .set({
+            ...step,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          });
+      }
+
+      console.log(`✅ Successfully inserted ${county.title} into Firestore`);
+    } catch (dbError) {
+      console.error(`❌ Failed to insert into Firestore:`, dbError.message);
+      // Don't fail the entire request if DB insertion fails
+    }
+
+    res.json({
+      success: true,
+      message: `Successfully processed ${county.title}`,
+      countyId: county.id,
+      title: county.title,
+      steps: county.steps.length,
+      pdfForms: pdfSteps.length,
+      downloadedForms: downloadedCount,
+      files: {
+        countyJson: countyFile,
+        manifest: manifestFile,
+        applicationDir: countyDir,
+      },
+    });
+  } catch (error) {
+    console.error("💥 County processing failed:", error);
+    res.status(500).json({
+      error: "Failed to process county",
+      details: error.message,
+    });
+  }
 });
 
 const CACHE_PATH = path.resolve("form-label-cache.json");
@@ -341,22 +566,18 @@ app.post("/api/download-pdf", async (req, res) => {
   try {
     // Validate appId format
     if (!/^[a-z0-9_]+$/.test(appId)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Invalid appId format. Use only lowercase letters, numbers, and underscores.",
-        });
+      return res.status(400).json({
+        error:
+          "Invalid appId format. Use only lowercase letters, numbers, and underscores.",
+      });
     }
 
     // Validate formId format
     if (!/^[A-Za-z0-9_-]+$/.test(formId)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Invalid formId format. Use only letters, numbers, hyphens, and underscores.",
-        });
+      return res.status(400).json({
+        error:
+          "Invalid formId format. Use only letters, numbers, hyphens, and underscores.",
+      });
     }
 
     // Create directory structure

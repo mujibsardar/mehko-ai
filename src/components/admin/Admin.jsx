@@ -11,6 +11,7 @@ import {
   collection,
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
+import CountyProcessor from "./CountyProcessor";
 
 const API = "/api"; // <-- prefix all backend calls
 
@@ -520,6 +521,21 @@ export default function Admin() {
           >
             PDF Download
           </button>
+          <button
+            onClick={() => setActiveTab("counties")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: "8px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "counties" ? "#eef2ff" : "#fff",
+              color: activeTab === "counties" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
+          >
+            County Processor
+          </button>
         </div>
 
         {activeTab === "apps" && (
@@ -573,6 +589,7 @@ export default function Admin() {
             {activeTab === "bulk" && "Bulk Import Applications"}
             {activeTab === "reports" && "Issue Reports"}
             {activeTab === "pdf-download" && "Download PDF Forms"}
+            {activeTab === "counties" && "County Processor"}
           </h2>
           <Link to="/dashboard" style={{ fontSize: 13 }}>
             ← Back to Dashboard
@@ -1166,6 +1183,8 @@ export default function Admin() {
               </div>
             </div>
           </div>
+        ) : activeTab === "counties" ? (
+          <CountyProcessor />
         ) : (
           <>
             {/* App form */}

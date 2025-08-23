@@ -24,10 +24,13 @@ export default defineConfig({
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/api": {
-        target: "http://127.0.0.1:8000",
+      "/api/admin": {
+        target: "http://localhost:3000",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""), // strip "/api"
+      },
+      "/api": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
       },
     },
   },
