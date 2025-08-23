@@ -26,7 +26,7 @@ const Sidebar = ({
     toggle,
   } = useApplicationSidebarState();
 
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [progressByAppId, setProgressByAppId] = useState({});
 
   useEffect(() => {
@@ -54,6 +54,11 @@ const Sidebar = ({
     <div className="sidebar">
       <div className="sidebar-header">
         <h3>Your Applications</h3>
+        {isAdmin && (
+          <div className="admin-indicator">
+            <span className="admin-badge">👑</span>
+          </div>
+        )}
       </div>
 
       <ul className="sidebar-list">
@@ -74,12 +79,13 @@ const Sidebar = ({
           // We intentionally HIDE AI assistant in the sidebar now.
 
           return (
-            <div key={application.id} className="sidebar-item-wrapper">
+            <div 
+              key={application.id} 
+              className="sidebar-item-wrapper"
+              onClick={() => onSelect(application.id)}
+            >
               <div className={`sidebar-item ${isActive ? "active" : ""}`}>
-                <div
-                  className="sidebar-app-title"
-                  onClick={() => onSelect(application.id)}
-                >
+                <div className="sidebar-app-title">
                   {application.title}
                 </div>
 
@@ -90,9 +96,14 @@ const Sidebar = ({
                       style={{ width: `${percent}%` }}
                     />
                   </div>
-                  <small>
-                    {completeCount} of {totalSteps} steps complete
-                  </small>
+                  <div className="progress-info">
+                    <small>
+                      {completeCount} of {totalSteps} steps complete
+                    </small>
+                    <small className="progress-percent">
+                      {percent}%
+                    </small>
+                  </div>
                 </div>
 
                 {isActive && (
