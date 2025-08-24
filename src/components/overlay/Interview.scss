@@ -177,9 +177,9 @@
 
       .submit-button {
         padding: 14px 28px;
-        background: #3b82f6;
+        background: #10b981; /* Changed from blue to green */
         color: #ffffff;
-        border: 1px solid #3b82f6;
+        border: 1px solid #10b981; /* Changed from blue to green */
         border-radius: 8px;
         font-size: 14px;
         font-weight: 600;
@@ -190,13 +190,13 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
         &:hover {
-          background: #2563eb;
-          border-color: #2563eb;
+          background: #059669; /* Changed from blue to green */
+          border-color: #059669; /* Changed from blue to green */
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
 
         &:active {
-          background: #1d4ed8;
+          background: #047857; /* Changed from blue to green */
           transform: translateY(1px);
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }

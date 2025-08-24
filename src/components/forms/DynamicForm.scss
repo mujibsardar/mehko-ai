@@ -68,8 +68,8 @@
 
       &:focus {
         outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        border-color: #10b981; /* Changed from blue to green */
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); /* Changed from blue to green */
       }
     }
   }
@@ -81,8 +81,8 @@
 
     button {
       padding: 0.75rem 1.25rem;
-      background-color: #ffffff;
-      color: #374151;
+      background-color: #ffffff !important; /* Added !important to override global styles */
+      color: #374151 !important; /* Added !important to override global styles */
       font-weight: 500;
       border: 1px solid #d1d5db;
       border-radius: 6px;
@@ -90,16 +90,36 @@
       transition: all 0.2s ease;
 
       &:hover {
-        background-color: #f9fafb;
+        background-color: #f9fafb !important; /* Added !important to override global styles */
         border-color: #9ca3af;
       }
 
+      /* Reset Form button */
       &:first-child {
-        background-color: #f3f4f6;
-        color: #6b7280;
+        background-color: #f3f4f6 !important; /* Added !important to override global styles */
+        color: #6b7280 !important; /* Added !important to override global styles */
 
         &:hover {
-          background-color: #e5e7eb;
+          background-color: #e5e7eb !important; /* Added !important to override global styles */
+        }
+      }
+
+      /* Download Filled PDF button */
+      &:last-child {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important; /* Added !important to override global styles */
+        color: white !important; /* Added !important to override global styles */
+        border-color: #10b981;
+        font-weight: 600;
+
+        &:hover {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%) !important; /* Added !important to override global styles */
+          border-color: #059669;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
         }
       }
     }

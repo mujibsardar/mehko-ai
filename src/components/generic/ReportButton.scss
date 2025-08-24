@@ -77,12 +77,12 @@
   }
 
   &--outline {
-    border-color: #3b82f6;
-    color: #3b82f6;
+    border-color: #10b981; /* Changed from blue to green */
+    color: #10b981; /* Changed from blue to green */
     background: transparent;
 
     &:hover:not(:disabled) {
-      background-color: #3b82f6;
+      background-color: #10b981; /* Changed from blue to green */
       color: #ffffff;
     }
   }

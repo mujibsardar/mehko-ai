@@ -27,12 +27,12 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Changed from purple/blue to green */
     display: grid;
     place-items: center;
     font-size: 18px;
     color: white;
-    box-shadow: 0 3px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 3px 12px rgba(16, 185, 129, 0.3); /* Changed from blue to green */
     border: 2px solid rgba(255, 255, 255, 0.2);
     transition: all 0.2s ease;
   }
