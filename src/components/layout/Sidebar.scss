@@ -135,6 +135,7 @@
   padding: 16px 16px 12px 16px;
   border-bottom: 1px solid #f3f4f6;
   background: #fafafa;
+  flex-shrink: 0; /* Prevent header from shrinking */
   
   .admin-indicator {
     .admin-badge {
@@ -153,6 +154,9 @@
   list-style: none;
   margin: 0;
   padding: 8px;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0; /* Allow flex shrinking */
 }
 
 .sidebar-item-wrapper {
@@ -174,9 +178,9 @@
   transition: all 0.2s ease;
   
   &.active {
-    background: #eff6ff;
-    border-color: #dbeafe;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    background: #ecfdf5; /* Changed from blue to green */
+    border-color: #d1fae5; /* Changed from blue to green */
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1); /* Changed from blue to green */
   }
 }
 
@@ -204,10 +208,10 @@
 }
 
 .active-nav {
-  border-left: 4px solid #3b82f6;
-  background: #eff6ff;
+  border-left: 4px solid #10b981; /* Changed from blue to green */
+  background: #ecfdf5; /* Changed from blue to green */
   font-weight: 600;
-  color: #1e40af;
+  color: #065f46; /* Changed from blue to green */
 }
 
 /* Step Captions and Badges */
@@ -238,9 +242,9 @@
 }
 
 .step-badge--form {
-  background: #eff6ff;
-  color: #2563eb;
-  border: 1px solid #bfdbfe;
+  background: #ecfdf5; /* Changed from blue to green */
+  color: #065f46; /* Changed from blue to green */
+  border: 1px solid #d1fae5; /* Changed from blue to green */
 }
 
 .step-badge--info {
@@ -256,8 +260,8 @@
 }
 
 .step-badge--form:hover {
-  background: #dbeafe;
-  border-color: #93c5fd;
+  background: #d1fae5; /* Changed from blue to green */
+  border-color: #a7f3d0; /* Changed from blue to green */
 }
 
 .step-badge--info:hover {
@@ -287,8 +291,8 @@
   }
   
   &.active-nav {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    color: #1e40af;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); /* Changed from blue to green */
+    color: #065f46; /* Changed from blue to green */
     font-weight: 600;
   }
   
@@ -328,5 +332,68 @@
     font-weight: bold;
     flex-shrink: 0;
   }
+}
+
+/* Support section styling - ensure it's always visible */
+.sidebar-support-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+  
+  &:hover {
+    background: #f9fafb;
+  }
+  
+  &.active-nav {
+    background: #ecfdf5; /* Changed from blue to green */
+    color: #065f46; /* Changed from blue to green */
+    font-weight: 600;
+  }
+  
+  .nav-icon {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+  
+  .nav-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* Collapsible section styling */
+.collapsible-section {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #10b981; /* Changed from blue to green */
+  }
+}
+
+/* Ensure proper spacing for the last item */
+.sidebar-item-wrapper:last-child {
+  margin-bottom: 20px; /* Extra space at bottom to prevent cutoff */
+}
+
+/* Fix for support section positioning */
+.sidebar-item .sidebar-sublist {
+  margin-bottom: 16px; /* Space before support section */
+}
+
+/* Ensure the sidebar itself has proper overflow handling */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Prevent double scrollbars */
 }
 

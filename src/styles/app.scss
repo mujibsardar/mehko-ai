@@ -46,6 +46,9 @@ $fa-font-path: "../../node_modules/@fortawesome/fontawesome-free/webfonts";
   border-right: 1px solid #eee;
   background: #fff;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .app-wrapper {
