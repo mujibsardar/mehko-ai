@@ -456,6 +456,7 @@ export function InterviewView({ app, form, application, step }) {
         currentFieldId={currentFieldId}
         formId={form}
         appId={app}
+        formOverlay={overlay}
       />
 
       <ReportIssueModal

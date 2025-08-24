@@ -88,7 +88,8 @@
   background: #ffffff;
   
   .pdf-preview-scale,
-  .pdf-preview-pagination {
+  .pdf-preview-pagination,
+  .pdf-preview-test-controls {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -129,6 +130,22 @@
       text-align: center;
     }
   }
+  
+  .pdf-preview-test-controls {
+    button {
+      width: auto;
+      height: auto;
+      padding: 4px 8px;
+      font-size: 11px;
+      background: #10b981;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background: #059669;
+      }
+    }
+  }
 }
 
 /* Content */
@@ -147,11 +164,72 @@
     align-items: center;
     justify-content: center;
     min-height: 400px;
+    position: relative;
     
     .pdf-preview-canvas {
       max-width: 100%;
       max-height: 100%;
       border-radius: 8px;
+      border: 1px solid #e5e7eb; /* Add border to make canvas visible */
+      background: #f9fafb; /* Light background to show canvas bounds */
+      display: block;
+      margin: 0 auto;
+    }
+
+    .pdf-preview-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: #6b7280;
+      
+      .loading-spinner {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #e5e7eb;
+        border-top: 3px solid #3b82f6;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+
+    .pdf-preview-error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
+      color: #dc2626;
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      
+      button {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background: #b91c1c;
+        }
+      }
     }
   }
 }
@@ -165,9 +243,18 @@
   .pdf-preview-info {
     font-size: 13px;
     color: #6b7280;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     
     span {
       font-weight: 500;
+    }
+
+    .page-info {
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 400;
     }
   }
 }
@@ -189,6 +276,11 @@
   to {
     transform: translateX(0);
   }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Responsive Design */
