@@ -88,8 +88,7 @@
   background: #ffffff;
   
   .pdf-preview-scale,
-  .pdf-preview-pagination,
-  .pdf-preview-test-controls {
+  .pdf-preview-pagination {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -131,21 +130,7 @@
     }
   }
   
-  .pdf-preview-test-controls {
-    button {
-      width: auto;
-      height: auto;
-      padding: 4px 8px;
-      font-size: 11px;
-      background: #10b981;
-      color: white;
-      border: none;
-      
-      &:hover {
-        background: #059669;
-      }
-    }
-  }
+
 }
 
 /* Content */
@@ -155,20 +140,18 @@
   padding: 24px;
   background: #fafafa;
   
-  .pdf-preview-canvas-container {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    position: relative;
+      .pdf-preview-canvas-container {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      position: relative;
     
     .pdf-preview-canvas {
-      max-width: 100%;
-      max-height: 100%;
       border-radius: 8px;
       border: 1px solid #e5e7eb; /* Add border to make canvas visible */
       background: #f9fafb; /* Light background to show canvas bounds */

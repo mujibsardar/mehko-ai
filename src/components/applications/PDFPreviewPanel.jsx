@@ -247,20 +247,26 @@ const PDFPreviewPanel = ({
 
   // Handle scale changes
   const changeScale = (newScale) => {
-    const clampedScale = Math.max(0.5, Math.min(2.0, newScale));
+    const clampedScale = Math.max(0.2, Math.min(3.0, newScale));
     console.log("🔍 Changing scale from", scale, "to", clampedScale);
     setScale(clampedScale);
+  };
 
-    // Force canvas re-render by temporarily clearing pageImage
-    if (pageImage) {
-      console.log("🔄 Force re-rendering canvas for scale change");
-      const currentImage = pageImage;
-      setPageImage(null);
-      // Re-set the image after a brief delay to trigger re-render
-      setTimeout(() => {
-        setPageImage(currentImage);
-      }, 50);
-    }
+  const fitToWidth = () => {
+    if (!containerRef.current || !pageMetrics) return;
+    const containerWidth = containerRef.current.clientWidth - 64; // Account for padding
+    const scale = containerWidth / pageMetrics.pixelWidth;
+    setScale(Math.max(0.2, Math.min(3.0, scale)));
+  };
+
+  const fitToPage = () => {
+    if (!containerRef.current || !pageMetrics) return;
+    const containerWidth = containerRef.current.clientWidth - 64;
+    const containerHeight = containerRef.current.clientHeight - 64;
+    const scaleX = containerWidth / pageMetrics.pixelWidth;
+    const scaleY = containerHeight / pageMetrics.pixelHeight;
+    const scale = Math.min(scaleX, scaleY);
+    setScale(Math.max(0.2, Math.min(3.0, scale)));
   };
 
   useEffect(() => {
@@ -336,9 +342,15 @@ const PDFPreviewPanel = ({
         {/* Controls */}
         <div className="pdf-preview-controls">
           <div className="pdf-preview-scale">
+            <button onClick={fitToPage} title="Fit page">
+              Fit
+            </button>
+            <button onClick={fitToWidth} title="Fit width">
+              Fit‑W
+            </button>
             <button
               onClick={() => changeScale(scale - 0.1)}
-              disabled={scale <= 0.5}
+              disabled={scale <= 0.2}
             >
               <svg
                 width="16"
@@ -354,7 +366,7 @@ const PDFPreviewPanel = ({
             <span>{Math.round(scale * 100)}%</span>
             <button
               onClick={() => changeScale(scale + 0.1)}
-              disabled={scale >= 2.0}
+              disabled={scale >= 3.0}
             >
               <svg
                 width="16"
@@ -403,41 +415,6 @@ const PDFPreviewPanel = ({
               >
                 <polyline points="9,18 15,12 9,6"></polyline>
               </svg>
-            </button>
-          </div>
-
-          {/* Test field highlighting button */}
-          <div className="pdf-preview-test-controls">
-            <button
-              onClick={() => {
-                const testFieldId = formOverlay?.fields?.[0]?.id;
-                if (testFieldId) {
-                  console.log("🧪 Testing field highlight with:", testFieldId);
-                  // This will trigger a re-render to test highlighting
-                  // We need to pass this up to the parent component
-                  console.log(
-                    "🧪 Note: Field highlighting is controlled by parent component"
-                  );
-                  console.log(
-                    "🧪 Current currentFieldId prop:",
-                    currentFieldId
-                  );
-                  console.log(
-                    "🧪 To test highlighting, focus on a form field in the main form"
-                  );
-                }
-              }}
-              style={{
-                background: "#10b981",
-                color: "white",
-                border: "none",
-                padding: "4px 8px",
-                borderRadius: "4px",
-                fontSize: "11px",
-                cursor: "pointer",
-              }}
-            >
-              Test Highlight
             </button>
           </div>
         </div>
