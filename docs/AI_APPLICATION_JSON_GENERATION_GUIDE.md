@@ -234,6 +234,8 @@ Before finalizing, ensure ALL of these are true:
 - [ ] **Contact information is complete** (phone, address, hours, not just "visit website")
 - [ ] **Submission methods are specific** (online, mail, in-person options)
 - [ ] **Timeline estimates are realistic** (not "varies" or "check website")
+- [ ] **FormId matches exactly** (use the exact identifier from the PDF filename)
+- [ ] **No emails in searchTerms** (emails belong in content, not search terms)
 
 ## Example Complete Info Step
 
@@ -369,6 +371,24 @@ This keeps your JSON simple while providing users with actionable ways to get mo
 - **Realistic timeline estimates** (weeks/months, not "varies")
 - **County-specific restrictions** and requirements
 - **Working website links** and form URLs
+
+## 💡 **Quick Quality Tips**
+
+### **FormId Accuracy:**
+- Use the **exact filename** from the PDF (e.g., "MEHKO_PublicHealthPermitApplication-ENG")
+- Don't simplify or remove suffixes unless you're certain they're not needed
+
+### **Search Terms Best Practices:**
+- **Never include emails** in search terms - put them in content instead
+- **Use specific phrases** users would actually search for
+- **Include current year** for fee-related searches (e.g., "MEHKO fees 2025")
+- **Keep under 60 characters** for better search results
+
+### **Content Specificity:**
+- **Replace "visit website"** with actual contact methods (phone, email, office location)
+- **Replace "see fee schedule"** with actual dollar amounts
+- **Replace "timeline varies"** with realistic estimates (e.g., "2-3 weeks")
+- **Replace "check instructions"** with specific submission methods
 
 ## Notes
 
