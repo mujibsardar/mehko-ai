@@ -39,9 +39,47 @@ echo -e "${BLUE}📺 Opening three separate terminal windows/tabs for each servi
 
 # Check service status first
 echo -e "${YELLOW}🔍 Checking service status...${NC}"
-check_service 8000 "Python FastAPI" || echo -e "${YELLOW}💡 FastAPI not running - logs will be minimal${NC}"
-check_service 3000 "Node.js Server" || echo -e "${YELLOW}💡 Node.js not running - logs will be minimal${NC}"
-check_service 5173 "React Dev Server" || echo -e "${YELLOW}💡 React not running - logs will be minimal${NC}"
+PYTHON_RUNNING=false
+NODE_RUNNING=false
+REACT_RUNNING=false
+
+if check_service 8000 "Python FastAPI"; then
+    PYTHON_RUNNING=true
+fi
+
+if check_service 3000 "Node.js Server"; then
+    NODE_RUNNING=true
+fi
+
+if check_service 5173 "React Dev Server"; then
+    REACT_RUNNING=true
+fi
+
+echo ""
+echo -e "${CYAN}📊 Service Status Summary:${NC}"
+echo "================================"
+if [ "$PYTHON_RUNNING" = true ]; then
+    echo -e "🐍 Python FastAPI: ${GREEN}✅ Running${NC}"
+else
+    echo -e "🐍 Python FastAPI: ${RED}❌ Not Running${NC}"
+    echo -e "   💡 Start with: ./scripts/start-all-services.sh"
+fi
+
+if [ "$NODE_RUNNING" = true ]; then
+    echo -e "🔧 Node.js Server: ${GREEN}✅ Running${NC}"
+else
+    echo -e "🔧 Node.js Server: ${RED}❌ Not Running${NC}"
+    echo -e "   💡 Start with: ./scripts/start-all-services.sh"
+fi
+
+if [ "$REACT_RUNNING" = true ]; then
+    echo -e "⚛️  React Dev Server: ${GREEN}✅ Running${NC}"
+else
+    echo -e "⚛️  React Dev Server: ${RED}❌ Not Running${NC}"
+    echo -e "   💡 Start with: ./scripts/start-all-services.sh"
+fi
+
+echo ""
 
 # Create log files if they don't exist
 echo -e "${YELLOW}📝 Ensuring log files exist...${NC}"
@@ -297,12 +335,14 @@ echo ""
     echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
     echo -e "  💻 CPU Performance Monitor - Real-time system metrics"
 echo ""
-if ! check_service 8000 "Python FastAPI" >/dev/null 2>&1 || ! check_service 3000 "Node.js Server" >/dev/null 2>&1 || ! check_service 5173 "React Dev Server" >/dev/null 2>&1; then
+
+# Final status summary using our stored variables
+if [ "$PYTHON_RUNNING" = true ] && [ "$NODE_RUNNING" = true ] && [ "$REACT_RUNNING" = true ]; then
+    echo -e "${GREEN}🎉 All services are running! Logs should be active.${NC}"
+else
     echo -e "${YELLOW}⚠️  Some services are not running. To start all services:${NC}"
     echo -e "${YELLOW}   ./scripts/start-all-services.sh${NC}"
     echo ""
     echo -e "${CYAN}💡 The log windows will show minimal output until services start.${NC}"
     echo -e "${CYAN}   Start the services and the logs will automatically populate!${NC}"
-else
-    echo -e "${GREEN}🎉 All services are running! Logs should be active.${NC}"
 fi

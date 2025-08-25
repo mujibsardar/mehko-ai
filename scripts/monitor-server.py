@@ -7,11 +7,43 @@ Monitors CPU, memory, and process performance for all services
 import psutil
 import time
 import argparse
+import subprocess
+import socket
 from datetime import datetime
 
-def get_process_info(port):
-    """Get process information for a specific port"""
+def check_port_listening(port):
+    """Check if a port is listening using socket connection"""
     try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex(('localhost', port))
+        sock.close()
+        return result == 0
+    except:
+        return False
+
+def get_process_info(port):
+    """Get process information for a specific port using multiple methods"""
+    try:
+        # Method 1: Try using lsof command (more reliable on macOS)
+        try:
+            result = subprocess.run(['lsof', '-Pi', f':{port}', '-sTCP:LISTEN', '-t'], 
+                                  capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                pid = int(result.stdout.strip().split('\n')[0])
+                process = psutil.Process(pid)
+                return {
+                    'pid': pid,
+                    'name': process.name(),
+                    'cpu_percent': process.cpu_percent(),
+                    'memory_percent': process.memory_percent(),
+                    'memory_mb': process.memory_info().rss / 1024 / 1024,
+                    'status': process.status()
+                }
+        except (subprocess.TimeoutExpired, subprocess.SubprocessError, ValueError):
+            pass
+        
+        # Method 2: Fallback to psutil.net_connections
         for conn in psutil.net_connections():
             if conn.laddr.port == port and conn.status == 'LISTEN':
                 pid = conn.pid
@@ -25,7 +57,20 @@ def get_process_info(port):
                         'memory_mb': process.memory_info().rss / 1024 / 1024,
                         'status': process.status()
                     }
-    except (psutil.NoSuchProcess, psutil.AccessDenied):
+        
+        # Method 3: Try socket connection test
+        if check_port_listening(port):
+            # Port is listening but we couldn't get process info
+            return {
+                'pid': None,
+                'name': 'Unknown',
+                'cpu_percent': 0.0,
+                'memory_percent': 0.0,
+                'memory_mb': 0.0,
+                'status': '🟢 Running'
+            }
+            
+    except (psutil.NoSuchProcess, psutil.AccessDenied, Exception):
         pass
     return None
 
@@ -49,11 +94,16 @@ def get_port_info():
     port_info = {}
     for port, service_name in ports.items():
         process_info = get_process_info(port)
-        if process_info:
+        if process_info and (process_info['pid'] is not None or process_info['status'] == '🟢 Running'):
+            # Create a clean status entry, ensuring our emoji status is preserved
             port_info[port] = {
                 'service': service_name,
                 'status': '🟢 Running',
-                **process_info
+                'pid': process_info.get('pid'),
+                'name': process_info.get('name', 'Unknown'),
+                'cpu_percent': process_info.get('cpu_percent', 0.0),
+                'memory_percent': process_info.get('memory_percent', 0.0),
+                'memory_mb': process_info.get('memory_mb', 0.0)
             }
         else:
             port_info[port] = {
