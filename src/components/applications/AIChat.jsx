@@ -27,24 +27,21 @@ const LoadingSpinner = () => (
 const formatAIResponse = (text) => {
   if (!text) return text;
 
-  // Split by common delimiters and add proper spacing
   let formatted = text
-    // Add line breaks after periods followed by capital letters (likely new sentences)
-    .replace(/\.([A-Z])/g, '.\n\n$1')
-    // Add line breaks after question marks
-    .replace(/\?/g, '?\n\n')
-    // Add line breaks after exclamation marks
-    .replace(/!/g, '!\n\n')
-    // Add line breaks after colons
-    .replace(/:/g, ':\n')
-    // Add line breaks after semicolons
-    .replace(/;/g, ';\n')
-    // Add line breaks for numbered lists
-    .replace(/(\d+\.)/g, '\n$1')
-    // Add line breaks for bullet points
-    .replace(/(•|\*|-)/g, '\n$1')
-    // Clean up multiple line breaks
-    .replace(/\n{3,}/g, '\n\n')
+    // Clean up common AI formatting artifacts
+    .replace(/\*\s*\n\s*\*/g, '\n') // Remove single asterisks on separate lines
+    .replace(/\n\s*\*\s*\n/g, '\n') // Remove asterisks with just whitespace
+    .replace(/\*\s*:/g, ':') // Clean up asterisk-colon patterns
+    .replace(/\n{3,}/g, '\n\n') // Limit consecutive line breaks to max 2
+    .replace(/\s+\n/g, '\n') // Remove trailing spaces before line breaks
+    .replace(/\n\s+/g, '\n') // Remove leading spaces after line breaks
+    // Smart sentence breaks - only when it makes sense
+    .replace(/([.!?])\s+([A-Z][a-z])/g, '$1\n\n$2') // Break after sentences followed by new sentence
+    .replace(/([.!?])\s+([A-Z][A-Z\s]+:)/g, '$1\n\n$2') // Break before headers (ALL CAPS followed by colon)
+    // Clean up numbered lists
+    .replace(/(\d+\.)\s+/g, '\n$1 ') // Ensure proper spacing for numbered lists
+    // Clean up bullet points (but don't over-process)
+    .replace(/(^|\n)([•\*\-])\s*/g, '$1$2 ') // Ensure proper spacing for bullets
     .trim();
 
   return formatted;
