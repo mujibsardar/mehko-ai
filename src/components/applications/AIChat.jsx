@@ -11,6 +11,45 @@ import {
 const API_APP = "http://127.0.0.1:8000";
 const API_CHAT = "http://localhost:3000/api/ai-chat";
 
+// Loading Spinner Component
+const LoadingSpinner = () => (
+  <div className="ai-chat__loading-spinner">
+    <div className="ai-chat__spinner-dots">
+      <div className="ai-chat__spinner-dot"></div>
+      <div className="ai-chat__spinner-dot"></div>
+      <div className="ai-chat__spinner-dot"></div>
+    </div>
+    <div className="ai-chat__loading-text">AI is thinking...</div>
+  </div>
+);
+
+// Format AI Response for Better Readability
+const formatAIResponse = (text) => {
+  if (!text) return text;
+
+  // Split by common delimiters and add proper spacing
+  let formatted = text
+    // Add line breaks after periods followed by capital letters (likely new sentences)
+    .replace(/\.([A-Z])/g, '.\n\n$1')
+    // Add line breaks after question marks
+    .replace(/\?/g, '?\n\n')
+    // Add line breaks after exclamation marks
+    .replace(/!/g, '!\n\n')
+    // Add line breaks after colons
+    .replace(/:/g, ':\n')
+    // Add line breaks after semicolons
+    .replace(/;/g, ';\n')
+    // Add line breaks for numbered lists
+    .replace(/(\d+\.)/g, '\n$1')
+    // Add line breaks for bullet points
+    .replace(/(•|\*|-)/g, '\n$1')
+    // Clean up multiple line breaks
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return formatted;
+};
+
 export default function AIChat({
   application,
   currentStep,
@@ -196,19 +235,19 @@ export default function AIChat({
 
   const formSpecificTasks = selectedForm
     ? [
-        {
-          title: `Complete ${selectedForm.title}`,
-          prompt: `I want to complete the ${selectedForm.title} form. What do I need to do?`,
-        },
-        {
-          title: "Form field help",
-          prompt: `I'm confused about some fields in the ${selectedForm.title} form. Can you help?`,
-        },
-        {
-          title: "Form submission",
-          prompt: `How do I submit the completed ${selectedForm.title} form?`,
-        },
-      ]
+      {
+        title: `Complete ${selectedForm.title}`,
+        prompt: `I want to complete the ${selectedForm.title} form. What do I need to do?`,
+      },
+      {
+        title: "Form field help",
+        prompt: `I'm confused about some fields in the ${selectedForm.title} form. Can you help?`,
+      },
+      {
+        title: "Form submission",
+        prompt: `How do I submit the completed ${selectedForm.title} form?`,
+      },
+    ]
     : [];
 
   const send = async (text, formContext = null) => {
@@ -262,7 +301,7 @@ export default function AIChat({
       const data = await res.json();
       const aiMsg = {
         sender: "ai",
-        text: data.reply || "Sorry, I don't have a response right now.",
+        text: formatAIResponse(data.reply || "Sorry, I don't have a response right now."),
         timestamp: new Date(),
       };
       const updated = [...next, aiMsg];
@@ -312,9 +351,8 @@ export default function AIChat({
         </button>
 
         <div
-          className={`ai-chat__form-actions-content ${
-            isFormHelpExpanded ? "expanded" : "collapsed"
-          }`}
+          className={`ai-chat__form-actions-content ${isFormHelpExpanded ? "expanded" : "collapsed"
+            }`}
         >
           <div className="ai-chat__form-actions-grid">
             {pdfFormSteps.map((step) => (
@@ -322,9 +360,8 @@ export default function AIChat({
                 <div className="ai-chat__form-card-header">
                   <h4>{step.title}</h4>
                   <button
-                    className={`ai-chat__form-select-btn ${
-                      selectedForm?.formId === step.formId ? "active" : ""
-                    }`}
+                    className={`ai-chat__form-select-btn ${selectedForm?.formId === step.formId ? "active" : ""
+                      }`}
                     onClick={() =>
                       setSelectedForm(
                         selectedForm?.formId === step.formId ? null : step
@@ -432,9 +469,8 @@ export default function AIChat({
           </button>
 
           <div
-            className={`ai-chat__guide-content ${
-              isGeneralTasksExpanded ? "expanded" : "collapsed"
-            }`}
+            className={`ai-chat__guide-content ${isGeneralTasksExpanded ? "expanded" : "collapsed"
+              }`}
           >
             <ul className="ai-chat__guide-list">
               {quickTasks.map((t) => (
@@ -484,6 +520,13 @@ export default function AIChat({
               </div>
             </div>
           ))}
+          {loading && (
+            <div className="chat-msg ai">
+              <div className="chat-bubble">
+                <LoadingSpinner />
+              </div>
+            </div>
+          )}
           <div ref={chatEndRef} />
         </div>
       </div>
