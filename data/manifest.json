@@ -373,5 +373,383 @@
         "appId": "lake_county_mehko"
       }
     ]
+  },
+  {
+    "id": "alameda_county_mehko",
+    "title": "Alameda County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No outdoor signage; direct-to-consumer only; application fee $696.",
+    "rootDomain": "deh.acgov.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- ☐ Residence in Alameda County\n- ☐ Menu and daily/weekly production plan\n- ☐ Basic kitchen setup meeting food safety practices\n\n**Where/how:** Review the county MEHKO overview on the Environmental Health website; limits are summarized here.\n\n**Cost & time:** $0 · 10–30 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "Alameda County MEHKO daily meal limits",
+          "Alameda County MEHKO weekly meal restrictions",
+          "Alameda County Home Kitchen Operations rules"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Food handler card for any helpers\n- ☐ Landlord/HOA OK if applicable; city business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60–$90 · 1–2 days total\n\n**Ready when:** You have a CFPM certificate and any property/business approvals.",
+        "searchTerms": [
+          "ANSI-CFP Food Protection Manager Alameda County",
+          "Alameda County renter permission MEHKO",
+          "Alameda County business license home food operation"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ **SOP form** — see **Step sop_form**\n- ☐ **Health Permit Application** — see **Step permit_application_form**\n- ☐ CFPM certificate\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+        "searchTerms": [
+          "Alameda County MEHKO SOP requirements",
+          "Alameda County MEHKO application documents",
+          "Alameda County Home Kitchen Operations forms"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "ALAMEDA_MEHKO_SOP-English",
+        "pdfUrl": "https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf",
+        "appId": "alameda_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Alameda County MEHKO SOP template",
+          "Alameda County food safety SOP requirements",
+          "MEHKO Standard Operating Procedures Alameda County"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "ALAMEDA_MEHKO_PermitApplication",
+        "pdfUrl": "https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf",
+        "appId": "alameda_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP (see Step sop_form)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Alameda County MEHKO permit application",
+          "Alameda County Health Permit Application form",
+          "Alameda County Home Kitchen Operations application"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Application (see Step permit_application_form)\n- ☐ Completed SOP (see Step sop_form)\n- ☐ CFPM certificate\n- ☐ Payment method for fees\n\n**Where/how:** Mail or walk in to Alameda County Department of Environmental Health, 1131 Harbor Bay Parkway, Alameda, CA 94502. Visit the county website for current office hours and payment methods.\n\n**Cost & time:** **$696 permit fee** · 10–20 minutes\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Alameda County MEHKO application fee",
+          "Alameda County Environmental Health submission",
+          "Alameda County MEHKO payment methods"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- ☐ Kitchen ready per your SOP\n- ☐ Thermometer, sanitizer, handwash setup\n- ☐ All required equipment functional\n\n**Where/how:** The department will schedule after your application is reviewed and approved.\n\n**Cost & time:** Included in application fee · 1–2 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "Alameda County MEHKO inspection checklist",
+          "Alameda County home kitchen inspection preparation",
+          "Alameda County Environmental Health inspection MEHKO"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- ☐ Final approval notice\n- ☐ Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after application fee) · timeline varies by case\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "Alameda County MEHKO permit issuance",
+          "Alameda County permit processing timeline",
+          "Alameda County Environmental Health permit status"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- ☐ Daily/weekly meal logs under limits\n- ☐ Temperature and cleaning records\n- ☐ No outdoor signage; direct-to-consumer only; delivery by operator/household/family\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** Renewal fees apply · ongoing\n\n**Ready when:** You track meals, keep records, and schedule renewal on time.",
+        "searchTerms": [
+          "Alameda County MEHKO meal tracking requirements",
+          "Alameda County MEHKO renewal process",
+          "Alameda County Home Kitchen Operations compliance"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- ☐ Phone: **(510) 567-6700**\n- ☐ Address: **1131 Harbor Bay Parkway, Alameda, CA 94502**\n- ☐ Website: **deh.acgov.org**\n\n**Where/how:** Contact the Environmental Health department using the information above.\n\n**Cost & time:** $0 · varies by question complexity\n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "Alameda County Environmental Health contact",
+          "Alameda County MEHKO program phone",
+          "Alameda County Home Kitchen Operations office"
+        ],
+        "appId": "alameda_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "santabarbara_mehko",
+    "title": "Santa Barbara County MEHKO",
+    "description": "Up to 30 meals/day · 90/week · state cap applies; annual county fee currently $391 (confirm current rate).",
+    "rootDomain": "countyofsb.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- ☐ Residence in Santa Barbara County\n- ☐ Menu and daily/weekly production plan\n- ☐ Basic kitchen setup meeting food safety practices\n\n**Where/how:** Review county MEHKO overview; limits are summarized here (details below).\n\n**Cost & time:** $0 · 10–30 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "Santa Barbara County MEHKO 30 meals per day",
+          "Santa Barbara MEHKO 90 meals per week limit",
+          "Santa Barbara County Home Kitchen Operations limits",
+          "MEHKO limits Santa Barbara County"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your **Certified Food Protection Manager (CFPM)** credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is typically required and property rules may apply.\n\n**What you need:**\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Landlord/HOA OK if applicable\n- ☐ City business license if required in your jurisdiction\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60–$90 · 1–2 days total (study + exam)\n\n**Ready when:** You have a CFPM certificate PDF and any property/business approvals.",
+        "searchTerms": [
+          "ANSI-CFP Food Protection Manager Santa Barbara",
+          "CFPM certification providers Santa Barbara County",
+          "Food safety manager course Santa Barbara",
+          "ANSI-CFP online course California"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ **SOP form** — see **Step sop_form**\n- ☐ **Health Permit Application** — see **Step permit_application_form**\n- ☐ CFPM certificate (from training step)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+        "searchTerms": [
+          "Santa Barbara MEHKO SOP",
+          "MEHKO Standard Operating Procedures Santa Barbara PDF",
+          "Home Kitchen SOP Santa Barbara County",
+          "Food safety SOP MEHKO"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "SBC_MEHKO_SOP-English",
+        "pdfUrl": "https://www.countyofsb.org/DocumentCenter/View/77409/Environmental-Health-Services-Fee-Schedule-FY-2023-24-Effective-May-20-2024",
+        "appId": "santabarbara_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Santa Barbara MEHKO SOP template",
+          "Santa Barbara food safety SOP requirements",
+          "MEHKO Standard Operating Procedures Santa Barbara"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application (MEHKO)",
+        "type": "pdf",
+        "formId": "SBC_MEHKO_PermitApplication",
+        "pdfUrl": "https://www.countyofsb.org/2017/Home-Kitchen-Operations",
+        "appId": "santabarbara_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP (see Step sop_form)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Santa Barbara County MEHKO application",
+          "MEHKO permit application Santa Barbara",
+          "Environmental Health permit application Santa Barbara",
+          "Home kitchen operations application form"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your application packet and pay the annual MEHKO fee.\n\n**Why it matters:** The county processes your permit after a complete submittal and payment.\n\n**What you need:**\n- ☐ Completed Application (see Step permit_application_form)\n- ☐ Completed SOP (see Step sop_form)\n- ☐ CFPM certificate\n- ☐ Payment method for annual fee\n\n**Where/how:** Submit to Environmental Health; call if you need help with submittal method.\n\n**Cost & time:** **$391 annual fee** (current fee schedule) · 10–20 minutes\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Santa Barbara County Environmental Health fee schedule MEHKO",
+          "MEHKO annual fee Santa Barbara County 391",
+          "Environmental Health Services fees Santa Barbara",
+          "Home Kitchen Operations fee Santa Barbara"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health after submittal.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- ☐ Kitchen ready per your SOP\n- ☐ Thermometer, sanitizer, handwash setup\n- ☐ All required equipment functional\n\n**Where/how:** The department will provide scheduling details; call if you need to request a date.\n\n**Cost & time:** Included in annual fee · 1–2 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "MEHKO inspection checklist Santa Barbara",
+          "Home kitchen inspection preparation Santa Barbara",
+          "Environmental Health inspection MEHKO Santa Barbara",
+          "Food safety home kitchen inspection county of sb"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Your Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- ☐ Final approval notice\n- ☐ Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after annual fee) · timeline varies by case\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "MEHKO permit status Santa Barbara County",
+          "Environmental Health permit issuance timeline Santa Barbara",
+          "Home kitchen permit delay Santa Barbara",
+          "Contact Environmental Health Santa Barbara status"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew annually.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- ☐ Daily/weekly meal logs under limits\n- ☐ Temperature & cleaning records\n- ☐ Permit renewal reminder\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** Annual fee on renewal · ongoing\n\n**Ready when:** You track meals, keep records, and schedule renewal on time.",
+        "searchTerms": [
+          "Santa Barbara MEHKO meal tracking",
+          "MEHKO 30 meals/day recordkeeping Santa Barbara",
+          "Home kitchen operations limits tracking",
+          "Meal logs MEHKO Santa Barbara"
+        ],
+        "appId": "santabarbara_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**Environmental Health Services (Public Health Department)**\n📞 Santa Barbara: **(805) 681-4900** (press 3, front desk)\n📞 Santa Maria: **(805) 346-8460** (press 3, front desk)\n🕘 Hours: Mon–Fri (see department for current hours/closures)\n🌐 Website: countyofsb.org → Public Health → Environmental Health\n\n**What to do:** Call to confirm submittal options, payment, and inspection scheduling.",
+        "searchTerms": [
+          "Santa Barbara County Environmental Health phone",
+          "MEHKO contact Santa Barbara County",
+          "Environmental Health Services Santa Barbara contact"
+        ],
+        "appId": "santabarbara_mehko"
+      }
+    ]
+  },
+  {
+    "id": "test_county_mehko",
+    "title": "Test County MEHKO",
+    "description": "Test county for demonstrating the new admin dashboard county processing functionality.",
+    "rootDomain": "testcounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review the MEHKO program overview and understand the requirements.\n\n**Why it matters:** Understanding the program helps you prepare properly and avoid delays.\n\n**What you need:**\n- ☐ Basic understanding of MEHKO rules\n- ☐ Kitchen setup assessment\n- ☐ Menu planning ideas\n\n**Where/how:** Review county MEHKO overview; visit the county website for current information.\n\n**Cost & time:** $0 · 15–30 minutes\n\n**Ready when:** You understand the basic requirements and have a plan for your operation.",
+        "searchTerms": [
+          "Test County MEHKO overview",
+          "Test County Home Kitchen Operations",
+          "Test County MEHKO requirements"
+        ],
+        "appId": "test_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "TEST_MEHKO_SOP-English",
+        "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1124/MEHKO-Standard-Operating-Procedures-PDF",
+        "appId": "test_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Test County MEHKO SOP template",
+          "Test County food safety SOP requirements",
+          "MEHKO Standard Operating Procedures Test County"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "TEST_MEHKO_PermitApplication",
+        "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1125/Permit-Application-PDF",
+        "appId": "test_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 2: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Test County MEHKO permit application",
+          "Test County Health Permit Application form",
+          "Test County Home Kitchen Operations application"
+        ]
+      }
+    ]
   }
 ]
