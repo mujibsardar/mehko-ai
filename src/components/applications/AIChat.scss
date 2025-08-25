@@ -425,6 +425,23 @@
     z-index: 10;
   }
 
+  // AI Disclaimer
+  &__disclaimer {
+    text-align: center;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+
+    small {
+      color: #64748b;
+      font-size: 11px;
+      line-height: 1.4;
+      font-style: italic;
+    }
+  }
+
   &__input-section {
     margin-bottom: 12px;
   }

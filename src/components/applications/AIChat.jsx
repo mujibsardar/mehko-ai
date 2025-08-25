@@ -208,6 +208,11 @@ IMPORTANT: This app tracks your MEHKO application progress and provides guidance
 Ask me anything or pick a quick task above!`,
             timestamp: new Date(),
           },
+          {
+            sender: "ai",
+            text: "💡 Note: While I aim to provide accurate information, please verify important details with official sources as I may occasionally make mistakes.",
+            timestamp: new Date(),
+          },
         ]);
       }
     });
@@ -543,6 +548,11 @@ Ask me anything or pick a quick task above!`,
 
       {/* Composer */}
       <div className="ai-chat__composer">
+        {/* AI Disclaimer */}
+        <div className="ai-chat__disclaimer">
+          <small>AI responses may contain inaccuracies. Please verify important information with official sources.</small>
+        </div>
+
         <div className="ai-chat__input-section">
           {selectedForm && (
             <div className="ai-chat__form-guidance">
