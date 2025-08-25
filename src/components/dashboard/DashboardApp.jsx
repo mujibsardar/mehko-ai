@@ -13,6 +13,7 @@ import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
 import DynamicForm from "../forms/DynamicForm";
 import useProgress from "../../hooks/useProgress";
+import useAllApplicationsProgress from "../../hooks/useAllApplicationsProgress";
 import { InterviewView } from "../overlay/Interview";
 import { pinApplication, unpinApplication } from "../../firebase/userData";
 
@@ -72,6 +73,21 @@ export default function DashboardApp() {
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
     user?.uid,
     activeApplicationId
+  );
+
+  // progress for all applications (sidebar)
+  const applicationIds = useMemo(() => 
+    selectedApplications.map(app => app.id), 
+    [selectedApplications]
+  );
+  
+  const {
+    allProgress,
+    getProgressForApp,
+    getProgressPercentage
+  } = useAllApplicationsProgress(
+    user?.uid,
+    applicationIds
   );
 
   // steps
@@ -162,13 +178,13 @@ export default function DashboardApp() {
   // Find the first incomplete step for continuing applications
   const getFirstIncompleteStepId = () => {
     if (!steps.length) return null;
-    
+
     console.log("Finding first incomplete step:", {
       totalSteps: steps.length,
       completedSteps,
       steps: steps.map(s => ({ id: s.id, _id: s._id, title: s.title }))
     });
-    
+
     for (let i = 0; i < steps.length; i++) {
       const step = steps[i];
       const stepId = step.id || step._id || String(i);
@@ -177,7 +193,7 @@ export default function DashboardApp() {
         return stepId;
       }
     }
-    
+
     // If all steps are completed, return the first step
     console.log("All steps completed, returning first step");
     return firstStepId;
@@ -188,9 +204,8 @@ export default function DashboardApp() {
     if (!selectedApplications.length) return null;
     const showBack = Boolean(activeApplicationId);
     const crumbs = activeApplication
-      ? `Home > ${activeApplication.title}${
-          activeSection !== "overview" ? ` > ${activeSection}` : ""
-        }`
+      ? `Home > ${activeApplication.title}${activeSection !== "overview" ? ` > ${activeSection}` : ""
+      }`
       : "Home";
     return (
       <div
@@ -499,7 +514,8 @@ export default function DashboardApp() {
           onSelect={handleApplicationSwitch}
           onStepSelect={onStepSelect}
           selectedStepId={currentStepId}
-          completedSteps={completedSteps}
+          allProgress={allProgress}
+          getProgressPercentage={getProgressPercentage}
         />
 
         {/* Main + AI right panel */}
@@ -537,8 +553,8 @@ export default function DashboardApp() {
                         onClick={() => {
                           setActiveSection("steps");
                           // If continuing, go to first incomplete step; if starting, go to first step
-                          const targetStepId = completedSteps.length > 0 
-                            ? getFirstIncompleteStepId() 
+                          const targetStepId = completedSteps.length > 0
+                            ? getFirstIncompleteStepId()
                             : firstStepId;
                           setCurrentStepId(targetStepId);
                         }}

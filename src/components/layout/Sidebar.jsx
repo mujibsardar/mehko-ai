@@ -12,7 +12,8 @@ const Sidebar = ({
   onSelect,
   onStepSelect,
   selectedStepId,
-  completedSteps = [], // Add this prop
+  allProgress = {}, // Updated to receive all progress data
+  getProgressPercentage, // Function to calculate progress percentage
 }) => {
   const {
     collapsedApps,
@@ -44,9 +45,18 @@ const Sidebar = ({
           const areStepsCollapsed = collapsedSteps[application.id];
           const isSupportCollapsed = collapsedSupport[application.id];
           const totalSteps = application.steps?.length || 0;
+          const completedSteps = allProgress[application.id] || [];
           const completeCount = completedSteps.length;
-          const percent =
-            totalSteps > 0 ? Math.round((completeCount / totalSteps) * 100) : 0;
+          const percent = getProgressPercentage ? getProgressPercentage(application.id, totalSteps) : 0;
+
+          // Debug logging to help track progress data
+          console.log(`Sidebar progress for ${application.id}:`, {
+            totalSteps,
+            completedSteps,
+            completeCount,
+            percent,
+            allProgress: allProgress[application.id]
+          });
 
           const hasComments = Boolean(
             application.supportTools?.commentsEnabled
@@ -180,9 +190,8 @@ const Sidebar = ({
                         return (
                           <li
                             key={stepId}
-                            className={`step-item ${
-                              isStepActive ? "active-nav" : ""
-                            } ${completedSteps.includes(stepId) ? "completed" : ""}`}
+                            className={`step-item ${isStepActive ? "active-nav" : ""
+                              } ${(allProgress[application.id] || []).includes(stepId) ? "completed" : ""}`}
                             onClick={(e) => {
                               e.stopPropagation();
                               if (onStepSelect) {
@@ -192,14 +201,14 @@ const Sidebar = ({
                           >
                             <div className="step-content">
                               <span className="step-icon">
-                                {step.type === "form" ? "📝" : 
-                                 step.type === "pdf" ? "📄" : "ℹ️"}
+                                {step.type === "form" ? "📝" :
+                                  step.type === "pdf" ? "📄" : "ℹ️"}
                               </span>
                               <span className="step-title">
                                 Step {idx + 1}: {step.title}
                               </span>
                             </div>
-                            {completedSteps.includes(stepId) && (
+                            {(allProgress[application.id] || []).includes(stepId) && (
                               <span className="step-status">✓</span>
                             )}
                           </li>
@@ -235,9 +244,8 @@ const Sidebar = ({
 
                         {!isSupportCollapsed && (
                           <li
-                            className={`sidebar-support-item ${
-                              activeSection === "comments" ? "active-nav" : ""
-                            }`}
+                            className={`sidebar-support-item ${activeSection === "comments" ? "active-nav" : ""
+                              }`}
                             onClick={(e) => {
                               e.stopPropagation();
                               setActiveSection("comments");
