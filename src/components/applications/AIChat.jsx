@@ -198,7 +198,14 @@ export default function AIChat({
         setMessages([
           {
             sender: "ai",
-            text: `Welcome! I'm here to help with ${application.title}. Ask me anything or pick a quick task above.`,
+            text: `Welcome! I'm here to help with ${application.title}. 
+
+IMPORTANT: This app tracks your MEHKO application progress and provides guidance. You'll need to:
+• Download PDF forms for each step
+• Complete forms offline 
+• Return to mark steps complete
+
+Ask me anything or pick a quick task above!`,
             timestamp: new Date(),
           },
         ]);
@@ -291,6 +298,12 @@ export default function AIChat({
             pdfText, // full extracted text
             pdfLinks, // {formId: {title,url,previewBase}}
             selectedForm: formContext, // Add selected form context
+            // IMPORTANT: Application workflow instructions
+            workflow: {
+              description: "This is a MEHKO application tracking system. Users download PDF forms, complete them offline, then return to mark steps complete. The app does NOT handle form completion directly - it only tracks progress and provides guidance.",
+              formProcess: "Forms must be downloaded as PDFs, completed offline, and then uploaded or marked as complete in the app.",
+              appPurpose: "The app tracks application progress, provides form guidance, and helps users understand requirements - it does not replace the actual form completion process."
+            }
           },
         }),
       });
