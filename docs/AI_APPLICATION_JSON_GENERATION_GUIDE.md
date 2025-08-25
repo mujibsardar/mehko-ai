@@ -24,7 +24,7 @@ This guide provides instructions for AI agents to generate JSON files for new co
       "type": "info|pdf",
       "action_required": true|false,
       "fill_pdf": true|false,
-      "content": "Step content in plain text",
+      "content": "Step content with markdown formatting support",
       "searchTerms": ["search phrase 1", "search phrase 2"],
       "formId": "FORM_ID_HERE", // Required for PDF steps only
       "pdfUrl": "https://county.gov/forms/form.pdf", // Required for PDF steps only
@@ -39,20 +39,20 @@ This guide provides instructions for AI agents to generate JSON files for new co
 Every step should follow this exact format:
 
 ```
-What to do: [Clear action description]
+**What to do:** [Clear action description]
 
-Why it matters: [Brief explanation of importance]
+**Why it matters:** [Brief explanation of importance]
 
-What you need:
+**What you need:**
 - ☐ [Requirement 1]
 - ☐ [Requirement 2] 
 - ☐ [Requirement 3]
 
-Where/how: [Instructions on how to complete - can include website references]
+**Where/how:** [Instructions on how to complete - can include website references]
 
-Cost & time: [Cost] · [Time estimate]
+**Cost & time:** [Cost] · [Time estimate]
 
-Ready when: [Clear completion criteria]
+**Ready when:** [Clear completion criteria]
 ```
 
 **⚠️ CRITICAL: Step References in "What you need"**
@@ -93,10 +93,15 @@ When referencing other steps in the "What you need" section, use this format:
 ### 1. Info Steps
 
 - **Purpose:** Provide information and instructions
-- **Content:** Use the standard structure above
+- **Content:** Use the standard structure above with markdown formatting
 - **fill_pdf:** Always false
 - **Required fields:** id, title, type, action_required, fill_pdf, content, searchTerms, appId
 - **Optional fields:** None
+
+**Markdown Formatting Support:**
+- `**text**` → Bold text (use for section headers)
+- `*text*` → Italic text (use sparingly for emphasis)
+- `` `text` `` → Code/inline text (use for technical terms)
 
 ### 2. PDF Steps ⚠️ REQUIRED
 
@@ -148,6 +153,31 @@ When referencing other steps in the "What you need" section, use this format:
    }
    ```
 
+## 🔍 **CRITICAL: PDF Discovery & Crawling Process**
+
+**When researching a county, you MUST:**
+
+1. **Visit the county's MEHKO webpage** (usually under Environmental Health or Public Health)
+2. **Search for and download the actual PDF forms** that users need to fill out
+3. **Find the direct download links** for:
+   - **SOP Form** (Standard Operating Procedures)
+   - **Permit Application Form** (Health Permit Application)
+4. **Test all PDF links** to ensure they work and download properly
+5. **Use the actual working URLs** in the `pdfUrl` field
+
+**❌ DO NOT:**
+- Use placeholder URLs like "https://county.gov/forms/mehko-sop.pdf"
+- Assume forms exist without verifying
+- Use broken or inaccessible links
+- Skip PDF discovery - this is mandatory
+
+**✅ DO:**
+- Crawl the county website thoroughly
+- Download and verify each PDF form
+- Use real, working download links
+- Test every link before including in JSON
+- Ensure forms are actually fillable by users
+
 ## Required Fields
 
 ### Application Level
@@ -195,10 +225,15 @@ Before finalizing, ensure ALL of these are true:
 - [ ] **All PDF steps have `formId`** (form identifier)
 - [ ] **All PDF steps have `fill_pdf: true`**
 - [ ] **All info steps have `fill_pdf: false`**
-- [ ] **Content uses plain text only** (no markdown, no **bold**)
+- [ ] **Content uses proper markdown formatting** (use **text** for section headers)
 - [ ] **Search terms in array** (not embedded in content)
 - [ ] **appId matches exactly** in all steps
 - [ ] **No missing required fields** for any step type
+- [ ] **Section headers properly formatted** with **What to do:**, **Why it matters:**, etc.
+- [ ] **Fee information is specific** (exact amounts, not "see fee schedule")
+- [ ] **Contact information is complete** (phone, address, hours, not just "visit website")
+- [ ] **Submission methods are specific** (online, mail, in-person options)
+- [ ] **Timeline estimates are realistic** (not "varies" or "check website")
 
 ## Example Complete Info Step
 
@@ -233,6 +268,37 @@ Before finalizing, ensure ALL of these are true:
 - **PDF forms:** Direct download links for SOP and permit applications
 - **External references:** Website mentions, FAQ references, and other resources users can visit
 
+### 🔍 **Detailed Research Requirements:**
+
+#### **Fee Information (Be Specific):**
+- Initial application fee (exact dollar amount)
+- Annual permit fee (exact dollar amount)
+- Plan check fees (per hour or flat rate)
+- Inspection fees (if separate from application)
+- Any current waivers, subsidies, or special programs
+- Payment methods accepted
+
+#### **Contact Information (Actual Details):**
+- Phone number (main office)
+- Office address and hours of operation
+- Email contact (if available)
+- Website for current information
+- Department name and contact person (if available)
+
+#### **Submission Methods (Specific Options):**
+- Online submission (URL if available)
+- Mail submission (complete address)
+- In-person submission (office location)
+- Required documents list
+- Any special submission requirements
+
+#### **Timeline Information (Realistic Estimates):**
+- Application processing time (weeks/months)
+- Inspection scheduling time (how far in advance)
+- Permit issuance time (after inspection)
+- Any seasonal delays or restrictions
+- Renewal timeline and requirements
+
 ### Where to Find Information:
 
 - County Environmental Health website
@@ -240,6 +306,21 @@ Before finalizing, ensure ALL of these are true:
 - MEHKO program pages
 - Fee schedules
 - Contact directories
+
+### 🔍 **Step-by-Step Research Process:**
+
+1. **Start with the county's main website** (e.g., `orangecounty.gov`)
+2. **Navigate to Environmental Health or Public Health section**
+3. **Search for "MEHKO" or "Microenterprise Home Kitchen Operations"**
+4. **Look for dedicated MEHKO program pages**
+5. **Find and download the required PDF forms:**
+   - SOP Form (Standard Operating Procedures)
+   - Permit Application Form
+6. **Extract direct download links** from the website
+7. **Test each PDF link** to ensure it downloads properly
+8. **Gather fee information** from fee schedules or program pages
+9. **Find contact information** for the department
+10. **Note any specific restrictions or requirements** mentioned
 
 ### How to Handle External References:
 
@@ -261,16 +342,42 @@ This keeps your JSON simple while providing users with actionable ways to get mo
 - **Broken links** - Test pdfUrl links before including
 - **Wrong field types** - Use correct boolean values (true/false, not "true"/"false")
 - **Missing appId** - Every step must have it
-- **Markdown in content** - Use plain text only
+- **Missing markdown formatting** - Use **text** for section headers to ensure proper parsing
 - **Empty searchTerms** - Always include relevant search phrases
+- **Incorrect step references** - Use "go to Step X: Title" format, not internal IDs
+
+## 🚀 **Content Quality Improvements**
+
+### **Instead of Generic Statements, Use Specific Information:**
+
+❌ **Generic (Poor):**
+- "See county website for fees"
+- "Contact the department for information"
+- "Submit according to instructions"
+- "Timeline varies by case"
+
+✅ **Specific (Excellent):**
+- "Initial fee: $150, Annual permit: $75"
+- "Phone: (555) 123-4567, Office: 123 Health St, Hours: Mon-Fri 8AM-5PM"
+- "Submit online at county.gov/mehko, by mail to [address], or in-person at [location]"
+- "Processing: 2-3 weeks, Inspection: 1-2 weeks after approval, Permit: 1 week after inspection"
+
+### **Always Include:**
+- **Exact dollar amounts** for all fees
+- **Complete contact information** (phone, address, hours)
+- **Specific submission options** (online, mail, in-person)
+- **Realistic timeline estimates** (weeks/months, not "varies")
+- **County-specific restrictions** and requirements
+- **Working website links** and form URLs
 
 ## Notes
 
 - **Keep it simple:** No complex nesting, subSteps, or advanced features
 - **PDF steps required:** Every application needs SOP and Permit Application steps
 - **Include working download links:** Users need to access actual forms
-- **Plain text content:** No markdown, no special formatting, no bold/italic
+- **Use markdown formatting:** Use **text** for section headers, *text* for emphasis, `text` for code/technical terms
 - **Follow the template exactly:** Use the structure shown above
 - **Validate thoroughly:** Use the checklist before providing final JSON
+- **Section headers matter:** The app parses **What to do:**, **Why it matters:**, etc. to create structured content
 
 **Remember: PDF steps are not optional - they are essential for a functional MEHKO application. Without them, users cannot complete the required forms.**
