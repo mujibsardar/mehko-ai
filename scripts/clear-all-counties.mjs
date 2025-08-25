@@ -9,7 +9,17 @@
  * 3. Firebase Firestore database
  * 4. Manifest files
  * 
- * USE WITH CAUTION - This will delete ALL county data!
+ * Firebase Collections Cleaned:
+ * - applications (main county applications)
+ * - applications/{appId}/comments (comments on county apps)
+ * - users/{userId}/applicationProgress (user progress for counties)
+ * - users/{userId}/pinnedApplications (user's pinned counties)
+ * - users/{userId}/aiChats (AI chat messages for counties)
+ * - users/{userId}/formProgress (form progress for counties)
+ * - reports (reports related to county apps)
+ * - stepFeedback (feedback on county app steps)
+ * 
+ * USE WITH CAUTION - This will delete ALL county data and related user data!
  */
 
 import { initializeApp, cert } from "firebase-admin/app";
@@ -91,12 +101,14 @@ class CountyCleaner {
       
       const batch = this.db.batch();
       let deletedCount = 0;
+      const appIds = [];
 
       snapshot.forEach((doc) => {
         const appId = doc.id;
         if (appId.includes("county") || appId.includes("mehko")) {
           batch.delete(doc.ref);
           deletedCount++;
+          appIds.push(appId);
           console.log(`  🗑️  Marked for deletion: ${appId}`);
         }
       });
@@ -104,6 +116,9 @@ class CountyCleaner {
       if (deletedCount > 0) {
         await batch.commit();
         console.log(`✅ Deleted ${deletedCount} county applications from Firebase`);
+        
+        // Now clean up related collections
+        await this.clearRelatedCollections(appIds);
       } else {
         console.log("ℹ️  No county applications found in Firebase");
       }
@@ -111,6 +126,182 @@ class CountyCleaner {
     } catch (error) {
       console.error("❌ Error clearing Firebase:", error.message);
       this.errors.push(`Firebase: ${error.message}`);
+    }
+  }
+
+  async clearRelatedCollections(appIds) {
+    if (appIds.length === 0) return;
+    
+    try {
+      console.log("\n🧹 Clearing related Firebase collections...");
+      
+      // 1. Clear comments on county applications
+      console.log("  📝 Clearing comments on county applications...");
+      for (const appId of appIds) {
+        const commentsRef = this.db.collection("applications", appId, "comments");
+        const commentsSnapshot = await commentsRef.get();
+        if (!commentsSnapshot.empty) {
+          const batch = this.db.batch();
+          commentsSnapshot.forEach(doc => batch.delete(doc.ref));
+          await batch.commit();
+          console.log(`    🗑️  Deleted ${commentsSnapshot.size} comments from ${appId}`);
+        }
+      }
+
+      // 2. Clear user progress for county applications
+      console.log("  📊 Clearing user progress for county applications...");
+      const usersRef = this.db.collection("users");
+      const usersSnapshot = await usersRef.get();
+      
+      for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+        const progressRef = this.db.collection("users", userId, "applicationProgress");
+        const progressSnapshot = await progressRef.get();
+        
+        if (!progressSnapshot.empty) {
+          const batch = this.db.batch();
+          let progressDeleted = 0;
+          
+          progressSnapshot.forEach(doc => {
+            if (appIds.includes(doc.id)) {
+              batch.delete(doc.ref);
+              progressDeleted++;
+            }
+          });
+          
+          if (progressDeleted > 0) {
+            await batch.commit();
+            console.log(`    🗑️  Deleted ${progressDeleted} progress records for user ${userId}`);
+          }
+        }
+      }
+
+      // 3. Clear pinned applications for counties
+      console.log("  📌 Clearing pinned county applications...");
+      for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+        const pinnedRef = this.db.collection("users", userId, "pinnedApplications");
+        const pinnedSnapshot = await pinnedRef.get();
+        
+        if (!pinnedSnapshot.empty) {
+          const batch = this.db.batch();
+          let pinnedDeleted = 0;
+          
+          pinnedSnapshot.forEach(doc => {
+            if (appIds.includes(doc.id)) {
+              batch.delete(doc.ref);
+              pinnedDeleted++;
+            }
+          });
+          
+          if (pinnedDeleted > 0) {
+            await batch.commit();
+            console.log(`    🗑️  Deleted ${pinnedDeleted} pinned applications for user ${userId}`);
+          }
+        }
+      }
+
+      // 4. Clear reports related to county applications
+      console.log("  📋 Clearing reports related to county applications...");
+      const reportsRef = this.db.collection("reports");
+      const reportsSnapshot = await reportsRef.get();
+      
+      if (!reportsSnapshot.empty) {
+        const batch = this.db.batch();
+        let reportsDeleted = 0;
+        
+        reportsSnapshot.forEach(doc => {
+          const reportData = doc.data();
+          if (reportData.applicationId && appIds.includes(reportData.applicationId)) {
+            batch.delete(doc.ref);
+            reportsDeleted++;
+          }
+        });
+        
+        if (reportsDeleted > 0) {
+          await batch.commit();
+          console.log(`    🗑️  Deleted ${reportsDeleted} reports related to county applications`);
+        }
+      }
+
+      // 5. Clear step feedback for county applications
+      console.log("  💬 Clearing step feedback for county applications...");
+      const stepFeedbackRef = this.db.collection("stepFeedback");
+      const stepFeedbackSnapshot = await stepFeedbackRef.get();
+      
+      if (!stepFeedbackSnapshot.empty) {
+        const batch = this.db.batch();
+        let feedbackDeleted = 0;
+        
+        stepFeedbackSnapshot.forEach(doc => {
+          const feedbackData = doc.data();
+          if (feedbackData.applicationId && appIds.includes(feedbackData.applicationId)) {
+            batch.delete(doc.ref);
+            feedbackDeleted++;
+          }
+        });
+        
+        if (feedbackDeleted > 0) {
+          await batch.commit();
+          console.log(`    🗑️  Deleted ${feedbackDeleted} step feedback records for county applications`);
+        }
+      }
+
+      // 6. Clear AI chat messages for county applications
+      console.log("  🤖 Clearing AI chat messages for county applications...");
+      for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+        const aiChatsRef = this.db.collection("users", userId, "aiChats");
+        const aiChatsSnapshot = await aiChatsRef.get();
+        
+        if (!aiChatsSnapshot.empty) {
+          const batch = this.db.batch();
+          let chatDeleted = 0;
+          
+          aiChatsSnapshot.forEach(doc => {
+            if (appIds.includes(doc.id)) {
+              batch.delete(doc.ref);
+              chatDeleted++;
+            }
+          });
+          
+          if (chatDeleted > 0) {
+            await batch.commit();
+            console.log(`    🗑️  Deleted ${chatDeleted} AI chat records for user ${userId}`);
+          }
+        }
+      }
+
+      // 7. Clear form progress for county applications
+      console.log("  📝 Clearing form progress for county applications...");
+      for (const userDoc of usersSnapshot.docs) {
+        const userId = userDoc.id;
+        const formProgressRef = this.db.collection("users", userId, "formProgress");
+        const formProgressSnapshot = await formProgressRef.get();
+        
+        if (!formProgressSnapshot.empty) {
+          const batch = this.db.batch();
+          let formProgressDeleted = 0;
+          
+          formProgressSnapshot.forEach(doc => {
+            if (appIds.includes(doc.id)) {
+              batch.delete(doc.ref);
+              formProgressDeleted++;
+            }
+          });
+          
+          if (formProgressDeleted > 0) {
+            await batch.commit();
+            console.log(`    🗑️  Deleted ${formProgressDeleted} form progress records for user ${userId}`);
+          }
+        }
+      }
+
+      console.log("✅ Related collections cleanup completed");
+      
+    } catch (error) {
+      console.error("❌ Error clearing related collections:", error.message);
+      this.errors.push(`Related collections: ${error.message}`);
     }
   }
 
