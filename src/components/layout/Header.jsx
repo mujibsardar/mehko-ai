@@ -21,10 +21,13 @@ export default function Header() {
     <header className="app-header">
       <div className="header-content">
         <div className="header-left">
-          <h1 className="app-title" onClick={() => window.location.reload()}>
-            <span className="app-icon">🏛️</span>
-            MEHKO.ai
-          </h1>
+          <div className="logo-section" onClick={() => window.location.reload()}>
+            <h1 className="app-title">
+              <span className="app-icon">🏛️</span>
+              MEHKO.ai
+            </h1>
+            <p className="app-tagline">MEHKO Applications Made Simple</p>
+          </div>
         </div>
 
         <div className="header-right">
