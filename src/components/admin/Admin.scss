@@ -177,3 +177,26 @@
     text-decoration: underline;
   }
 }
+
+/* Minimal sidebar improvements - keeping existing structure */
+.admin-sidebar {
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  button {
+    transition: all 0.15s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}

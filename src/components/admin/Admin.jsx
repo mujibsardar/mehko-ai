@@ -450,6 +450,7 @@ export default function Admin() {
     <div style={{ display: "flex", height: "100vh", minHeight: 600 }}>
       {/* Sidebar */}
       <aside
+        className="admin-sidebar"
         style={{
           width: 280,
           borderRight: "1px solid #eee",
@@ -591,8 +592,8 @@ export default function Admin() {
             {activeTab === "pdf-download" && "Download PDF Forms"}
             {activeTab === "counties" && "County Processor"}
           </h2>
-          <Link 
-            to="/dashboard" 
+          <Link
+            to="/dashboard"
             className="back-to-dashboard-link"
             style={{ fontSize: 13, color: "#3b82f6" }}
           >
@@ -1321,7 +1322,7 @@ export default function Admin() {
                   />
                 </div>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button 
+                  <button
                     onClick={saveAppMeta}
                     style={{
                       padding: "12px 24px",
@@ -1651,7 +1652,7 @@ export default function Admin() {
                 )}
 
                 <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  <button 
+                  <button
                     onClick={addStepToQueue}
                     style={{
                       padding: "12px 24px",
