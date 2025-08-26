@@ -7,6 +7,9 @@ import AIFieldMapper from "../ai/AIFieldMapper";
 // API prefix
 const API = "/api";
 
+// Helper function to convert spaces to underscores for filesystem compatibility
+const normalizeForFilesystem = (str) => str.replace(/\s+/g, "_");
+
 // Preview DPI + unit converters
 const PREVIEW_DPI = 144; // image rendered at 144 dpi
 const ptToPx = (n) => n * (PREVIEW_DPI / 72); // points -> pixels
@@ -59,6 +62,10 @@ export default function Mapper() {
   const app = params.app || params.appId;
   const form = params.form || params.formId;
 
+  // Normalize app and form names for filesystem compatibility
+  const normalizedApp = normalizeForFilesystem(app);
+  const normalizedForm = normalizeForFilesystem(form);
+
   const [overlay, setOverlay] = useState({ fields: [] });
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
@@ -75,21 +82,21 @@ export default function Mapper() {
   // Load template (convert saved points -> screen pixels)
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${API}/apps/${app}/forms/${form}/template`);
+      const res = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`);
       const tpl = await res.json();
       const fields = Array.isArray(tpl?.fields)
         ? tpl.fields.map((f) => ({ ...f, rect: rectPtToPx(f.rect) }))
         : [];
       setOverlay({ fields });
     })();
-  }, [app, form]);
+  }, [normalizedApp, normalizedForm]);
 
   // Load metrics + preview for current page
   useEffect(() => {
     const q = (obj) => new URLSearchParams(obj).toString();
     async function load() {
       const m = await fetch(
-        `${API}/apps/${app}/forms/${form}/page-metrics?${q({
+        `${API}/apps/${normalizedApp}/forms/${normalizedForm}/page-metrics?${q({
           page,
           dpi: PREVIEW_DPI,
         })}`
@@ -98,7 +105,7 @@ export default function Mapper() {
       setPages(m.pages || 1);
 
       const blob = await fetch(
-        `${API}/apps/${app}/forms/${form}/preview-page?${q({
+        `${API}/apps/${normalizedApp}/forms/${normalizedForm}/preview-page?${q({
           page,
           dpi: PREVIEW_DPI,
         })}`
@@ -107,7 +114,7 @@ export default function Mapper() {
     }
     load();
     return () => setImgUrl(null);
-  }, [app, form, page]);
+  }, [normalizedApp, normalizedForm, page]);
 
   // Draw background + boxes
   useEffect(() => {
@@ -489,7 +496,7 @@ export default function Mapper() {
     };
     const fd = new FormData();
     fd.append("overlay_json", JSON.stringify(overlayToSave));
-    const r = await fetch(`${API}/apps/${app}/forms/${form}/template`, {
+    const r = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`, {
       method: "POST",
       body: fd,
     });

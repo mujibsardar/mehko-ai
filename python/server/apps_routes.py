@@ -36,7 +36,7 @@ def app_dir(app: str) -> Path:
     return APPS / app
 
 def form_dir(app: str, form: str) -> Path:
-    return app_dir(app) / form
+    return app_dir(app) / "forms" / form
 
 def ensure_dir(p: Path):
     p.mkdir(parents=True, exist_ok=True)
