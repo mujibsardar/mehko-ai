@@ -650,8 +650,8 @@ export default function Mapper() {
             {editMode && draggedField
               ? " Drag fields to reposition"
               : editMode && resizeHandle
-              ? " Resize field by dragging handles"
-              : " Click and drag fields to move, drag handles to resize"}
+                ? " Resize field by dragging handles"
+                : " Click and drag fields to move, drag handles to resize"}
           </div>
         )}
 
