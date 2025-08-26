@@ -19,10 +19,108 @@ const PDFPreviewPanel = ({
   const [pageMetrics, setPageMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Pan and zoom state
+  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [lastPanOffset, setLastPanOffset] = useState({ x: 0, y: 0 });
+
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
+  const canvasContainerRef = useRef(null);
 
   const API_BASE = "http://127.0.0.1:8000";
+
+  // Pan and zoom functions
+  const resetPan = () => {
+    setPanOffset({ x: 0, y: 0 });
+  };
+
+  const fitToPage = () => {
+    if (!pageMetrics || !canvasContainerRef.current) return;
+
+    const container = canvasContainerRef.current;
+    const containerWidth = container.clientWidth - 40; // Account for padding
+    const containerHeight = container.clientHeight - 40;
+
+    const scaleX = containerWidth / pageMetrics.pixelWidth;
+    const scaleY = containerHeight / pageMetrics.pixelHeight;
+    const newScale = Math.min(scaleX, scaleY, 1.0); // Don't scale up beyond 100%
+
+    setScale(newScale);
+    resetPan();
+  };
+
+  const fitToWidth = () => {
+    if (!pageMetrics || !canvasContainerRef.current) return;
+
+    const container = canvasContainerRef.current;
+    const containerWidth = container.clientWidth - 40;
+
+    const newScale = containerWidth / pageMetrics.pixelWidth;
+    setScale(newScale);
+    resetPan();
+  };
+
+  const changeScale = (newScale) => {
+    const clampedScale = Math.max(0.1, Math.min(5.0, newScale));
+    setScale(clampedScale);
+    resetPan();
+  };
+
+  const goToPage = (pageNum) => {
+    if (pageNum >= 0 && pageNum < totalPages) {
+      setCurrentPage(pageNum);
+      resetPan(); // Reset pan when changing pages
+    }
+  };
+
+  // Mouse event handlers for panning
+  const handleMouseDown = (e) => {
+    if (scale <= 1.0) return; // Only allow panning when zoomed in
+
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    setLastPanOffset({ ...panOffset });
+
+    // Change cursor
+    if (canvasContainerRef.current) {
+      canvasContainerRef.current.style.cursor = 'grabbing';
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || scale <= 1.0) return;
+
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
+
+    setPanOffset({
+      x: lastPanOffset.x + deltaX,
+      y: lastPanOffset.y + deltaY
+    });
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+
+      // Change cursor back
+      if (canvasContainerRef.current) {
+        canvasContainerRef.current.style.cursor = 'grab';
+      }
+    }
+  };
+
+  const handleWheel = (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      const newScale = scale * zoomFactor;
+      changeScale(newScale);
+    }
+  };
 
   // Load PDF page metrics and image
   useEffect(() => {
@@ -140,11 +238,16 @@ const PDFPreviewPanel = ({
         width: scaledWidth,
         height: scaledHeight,
         scale,
+        panOffset,
       });
 
       // Clear canvas with white background
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, scaledWidth, scaledHeight);
+
+      // Apply pan offset transformation
+      ctx.save();
+      ctx.translate(panOffset.x, panOffset.y);
 
       // Draw PDF page image
       ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
@@ -227,6 +330,9 @@ const PDFPreviewPanel = ({
       } else {
         console.log("⚠️ No form overlay fields available");
       }
+
+      // Restore context after drawing everything
+      ctx.restore();
     };
 
     img.onerror = (error) => {
@@ -236,58 +342,34 @@ const PDFPreviewPanel = ({
 
     console.log("🔄 Setting image source:", pageImage);
     img.src = pageImage;
-  }, [pageImage, currentFieldId, formOverlay, scale, currentPage]);
-
-  // Handle page navigation
-  const goToPage = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
-
-  // Handle scale changes
-  const changeScale = (newScale) => {
-    const clampedScale = Math.max(0.2, Math.min(3.0, newScale));
-    console.log("🔍 Changing scale from", scale, "to", clampedScale);
-    setScale(clampedScale);
-  };
-
-  const fitToWidth = () => {
-    if (!containerRef.current || !pageMetrics) return;
-    const containerWidth = containerRef.current.clientWidth - 64; // Account for padding
-    const scale = containerWidth / pageMetrics.pixelWidth;
-    setScale(Math.max(0.2, Math.min(3.0, scale)));
-  };
-
-  const fitToPage = () => {
-    if (!containerRef.current || !pageMetrics) return;
-    const containerWidth = containerRef.current.clientWidth - 64;
-    const containerHeight = containerRef.current.clientHeight - 64;
-    const scaleX = containerWidth / pageMetrics.pixelWidth;
-    const scaleY = containerHeight / pageMetrics.pixelHeight;
-    const scale = Math.min(scaleX, scaleY);
-    setScale(Math.max(0.2, Math.min(3.0, scale)));
-  };
+  }, [pageImage, currentFieldId, formOverlay, scale, currentPage, panOffset]);
 
   useEffect(() => {
-    const handleEscape = (e) => {
+    const handleKeyDown = (e) => {
       if (e.key === "Escape" && isOpen) {
         onClose();
+      } else if (e.key === "0" && isOpen) {
+        // Reset zoom and pan
+        changeScale(1.0);
+        resetPan();
+      } else if (e.key === "r" && isOpen && scale > 1.0) {
+        // Reset pan only
+        resetPan();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, scale]);
 
   // Debug currentFieldId changes
   useEffect(() => {
@@ -310,18 +392,21 @@ const PDFPreviewPanel = ({
       {/* Backdrop */}
       <div className="pdf-preview-backdrop" onClick={onClose} />
 
-      {/* Panel */}
+      {/* Full-screen Panel */}
       <div
         ref={containerRef}
-        className={`pdf-preview-panel ${className}`}
-        style={{ transform: isOpen ? "translateX(0)" : "translateX(100%)" }}
+        className={`pdf-preview-panel-fullscreen ${className}`}
+        style={{ 
+          opacity: isOpen ? 1 : 0,
+          visibility: isOpen ? 'visible' : 'hidden'
+        }}
       >
         {/* Header */}
         <div className="pdf-preview-header">
           <div className="pdf-preview-title">
             <h3>PDF Preview</h3>
             <span className="pdf-preview-subtitle">
-              Form Field Highlighting
+              Form Field Highlighting • {scale > 1.0 ? 'Drag to pan • ' : ''}Ctrl+Scroll to zoom
             </span>
           </div>
           <button className="pdf-preview-close" onClick={onClose}>
@@ -349,8 +434,9 @@ const PDFPreviewPanel = ({
               Fit‑W
             </button>
             <button
-              onClick={() => changeScale(scale - 0.1)}
-              disabled={scale <= 0.2}
+              onClick={() => changeScale(scale - 0.25)}
+              disabled={scale <= 0.1}
+              title="Zoom out"
             >
               <svg
                 width="16"
@@ -363,10 +449,13 @@ const PDFPreviewPanel = ({
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
-            <span>{Math.round(scale * 100)}%</span>
+            <span style={{ minWidth: '60px', textAlign: 'center' }}>
+              {Math.round(scale * 100)}%
+            </span>
             <button
-              onClick={() => changeScale(scale + 0.1)}
-              disabled={scale >= 3.0}
+              onClick={() => changeScale(scale + 0.25)}
+              disabled={scale >= 5.0}
+              title="Zoom in"
             >
               <svg
                 width="16"
@@ -380,6 +469,15 @@ const PDFPreviewPanel = ({
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
+            {scale > 1.0 && (
+              <button 
+                onClick={resetPan} 
+                title="Reset pan position"
+                style={{ marginLeft: '8px' }}
+              >
+                🎯
+              </button>
+            )}
           </div>
 
           <div className="pdf-preview-pagination">
@@ -421,7 +519,20 @@ const PDFPreviewPanel = ({
 
         {/* PDF Content */}
         <div className="pdf-preview-content">
-          <div className="pdf-preview-canvas-container">
+          <div 
+            ref={canvasContainerRef}
+            className="pdf-preview-canvas-container"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onWheel={handleWheel}
+            style={{
+              cursor: scale > 1.0 ? 'grab' : 'default',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
             {loading && (
               <div className="pdf-preview-loading">
                 <div className="loading-spinner"></div>
@@ -441,7 +552,11 @@ const PDFPreviewPanel = ({
                 <canvas
                   ref={canvasRef}
                   className="pdf-preview-canvas"
-                  style={{ display: "block" }}
+                  style={{ 
+                    display: "block",
+                    transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
+                    transition: isDragging ? 'none' : 'transform 0.1s ease-out'
+                  }}
                 />
                 {/* Debug info overlay */}
                 <div
@@ -501,8 +616,8 @@ const PDFPreviewPanel = ({
             <span>Current Field: {currentFieldId || "None selected"}</span>
             {pageMetrics && (
               <span className="page-info">
-                • Page {currentPage + 1} of {totalPages}• Scale:{" "}
-                {Math.round(scale * 100)}%
+                • Page {currentPage + 1} of {totalPages} • Scale: {Math.round(scale * 100)}%
+                {scale > 1.0 && " • Drag to pan • R to reset pan • 0 to reset zoom"}
               </span>
             )}
           </div>
