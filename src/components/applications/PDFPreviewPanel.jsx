@@ -213,6 +213,7 @@ const PDFPreviewPanel = ({
       console.log("🖼️ Image loaded successfully:", {
         width: img.width,
         height: img.height,
+        pageMetrics,
       });
 
       const canvas = canvasRef.current;
@@ -227,32 +228,44 @@ const PDFPreviewPanel = ({
         return;
       }
 
-      // Set canvas size based on image and scale
-      const scaledWidth = Math.round(img.width * scale);
-      const scaledHeight = Math.round(img.height * scale);
+      // Use metrics as single source of truth (avoids DPR/browser decode mismatches)
+      const baseW = pageMetrics?.pixelWidth ?? img.width;
+      const baseH = pageMetrics?.pixelHeight ?? img.height;
+      const scaledWidth = Math.round(baseW * scale);
+      const scaledHeight = Math.round(baseH * scale);
       canvas.width = scaledWidth;
       canvas.height = scaledHeight;
+
+      // Exact px/pt from scaled dimensions (already includes scale)
+      const pagePtsW = pageMetrics?.pointsWidth ?? 612;
+      const pagePtsH = pageMetrics?.pointsHeight ?? 792;
+      const pxPerPtX = scaledWidth / pagePtsW;
+      const pxPerPtY = scaledHeight / pagePtsH;
 
       console.log("📏 Canvas dimensions set:", {
         width: scaledWidth,
         height: scaledHeight,
         scale,
         panOffset,
+        pxPerPtX,
+        pxPerPtY,
       });
 
       // Clear canvas with white background
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, scaledWidth, scaledHeight);
 
-      // Draw PDF page image at (0,0) - panning handled by CSS transform only
+      // Draw the bitmap to the same scaled dimensions
+      ctx.imageSmoothingEnabled = false;
       ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
       console.log("✅ PDF page image drawn to canvas");
 
-      // Draw field overlays
-      if (formOverlay?.fields) {
-        const pageFields = formOverlay.fields.filter(
-          (f) => (Number(f.page ?? 1) - 1) === currentPage
-        );
+              // Draw field overlays
+        if (formOverlay?.fields) {
+          // Try both 1-based and 0-based page indexing (some extractors use 0-based)
+          const pageFields = formOverlay.fields.filter(
+            (f) => (Number(f.page ?? 1) - 1) === currentPage || Number(f.page ?? 0) === currentPage
+          );
 
         console.log("🏷️ Rendering field overlays:", {
           totalFields: formOverlay.fields.length,
@@ -262,7 +275,15 @@ const PDFPreviewPanel = ({
         });
 
         pageFields.forEach((field) => {
-          const [x0, y0, x1, y1] = field.rect || [0, 0, 100, 20];
+          // Handle both [x,y,x,y] and [x,y,width,height] rect formats
+          let [rx0, ry0, rx1, ry1] = field.rect || [0, 0, 0, 0];
+          // detect width/height form
+          if (rx1 < rx0 || ry1 < ry0) {
+            rx1 = rx0 + Math.abs(rx1);
+            ry1 = ry0 + Math.abs(ry1);
+          }
+          const [x0, y0, x1, y1] = [rx0, ry0, rx1, ry1];
+
           const isCurrentField = currentFieldId === field.id;
 
           console.log("🏷️ Processing field:", {
@@ -272,15 +293,11 @@ const PDFPreviewPanel = ({
             rect: [x0, y0, x1, y1],
           });
 
-          // Convert points to pixels with proper Y-flip and scale
-          const dpi = pageMetrics?.dpi ?? 144;
-          const pxPerPt = dpi / 72;
-          const pagePtsH = pageMetrics?.pointsHeight ?? 792; // letter default
-
-          const left = x0 * pxPerPt * scale;
-          const right = x1 * pxPerPt * scale;
-          const top = (pagePtsH - y1) * pxPerPt * scale;    // flip Y
-          const bot = (pagePtsH - y0) * pxPerPt * scale;
+          // two-corner rect in PDF points; flip Y from bottom-left to top-left
+          const left = x0 * pxPerPtX;
+          const right = x1 * pxPerPtX;
+          const top = (pagePtsH - y1) * pxPerPtY; // flip
+          const bot = (pagePtsH - y0) * pxPerPtY;
 
           const x = Math.round(Math.min(left, right));
           const y = Math.round(Math.min(top, bot));
