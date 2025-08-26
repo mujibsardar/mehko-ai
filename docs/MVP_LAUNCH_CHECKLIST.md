@@ -43,6 +43,16 @@
   - Template field mapping
   - Form completion tracking
   - PDF generation capabilities
+- [ ] **Auto-Save PDF/HTML Form Filler**
+  - Real-time form data persistence
+  - Auto-save every 30 seconds
+  - Form field validation
+  - Progress recovery on page refresh
+- [ ] **Enhanced PDF Preview Panel**
+  - Larger PDF display area
+  - Improved scrolling and navigation
+  - Zoom controls and pan functionality
+  - Better mobile responsiveness
 - [ ] **County Data Management**
   - Los Angeles County data validation
   - Form template verification
@@ -73,6 +83,16 @@
   - [ ] Verify progress persistence
   - [ ] Test progress visualization
   - [ ] Validate data synchronization
+- [ ] **Auto-Save Form System**
+  - [ ] Test auto-save functionality (30-second intervals)
+  - [ ] Verify form data persistence across sessions
+  - [ ] Test progress recovery after page refresh
+  - [ ] Validate form field validation
+- [ ] **PDF Preview Panel**
+  - [ ] Test larger PDF display area
+  - [ ] Verify improved scrolling and navigation
+  - [ ] Test zoom controls and pan functionality
+  - [ ] Validate mobile responsiveness
 
 ### **User Experience Testing**
 - [ ] **Responsive Design**
@@ -195,6 +215,8 @@
   - [ ] < 5% error rate
   - [ ] 80%+ task completion rate
   - [ ] Positive user feedback
+  - [ ] Auto-save working reliably (99%+ success rate)
+  - [ ] PDF preview panel responsive and user-friendly
 
 ### **Business Metrics**
 - [ ] **Adoption**
