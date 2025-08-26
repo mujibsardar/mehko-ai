@@ -151,6 +151,21 @@
       "shrink": true
     },
     {
+      "id": "ai_field_5_1",
+      "label": "Zip Code",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        522.5,
+        294.5,
+        564.5,
+        313.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
       "id": "ai_field_6",
       "label": "Owner's Name",
       "page": 0,
@@ -190,21 +205,6 @@
         329.25,
         611,
         341.75
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_5_1",
-      "label": "Zip Code",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        522.5,
-        294.5,
-        564.5,
-        313.5
       ],
       "fontSize": 11,
       "align": "left",

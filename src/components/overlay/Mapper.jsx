@@ -582,23 +582,34 @@ export default function Mapper() {
     scheduleAutoSave();
   };
 
-  const moveFieldToPosition = (fieldId, newPosition) => {
+    const moveFieldToPosition = (fieldId, newPosition) => {
     const pageFields = overlay.fields.filter(f => f.page === page);
     const otherFields = overlay.fields.filter(f => f.page !== page);
-
+    
     const fieldIndex = pageFields.findIndex(f => f.id === fieldId);
     if (fieldIndex === -1) return;
-
+    
     const [movedField] = pageFields.splice(fieldIndex, 1);
     pageFields.splice(newPosition, 0, movedField);
-
+    
     const newOverlay = {
       ...overlay,
       fields: [...otherFields, ...pageFields]
     };
-
+    
     setOverlay(newOverlay);
     scheduleAutoSave();
+  };
+
+  // Debug function to log current field order
+  const logFieldOrder = () => {
+    console.log("=== Current Field Order ===");
+    overlay.fields
+      .filter(f => f.page === page)
+      .forEach((field, index) => {
+        console.log(`${index + 1}: ${field.label || field.id} (${field.id})`);
+      });
+    console.log("==========================");
   };
 
   const selected = useMemo(
@@ -1664,6 +1675,22 @@ export default function Mapper() {
                 title="Import field order from file"
               >
                 📥 Import Order
+              </button>
+              
+              <button
+                onClick={logFieldOrder}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "11px",
+                  backgroundColor: "#6b7280",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+                title="Log current field order to console for debugging"
+              >
+                🐛 Debug Order
               </button>
             </div>
             

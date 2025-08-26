@@ -33,6 +33,10 @@ export function InterviewView({ app, form, application, step }) {
       console.log("template response:", tpl); // debug
       const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
       setOverlay({ fields });
+      
+      // Debug: Log field order for verification
+      console.log("Field order loaded:", fields.map(f => ({ id: f.id, label: f.label, page: f.page })));
+      
       const init = {};
       for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
       setValues(init);
@@ -79,6 +83,30 @@ export function InterviewView({ app, form, application, step }) {
       if (!g.has(p)) g.set(p, []);
       g.get(p).push(f);
     }
+    
+    // Sort fields within each page by their order in the overlay array
+    // This preserves the exact order established in the mapper
+    for (const [pageNum, fields] of g.entries()) {
+      // Get the original order from the overlay for this page
+      const pageFieldOrder = overlay.fields
+        .filter(f => (f.page ?? 0) === pageNum)
+        .map(f => f.id);
+      
+      // Debug: Log field ordering for this page
+      console.log(`Page ${pageNum} field order:`, pageFieldOrder);
+      console.log(`Page ${pageNum} fields before sort:`, fields.map(f => ({ id: f.id, label: f.label })));
+      
+      // Sort fields according to their original order
+      fields.sort((a, b) => {
+        const aIndex = pageFieldOrder.indexOf(a.id);
+        const bIndex = pageFieldOrder.indexOf(b.id);
+        return aIndex - bIndex;
+      });
+      
+      // Debug: Log fields after sorting
+      console.log(`Page ${pageNum} fields after sort:`, fields.map(f => ({ id: f.id, label: f.label })));
+    }
+    
     return [...g.entries()].sort((a, b) => a[0] - b[0]);
   }, [overlay]);
 
