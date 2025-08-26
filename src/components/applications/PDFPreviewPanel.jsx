@@ -78,8 +78,7 @@ const PDFPreviewPanel = ({
 
   // Mouse event handlers for panning
   const handleMouseDown = (e) => {
-    if (scale <= 1.0) return; // Only allow panning when zoomed in
-
+    e.preventDefault();
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
     setLastPanOffset({ ...panOffset });
@@ -91,7 +90,7 @@ const PDFPreviewPanel = ({
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging || scale <= 1.0) return;
+    if (!isDragging) return;
 
     const deltaX = e.clientX - dragStart.x;
     const deltaY = e.clientY - dragStart.y;
@@ -245,18 +244,14 @@ const PDFPreviewPanel = ({
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, scaledWidth, scaledHeight);
 
-      // Apply pan offset transformation
-      ctx.save();
-      ctx.translate(panOffset.x, panOffset.y);
-
-      // Draw PDF page image
+      // Draw PDF page image at (0,0) - panning handled by CSS transform only
       ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
       console.log("✅ PDF page image drawn to canvas");
 
       // Draw field overlays
       if (formOverlay?.fields) {
         const pageFields = formOverlay.fields.filter(
-          (f) => Number(f.page || 0) === currentPage
+          (f) => (Number(f.page ?? 1) - 1) === currentPage
         );
 
         console.log("🏷️ Rendering field overlays:", {
@@ -277,20 +272,28 @@ const PDFPreviewPanel = ({
             rect: [x0, y0, x1, y1],
           });
 
-          // Convert points to pixels and apply scale
-          const scaledX0 = Math.round(x0 * (144 / 72) * scale); // Convert points to pixels (144 DPI) and apply scale
-          const scaledY0 = Math.round(y0 * (144 / 72) * scale);
-          const scaledX1 = Math.round(x1 * (144 / 72) * scale);
-          const scaledY1 = Math.round(y1 * (144 / 72) * scale);
+          // Convert points to pixels with proper Y-flip and scale
+          const dpi = pageMetrics?.dpi ?? 144;
+          const pxPerPt = dpi / 72;
+          const pagePtsH = pageMetrics?.pointsHeight ?? 792; // letter default
 
-          const fieldWidth = scaledX1 - scaledX0;
-          const fieldHeight = scaledY1 - scaledY0;
+          const left = x0 * pxPerPt * scale;
+          const right = x1 * pxPerPt * scale;
+          const top = (pagePtsH - y1) * pxPerPt * scale;    // flip Y
+          const bot = (pagePtsH - y0) * pxPerPt * scale;
+
+          const x = Math.round(Math.min(left, right));
+          const y = Math.round(Math.min(top, bot));
+          const w = Math.round(Math.abs(right - left));
+          const h = Math.round(Math.abs(bot - top));
+
+          if (w <= 0 || h <= 0) return;
 
           console.log("🏷️ Drawing field:", {
             id: field.id,
             rect: [x0, y0, x1, y1],
-            scaled: [scaledX0, scaledY0, scaledX1, scaledY1],
-            dimensions: [fieldWidth, fieldHeight],
+            scaled: [x, y, w, h],
+            dimensions: [w, h],
             isCurrentField,
           });
 
@@ -298,12 +301,12 @@ const PDFPreviewPanel = ({
           ctx.fillStyle = isCurrentField
             ? "rgba(33, 150, 243, 0.3)"
             : "rgba(0, 0, 0, 0.05)";
-          ctx.fillRect(scaledX0, scaledY0, fieldWidth, fieldHeight);
+          ctx.fillRect(x, y, w, h);
 
           // Draw field border
           ctx.strokeStyle = isCurrentField ? "#2196f3" : "#666666";
           ctx.lineWidth = isCurrentField ? 3 : 1;
-          ctx.strokeRect(scaledX0, scaledY0, fieldWidth, fieldHeight);
+          ctx.strokeRect(x, y, w, h);
 
           // Add highlight effect for current field
           if (isCurrentField) {
@@ -312,17 +315,17 @@ const PDFPreviewPanel = ({
             ctx.shadowOffsetX = 0;
             ctx.shadowOffsetY = 0;
             ctx.strokeRect(
-              scaledX0 - 2,
-              scaledY0 - 2,
-              fieldWidth + 4,
-              fieldHeight + 4
+              x - 2,
+              y - 2,
+              w + 4,
+              h + 4
             );
             ctx.shadowBlur = 0;
 
             // Draw field label
             ctx.fillStyle = "#1976d2";
             ctx.font = "14px Arial";
-            ctx.fillText(field.label || field.id, scaledX0, scaledY0 - 8);
+            ctx.fillText(field.label || field.id, x, y - 8);
           }
         });
 
@@ -330,9 +333,6 @@ const PDFPreviewPanel = ({
       } else {
         console.log("⚠️ No form overlay fields available");
       }
-
-      // Restore context after drawing everything
-      ctx.restore();
     };
 
     img.onerror = (error) => {
@@ -396,7 +396,7 @@ const PDFPreviewPanel = ({
       <div
         ref={containerRef}
         className={`pdf-preview-panel-fullscreen ${className}`}
-        style={{ 
+        style={{
           opacity: isOpen ? 1 : 0,
           visibility: isOpen ? 'visible' : 'hidden'
         }}
@@ -406,7 +406,7 @@ const PDFPreviewPanel = ({
           <div className="pdf-preview-title">
             <h3>PDF Preview</h3>
             <span className="pdf-preview-subtitle">
-              Form Field Highlighting • {scale > 1.0 ? 'Drag to pan • ' : ''}Ctrl+Scroll to zoom
+              Form Field Highlighting • Drag to pan • Ctrl+Scroll to zoom
             </span>
           </div>
           <button className="pdf-preview-close" onClick={onClose}>
@@ -470,8 +470,8 @@ const PDFPreviewPanel = ({
               </svg>
             </button>
             {scale > 1.0 && (
-              <button 
-                onClick={resetPan} 
+              <button
+                onClick={resetPan}
                 title="Reset pan position"
                 style={{ marginLeft: '8px' }}
               >
@@ -519,7 +519,7 @@ const PDFPreviewPanel = ({
 
         {/* PDF Content */}
         <div className="pdf-preview-content">
-          <div 
+          <div
             ref={canvasContainerRef}
             className="pdf-preview-canvas-container"
             onMouseDown={handleMouseDown}
@@ -528,9 +528,10 @@ const PDFPreviewPanel = ({
             onMouseLeave={handleMouseUp}
             onWheel={handleWheel}
             style={{
-              cursor: scale > 1.0 ? 'grab' : 'default',
+              cursor: isDragging ? 'grabbing' : 'grab',
               position: 'relative',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              userSelect: 'none'
             }}
           >
             {loading && (
@@ -552,7 +553,7 @@ const PDFPreviewPanel = ({
                 <canvas
                   ref={canvasRef}
                   className="pdf-preview-canvas"
-                  style={{ 
+                  style={{
                     display: "block",
                     transform: `translate(${panOffset.x}px, ${panOffset.y}px)`,
                     transition: isDragging ? 'none' : 'transform 0.1s ease-out'
@@ -617,7 +618,7 @@ const PDFPreviewPanel = ({
             {pageMetrics && (
               <span className="page-info">
                 • Page {currentPage + 1} of {totalPages} • Scale: {Math.round(scale * 100)}%
-                {scale > 1.0 && " • Drag to pan • R to reset pan • 0 to reset zoom"}
+                {" • Drag to pan • R to reset pan • 0 to reset zoom"}
               </span>
             )}
           </div>
