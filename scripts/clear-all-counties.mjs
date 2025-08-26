@@ -24,7 +24,7 @@
 
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { readFileSync, existsSync, unlinkSync, rmdirSync } from "fs";
+import { readFileSync, existsSync, unlinkSync, rmdirSync, readdirSync, writeFileSync, lstatSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -102,25 +102,65 @@ class CountyCleaner {
       const batch = this.db.batch();
       let deletedCount = 0;
       const appIds = [];
+      const skippedApps = [];
 
       snapshot.forEach((doc) => {
         const appId = doc.id;
-        if (appId.includes("county") || appId.includes("mehko")) {
+        console.log(`  🔍 Checking application: ${appId}`);
+        
+        // More comprehensive check for county/MEHKO applications
+        const isCountyApp = appId.includes("county") || 
+                           appId.includes("mehko") || 
+                           appId.includes("_county") ||
+                           appId.includes("county_") ||
+                           appId.includes("_mehko") ||
+                           appId.includes("mehko_");
+        
+        if (isCountyApp) {
           batch.delete(doc.ref);
           deletedCount++;
           appIds.push(appId);
           console.log(`  🗑️  Marked for deletion: ${appId}`);
+        } else {
+          skippedApps.push(appId);
+          console.log(`  ⏭️  Skipped (not a county app): ${appId}`);
         }
       });
 
       if (deletedCount > 0) {
+        console.log(`\n💾 Committing batch deletion of ${deletedCount} applications...`);
         await batch.commit();
-        console.log(`✅ Deleted ${deletedCount} county applications from Firebase`);
+        console.log(`✅ Successfully deleted ${deletedCount} county applications from Firebase`);
+        
+        if (skippedApps.length > 0) {
+          console.log(`ℹ️  Skipped ${skippedApps.length} non-county applications: ${skippedApps.join(', ')}`);
+        }
         
         // Now clean up related collections
         await this.clearRelatedCollections(appIds);
+        
+        // Verify deletion was successful
+        console.log("\n🔍 Verifying deletion...");
+        const verifySnapshot = await applicationsRef.get();
+        const remainingApps = [];
+        verifySnapshot.forEach(doc => {
+          const appId = doc.id;
+          if (appId.includes("county") || appId.includes("mehko")) {
+            remainingApps.push(appId);
+          }
+        });
+        
+        if (remainingApps.length === 0) {
+          console.log("✅ Verification successful: All county applications removed from Firebase");
+        } else {
+          console.log(`⚠️  Warning: ${remainingApps.length} county applications still remain: ${remainingApps.join(', ')}`);
+          this.errors.push(`Verification failed: ${remainingApps.length} county apps still exist`);
+        }
       } else {
         console.log("ℹ️  No county applications found in Firebase");
+        if (skippedApps.length > 0) {
+          console.log(`ℹ️  All ${skippedApps.length} applications were skipped: ${skippedApps.join(', ')}`);
+        }
       }
       
     } catch (error) {
@@ -309,14 +349,28 @@ class CountyCleaner {
     try {
       console.log("\n📁 Clearing local county files...");
       
-      // Clear data directory county files
-      const countyFiles = [
-        "alameda_county_mehko.json",
-        "lake_county_mehko.json", 
-        "santabarbara_mehko.json",
-        "test-county.json",
-        "county-batch.json"
+      // PROTECTED FILES - These should NEVER be deleted
+      const protectedFiles = [
+        "county-template.json",
+        "example-county.json", 
+        "county-targets.md",
+        "README.md"
       ];
+      
+      // Clear data directory county files - dynamically find them
+      const allDataFiles = readdirSync(DATA_DIR);
+      const countyFiles = allDataFiles.filter(filename => {
+        // Only delete files that look like county data (contain 'county' or 'mehko' and end with .json)
+        const isCountyFile = (filename.includes('county') || filename.includes('mehko')) && 
+                           filename.endsWith('.json') &&
+                           !protectedFiles.includes(filename);
+        
+        if (isCountyFile) {
+          console.log(`  🔍 Found county file: ${filename}`);
+        }
+        
+        return isCountyFile;
+      });
 
       countyFiles.forEach(filename => {
         const filepath = join(DATA_DIR, filename);
@@ -327,26 +381,32 @@ class CountyCleaner {
         }
       });
 
-      // Clear applications directory
-      const countyDirs = [
-        "alameda_county_mehko",
-        "lake_county_mehko",
-        "los_angeles_mehko", 
-        "sandiego_mehko",
-        "santabarbara_mehko",
-        "sonoma_county_mehko"
-      ];
+      // Clear applications directory - dynamically find county directories
+      if (existsSync(APPLICATIONS_DIR)) {
+        const allAppDirs = readdirSync(APPLICATIONS_DIR);
+        const countyDirs = allAppDirs.filter(dirname => {
+          // Only delete directories that look like county applications
+          const isCountyDir = (dirname.includes('county') || dirname.includes('mehko')) &&
+                            dirname !== 'test'; // Protect test directory
+          
+          if (isCountyDir) {
+            console.log(`  🔍 Found county directory: ${dirname}`);
+          }
+          
+          return isCountyDir;
+        });
 
-      countyDirs.forEach(dirname => {
-        const dirpath = join(APPLICATIONS_DIR, dirname);
-        if (existsSync(dirpath)) {
-          this.deleteDirectoryRecursive(dirpath);
-          console.log(`  🗑️  Deleted directory: ${dirname}`);
-          this.deletedCounties.push(dirname);
-        }
-      });
+        countyDirs.forEach(dirname => {
+          const dirpath = join(APPLICATIONS_DIR, dirname);
+          if (existsSync(dirpath)) {
+            this.deleteDirectoryRecursive(dirpath);
+            console.log(`  🗑️  Deleted directory: ${dirname}`);
+            this.deletedCounties.push(dirname);
+          }
+        });
+      }
 
-      // Clear applications.json files
+      // Clear applications.json files (these are generated, safe to delete)
       const appFiles = [
         join(PUBLIC_DATA_DIR, "applications.json"),
         join(SRC_DATA_DIR, "applications.json"),
@@ -360,13 +420,21 @@ class CountyCleaner {
         }
       });
 
-      // Reset manifest to empty array
+      // Reset manifest to empty array (this is safe to reset)
       const manifestPath = join(DATA_DIR, "manifest.json");
       if (existsSync(manifestPath)) {
         const emptyManifest = "[]\n";
-        require("fs").writeFileSync(manifestPath, emptyManifest);
+        writeFileSync(manifestPath, emptyManifest);
         console.log("  🔄 Reset manifest.json to empty array");
       }
+      
+      // Log what was protected
+      console.log("  🛡️  Protected template files:");
+      protectedFiles.forEach(file => {
+        if (existsSync(join(DATA_DIR, file))) {
+          console.log(`    • ${file}`);
+        }
+      });
       
     } catch (error) {
       console.error("❌ Error clearing local files:", error.message);
@@ -376,12 +444,12 @@ class CountyCleaner {
 
   deleteDirectoryRecursive(dirPath) {
     if (existsSync(dirPath)) {
-      const files = require("fs").readdirSync(dirPath);
+      const files = readdirSync(dirPath);
       
       files.forEach(file => {
         const curPath = join(dirPath, file);
         
-        if (require("fs").lstatSync(curPath).isDirectory()) {
+        if (lstatSync(curPath).isDirectory()) {
           this.deleteDirectoryRecursive(curPath);
         } else {
           unlinkSync(curPath);
@@ -396,6 +464,15 @@ class CountyCleaner {
     try {
       console.log("🚨 COUNTY CLEANUP SCRIPT - USE WITH CAUTION!");
       console.log("=" .repeat(50));
+      
+      // Show what will be protected
+      console.log("🛡️  PROTECTED FILES (will NOT be deleted):");
+      console.log("   • county-template.json - County creation template");
+      console.log("   • example-county.json - Example county structure");
+      console.log("   • county-targets.md - County documentation");
+      console.log("   • README.md - Data directory documentation");
+      console.log("   • test/ - Test directory");
+      console.log("");
       
       // Initialize Firebase
       await this.initializeFirebase();
