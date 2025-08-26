@@ -50,7 +50,7 @@ export default function ReportsViewer() {
     if (!window.confirm("Are you sure you want to delete this report? This cannot be undone.")) {
       return;
     }
-    
+
     try {
       await deleteReport(reportId);
       await loadReports(); // Refresh the list
@@ -94,6 +94,18 @@ export default function ReportsViewer() {
   if (loading) {
     return (
       <div className="reports-viewer">
+        {/* Admin Dashboard Navigation */}
+        <div className="admin-navigation">
+          <div className="nav-title">
+            📊 Reports Viewer
+          </div>
+          <a
+            href="/admin"
+            className="back-to-admin-btn"
+          >
+            ← Back to Admin Dashboard
+          </a>
+        </div>
         <div className="loading-state">
           <div className="spinner"></div>
           <p>Loading reports...</p>
@@ -118,8 +130,8 @@ export default function ReportsViewer() {
       <div className="reports-header">
         <h2>Issue Reports ({reports.length})</h2>
         <div className="header-actions">
-          <select 
-            value={filter} 
+          <select
+            value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="filter-select"
           >
@@ -127,8 +139,8 @@ export default function ReportsViewer() {
             <option value="application">Application Issues</option>
             <option value="step">Step Issues</option>
           </select>
-          <select 
-            value={statusFilter} 
+          <select
+            value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="filter-select"
           >
@@ -170,13 +182,13 @@ export default function ReportsViewer() {
           <div key={report.id} className="report-card">
             <div className="report-header">
               <div className="report-meta">
-                <span 
+                <span
                   className="severity-badge"
                   style={{ backgroundColor: getSeverityColor(report.severity) }}
                 >
                   {report.severity}
                 </span>
-                <span 
+                <span
                   className="status-badge"
                   style={{ backgroundColor: getStatusColor(report.status) }}
                 >

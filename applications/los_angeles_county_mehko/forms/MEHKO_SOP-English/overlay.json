@@ -14,6 +14,726 @@
       "fontSize": 11,
       "align": "left",
       "shrink": true
+    },
+    {
+      "id": "ai_field_1",
+      "label": "Name of Business (Doing Business As):",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        309,
+        118.25,
+        459,
+        130.75
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_2",
+      "label": "Number of Employees:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        25,
+        100,
+        75,
+        112.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_3",
+      "label": "Number of hours each employee will work per week:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        25,
+        125,
+        175,
+        137.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_4",
+      "label": "Employee 1:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        25,
+        150,
+        75,
+        162.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_5",
+      "label": "Employee 2:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        100,
+        150,
+        150,
+        162.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_6",
+      "label": "Employee 3:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        25,
+        175,
+        75,
+        187.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_7",
+      "label": "Employee 4:",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        100,
+        175,
+        150,
+        187.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_8",
+      "label": "Do you plan to operate a Compact Mobile Food Operation (CMFO) in combination with the MEHKO?",
+      "page": 0,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        200,
+        42.5,
+        210
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_9",
+      "label": "I understand that an additional permit is required for CMFO.",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        25,
+        225,
+        225,
+        237.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_10",
+      "label": "Initials",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        25,
+        10,
+        75,
+        20
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_11",
+      "label": "Log",
+      "page": 1,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        50,
+        42.5,
+        60
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_12",
+      "label": "Phone app",
+      "page": 1,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        65,
+        42.5,
+        75
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_13",
+      "label": "Receipts",
+      "page": 1,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        80,
+        42.5,
+        90
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_14",
+      "label": "Other (specify)",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        40,
+        80,
+        140,
+        90
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_15",
+      "label": "Website",
+      "page": 2,
+      "type": "text",
+      "rect": [
+        25,
+        15,
+        175,
+        27.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_16",
+      "label": "Social Media",
+      "page": 2,
+      "type": "text",
+      "rect": [
+        25,
+        30,
+        175,
+        42.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_17",
+      "label": "Internet Intermediary",
+      "page": 2,
+      "type": "text",
+      "rect": [
+        25,
+        60,
+        175,
+        72.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_18",
+      "label": "Non-Potentially Hazardous Foods Only",
+      "page": 2,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        100,
+        42.5,
+        110
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_19",
+      "label": "Potentially Hazardous Foods",
+      "page": 2,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        115,
+        42.5,
+        125
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_20",
+      "label": "Menu Items",
+      "page": 2,
+      "type": "text",
+      "rect": [
+        25,
+        150,
+        175,
+        175
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_21",
+      "label": "List of Ingredients",
+      "page": 2,
+      "type": "text",
+      "rect": [
+        25,
+        185,
+        175,
+        210
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_22",
+      "label": "Dining room",
+      "page": 4,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        50,
+        42.5,
+        60
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_23",
+      "label": "Kitchen table",
+      "page": 4,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        65,
+        42.5,
+        75
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_24",
+      "label": "Backyard",
+      "page": 4,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        80,
+        42.5,
+        90
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_25",
+      "label": "Patio",
+      "page": 4,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        95,
+        42.5,
+        105
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_26",
+      "label": "Not served on site",
+      "page": 4,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        110,
+        42.5,
+        120
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_27",
+      "label": "Will the MEHKO deliver food products to customers?",
+      "page": 4,
+      "type": "radio",
+      "rect": [
+        17.5,
+        125,
+        42.5,
+        135
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_28",
+      "label": "If yes, who will deliver the food?",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        140,
+        175,
+        152.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_29",
+      "label": "How will food be transported?",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        155,
+        175,
+        167.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_30",
+      "label": "Distance:",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        170,
+        75,
+        182.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_31",
+      "label": "Time:",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        100,
+        170,
+        150,
+        182.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_32",
+      "label": "How food will be properly held hot/cold during transportation?",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        185,
+        175,
+        197.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_33",
+      "label": "Describe how food will be packaged for transport:",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        200,
+        175,
+        212.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_34",
+      "label": "Initials",
+      "page": 4,
+      "type": "text",
+      "rect": [
+        25,
+        225,
+        75,
+        237.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_35",
+      "label": "Initials",
+      "page": 5,
+      "type": "text",
+      "rect": [
+        25,
+        25,
+        75,
+        35
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_36",
+      "label": "1 or 2 Compartment sink",
+      "page": 6,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        150,
+        42.5,
+        160
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_37",
+      "label": "Dishwasher",
+      "page": 6,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        165,
+        42.5,
+        175
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_38",
+      "label": "Other:",
+      "page": 6,
+      "type": "text",
+      "rect": [
+        40,
+        165,
+        140,
+        177.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_39",
+      "label": "How will the sanitizer concentration be tested?",
+      "page": 6,
+      "type": "text",
+      "rect": [
+        25,
+        185,
+        175,
+        197.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_40",
+      "label": "Initials",
+      "page": 6,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        210,
+        42.5,
+        220
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_41",
+      "label": "Public water system",
+      "page": 7,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        75,
+        42.5,
+        85
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_42",
+      "label": "Private well",
+      "page": 7,
+      "type": "checkbox",
+      "rect": [
+        17.5,
+        90,
+        42.5,
+        100
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_43",
+      "label": "Initials",
+      "page": 7,
+      "type": "text",
+      "rect": [
+        25,
+        110,
+        75,
+        122.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_44",
+      "label": "Additional waste bins",
+      "page": 7,
+      "type": "text",
+      "rect": [
+        25,
+        150,
+        175,
+        162.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_45",
+      "label": "Signature",
+      "page": 8,
+      "type": "text",
+      "rect": [
+        25,
+        150,
+        225,
+        162.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_46",
+      "label": "Print Name",
+      "page": 8,
+      "type": "text",
+      "rect": [
+        25,
+        170,
+        225,
+        182.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_47",
+      "label": "Date",
+      "page": 8,
+      "type": "text",
+      "rect": [
+        25,
+        190,
+        125,
+        202.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_48",
+      "label": "Title",
+      "page": 8,
+      "type": "text",
+      "rect": [
+        125,
+        190,
+        225,
+        202.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
     }
   ]
 }

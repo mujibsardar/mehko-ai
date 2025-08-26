@@ -81,10 +81,18 @@ export default function Mapper() {
   const [imgUrl, setImgUrl] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [showAIMapper, setShowAIMapper] = useState(false);
   const [editMode, setEditMode] = useState(false); // New: Field placement mode
   const [draggedField, setDraggedField] = useState(null); // New: Track field being dragged
   const [resizeHandle, setResizeHandle] = useState(null); // New: Track resize handle
+
+  // AI Field Extraction state
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [currentStep, setCurrentStep] = useState("idle");
+  const [progress, setProgress] = useState(0);
+  const [aiError, setAiError] = useState(null);
+  const [selectedFields, setSelectedFields] = useState([]);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   // Field reordering state
   const [reorderMode, setReorderMode] = useState(false);
@@ -104,6 +112,186 @@ export default function Mapper() {
 
   const canvasRef = useRef(null);
   const drawingRef = useRef(null);
+  const fileInputRef = useRef(null);
+
+  // AI Field Extraction Functions
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    console.log("File selected:", file);
+
+    if (!file || !file.type.includes("pdf")) {
+      setAiError("Please select a valid PDF file");
+      return;
+    }
+
+    setIsProcessing(true);
+    setCurrentStep("analyzing");
+    setProgress(0);
+    setAiError(null);
+
+    try {
+      // Step 1: Upload PDF and get AI analysis
+      setProgress(20);
+      console.log("Starting PDF upload...");
+
+      const formData = new FormData();
+      formData.append("pdf", file);
+
+      console.log(
+        "Sending request to:",
+        "http://localhost:3000/api/ai-analyze-pdf"
+      );
+
+      const uploadResponse = await fetch(
+        "http://localhost:3000/api/ai-analyze-pdf",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      console.log("Upload response status:", uploadResponse.status);
+      console.log("Upload response ok:", uploadResponse.ok);
+
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text();
+        console.error("Upload failed with response:", errorText);
+        throw new Error(
+          `Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`
+        );
+      }
+
+      const analysisData = await uploadResponse.json();
+      console.log("Analysis data received:", analysisData);
+      setProgress(60);
+
+      // Step 2: Process AI suggestions
+      setCurrentStep("mapping");
+      const suggestions = processAISuggestions(analysisData.fields);
+      console.log("Processed suggestions:", suggestions);
+      setAiSuggestions(suggestions);
+      setProgress(80);
+
+      // Step 3: Auto-select high-confidence fields
+      setCurrentStep("reviewing");
+      const highConfidenceFields = suggestions.filter(
+        (f) => f.confidence > 0.8
+      );
+      console.log("High confidence fields:", highConfidenceFields);
+      setSelectedFields(highConfidenceFields.map((f) => f.id));
+      setProgress(100);
+    } catch (err) {
+      console.error("Error in handleFileUpload:", err);
+      setAiError(err.message);
+      setCurrentStep("idle");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const processAISuggestions = (aiFields) => {
+    return aiFields.map((field, index) => ({
+      id: `ai_field_${index + 1}`,
+      label: field.label || `Field ${index + 1}`,
+      page: field.page || 0,
+      type: field.type || "text",
+      rect: field.rect || [0, 0, 100, 20],
+      fontSize: field.fontSize || 11,
+      align: field.align || "left",
+      shrink: field.shrink !== false,
+      confidence: field.confidence || 0.5,
+      aiReasoning: field.reasoning || "AI detected form field",
+      originalId: field.originalId,
+      // Add metadata for better coordinate handling
+      originalRect: field.rect,
+      width: field.rect ? field.rect[2] - field.rect[0] : 100,
+      height: field.rect ? field.rect[3] - field.rect[1] : 20,
+    }));
+  };
+
+  const handleFieldSelection = (fieldId, isSelected) => {
+    if (isSelected) {
+      setSelectedFields((prev) => [...prev, fieldId]);
+    } else {
+      setSelectedFields((prev) => prev.filter((id) => id !== fieldId));
+    }
+  };
+
+  const handleApplyMapping = async () => {
+    if (selectedFields.length === 0) {
+      setAiError("Please select at least one field to apply");
+      return;
+    }
+
+    try {
+      // Instead of adding fields directly to overlay, just mark them as ready for dragging
+      // The fields will remain in the tray for manual placement
+      setCurrentStep("fields-ready");
+      setAiError(null);
+
+      // Show success message
+      console.log(`${selectedFields.length} fields are now ready for dragging from the tray`);
+
+      // Keep the selected fields in the tray - don't clear them yet
+      // User will drag them individually to the PDF
+    } catch (err) {
+      setAiError(err.message);
+    }
+  };
+
+  // Field Tray Drag and Drop Functions
+  const handleFieldTrayDragStart = (e, field) => {
+    e.dataTransfer.setData('application/json', JSON.stringify(field));
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleCanvasDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setIsDragOver(true);
+  };
+
+  const handleCanvasDragLeave = (e) => {
+    // Only set to false if we're leaving the container entirely
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsDragOver(false);
+    }
+  };
+
+  const handleCanvasDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const fieldData = e.dataTransfer.getData('application/json');
+    if (fieldData) {
+      try {
+        const field = JSON.parse(fieldData);
+        const rect = canvasRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Create a new field at the drop location
+        const newField = {
+          ...field,
+          id: `${field.id}_${Date.now()}`,
+          page: page,
+          rect: [x - 50, y - 10, x + 50, y + 10], // Default size
+        };
+
+        const newOverlay = {
+          ...overlay,
+          fields: [...overlay.fields, newField],
+        };
+
+        setOverlay(newOverlay);
+        setSelectedId(newField.id);
+        scheduleAutoSave();
+      } catch (err) {
+        console.error('Error parsing dropped field:', err);
+      }
+    }
+  };
+
+
 
   // Load template (convert saved points -> screen pixels)
   useEffect(() => {
@@ -1012,929 +1200,1165 @@ export default function Mapper() {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 320px",
-        gap: 12,
-        padding: 12,
-      }}
-    >
-      <div>
-        <div
+    <div>
+      {/* Admin Dashboard Navigation */}
+      <div style={{
+        marginBottom: '16px',
+        padding: '12px',
+        backgroundColor: '#f8fafc',
+        border: '1px solid #e2e8f0',
+        borderRadius: '8px',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      }}>
+        <div style={{ fontWeight: '600', color: '#475569' }}>
+          🤖 AI Field Mapping Tool
+        </div>
+        <Link
+          to="/admin"
           style={{
-            display: "flex",
-            gap: 8,
-            alignItems: "center",
-            marginBottom: 8,
-            flexWrap: "wrap",
-          }}
-        >
-          <strong>Mapper</strong>
-          <code>
-            {app}/{form}
-          </code>
-
-          {/* Save Status and Controls */}
-          <div style={{
+            background: '#3b82f6',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '6px',
+            textDecoration: 'none',
+            fontWeight: '500',
+            fontSize: '14px',
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
-            marginLeft: '16px'
-          }}>
-            <SaveStatusIndicator />
-
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <SaveButton
-                onClick={handleManualSave}
-                disabled={saveStatus === SAVE_STATUS.SAVING || !unsavedChanges}
-                variant={unsavedChanges ? 'primary' : 'secondary'}
-                title={unsavedChanges ? "Save all changes (Ctrl+S)" : "No changes to save"}
-              >
-                {saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' :
-                  unsavedChanges ? '💾 Save Application' : '✓ Saved'}
-              </SaveButton>
-
-              {unsavedChanges && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '12px',
-                  color: '#d97706',
-                  backgroundColor: '#fef3c7',
-                  padding: '6px 10px',
-                  borderRadius: '6px',
-                  border: '1px solid #f59e0b'
-                }}>
-                  <span>
-                    {autoSaveCountdown > 0 ? `Auto-saving in ${autoSaveCountdown}s...` : 'Changes pending'}
-                  </span>
-                  {autoSaveCountdown > 0 && (
-                    <div style={{
-                      width: '40px',
-                      height: '4px',
-                      backgroundColor: '#f59e0b',
-                      borderRadius: '2px',
-                      overflow: 'hidden'
-                    }}>
-                      <div style={{
-                        width: `${(autoSaveCountdown / 2) * 100}%`,
-                        height: '100%',
-                        backgroundColor: '#10b981',
-                        transition: 'width 1s linear'
-                      }} />
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Quick save button for immediate save */}
-              {unsavedChanges && (
-                <button
-                  onClick={handleManualSave}
-                  disabled={saveStatus === SAVE_STATUS.SAVING}
-                  style={{
-                    padding: '4px 8px',
-                    fontSize: '11px',
-                    backgroundColor: '#10b981',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: saveStatus === SAVE_STATUS.SAVING ? 'not-allowed' : 'pointer',
-                    opacity: saveStatus === SAVE_STATUS.SAVING ? 0.6 : 1
-                  }}
-                  title="Save immediately (bypass auto-save)"
-                >
-                  Save Now
-                </button>
-              )}
-            </div>
-          </div>
-
-          <button
-            onClick={() => setShowAIMapper(true)}
-            style={{
-              background: "linear-gradient(135deg, #10b981, #059669)",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "6px",
-              fontWeight: "600",
-              cursor: "pointer",
-              marginLeft: "8px",
-            }}
-          >
-            🤖 AI Field Detection
-          </button>
-          <button
-            onClick={toggleEditMode}
-            style={{
-              background: editMode ? "#dc2626" : "#3b82f6",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "6px",
-              fontWeight: "600",
-              cursor: "pointer",
-              marginLeft: "8px",
-            }}
-          >
-            {editMode ? "✋ Exit Edit Mode" : "✏️ Edit Fields"}
-          </button>
-
-          <button
-            onClick={toggleReorderMode}
-            style={{
-              background: reorderMode ? "#dc2626" : "#8b5cf6",
-              color: "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "6px",
-              fontWeight: "600",
-              cursor: "pointer",
-              marginLeft: "8px",
-            }}
-          >
-            {reorderMode ? "✋ Exit Reorder Mode" : "🔄 Reorder Fields"}
-          </button>
-          <div
-            style={{
-              marginLeft: "auto",
-              display: "flex",
-              gap: 6,
-              alignItems: "center",
-            }}
-          >
-            <button
-              disabled={page <= 0}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-            >
-              ◀ Prev
-            </button>
-            <div>
-              Page {page + 1} / {pages}
-            </div>
-            <button
-              disabled={page >= pages - 1}
-              onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
-            >
-              Next ▶
-            </button>
-          </div>
-        </div>
-
-        {/* Save Help Section */}
-        {!unsavedChanges && (
-          <div style={{
-            backgroundColor: '#eff6ff',
-            border: '1px solid #bfdbfe',
-            borderRadius: '6px',
-            padding: '12px',
-            marginBottom: '16px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '18px' }}>💡</span>
-              <div>
-                <div style={{ fontWeight: '600', color: '#1e40af' }}>Save System</div>
-                <div style={{ fontSize: '14px', color: '#1d4ed8' }}>
-                  • <strong>Auto-save:</strong> Changes are automatically saved after 2 seconds of inactivity
-                  • <strong>Manual save:</strong> Click "Save Application" or use <kbd style={{ backgroundColor: '#e5e7eb', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>Ctrl+S</kbd>
-                  • <strong>Field save:</strong> Individual field changes are saved automatically
-                  • <strong>Escape:</strong> Press <kbd style={{ backgroundColor: '#e5e7eb', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>Esc</kbd> to exit edit mode
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Save Summary when changes are pending */}
-        {unsavedChanges && (
-          <div style={{
-            backgroundColor: '#fef3c7',
-            border: '1px solid #f59e0b',
-            borderRadius: '6px',
-            padding: '12px',
-            marginBottom: '16px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '18px' }}>⚠️</span>
-              <div>
-                <div style={{ fontWeight: '600', color: '#92400e' }}>Unsaved Changes</div>
-                <div style={{ fontSize: '14px', color: '#92400e' }}>
-                  You have unsaved changes that will be automatically saved in {autoSaveCountdown > 0 ? `${autoSaveCountdown} seconds` : '2 seconds'}.
-                  <br />
-                  <strong>Tip:</strong> Use "Save Now" for immediate save or "Save Application" to save all changes at once.
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Save Error Display */}
-        {saveError && (
-          <div style={{
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fecaca',
-            borderRadius: '6px',
-            padding: '12px',
-            marginBottom: '16px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '18px', color: '#dc2626' }}>⚠</span>
-              <div>
-                <div style={{ fontWeight: '600', color: '#991b1b' }}>Save Error</div>
-                <div style={{ fontSize: '14px', color: '#dc2626' }}>{saveError}</div>
-              </div>
-              <button
-                onClick={() => setSaveError(null)}
-                style={{
-                  marginLeft: 'auto',
-                  color: '#f87171',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  padding: '4px'
-                }}
-                onMouseEnter={(e) => e.target.style.color = '#dc2626'}
-                onMouseLeave={(e) => e.target.style.color = '#f87171'}
-              >
-                ✕
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Edit Mode Instructions */}
-        {editMode && (
-          <div
-            style={{
-              background: "#fef3c7",
-              border: "1px solid #f59e0b",
-              borderRadius: "6px",
-              padding: "8px 12px",
-              marginBottom: "8px",
-              fontSize: "14px",
-            }}
-          >
-            <strong>✏️ Edit Mode Active:</strong>
-            {editMode && draggedField
-              ? " Drag fields to reposition"
-              : editMode && resizeHandle
-                ? " Resize field by dragging handles"
-                : " Click and drag fields to move, drag handles to resize"}
-          </div>
-        )}
-
-        {/* Reorder Mode Instructions */}
-        {reorderMode && (
-          <div
-            style={{
-              background: "#f0f9ff",
-              border: "1px solid #0ea5e9",
-              borderRadius: "6px",
-              padding: "8px 12px",
-              marginBottom: "8px",
-              fontSize: "14px",
-            }}
-          >
-            <strong>🔄 Reorder Mode Active:</strong>
-            Drag and drop fields to reorder them. The order will be preserved when users fill out the form.
-          </div>
-        )}
-
-        <div
-          style={{
-            border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #ccc",
-            maxHeight: "70vh",
-            overflow: "auto",
-            backgroundColor: unsavedChanges ? "#fef3c7" : "#f9f9f9",
-            transition: "all 0.2s ease",
-            position: "relative"
+            gap: '6px'
           }}
         >
-          {unsavedChanges && (
-            <div style={{
-              position: "absolute",
-              top: "8px",
-              right: "8px",
-              backgroundColor: "#f59e0b",
-              color: "white",
-              padding: "4px 8px",
-              borderRadius: "4px",
-              fontSize: "12px",
-              fontWeight: "600",
-              zIndex: 10
-            }}>
-              ⚠ Unsaved Changes
-            </div>
-          )}
-
-          {reorderMode && (
-            <div style={{
-              position: "absolute",
-              top: "8px",
-              left: "8px",
-              backgroundColor: "#8b5cf6",
-              color: "white",
-              padding: "4px 8px",
-              borderRadius: "4px",
-              fontSize: "12px",
-              fontWeight: "600",
-              zIndex: 10
-            }}>
-              🔄 Reorder Mode
-            </div>
-          )}
-          <canvas
-            ref={canvasRef}
-            style={{
-              cursor: editMode ? "move" : "crosshair",
-              display: "block",
-            }}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-          />
-        </div>
+          ← Back to Admin Dashboard
+        </Link>
       </div>
 
-      {/* Editor */}
-      <div style={{
-        border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #eee",
-        padding: 10,
-        borderRadius: 8,
-        backgroundColor: unsavedChanges ? '#fef3c7' : 'white',
-        transition: 'all 0.2s ease'
-      }}>
-        <div style={{
-          fontWeight: 700,
-          marginBottom: 8,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}>
-          Field
-          {unsavedChanges && (
-            <span style={{
-              fontSize: '12px',
-              color: '#d97706',
-              backgroundColor: '#fef3c7',
-              padding: '2px 6px',
-              borderRadius: '4px',
-              border: '1px solid #f59e0b'
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 280px 280px",
+          gap: 12,
+          padding: 12,
+        }}
+      >
+        <div>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+              marginBottom: 8,
+              flexWrap: "wrap",
+            }}
+          >
+            <strong>Mapper</strong>
+            <code>
+              {app}/{form}
+            </code>
+
+            {/* Save Status and Controls */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              marginLeft: '16px'
             }}>
-              ⚠ Changes pending
-            </span>
-          )}
-        </div>
-        {!selected && <div style={{ color: "#666" }}>Click a box to edit</div>}
-        {selected && (
-          <div style={{ display: "grid", gap: 8 }}>
-            <label>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                ID
+              <SaveStatusIndicator />
+
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <SaveButton
+                  onClick={handleManualSave}
+                  disabled={saveStatus === SAVE_STATUS.SAVING || !unsavedChanges}
+                  variant={unsavedChanges ? 'primary' : 'secondary'}
+                  title={unsavedChanges ? "Save all changes (Ctrl+S)" : "No changes to save"}
+                >
+                  {saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' :
+                    unsavedChanges ? '💾 Save Application' : '✓ Saved'}
+                </SaveButton>
+
                 {unsavedChanges && (
-                  <span style={{ fontSize: '10px', color: '#d97706' }}>●</span>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    fontSize: '12px',
+                    color: '#d97706',
+                    backgroundColor: '#fef3c7',
+                    padding: '6px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid #f59e0b'
+                  }}>
+                    <span>
+                      {autoSaveCountdown > 0 ? `Auto-saving in ${autoSaveCountdown}s...` : 'Changes pending'}
+                    </span>
+                    {autoSaveCountdown > 0 && (
+                      <div style={{
+                        width: '40px',
+                        height: '4px',
+                        backgroundColor: '#f59e0b',
+                        borderRadius: '2px',
+                        overflow: 'hidden'
+                      }}>
+                        <div style={{
+                          width: `${(autoSaveCountdown / 2) * 100}%`,
+                          height: '100%',
+                          backgroundColor: '#10b981',
+                          transition: 'width 1s linear'
+                        }} />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Quick save button for immediate save */}
+                {unsavedChanges && (
+                  <button
+                    onClick={handleManualSave}
+                    disabled={saveStatus === SAVE_STATUS.SAVING}
+                    style={{
+                      padding: '4px 8px',
+                      fontSize: '11px',
+                      backgroundColor: '#10b981',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: saveStatus === SAVE_STATUS.SAVING ? 'not-allowed' : 'pointer',
+                      opacity: saveStatus === SAVE_STATUS.SAVING ? 0.6 : 1
+                    }}
+                    title="Save immediately (bypass auto-save)"
+                  >
+                    Save Now
+                  </button>
                 )}
               </div>
-              <input
-                value={selected.id}
-                onChange={(e) => updateSelected({ id: e.target.value })}
-                style={{
-                  border: unsavedChanges ? '1px solid #f59e0b' : '1px solid #d1d5db',
-                  borderRadius: '4px',
-                  padding: '4px 8px',
-                  width: '100%'
-                }}
-              />
-            </label>
-            <label>
-              <div>Label</div>
-              <input
-                value={selected.label || ""}
-                onChange={(e) => updateSelected({ label: e.target.value })}
-              />
-            </label>
-            <label>
-              <div>Type</div>
-              <select
-                value={selected.type || "text"}
-                onChange={(e) => updateSelected({ type: e.target.value })}
-              >
-                <option value="text">text</option>
-                <option value="checkbox">checkbox</option>
-                <option value="signature">signature</option>
-              </select>
-            </label>
-            <label>
-              <div>Font Size</div>
-              <input
-                type="number"
-                value={selected.fontSize || 11}
-                onChange={(e) =>
-                  updateSelected({ fontSize: Number(e.target.value || 11) })
-                }
-              />
-            </label>
-            <label>
-              <div>Align</div>
-              <select
-                value={selected.align || "left"}
-                onChange={(e) => updateSelected({ align: e.target.value })}
-              >
-                <option>left</option>
-                <option>center</option>
-                <option>right</option>
-              </select>
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={!!selected.shrink}
-                onChange={(e) => updateSelected({ shrink: e.target.checked })}
-              />
-              <span style={{ marginLeft: 6 }}>Shrink to fit</span>
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={!!selected.uppercase}
-                onChange={(e) =>
-                  updateSelected({ uppercase: e.target.checked })
-                }
-              />
-              <span style={{ marginLeft: 6 }}>Uppercase</span>
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={!!selected.bg}
-                onChange={(e) => updateSelected({ bg: e.target.checked })}
-              />
-              <span style={{ marginLeft: 6 }}>White-out BG</span>
-            </label>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                onClick={delSelected}
-                style={{
-                  color: "#dc2626",
-                  background: 'none',
-                  border: '1px solid #dc2626',
-                  padding: '6px 12px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = '#dc2626';
-                  e.target.style.color = 'white';
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = 'transparent';
-                  e.target.style.color = '#dc2626';
-                }}
-              >
-                Delete
-              </button>
-              <SaveButton
-                onClick={() => updateSelected({})}
-                variant="success"
-                disabled={saveStatus === SAVE_STATUS.SAVING}
-                title="Save field changes (auto-saves in 2s)"
-              >
-                {saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' : '💾 Save Field'}
-              </SaveButton>
-            </div>
-          </div>
-        )}
-        <hr style={{ margin: "12px 0" }} />
-
-        {/* Field Order Management */}
-        {reorderMode && (
-          <div style={{ marginBottom: "16px" }}>
-            <div style={{ marginBottom: "8px" }}>
-              <strong>Field Order (Page {page + 1}):</strong>
-            </div>
-            <div style={{
-              fontSize: "12px",
-              color: "#666",
-              maxHeight: "200px",
-              overflowY: "auto",
-              border: "1px solid #e5e7eb",
-              borderRadius: "4px",
-              padding: "8px"
-            }}>
-              {overlay.fields
-                .filter(f => f.page === page)
-                .map((field, index) => (
-                  <div
-                    key={field.id}
-                    draggable={reorderMode}
-                    onDragStart={(e) => handleFieldDragStart(e, field.id)}
-                    onDragOver={(e) => handleFieldDragOver(e, field.id)}
-                    onDrop={(e) => handleFieldDrop(e, field.id)}
-                    onDragEnd={handleFieldDragEnd}
-                    style={{
-                      padding: "6px 8px",
-                      margin: "2px 0",
-                      backgroundColor: draggedFieldId === field.id ? "#fef3c7" :
-                        dragOverFieldId === field.id ? "#dbeafe" : "#f9fafb",
-                      border: draggedFieldId === field.id ? "1px solid #f59e0b" :
-                        dragOverFieldId === field.id ? "1px solid #3b82f6" : "1px solid #e5e7eb",
-                      borderRadius: "4px",
-                      cursor: reorderMode ? "grab" : "default",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px"
-                    }}
-                  >
-                    <span style={{
-                      fontSize: "10px",
-                      color: "#6b7280",
-                      minWidth: "20px"
-                    }}>
-                      {index + 1}
-                    </span>
-                    <span style={{ flex: 1, fontSize: "11px" }}>
-                      {field.label || field.id}
-                    </span>
-                    <span style={{
-                      fontSize: "10px",
-                      color: field.id.startsWith("ai_field_") ? "#3b82f6" : "#10b981"
-                    }}>
-                      {field.id.startsWith("ai_field_") ? "🤖" : "✏️"}
-                    </span>
-                  </div>
-                ))}
-            </div>
-            <div style={{
-              fontSize: "11px",
-              color: "#6b7280",
-              marginTop: "8px",
-              fontStyle: "italic"
-            }}>
-              Drag fields to reorder. Order affects form display sequence.
             </div>
 
-            {/* Field Order Actions */}
-            <div style={{
-              marginTop: "12px",
-              display: "flex",
-              gap: "8px",
-              flexDirection: "column"
-            }}>
-              <button
-                onClick={() => {
-                  const orderData = {
-                    app: app,
-                    form: form,
-                    page: page,
-                    fieldOrder: overlay.fields
-                      .filter(f => f.page === page)
-                      .map(f => ({ id: f.id, label: f.label }))
-                  };
-                  const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: 'application/json' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `${app}_${form}_page${page + 1}_field_order.json`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "11px",
-                  backgroundColor: "#3b82f6",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer"
-                }}
-                title="Export current field order"
-              >
-                📤 Export Order
-              </button>
 
-              <button
-                onClick={() => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = '.json';
-                  input.onchange = (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (e) => {
-                        try {
-                          const orderData = JSON.parse(e.target.result);
-                          if (orderData.app === app && orderData.form === form && orderData.page === page) {
-                            // Reorder fields based on imported order
-                            const newOrder = orderData.fieldOrder.map(f => f.id);
-                            const pageFields = overlay.fields.filter(f => f.page === page);
-                            const otherFields = overlay.fields.filter(f => f.page !== page);
-
-                            // Sort page fields according to imported order
-                            const sortedPageFields = newOrder.map(id =>
-                              pageFields.find(f => f.id === id)
-                            ).filter(Boolean);
-
-                            // Add any fields not in the imported order
-                            const missingFields = pageFields.filter(f => !newOrder.includes(f.id));
-                            sortedPageFields.push(...missingFields);
-
-                            const newOverlay = {
-                              ...overlay,
-                              fields: [...otherFields, ...sortedPageFields]
-                            };
-
-                            setOverlay(newOverlay);
-                            scheduleAutoSave();
-                            alert('Field order imported successfully!');
-                          } else {
-                            alert('Import file does not match current form/page');
-                          }
-                        } catch (error) {
-                          alert('Invalid import file format');
-                        }
-                      };
-                      reader.readAsText(file);
-                    }
-                  };
-                  input.click();
-                }}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "11px",
-                  backgroundColor: "#f59e0b",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer"
-                }}
-                title="Import field order from file"
-              >
-                📥 Import Order
-              </button>
-
-              <button
-                onClick={logFieldOrder}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "11px",
-                  backgroundColor: "#6b7280",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer"
-                }}
-                title="Log current field order to console for debugging"
-              >
-                🐛 Debug Order
-              </button>
-            </div>
-
-            {/* Quick Insert Field */}
-            <div style={{ marginTop: "12px" }}>
-              <button
-                onClick={() => {
-                  const newField = {
-                    id: `f_${Date.now()}`,
-                    label: `New Field ${overlay.fields.filter(f => f.page === page).length + 1}`,
-                    page: page,
-                    type: "text",
-                    rect: [100, 100, 200, 120],
-                    fontSize: 11,
-                    align: "left",
-                    shrink: true,
-                  };
-                  insertFieldAtPosition(0, newField); // Insert at top
-                }}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "11px",
-                  backgroundColor: "#10b981",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  width: "100%"
-                }}
-                title="Add new field at the top of this page"
-              >
-                ➕ Insert Field at Top
-              </button>
-
-              <button
-                onClick={() => setShowInsertDialog(true)}
-                style={{
-                  padding: "6px 12px",
-                  fontSize: "11px",
-                  backgroundColor: "#8b5cf6",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  width: "100%",
-                  marginTop: "8px"
-                }}
-                title="Insert field at specific position"
-              >
-                📍 Insert at Position
-              </button>
-            </div>
-          </div>
-        )}
-
-        <div>
-          <div style={{ marginBottom: "8px" }}>
-            <strong>Field Statistics:</strong>
-          </div>
-          <div style={{ fontSize: "14px", color: "#666" }}>
-            <div>📊 Total: {fieldStats.total}</div>
-            <div>🤖 AI Detected: {fieldStats.ai}</div>
-            <div>✏️ Manual: {fieldStats.manual}</div>
-          </div>
-        </div>
-      </div>
-
-      {/* AI Field Mapper Modal */}
-      {showAIMapper && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              borderRadius: "16px",
-              maxWidth: "800px",
-              width: "100%",
-              maxHeight: "90vh",
-              overflow: "auto",
-              position: "relative",
-            }}
-          >
             <button
-              onClick={() => setShowAIMapper(false)}
+              onClick={toggleEditMode}
               style={{
-                position: "absolute",
-                top: "16px",
-                right: "16px",
-                background: "#f3f4f6",
+                background: editMode ? "#dc2626" : "#3b82f6",
+                color: "white",
                 border: "none",
-                borderRadius: "50%",
-                width: "32px",
-                height: "32px",
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontWeight: "600",
                 cursor: "pointer",
-                fontSize: "18px",
+                marginLeft: "8px",
               }}
             >
-              ✕
+              {editMode ? "✋ Exit Edit Mode" : "✏️ Edit Fields"}
             </button>
-            <AIFieldMapper
-              app={app}
-              form={form}
-              onMappingComplete={(newOverlay) => {
-                handleOverlayUpdate(newOverlay);
-                setShowAIMapper(false);
-                // Auto-enable edit mode after AI detection for field placement
-                setEditMode(true);
+
+            <button
+              onClick={toggleReorderMode}
+              style={{
+                background: reorderMode ? "#dc2626" : "#8b5cf6",
+                color: "white",
+                border: "none",
+                padding: "8px 16px",
+                borderRadius: "6px",
+                fontWeight: "600",
+                cursor: "pointer",
+                marginLeft: "8px",
               }}
+            >
+              {reorderMode ? "✋ Exit Reorder Mode" : "🔄 Reorder Fields"}
+            </button>
+            <div
+              style={{
+                marginLeft: "auto",
+                display: "flex",
+                gap: 6,
+                alignItems: "center",
+              }}
+            >
+              <button
+                disabled={page <= 0}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+              >
+                ◀ Prev
+              </button>
+              <div>
+                Page {page + 1} / {pages}
+              </div>
+              <button
+                disabled={page >= pages - 1}
+                onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
+              >
+                Next ▶
+              </button>
+            </div>
+          </div>
+
+          {/* Save Help Section */}
+          {!unsavedChanges && (
+            <div style={{
+              backgroundColor: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              borderRadius: '6px',
+              padding: '12px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>💡</span>
+                <div>
+                  <div style={{ fontWeight: '600', color: '#1e40af' }}>Save System</div>
+                  <div style={{ fontSize: '14px', color: '#1d4ed8' }}>
+                    • <strong>Auto-save:</strong> Changes are automatically saved after 2 seconds of inactivity
+                    • <strong>Manual save:</strong> Click "Save Application" or use <kbd style={{ backgroundColor: '#e5e7eb', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>Ctrl+S</kbd>
+                    • <strong>Field save:</strong> Individual field changes are saved automatically
+                    • <strong>Escape:</strong> Press <kbd style={{ backgroundColor: '#e5e7eb', padding: '2px 6px', borderRadius: '3px', fontSize: '12px' }}>Esc</kbd> to exit edit mode
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Save Summary when changes are pending */}
+          {unsavedChanges && (
+            <div style={{
+              backgroundColor: '#fef3c7',
+              border: '1px solid #f59e0b',
+              borderRadius: '6px',
+              padding: '12px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>⚠️</span>
+                <div>
+                  <div style={{ fontWeight: '600', color: '#92400e' }}>Unsaved Changes</div>
+                  <div style={{ fontSize: '14px', color: '#92400e' }}>
+                    You have unsaved changes that will be automatically saved in {autoSaveCountdown > 0 ? `${autoSaveCountdown} seconds` : '2 seconds'}.
+                    <br />
+                    <strong>Tip:</strong> Use "Save Now" for immediate save or "Save Application" to save all changes at once.
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Save Error Display */}
+          {saveError && (
+            <div style={{
+              backgroundColor: '#fef2f2',
+              border: '1px solid #fecaca',
+              borderRadius: '6px',
+              padding: '12px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px', color: '#dc2626' }}>⚠</span>
+                <div>
+                  <div style={{ fontWeight: '600', color: '#991b1b' }}>Save Error</div>
+                  <div style={{ fontSize: '14px', color: '#dc2626' }}>{saveError}</div>
+                </div>
+                <button
+                  onClick={() => setSaveError(null)}
+                  style={{
+                    marginLeft: 'auto',
+                    color: '#f87171',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    padding: '4px'
+                  }}
+                  onMouseEnter={(e) => e.target.style.color = '#dc2626'}
+                  onMouseLeave={(e) => e.target.style.color = '#f87171'}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Edit Mode Instructions */}
+          {editMode && (
+            <div
+              style={{
+                background: "#fef3c7",
+                border: "1px solid #f59e0b",
+                borderRadius: "6px",
+                padding: "8px 12px",
+                marginBottom: "8px",
+                fontSize: "14px",
+              }}
+            >
+              <strong>✏️ Edit Mode Active:</strong>
+              {editMode && draggedField
+                ? " Drag fields to reposition"
+                : editMode && resizeHandle
+                  ? " Resize field by dragging handles"
+                  : " Click and drag fields to move, drag handles to resize"}
+            </div>
+          )}
+
+          {/* Reorder Mode Instructions */}
+          {reorderMode && (
+            <div
+              style={{
+                background: "#f0f9ff",
+                border: "1px solid #0ea5e9",
+                borderRadius: "6px",
+                padding: "8px 12px",
+                marginBottom: "8px",
+                fontSize: "14px",
+              }}
+            >
+              <strong>🔄 Reorder Mode Active:</strong>
+              Drag and drop fields to reorder them. The order will be preserved when users fill out the form.
+            </div>
+          )}
+
+          <div
+            style={{
+              border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #ccc",
+              maxHeight: "70vh",
+              overflow: "auto",
+              backgroundColor: unsavedChanges ? "#fef3c7" : "#f9f9f9",
+              transition: "all 0.2s ease",
+              position: "relative"
+            }}
+            onDragOver={handleCanvasDragOver}
+            onDragLeave={handleCanvasDragLeave}
+            onDrop={handleCanvasDrop}
+          >
+            {unsavedChanges && (
+              <div style={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                backgroundColor: "#f59e0b",
+                color: "white",
+                padding: "4px 8px",
+                borderRadius: "4px",
+                fontSize: "12px",
+                fontWeight: "600",
+                zIndex: 10
+              }}>
+                ⚠ Unsaved Changes
+              </div>
+            )}
+
+            {reorderMode && (
+              <div style={{
+                position: "absolute",
+                top: "8px",
+                left: "8px",
+                backgroundColor: "#8b5cf6",
+                color: "white",
+                padding: "4px 8px",
+                borderRadius: "4px",
+                fontSize: "12px",
+                fontWeight: "600",
+                zIndex: 10
+              }}>
+                🔄 Reorder Mode
+              </div>
+            )}
+
+            {/* Drag Over Indicator */}
+            {isDragOver && (
+              <div style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "rgba(59, 130, 246, 0.9)",
+                color: "white",
+                padding: "16px 24px",
+                borderRadius: "8px",
+                fontSize: "16px",
+                fontWeight: "600",
+                zIndex: 20,
+                pointerEvents: "none",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)"
+              }}>
+                📝 Drop field here
+              </div>
+            )}
+            <canvas
+              ref={canvasRef}
+              style={{
+                cursor: editMode ? "move" : "crosshair",
+                display: "block",
+              }}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
             />
           </div>
         </div>
-      )}
 
-      {/* Insert Field Dialog */}
-      {showInsertDialog && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              background: "white",
-              borderRadius: "12px",
-              maxWidth: "400px",
-              width: "100%",
-              padding: "24px",
-              position: "relative",
-            }}
-          >
-            <h3 style={{ margin: "0 0 16px 0", color: "#1f2937" }}>
-              📍 Insert Field at Position
-            </h3>
+        {/* Field Tray */}
+        <div style={{
+          border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #eee",
+          padding: 10,
+          borderRadius: 8,
+          backgroundColor: unsavedChanges ? '#fef3c7' : 'white',
+          transition: 'all 0.2s ease',
+          maxHeight: '70vh',
+          overflow: 'auto'
+        }}>
+          <div style={{
+            fontWeight: 700,
+            marginBottom: 8,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            🤖 AI Field Tray
+            {unsavedChanges && (
+              <span style={{
+                fontSize: '12px',
+                color: '#d97706',
+                backgroundColor: '#fef3c7',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                border: '1px solid #f59e0b'
+              }}>
+                ⚠ Changes pending
+              </span>
+            )}
+          </div>
 
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
-                Position (1-{overlay.fields.filter(f => f.page === page).length + 1}):
-              </label>
-              <input
-                type="number"
-                min="1"
-                max={overlay.fields.filter(f => f.page === page).length + 1}
-                value={insertPosition + 1}
-                onChange={(e) => setInsertPosition(Math.max(0, parseInt(e.target.value) - 1))}
+          {/* AI Field Upload Section */}
+          {!isProcessing && currentStep === "idle" && (
+            <div style={{ marginBottom: '16px' }}>
+              <div
                 style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "4px",
-                  fontSize: "14px"
+                  border: "2px dashed #d1d5db",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  background: "#f9fafb",
                 }}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div style={{ fontSize: "24px", marginBottom: "8px" }}>📄</div>
+                <div style={{ fontSize: "12px", fontWeight: "600", color: "#374151" }}>
+                  Click to upload PDF
+                </div>
+                <div style={{ fontSize: "10px", color: "#6b7280" }}>
+                  or drag and drop
+                </div>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleFileUpload}
+                style={{ display: "none" }}
               />
             </div>
+          )}
 
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
-                Field Label:
-              </label>
-              <input
-                type="text"
-                id="newFieldLabel"
-                placeholder="Enter field label"
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  border: "1px solid #d1d5db",
-                  borderRadius: "4px",
-                  fontSize: "14px"
-                }}
-              />
+          {/* AI Processing Progress */}
+          {isProcessing && (
+            <div style={{ marginBottom: '16px', textAlign: 'center' }}>
+              <div style={{
+                width: '100%',
+                height: '8px',
+                background: '#e5e7eb',
+                borderRadius: '4px',
+                overflow: 'hidden',
+                marginBottom: '8px'
+              }}>
+                <div style={{
+                  width: `${progress}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #3b82f6, #10b981)',
+                  borderRadius: '4px',
+                  transition: 'width 0.3s ease'
+                }} />
+              </div>
+              <div style={{ fontSize: '12px', color: '#374151', fontWeight: '500' }}>
+                {currentStep === "analyzing" && "AI analyzing PDF structure..."}
+                {currentStep === "mapping" && "Mapping detected fields..."}
+                {currentStep === "reviewing" && "Review AI suggestions..."}
+              </div>
             </div>
+          )}
 
-            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
-              <button
-                onClick={() => setShowInsertDialog(false)}
-                style={{
-                  padding: "8px 16px",
-                  backgroundColor: "#6b7280",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "14px"
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  const label = document.getElementById('newFieldLabel').value || `New Field ${insertPosition + 1}`;
-                  const newField = {
-                    id: `f_${Date.now()}`,
-                    label: label,
-                    page: page,
-                    type: "text",
-                    rect: [100, 100 + (insertPosition * 30), 200, 120 + (insertPosition * 30)],
-                    fontSize: 11,
-                    align: "left",
-                    shrink: true,
-                  };
-                  insertFieldAtPosition(insertPosition, newField);
-                  setShowInsertDialog(false);
-                  document.getElementById('newFieldLabel').value = '';
-                }}
-                style={{
-                  padding: "8px 16px",
-                  backgroundColor: "#10b981",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: "14px"
-                }}
-              >
-                Insert Field
-              </button>
+          {/* AI Error Display */}
+          {aiError && (
+            <div style={{
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#dc2626',
+              padding: '8px',
+              borderRadius: '6px',
+              marginBottom: '12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{ fontSize: '16px' }}>⚠️</span>
+              {aiError}
+            </div>
+          )}
+
+          {/* AI Success Display */}
+          {currentStep === "fields-ready" && (
+            <div style={{
+              background: '#f0fdf4',
+              border: '1px solid #bbf7d0',
+              color: '#166534',
+              padding: '8px',
+              borderRadius: '6px',
+              marginBottom: '12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{ fontSize: '16px' }}>✅</span>
+              {selectedFields.length} fields are ready! Drag them from the tray to the PDF where you want them positioned.
+            </div>
+          )}
+
+          {/* AI Field Suggestions */}
+          {currentStep === "reviewing" && aiSuggestions.length > 0 && (
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#1f2937' }}>
+                AI Field Suggestions
+              </div>
+              <div style={{ display: 'grid', gap: '8px' }}>
+                {aiSuggestions.map((field) => (
+                  <div
+                    key={field.id}
+                    draggable
+                    onDragStart={(e) => handleFieldTrayDragStart(e, field)}
+                    style={{
+                      border: selectedFields.includes(field.id) ? "2px solid #3b82f6" : "1px solid #e5e7eb",
+                      borderRadius: "6px",
+                      padding: "8px",
+                      transition: "all 0.2s ease",
+                      background: selectedFields.includes(field.id) ? "#eff6ff" : "white",
+                      cursor: "grab",
+                      fontSize: '12px'
+                    }}
+                    onMouseEnter={(e) => e.target.style.transform = 'translateY(-1px)'}
+                    onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                      <input
+                        type="checkbox"
+                        checked={selectedFields.includes(field.id)}
+                        onChange={(e) => handleFieldSelection(field.id, e.target.checked)}
+                        style={{ width: '14px', height: '14px' }}
+                      />
+                      <span style={{ fontWeight: '600', color: '#1f2937', flex: 1 }}>
+                        {field.label}
+                      </span>
+                      <span style={{
+                        padding: '2px 6px',
+                        borderRadius: '8px',
+                        fontSize: '10px',
+                        fontWeight: '600',
+                        color: 'white',
+                        background: field.confidence > 0.8 ? '#10b981' : field.confidence > 0.6 ? '#f59e0b' : '#ef4444'
+                      }}>
+                        {Math.round(field.confidence * 100)}%
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '10px', color: '#6b7280' }}>
+                      <div>Type: {field.type}</div>
+                      <div>Page: {field.page + 1}</div>
+                      <div>Size: {Math.round(field.width)}×{Math.round(field.height)} px</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {aiSuggestions.length > 0 && (
+                <button
+                  onClick={handleApplyMapping}
+                  disabled={selectedFields.length === 0}
+                  style={{
+                    background: selectedFields.length > 0 ? '#10b981' : '#9ca3af',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 12px',
+                    borderRadius: '6px',
+                    fontWeight: '600',
+                    cursor: selectedFields.length > 0 ? 'pointer' : 'not-allowed',
+                    fontSize: '12px',
+                    width: '100%',
+                    marginTop: '8px'
+                  }}
+                >
+                  {currentStep === "fields-ready"
+                    ? `✓ ${selectedFields.length} Fields Ready for Dragging`
+                    : `Prepare ${selectedFields.length} Fields for Dragging`
+                  }
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Instructions */}
+          <div style={{
+            fontSize: '11px',
+            color: '#6b7280',
+            lineHeight: '1.4',
+            marginTop: '16px',
+            padding: '8px',
+            background: '#f3f4f6',
+            borderRadius: '4px'
+          }}>
+            <div style={{ fontWeight: '600', marginBottom: '4px' }}>How to use:</div>
+            <div>1. 📄 Upload a PDF to extract fields</div>
+            <div>2. ✅ Select fields you want to use</div>
+            <div>3. 🔄 Click "Prepare Fields for Dragging"</div>
+            <div>4. 🖱️ Drag fields from tray to PDF</div>
+            <div>5. 📍 Position fields exactly where needed</div>
+          </div>
+
+          {/* Field Count */}
+          {overlay.fields.length > 0 && (
+            <div style={{
+              marginTop: '12px',
+              padding: '8px',
+              background: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              borderRadius: '4px',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '12px', fontWeight: '600', color: '#1e40af' }}>
+                Total Fields: {overlay.fields.length}
+              </div>
+              <div style={{ fontSize: '10px', color: '#3b82f6' }}>
+                {overlay.fields.filter(f => f.id.startsWith('ai_field_')).length} AI detected
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Editor */}
+        <div style={{
+          border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #eee",
+          padding: 10,
+          borderRadius: 8,
+          backgroundColor: unsavedChanges ? '#fef3c7' : 'white',
+          transition: 'all 0.2s ease'
+        }}>
+          <div style={{
+            fontWeight: 700,
+            marginBottom: 8,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            Field
+            {unsavedChanges && (
+              <span style={{
+                fontSize: '12px',
+                color: '#d97706',
+                backgroundColor: '#fef3c7',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                border: '1px solid #f59e0b'
+              }}>
+                ⚠ Changes pending
+              </span>
+            )}
+          </div>
+          {!selected && <div style={{ color: "#666" }}>Click a box to edit</div>}
+          {selected && (
+            <div style={{ display: "grid", gap: 8 }}>
+              <label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  ID
+                  {unsavedChanges && (
+                    <span style={{ fontSize: '10px', color: '#d97706' }}>●</span>
+                  )}
+                </div>
+                <input
+                  value={selected.id}
+                  onChange={(e) => updateSelected({ id: e.target.value })}
+                  style={{
+                    border: unsavedChanges ? '1px solid #f59e0b' : '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    padding: '4px 8px',
+                    width: '100%'
+                  }}
+                />
+              </label>
+              <label>
+                <div>Label</div>
+                <input
+                  value={selected.label || ""}
+                  onChange={(e) => updateSelected({ label: e.target.value })}
+                />
+              </label>
+              <label>
+                <div>Type</div>
+                <select
+                  value={selected.type || "text"}
+                  onChange={(e) => updateSelected({ type: e.target.value })}
+                >
+                  <option value="text">text</option>
+                  <option value="checkbox">checkbox</option>
+                  <option value="signature">signature</option>
+                </select>
+              </label>
+              <label>
+                <div>Font Size</div>
+                <input
+                  type="number"
+                  value={selected.fontSize || 11}
+                  onChange={(e) =>
+                    updateSelected({ fontSize: Number(e.target.value || 11) })
+                  }
+                />
+              </label>
+              <label>
+                <div>Align</div>
+                <select
+                  value={selected.align || "left"}
+                  onChange={(e) => updateSelected({ align: e.target.value })}
+                >
+                  <option>left</option>
+                  <option>center</option>
+                  <option>right</option>
+                </select>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={!!selected.shrink}
+                  onChange={(e) => updateSelected({ shrink: e.target.checked })}
+                />
+                <span style={{ marginLeft: 6 }}>Shrink to fit</span>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={!!selected.uppercase}
+                  onChange={(e) =>
+                    updateSelected({ uppercase: e.target.checked })
+                  }
+                />
+                <span style={{ marginLeft: 6 }}>Uppercase</span>
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={!!selected.bg}
+                  onChange={(e) => updateSelected({ bg: e.target.checked })}
+                />
+                <span style={{ marginLeft: 6 }}>White-out BG</span>
+              </label>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={delSelected}
+                  style={{
+                    color: "#dc2626",
+                    background: 'none',
+                    border: '1px solid #dc2626',
+                    padding: '6px 12px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '14px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.backgroundColor = '#dc2626';
+                    e.target.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.backgroundColor = 'transparent';
+                    e.target.style.color = '#dc2626';
+                  }}
+                >
+                  Delete
+                </button>
+                <SaveButton
+                  onClick={() => updateSelected({})}
+                  variant="success"
+                  disabled={saveStatus === SAVE_STATUS.SAVING}
+                  title="Save field changes (auto-saves in 2s)"
+                >
+                  {saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' : '💾 Save Field'}
+                </SaveButton>
+              </div>
+            </div>
+          )}
+          <hr style={{ margin: "12px 0" }} />
+
+          {/* Field Order Management */}
+          {reorderMode && (
+            <div style={{ marginBottom: "16px" }}>
+              <div style={{ marginBottom: "8px" }}>
+                <strong>Field Order (Page {page + 1}):</strong>
+              </div>
+              <div style={{
+                fontSize: "12px",
+                color: "#666",
+                maxHeight: "200px",
+                overflowY: "auto",
+                border: "1px solid #e5e7eb",
+                borderRadius: "4px",
+                padding: "8px"
+              }}>
+                {overlay.fields
+                  .filter(f => f.page === page)
+                  .map((field, index) => (
+                    <div
+                      key={field.id}
+                      draggable={reorderMode}
+                      onDragStart={(e) => handleFieldDragStart(e, field.id)}
+                      onDragOver={(e) => handleFieldDragOver(e, field.id)}
+                      onDrop={(e) => handleFieldDrop(e, field.id)}
+                      onDragEnd={handleFieldDragEnd}
+                      style={{
+                        padding: "6px 8px",
+                        margin: "2px 0",
+                        backgroundColor: draggedFieldId === field.id ? "#fef3c7" :
+                          dragOverFieldId === field.id ? "#dbeafe" : "#f9fafb",
+                        border: draggedFieldId === field.id ? "1px solid #f59e0b" :
+                          dragOverFieldId === field.id ? "1px solid #3b82f6" : "1px solid #e5e7eb",
+                        borderRadius: "4px",
+                        cursor: reorderMode ? "grab" : "default",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px"
+                      }}
+                    >
+                      <span style={{
+                        fontSize: "10px",
+                        color: "#6b7280",
+                        minWidth: "20px"
+                      }}>
+                        {index + 1}
+                      </span>
+                      <span style={{ flex: 1, fontSize: "11px" }}>
+                        {field.label || field.id}
+                      </span>
+                      <span style={{
+                        fontSize: "10px",
+                        color: field.id.startsWith("ai_field_") ? "#3b82f6" : "#10b981"
+                      }}>
+                        {field.id.startsWith("ai_field_") ? "🤖" : "✏️"}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+              <div style={{
+                fontSize: "11px",
+                color: "#6b7280",
+                marginTop: "8px",
+                fontStyle: "italic"
+              }}>
+                Drag fields to reorder. Order affects form display sequence.
+              </div>
+
+              {/* Field Order Actions */}
+              <div style={{
+                marginTop: "12px",
+                display: "flex",
+                gap: "8px",
+                flexDirection: "column"
+              }}>
+                <button
+                  onClick={() => {
+                    const orderData = {
+                      app: app,
+                      form: form,
+                      page: page,
+                      fieldOrder: overlay.fields
+                        .filter(f => f.page === page)
+                        .map(f => ({ id: f.id, label: f.label }))
+                    };
+                    const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${app}_${form}_page${page + 1}_field_order.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                  }}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "11px",
+                    backgroundColor: "#3b82f6",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                  title="Export current field order"
+                >
+                  📤 Export Order
+                </button>
+
+                <button
+                  onClick={() => {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.json';
+                    input.onchange = (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                          try {
+                            const orderData = JSON.parse(e.target.result);
+                            if (orderData.app === app && orderData.form === form && orderData.page === page) {
+                              // Reorder fields based on imported order
+                              const newOrder = orderData.fieldOrder.map(f => f.id);
+                              const pageFields = overlay.fields.filter(f => f.page === page);
+                              const otherFields = overlay.fields.filter(f => f.page !== page);
+
+                              // Sort page fields according to imported order
+                              const sortedPageFields = newOrder.map(id =>
+                                pageFields.find(f => f.id === id)
+                              ).filter(Boolean);
+
+                              // Add any fields not in the imported order
+                              const missingFields = pageFields.filter(f => !newOrder.includes(f.id));
+                              sortedPageFields.push(...missingFields);
+
+                              const newOverlay = {
+                                ...overlay,
+                                fields: [...otherFields, ...sortedPageFields]
+                              };
+
+                              setOverlay(newOverlay);
+                              scheduleAutoSave();
+                              alert('Field order imported successfully!');
+                            } else {
+                              alert('Import file does not match current form/page');
+                            }
+                          } catch (error) {
+                            alert('Invalid import file format');
+                          }
+                        };
+                        reader.readAsText(file);
+                      }
+                    };
+                    input.click();
+                  }}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "11px",
+                    backgroundColor: "#f59e0b",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                  title="Import field order from file"
+                >
+                  📥 Import Order
+                </button>
+
+                <button
+                  onClick={logFieldOrder}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "11px",
+                    backgroundColor: "#6b7280",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                  title="Log current field order to console for debugging"
+                >
+                  🐛 Debug Order
+                </button>
+              </div>
+
+              {/* Quick Insert Field */}
+              <div style={{ marginTop: "12px" }}>
+                <button
+                  onClick={() => {
+                    const newField = {
+                      id: `f_${Date.now()}`,
+                      label: `New Field ${overlay.fields.filter(f => f.page === page).length + 1}`,
+                      page: page,
+                      type: "text",
+                      rect: [100, 100, 200, 120],
+                      fontSize: 11,
+                      align: "left",
+                      shrink: true,
+                    };
+                    insertFieldAtPosition(0, newField); // Insert at top
+                  }}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "11px",
+                    backgroundColor: "#10b981",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    width: "100%"
+                  }}
+                  title="Add new field at the top of this page"
+                >
+                  ➕ Insert Field at Top
+                </button>
+
+                <button
+                  onClick={() => setShowInsertDialog(true)}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "11px",
+                    backgroundColor: "#8b5cf6",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    width: "100%",
+                    marginTop: "8px"
+                  }}
+                  title="Insert field at specific position"
+                >
+                  📍 Insert at Position
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div>
+            <div style={{ marginBottom: "8px" }}>
+              <strong>Field Statistics:</strong>
+            </div>
+            <div style={{ fontSize: "14px", color: "#666" }}>
+              <div>📊 Total: {fieldStats.total}</div>
+              <div>🤖 AI Detected: {fieldStats.ai}</div>
+              <div>✏️ Manual: {fieldStats.manual}</div>
             </div>
           </div>
         </div>
-      )}
+
+
+
+        {/* Insert Field Dialog */}
+        {showInsertDialog && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.5)",
+              zIndex: 1000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "20px",
+            }}
+          >
+            <div
+              style={{
+                background: "white",
+                borderRadius: "12px",
+                maxWidth: "400px",
+                width: "100%",
+                padding: "24px",
+                position: "relative",
+              }}
+            >
+              <h3 style={{ margin: "0 0 16px 0", color: "#1f2937" }}>
+                📍 Insert Field at Position
+              </h3>
+
+              <div style={{ marginBottom: "16px" }}>
+                <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+                  Position (1-{overlay.fields.filter(f => f.page === page).length + 1}):
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max={overlay.fields.filter(f => f.page === page).length + 1}
+                  value={insertPosition + 1}
+                  onChange={(e) => setInsertPosition(Math.max(0, parseInt(e.target.value) - 1))}
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    border: "1px solid #d1d5db",
+                    borderRadius: "4px",
+                    fontSize: "14px"
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: "16px" }}>
+                <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+                  Field Label:
+                </label>
+                <input
+                  type="text"
+                  id="newFieldLabel"
+                  placeholder="Enter field label"
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    border: "1px solid #d1d5db",
+                    borderRadius: "4px",
+                    fontSize: "14px"
+                  }}
+                />
+              </div>
+
+              <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+                <button
+                  onClick={() => setShowInsertDialog(false)}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#6b7280",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "14px"
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    const label = document.getElementById('newFieldLabel').value || `New Field ${insertPosition + 1}`;
+                    const newField = {
+                      id: `f_${Date.now()}`,
+                      label: label,
+                      page: page,
+                      type: "text",
+                      rect: [100, 100 + (insertPosition * 30), 200, 120 + (insertPosition * 30)],
+                      fontSize: 11,
+                      align: "left",
+                      shrink: true,
+                    };
+                    insertFieldAtPosition(insertPosition, newField);
+                    setShowInsertDialog(false);
+                    document.getElementById('newFieldLabel').value = '';
+                  }}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#10b981",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "14px"
+                  }}
+                >
+                  Insert Field
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

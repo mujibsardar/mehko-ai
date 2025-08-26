@@ -3,6 +3,43 @@
   margin: 0 auto;
   padding: 24px;
 
+  .admin-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    .nav-title {
+      font-weight: 600;
+      color: #475569;
+      font-size: 1.1rem;
+    }
+
+    .back-to-admin-btn {
+      background: #3b82f6;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+    }
+  }
+
   .reports-header {
     display: flex;
     justify-content: space-between;

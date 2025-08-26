@@ -148,6 +148,18 @@ export default function CountyProcessor() {
 
   return (
     <div className="county-processor">
+      {/* Admin Dashboard Navigation */}
+      <div className="admin-navigation">
+        <div className="nav-title">
+          🏛️ County Processor
+        </div>
+        <a
+          href="/admin"
+          className="back-to-admin-btn"
+        >
+          ← Back to Admin Dashboard
+        </a>
+      </div>
       <div className="county-processor__header">
         <h2>🚀 County JSON Processor</h2>
         <p>
@@ -247,9 +259,8 @@ export default function CountyProcessor() {
             {results.map((result, index) => (
               <div
                 key={index}
-                className={`result-item ${
-                  result.success ? "success" : "error"
-                }`}
+                className={`result-item ${result.success ? "success" : "error"
+                  }`}
               >
                 <div className="result-header">
                   <span className="filename">{result.filename}</span>
