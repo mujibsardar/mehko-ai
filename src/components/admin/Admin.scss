@@ -166,3 +166,14 @@
     }
   }
 }
+
+/* Override any green colors for the back to dashboard link */
+.back-to-dashboard-link {
+  color: #3b82f6 !important;
+  text-decoration: none;
+
+  &:hover {
+    color: #2563eb !important;
+    text-decoration: underline;
+  }
+}

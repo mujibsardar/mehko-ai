@@ -10,7 +10,7 @@ $z-index-sidebar: 100;
 $z-index-nav-tabs: 200;
 $z-index-modal: 9000;
 $z-index-notifications: 9500;
-$z-index-dialogs:9800;
+$z-index-dialogs: 9800;
 $z-index-activity-spinner: 9990;
 $z-index-animated-cursor: 9995;
 $z-index-loader: 9999;
@@ -56,8 +56,8 @@ $loader-background-color: #111111;
     --theme-soft-3: #292929;
 
     --theme-highlight: #9dff8e;
-    --theme-highlight-2: #b5ffa9;
-    --theme-highlight-3: #d5fdcd;
+    --theme-highlight-2: #3b82f6;
+    --theme-highlight-3: #2563eb;
 
     --theme-dark: #101010;
     --theme-dark-opacity: rgba(16, 16, 16, 0.2);
@@ -107,8 +107,8 @@ $loader-background-color: #111111;
     --theme-white: #ffffff;
 
     --theme-highlight: #269366;
-    --theme-highlight-2: #207956;
-    --theme-highlight-3: #1a6447;
+    --theme-highlight-2: #3b82f6;
+    --theme-highlight-3: #2563eb;
 
     --theme-bg: url('/images/css/bg-green.png');
     --theme-bg-color: #9adbaf;

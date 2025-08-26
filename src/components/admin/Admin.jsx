@@ -281,7 +281,7 @@ export default function Admin() {
     let j = {};
     try {
       j = await r.json();
-    } catch {}
+    } catch { }
     if (!r.ok) return alert(j.detail || "Backend /api/apps failed");
 
     const ref = doc(db, "applications", appId);
@@ -358,7 +358,7 @@ export default function Admin() {
         let j = {};
         try {
           j = await r.json();
-        } catch {}
+        } catch { }
         if (!r.ok)
           return alert(j.detail || `PDF upload failed for ${s.formId}`);
       }
@@ -591,7 +591,11 @@ export default function Admin() {
             {activeTab === "pdf-download" && "Download PDF Forms"}
             {activeTab === "counties" && "County Processor"}
           </h2>
-          <Link to="/dashboard" style={{ fontSize: 13 }}>
+          <Link 
+            to="/dashboard" 
+            className="back-to-dashboard-link"
+            style={{ fontSize: 13, color: "#3b82f6" }}
+          >
             ← Back to Dashboard
           </Link>
           {activeTab === "apps" && status && (
@@ -759,7 +763,7 @@ export default function Admin() {
                       onClick={previewFiles}
                       style={{
                         padding: "6px 12px",
-                        background: "#10b981",
+                        background: "#3b82f6",
                         color: "white",
                         border: "none",
                         borderRadius: "6px",
@@ -856,7 +860,7 @@ export default function Admin() {
                       padding: "8px 16px",
                       background:
                         isProcessing ||
-                        bulkPreview.filter((p) => p.valid).length === 0
+                          bulkPreview.filter((p) => p.valid).length === 0
                           ? "#9ca3af"
                           : "#3b82f6",
                       color: "white",
@@ -864,7 +868,7 @@ export default function Admin() {
                       borderRadius: "6px",
                       cursor:
                         isProcessing ||
-                        bulkPreview.filter((p) => p.valid).length === 0
+                          bulkPreview.filter((p) => p.valid).length === 0
                           ? "not-allowed"
                           : "pointer",
                       fontSize: 14,
@@ -872,9 +876,8 @@ export default function Admin() {
                   >
                     {isProcessing
                       ? "Processing..."
-                      : `Import ${
-                          bulkPreview.filter((p) => p.valid).length
-                        } Applications`}
+                      : `Import ${bulkPreview.filter((p) => p.valid).length
+                      } Applications`}
                   </button>
                 </div>
 
@@ -1092,9 +1095,9 @@ export default function Admin() {
                   padding: "8px 16px",
                   background:
                     isDownloadingPdf ||
-                    !pdfDownloadUrl ||
-                    !pdfDownloadAppId ||
-                    !pdfDownloadFormId
+                      !pdfDownloadUrl ||
+                      !pdfDownloadAppId ||
+                      !pdfDownloadFormId
                       ? "#9ca3af"
                       : "#3b82f6",
                   color: "white",
@@ -1102,9 +1105,9 @@ export default function Admin() {
                   borderRadius: "6px",
                   cursor:
                     isDownloadingPdf ||
-                    !pdfDownloadUrl ||
-                    !pdfDownloadAppId ||
-                    !pdfDownloadFormId
+                      !pdfDownloadUrl ||
+                      !pdfDownloadAppId ||
+                      !pdfDownloadFormId
                       ? "not-allowed"
                       : "pointer",
                   fontSize: 14,
