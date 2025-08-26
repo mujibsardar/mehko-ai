@@ -1200,30 +1200,50 @@ export default function Admin() {
                 background: "#fff",
               }}
             >
-              <h3 style={{ marginTop: 0 }}>Application</h3>
-              <div style={{ display: "grid", gap: 8 }}>
-                <input
-                  placeholder="app id (e.g., san_diego_mehko)"
-                  value={appId}
-                  onChange={(e) => setAppId(e.target.value)}
-                />
-                <input
-                  placeholder="title (e.g., Orange County MEHKO)"
-                  value={appTitle}
-                  onChange={(e) => setAppTitle(e.target.value)}
-                />
-                <input
-                  placeholder="root domain (e.g., ocgov.com)"
-                  value={rootDomain}
-                  onChange={(e) => setRootDomain(e.target.value)}
-                />
-                <textarea
-                  placeholder="description"
-                  rows={3}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  style={{ resize: "vertical" }}
-                />
+              <h3 style={{ marginTop: 0 }}>Application Details</h3>
+              <div style={{ display: "grid", gap: 12 }}>
+                <div>
+                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    Application ID
+                  </label>
+                  <input
+                    placeholder="e.g., san_diego_mehko"
+                    value={appId}
+                    onChange={(e) => setAppId(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    Application Title
+                  </label>
+                  <input
+                    placeholder="e.g., Orange County MEHKO"
+                    value={appTitle}
+                    onChange={(e) => setAppTitle(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    Root Domain
+                  </label>
+                  <input
+                    placeholder="e.g., ocgov.com"
+                    value={rootDomain}
+                    onChange={(e) => setRootDomain(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    Description
+                  </label>
+                  <textarea
+                    placeholder="Enter application description..."
+                    rows={3}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    style={{ resize: "vertical" }}
+                  />
+                </div>
                 <div style={{ display: "flex", gap: 8 }}>
                   <button onClick={saveAppMeta}>Save App</button>
                 </div>
@@ -1241,7 +1261,7 @@ export default function Admin() {
                   background: "#fff",
                 }}
               >
-                <h3 style={{ marginTop: 0 }}>Existing Steps</h3>
+                <h3 style={{ marginTop: 0 }}>Current Application Steps</h3>
                 {steps.length === 0 ? (
                   <p style={{ color: "#6b7280" }}>No steps yet.</p>
                 ) : (
@@ -1330,64 +1350,94 @@ export default function Admin() {
                 marginBottom: 24,
               }}
             >
-              <h3 style={{ marginTop: 0 }}>Add Steps</h3>
-              <div style={{ display: "grid", gap: 8, alignItems: "start" }}>
+              <h3 style={{ marginTop: 0 }}>Create New Step</h3>
+              <div style={{ display: "grid", gap: 12, alignItems: "start" }}>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <select
-                    value={newType}
-                    onChange={(e) => setNewType(e.target.value)}
-                  >
-                    <option value="info">Info</option>
-                    <option value="form">Form</option>
-                    <option value="pdf">PDF</option>
-                  </select>
-                  <input
-                    placeholder="step title"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
+                  <div>
+                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                      Step Type
+                    </label>
+                    <select
+                      value={newType}
+                      onChange={(e) => setNewType(e.target.value)}
+                    >
+                      <option value="info">Information Step</option>
+                      <option value="form">Form Step</option>
+                      <option value="pdf">PDF Step</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                      Step Title
+                    </label>
+                    <input
+                      placeholder="Enter step title..."
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    Step Description
+                  </label>
+                  <textarea
+                    placeholder="Enter step description or content..."
+                    rows={2}
+                    value={newContent}
+                    onChange={(e) => setNewContent(e.target.value)}
+                    style={{ resize: "vertical" }}
                   />
                 </div>
 
-                <textarea
-                  placeholder="step description / content (optional for form/pdf)"
-                  rows={2}
-                  value={newContent}
-                  onChange={(e) => setNewContent(e.target.value)}
-                  style={{ resize: "vertical" }}
-                />
-
                 {newType === "form" && (
-                  <input
-                    placeholder="formName (e.g., MEHKO_SOP-English.pdf)"
-                    value={newFormName}
-                    onChange={(e) => setNewFormName(e.target.value)}
-                  />
-                )}
-
-                {newType === "pdf" && (
-                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  <div>
+                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                      Form Name
+                    </label>
                     <input
-                      placeholder="formId (e.g., MEHKO_SOP-English)"
-                      value={newFormId}
-                      onChange={(e) => setNewFormId(e.target.value)}
-                    />
-                    <input
-                      type="file"
-                      accept="application/pdf"
-                      onChange={(e) =>
-                        setNewPdfFile(e.target.files?.[0] || null)
-                      }
+                      placeholder="e.g., MEHKO_SOP-English.pdf"
+                      value={newFormName}
+                      onChange={(e) => setNewFormName(e.target.value)}
                     />
                   </div>
                 )}
 
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={addStepToQueue}>+ Add to Queue</button>
+                {newType === "pdf" && (
+                  <div style={{ display: "grid", gap: 8 }}>
+                    <div>
+                      <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                        Form ID
+                      </label>
+                      <input
+                        placeholder="e.g., MEHKO_SOP-English"
+                        value={newFormId}
+                        onChange={(e) => setNewFormId(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                        PDF File
+                      </label>
+                      <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) =>
+                          setNewPdfFile(e.target.files?.[0] || null)
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <button onClick={addStepToQueue}>Add to Queue</button>
                   <button
                     onClick={saveQueuedSteps}
                     disabled={!appId || queuedSteps.length === 0}
                   >
-                    Save Queued Steps
+                    Save All Steps
                   </button>
                   <div
                     style={{
@@ -1396,7 +1446,7 @@ export default function Admin() {
                       color: "#6b7280",
                     }}
                   >
-                    {queuedSteps.length} queued
+                    {queuedSteps.length} step{queuedSteps.length !== 1 ? 's' : ''} queued
                   </div>
                 </div>
 
