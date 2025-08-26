@@ -1,0 +1,156 @@
+{
+  "id": "los_angeles_county_mehko",
+  "title": "Los Angeles County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week; max $100,000 annual gross sales. LA County (excludes Pasadena, Long Beach, Vernon). Initial $597 review fee is currently subsidized; annual health permit ~$347.",
+  "rootDomain": "publichealth.lacounty.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Confirm you can run a MEHKO at home and understand LA County limits (30/day, 90/week; $100,000/year).\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- ☐ Residence in Los Angeles County (not Pasadena, Long Beach, or Vernon)\n- ☐ Menu and daily/weekly production plan\n- ☐ Basic kitchen setup meeting food safety practices\n\n**Where/how:** Review LA County's MEHKO pages and FAQ; limits are summarized here.\n\n**Cost & time:** $0 · 10–30 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+      "searchTerms": [
+        "LA County MEHKO limits 30 90",
+        "Los Angeles County MEHKO rules 2025",
+        "LA County MEHKO sales cap $100,000"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required.\n\n**What you need:**\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Landlord/HOA OK if applicable\n- ☐ City business license if required in your city\n\n**Where/how:** Take an ANSI-approved CFPM course; verify local business license rules.\n\n**Cost & time:** ~$60–$90 · 1–2 days total\n\n**Ready when:** You have a CFPM certificate PDF and any property/business approvals.",
+      "searchTerms": [
+        "ANSI CFPM course Los Angeles County",
+        "LA city business license home food",
+        "LA County MEHKO certification requirement"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or emailing.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "LA County MEHKO required documents",
+        "Los Angeles MEHKO forms list",
+        "MEHKO submission packet LA County"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "MEHKO_SOP-English",
+      "pdfUrl": "https://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf",
+      "appId": "los_angeles_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "LA County MEHKO SOP template",
+        "Los Angeles food safety SOP requirements",
+        "MEHKO SOP form LA"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "MEHKO_PublicHealthPermitApplication-ENG",
+      "pdfUrl": "https://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf",
+      "appId": "los_angeles_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the LA County Public Health Permit Application for a MEHKO.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner contact and site address\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+      "searchTerms": [
+        "LA County MEHKO permit application PDF",
+        "Los Angeles MEHKO application form",
+        "apply MEHKO permit LA County"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Application — go to Step 5: Health Permit Application\n- ☐ Completed SOP — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ CFPM certificate\n- ☐ Payment method for fees (see amounts below)\n\n**Where/how:** Email your packet or contact LA County Environmental Health (Homebased Food Programs) for submission options. Phone (888) 700-9995 or (626) 430-9855; email homebasedfoods@ph.lacounty.gov. Office: 5050 Commerce Dr, Baldwin Park, CA 91706 (Mon–Fri 8AM–5PM).\n\n**Cost & time:** Initial application review fee $597 (one-time; currently subsidized/waived for up to 1,000 applicants through June 30, 2026, while funds last). Annual health permit about $347. · 10–20 minutes to submit\n\n**Ready when:** County confirms receipt and payment/fee waiver.",
+      "searchTerms": [
+        "LA County MEHKO fee $597 subsidy",
+        "Los Angeles MEHKO annual permit $347",
+        "LA County MEHKO where to submit application"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- ☐ Kitchen ready per your SOP\n- ☐ Thermometer, sanitizer, handwash setup\n- ☐ All required equipment functional\n\n**Where/how:** The department will provide scheduling details after application review.\n\n**Cost & time:** Included in fees · 1–2 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+      "searchTerms": [
+        "LA County MEHKO inspection guide",
+        "Los Angeles MEHKO inspection checklist",
+        "MEHKO home inspection LA"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- ☐ Final approval notice\n- ☐ Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after fees paid) · typically 1–2 weeks after inspection\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+      "searchTerms": [
+        "LA County MEHKO permit issuance timeline",
+        "Los Angeles Environmental Health permit status",
+        "MEHKO permit received LA"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- ☐ Daily/weekly meal logs under 30/day and 90/week\n- ☐ Temperature & cleaning records\n- ☐ Permit renewal reminder\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** Renewal fees apply · ongoing\n\n**Ready when:** You track meals, keep records, and schedule renewal on time.",
+      "searchTerms": [
+        "LA County MEHKO renewal process",
+        "Los Angeles MEHKO compliance rules",
+        "MEHKO meal limits tracking LA"
+      ],
+      "appId": "los_angeles_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- ☐ Phone or email for questions\n- ☐ Office hours and location\n- ☐ Website for additional resources\n\n**Where/how:** LA County Environmental Health — Homebased Food Programs. Phone: (888) 700-9995 or (626) 430-9855. Email: homebasedfoods@ph.lacounty.gov. Office: 5050 Commerce Dr, Baldwin Park, CA 91706. Hours: Mon–Fri 8AM–5PM. Website: publichealth.lacounty.gov/eh/business/microenterprise-home-kitchen-operation.htm\n\n**Cost & time:** $0 · varies by question\n\n**Ready when:** You have the information you need to proceed.",
+      "searchTerms": [
+        "LA County Environmental Health contact",
+        "homebasedfoods@ph.lacounty.gov",
+        "5050 Commerce Dr Baldwin Park hours"
+      ],
+      "appId": "los_angeles_county_mehko"
+    }
+  ]
+}

@@ -90,10 +90,10 @@ export default function Mapper() {
   const [reorderMode, setReorderMode] = useState(false);
   const [draggedFieldId, setDraggedFieldId] = useState(null);
   const [dragOverFieldId, setDragOverFieldId] = useState(null);
-    const [fieldOrder, setFieldOrder] = useState([]);
+  const [fieldOrder, setFieldOrder] = useState([]);
   const [showInsertDialog, setShowInsertDialog] = useState(false);
   const [insertPosition, setInsertPosition] = useState(0);
-  
+
   // Save state management
   const [saveStatus, setSaveStatus] = useState(SAVE_STATUS.SAVED);
   const [lastSaved, setLastSaved] = useState(null);
@@ -582,21 +582,21 @@ export default function Mapper() {
     scheduleAutoSave();
   };
 
-    const moveFieldToPosition = (fieldId, newPosition) => {
+  const moveFieldToPosition = (fieldId, newPosition) => {
     const pageFields = overlay.fields.filter(f => f.page === page);
     const otherFields = overlay.fields.filter(f => f.page !== page);
-    
+
     const fieldIndex = pageFields.findIndex(f => f.id === fieldId);
     if (fieldIndex === -1) return;
-    
+
     const [movedField] = pageFields.splice(fieldIndex, 1);
     pageFields.splice(newPosition, 0, movedField);
-    
+
     const newOverlay = {
       ...overlay,
       fields: [...otherFields, ...pageFields]
     };
-    
+
     setOverlay(newOverlay);
     scheduleAutoSave();
   };
@@ -1330,7 +1330,7 @@ export default function Mapper() {
               ⚠ Unsaved Changes
             </div>
           )}
-          
+
           {reorderMode && (
             <div style={{
               position: "absolute",
@@ -1425,6 +1425,7 @@ export default function Mapper() {
               >
                 <option value="text">text</option>
                 <option value="checkbox">checkbox</option>
+                <option value="signature">signature</option>
               </select>
             </label>
             <label>
@@ -1509,15 +1510,15 @@ export default function Mapper() {
           </div>
         )}
         <hr style={{ margin: "12px 0" }} />
-        
+
         {/* Field Order Management */}
         {reorderMode && (
           <div style={{ marginBottom: "16px" }}>
             <div style={{ marginBottom: "8px" }}>
               <strong>Field Order (Page {page + 1}):</strong>
             </div>
-            <div style={{ 
-              fontSize: "12px", 
+            <div style={{
+              fontSize: "12px",
               color: "#666",
               maxHeight: "200px",
               overflowY: "auto",
@@ -1538,10 +1539,10 @@ export default function Mapper() {
                     style={{
                       padding: "6px 8px",
                       margin: "2px 0",
-                      backgroundColor: draggedFieldId === field.id ? "#fef3c7" : 
-                                   dragOverFieldId === field.id ? "#dbeafe" : "#f9fafb",
+                      backgroundColor: draggedFieldId === field.id ? "#fef3c7" :
+                        dragOverFieldId === field.id ? "#dbeafe" : "#f9fafb",
                       border: draggedFieldId === field.id ? "1px solid #f59e0b" :
-                             dragOverFieldId === field.id ? "1px solid #3b82f6" : "1px solid #e5e7eb",
+                        dragOverFieldId === field.id ? "1px solid #3b82f6" : "1px solid #e5e7eb",
                       borderRadius: "4px",
                       cursor: reorderMode ? "grab" : "default",
                       display: "flex",
@@ -1549,8 +1550,8 @@ export default function Mapper() {
                       gap: "8px"
                     }}
                   >
-                    <span style={{ 
-                      fontSize: "10px", 
+                    <span style={{
+                      fontSize: "10px",
                       color: "#6b7280",
                       minWidth: "20px"
                     }}>
@@ -1559,8 +1560,8 @@ export default function Mapper() {
                     <span style={{ flex: 1, fontSize: "11px" }}>
                       {field.label || field.id}
                     </span>
-                    <span style={{ 
-                      fontSize: "10px", 
+                    <span style={{
+                      fontSize: "10px",
                       color: field.id.startsWith("ai_field_") ? "#3b82f6" : "#10b981"
                     }}>
                       {field.id.startsWith("ai_field_") ? "🤖" : "✏️"}
@@ -1568,19 +1569,19 @@ export default function Mapper() {
                   </div>
                 ))}
             </div>
-            <div style={{ 
-              fontSize: "11px", 
-              color: "#6b7280", 
+            <div style={{
+              fontSize: "11px",
+              color: "#6b7280",
               marginTop: "8px",
               fontStyle: "italic"
             }}>
               Drag fields to reorder. Order affects form display sequence.
             </div>
-            
+
             {/* Field Order Actions */}
-            <div style={{ 
-              marginTop: "12px", 
-              display: "flex", 
+            <div style={{
+              marginTop: "12px",
+              display: "flex",
               gap: "8px",
               flexDirection: "column"
             }}>
@@ -1615,7 +1616,7 @@ export default function Mapper() {
               >
                 📤 Export Order
               </button>
-              
+
               <button
                 onClick={() => {
                   const input = document.createElement('input');
@@ -1633,21 +1634,21 @@ export default function Mapper() {
                             const newOrder = orderData.fieldOrder.map(f => f.id);
                             const pageFields = overlay.fields.filter(f => f.page === page);
                             const otherFields = overlay.fields.filter(f => f.page !== page);
-                            
+
                             // Sort page fields according to imported order
-                            const sortedPageFields = newOrder.map(id => 
+                            const sortedPageFields = newOrder.map(id =>
                               pageFields.find(f => f.id === id)
                             ).filter(Boolean);
-                            
+
                             // Add any fields not in the imported order
                             const missingFields = pageFields.filter(f => !newOrder.includes(f.id));
                             sortedPageFields.push(...missingFields);
-                            
+
                             const newOverlay = {
                               ...overlay,
                               fields: [...otherFields, ...sortedPageFields]
                             };
-                            
+
                             setOverlay(newOverlay);
                             scheduleAutoSave();
                             alert('Field order imported successfully!');
@@ -1676,7 +1677,7 @@ export default function Mapper() {
               >
                 📥 Import Order
               </button>
-              
+
               <button
                 onClick={logFieldOrder}
                 style={{
@@ -1693,7 +1694,7 @@ export default function Mapper() {
                 🐛 Debug Order
               </button>
             </div>
-            
+
             {/* Quick Insert Field */}
             <div style={{ marginTop: "12px" }}>
               <button
@@ -1724,7 +1725,7 @@ export default function Mapper() {
               >
                 ➕ Insert Field at Top
               </button>
-              
+
               <button
                 onClick={() => setShowInsertDialog(true)}
                 style={{
@@ -1745,7 +1746,7 @@ export default function Mapper() {
             </div>
           </div>
         )}
-        
+
         <div>
           <div style={{ marginBottom: "8px" }}>
             <strong>Field Statistics:</strong>
@@ -1847,7 +1848,7 @@ export default function Mapper() {
             <h3 style={{ margin: "0 0 16px 0", color: "#1f2937" }}>
               📍 Insert Field at Position
             </h3>
-            
+
             <div style={{ marginBottom: "16px" }}>
               <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
                 Position (1-{overlay.fields.filter(f => f.page === page).length + 1}):
@@ -1867,7 +1868,7 @@ export default function Mapper() {
                 }}
               />
             </div>
-            
+
             <div style={{ marginBottom: "16px" }}>
               <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
                 Field Label:
@@ -1885,7 +1886,7 @@ export default function Mapper() {
                 }}
               />
             </div>
-            
+
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
               <button
                 onClick={() => setShowInsertDialog(false)}
