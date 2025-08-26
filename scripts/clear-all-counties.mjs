@@ -72,8 +72,12 @@ class CountyCleaner {
 
       const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf8"));
       
+      console.log(`🔧 Service account loaded from: ${serviceAccountPath}`);
+      console.log(`🔧 Project ID from service account: ${serviceAccount.project_id}`);
+      
       initializeApp({
         credential: cert(serviceAccount),
+        projectId: serviceAccount.project_id
       });
 
       this.db = getFirestore();
@@ -89,8 +93,31 @@ class CountyCleaner {
     try {
       console.log("\n🗄️  Clearing Firebase applications collection...");
       
+      // Debug: Show what project we're connected to
+      try {
+        const app = this.db.app;
+        console.log(`🔗 Connected to Firebase project: ${app?.options?.projectId || 'Unknown'}`);
+      } catch (e) {
+        console.log("🔗 Firebase project info not available");
+      }
+      
+      // Debug: List all top-level collections
+      console.log("🔍 Checking available collections...");
+      const collections = await this.db.listCollections();
+      console.log(`📚 Found ${collections.length} collections: ${collections.map(c => c.id).join(', ')}`);
+      
       const applicationsRef = this.db.collection("applications");
-      const snapshot = await applicationsRef.get();
+      console.log("🔍 Querying applications collection...");
+      
+      let snapshot;
+      try {
+        snapshot = await applicationsRef.get();
+        console.log(`📊 Snapshot received: empty=${snapshot.empty}, size=${snapshot.size}`);
+      } catch (queryError) {
+        console.error("❌ Error querying applications collection:", queryError.message);
+        this.errors.push(`Applications query: ${queryError.message}`);
+        return;
+      }
       
       if (snapshot.empty) {
         console.log("ℹ️  No applications found in Firebase");
