@@ -322,7 +322,7 @@ app.post("/api/ai-chat", async (req, res) => {
     let systemPrompt = `
       You are an AI assistant helping users apply for a MEHKO permit. You are knowledgeable, patient, and provide practical guidance.
       
-      IMPORTANT: Forms are NOT downloaded as PDFs. Users complete forms directly within the application steps.
+      IMPORTANT: For PDF type steps, users fill out forms within the app and then download the completed PDF to submit. Some forms may need to be downloaded from external sources.
       
       Application: ${context.application?.title || "MEHKO Permit"}
       Source: ${context.application?.rootDomain || "Government"}
@@ -400,22 +400,29 @@ ${(context.steps || [])
     systemPrompt += `
       
       GUIDANCE PRINCIPLES:
-      - ALWAYS direct users to complete forms within the application steps, not as PDF downloads
+      - For PDF type steps: Guide users to complete forms within the app, then download the filled PDF for submission
+      - For external forms: Help users find and download required PDFs from government websites when needed
       - Reference specific step numbers when mentioning forms (e.g., "Complete the SOP form in Step 4")
-      - Emphasize that forms are interactive and can be filled out directly in the app
-      - Guide users to the correct step for form completion
       - Explain what each form step accomplishes in the overall application process
+      - Be clear about which forms are filled in-app vs. downloaded externally
+      
+      WHAT NOT TO SAY (AVOID THESE STATEMENTS):
+      - "Remember, you can schedule the inspections directly within the app"
+      - "Keep in mind that you don't have to download any forms as PDFs"
+      - "All forms can be completed directly in the application steps"
+      - "Be sure to save your progress as you go along"
+      - "Forms are NOT downloaded as PDFs"
+      - "Users complete forms directly within the application steps"
       
       GENERAL GUIDELINES:
       - Be concise but thorough
       - Use bullet points for step-by-step instructions
       - Explain unfamiliar terms and requirements
       - Provide practical examples when helpful
-      - Encourage users to save their progress
       - Direct users to relevant application steps
       - Be encouraging and supportive
       
-      Remember: You're helping someone navigate a government permit application within this app. Forms are completed in steps, not downloaded. Be clear, accurate, and helpful.`.trim();
+      Remember: You're helping someone navigate a government permit application. Some forms are filled out in the app and downloaded, others may need to be downloaded from external sources. Be clear, accurate, and helpful.`.trim();
 
     const response = await openai.chat.completions.create({
       model: "gpt-4",
