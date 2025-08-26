@@ -1,5 +1,5 @@
 // Interview.jsx
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PDFPreviewPanel from "../applications/PDFPreviewPanel";
 import useAuth from "../../hooks/useAuth";
@@ -20,13 +20,14 @@ export function InterviewView({ app, form, application, step }) {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [currentFieldId, setCurrentFieldId] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  
+
   // Auto-save state
-  const [autoSaveTimeout, setAutoSaveTimeout] = useState(null);
+  const autoSaveTimeoutRef = useRef(null);
+  const countdownIntervalRef = useRef(null);
   const [autoSaveCountdown, setAutoSaveCountdown] = useState(0);
   const [saveStatus, setSaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
   const [lastSaved, setLastSaved] = useState(null);
-  
+
   const { user, isAdmin } = useAuth();
   const location = useLocation();
   const { openAuthModal } = useAuthModal();
@@ -34,139 +35,126 @@ export function InterviewView({ app, form, application, step }) {
   // Check if we're in admin context or user context
   const isAdminRoute = location.pathname.startsWith("/admin");
 
-  // Auto-save functionality with debouncing
-  const scheduleAutoSave = useCallback(() => {
-    if (autoSaveTimeout) {
-      clearTimeout(autoSaveTimeout);
-    }
-
-    setSaveStatus("saving");
-    setAutoSaveCountdown(2);
-
-    const timeout = setTimeout(() => {
-      saveFormData();
-    }, 2000); // Auto-save after 2 seconds of inactivity
-
-    setAutoSaveTimeout(timeout);
-
-    // Update countdown every second
-    const countdownInterval = setInterval(() => {
-      setAutoSaveCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(countdownInterval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, [autoSaveTimeout]);
-
-  // Cleanup auto-save timeout
+  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      if (autoSaveTimeout) {
-        clearTimeout(autoSaveTimeout);
-      }
+      if (autoSaveTimeoutRef.current) clearTimeout(autoSaveTimeoutRef.current);
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
-  }, [autoSaveTimeout]);
+  }, []);
 
   // Save form data to Firestore
-  const saveFormData = async () => {
+  const saveFormData = useCallback(async () => {
     if (!user || !app || !form) return;
-    
     try {
       setSaveStatus("saving");
       await savePdfFormData(user.uid, app, form, values);
       setSaveStatus("saved");
       setLastSaved(new Date());
-      
+
       // Clear any pending auto-save
-      if (autoSaveTimeout) {
-        clearTimeout(autoSaveTimeout);
-        setAutoSaveTimeout(null);
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+        autoSaveTimeoutRef.current = null;
       }
-      
-      // Show success status briefly
+
+      // Reset to idle after a short delay
       setTimeout(() => {
-        if (saveStatus === "saved") {
-          setSaveStatus("idle");
-        }
+        setSaveStatus("idle");
       }, 2000);
-      
     } catch (error) {
       console.error("Failed to save form data:", error);
       setSaveStatus("error");
-      
-      // Show error status briefly
-      setTimeout(() => {
-        setSaveStatus("idle");
-      }, 3000);
+      setTimeout(() => setSaveStatus("idle"), 3000);
     }
-  };
+  }, [user, app, form, values]);
+
+  // Auto-save functionality with debouncing (stable via refs)
+  const scheduleAutoSave = useCallback(() => {
+    if (!user) return;
+
+    // Clear existing timers
+    if (autoSaveTimeoutRef.current) clearTimeout(autoSaveTimeoutRef.current);
+    if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
+
+    setSaveStatus("saving");
+    setAutoSaveCountdown(2);
+
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      saveFormData();
+      autoSaveTimeoutRef.current = null;
+    }, 2000);
+
+    // countdown tick (2 -> 0)
+    countdownIntervalRef.current = setInterval(() => {
+      setAutoSaveCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(countdownIntervalRef.current);
+          countdownIntervalRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [user, saveFormData]);
 
   useEffect(() => {
     (async () => {
       setLoading(true);
-      console.log("InterviewView fetching:", app, form); // debug
-      const r = await fetch(`${API}/apps/${app}/forms/${form}/template`);
-      const tpl = await r.json();
-      console.log("template response:", tpl); // debug
-      const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
-      setOverlay({ fields });
-      
-      // Debug: Log field order for verification
-      console.log("Field order loaded:", fields.map(f => ({ id: f.id, label: f.label, page: f.page })));
-      
-      // Initialize form values
-      const init = {};
-      for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
-      
-      // Load saved data if user is authenticated
-      if (user && app && form) {
-        try {
-          const savedData = await loadPdfFormData(user.uid, app, form);
-          // Merge saved data with initial values
-          const mergedValues = { ...init, ...savedData };
-          setValues(mergedValues);
-          console.log("Loaded saved form data:", savedData);
-        } catch (error) {
-          console.error("Failed to load saved form data:", error);
+      try {
+        const r = await fetch(`${API}/apps/${app}/forms/${form}/template`);
+        const tpl = await r.json();
+        const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
+        setOverlay({ fields });
+
+        // Initialize form values
+        const init = {};
+        for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
+
+        // Load saved data if user is authenticated
+        if (user && app && form) {
+          try {
+            const savedData = await loadPdfFormData(user.uid, app, form);
+            const mergedValues = { ...init, ...savedData };
+            setValues(mergedValues);
+          } catch (error) {
+            console.error("Failed to load saved form data:", error);
+            setValues(init);
+          }
+        } else {
           setValues(init);
         }
-      } else {
-        setValues(init);
+      } catch (e) {
+        console.error("Template fetch failed:", e);
+        setOverlay({ fields: [] });
+        setValues({});
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     })();
   }, [app, form, user]);
 
-  function onChange(id, type, v) {
-    const newValues = { ...values, [id]: type === "checkbox" ? !!v : v };
-    setValues(newValues);
-    
-    // Schedule auto-save for form changes
-    if (user) {
+  const onChange = useCallback(
+    (id, type, v) => {
+      setValues(prev => {
+        const next = { ...prev, [id]: type === "checkbox" ? !!v : v };
+        return next;
+      });
       scheduleAutoSave();
-    }
-  }
+    },
+    [scheduleAutoSave]
+  );
 
-  const handleFieldFocus = (fieldId) => {
-    setCurrentFieldId(fieldId);
-  };
-
-  const handleFieldBlur = () => {
-    setCurrentFieldId(null);
-  };
+  const handleFieldFocus = (fieldId) => setCurrentFieldId(fieldId);
+  const handleFieldBlur = () => setCurrentFieldId(null);
 
   async function onSubmit(e) {
     e.preventDefault();
-    
-    // Save form data before submitting
+
     if (user) {
       await saveFormData();
     }
-    
+
     const fd = new FormData();
     fd.append("answers_json", JSON.stringify(values));
     const r = await fetch(`${API}/apps/${app}/forms/${form}/fill`, {
@@ -192,30 +180,12 @@ export function InterviewView({ app, form, application, step }) {
       if (!g.has(p)) g.set(p, []);
       g.get(p).push(f);
     }
-    
-    // Sort fields within each page by their order in the overlay array
-    // This preserves the exact order established in the mapper
     for (const [pageNum, fields] of g.entries()) {
-      // Get the original order from the overlay for this page
       const pageFieldOrder = overlay.fields
         .filter(f => (f.page ?? 0) === pageNum)
         .map(f => f.id);
-      
-      // Debug: Log field ordering for this page
-      console.log(`Page ${pageNum} field order:`, pageFieldOrder);
-      console.log(`Page ${pageNum} fields before sort:`, fields.map(f => ({ id: f.id, label: f.label })));
-      
-      // Sort fields according to their original order
-      fields.sort((a, b) => {
-        const aIndex = pageFieldOrder.indexOf(a.id);
-        const bIndex = pageFieldOrder.indexOf(b.id);
-        return aIndex - bIndex;
-      });
-      
-      // Debug: Log fields after sorting
-      console.log(`Page ${pageNum} fields after sort:`, fields.map(f => ({ id: f.id, label: f.label })));
+      fields.sort((a, b) => pageFieldOrder.indexOf(a.id) - pageFieldOrder.indexOf(b.id));
     }
-    
     return [...g.entries()].sort((a, b) => a[0] - b[0]);
   }, [overlay]);
 
@@ -233,119 +203,36 @@ export function InterviewView({ app, form, application, step }) {
   // Authentication check - different messages for admin vs user context
   if (!user) {
     if (isAdminRoute) {
-      // Admin route - show admin access denied
       return (
-        <div
-          style={{
-            padding: 24,
-            textAlign: "center",
-            maxWidth: 500,
-            margin: "0 auto",
-          }}
-        >
-          <div
-            style={{
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: "12px",
-              padding: "24px",
-              marginBottom: "24px",
-            }}
-          >
-            <h3
-              style={{
-                color: "#dc2626",
-                margin: "0 0 16px 0",
-                fontSize: "20px",
-              }}
-            >
-              🚫 Access Denied
-            </h3>
-            <p
-              style={{
-                color: "#7f1d1d",
-                margin: "0 0 20px 0",
-                lineHeight: "1.6",
-              }}
-            >
-              Admin privileges required. Only authorized users can access this
-              area.
+        <div style={{ padding: 24, textAlign: "center", maxWidth: 500, margin: "0 auto" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
+            <h3 style={{ color: "#dc2626", margin: "0 0 16px 0", fontSize: "20px" }}>🚫 Access Denied</h3>
+            <p style={{ color: "#7f1d1d", margin: "0 0 20px 0", lineHeight: "1.6" }}>
+              Admin privileges required. Only authorized users can access this area.
             </p>
             <button
-              onClick={() => {
-                window.location.href = "/dashboard";
-              }}
-              style={{
-                background: "#dc2626",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                padding: "12px 24px",
-                fontSize: "16px",
-                cursor: "pointer",
-                fontWeight: "500",
-              }}
+              onClick={() => { window.location.href = "/dashboard"; }}
+              style={{ background: "#dc2626", color: "white", border: "none", borderRadius: "8px", padding: "12px 24px", fontSize: "16px", cursor: "pointer", fontWeight: "500" }}
             >
               Return to Dashboard
             </button>
           </div>
           <p style={{ color: "#6b7280", fontSize: "14px" }}>
-            This is an admin-only area for managing the <strong>{app}</strong>{" "}
-            application.
+            This is an admin-only area for managing the <strong>{app}</strong> application.
           </p>
         </div>
       );
     } else {
-      // User route - show authentication required message
       return (
-        <div
-          style={{
-            padding: 24,
-            textAlign: "center",
-            maxWidth: 500,
-            margin: "0 auto",
-          }}
-        >
-          <div
-            style={{
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: "12px",
-              padding: "24px",
-              marginBottom: "24px",
-            }}
-          >
-            <h3
-              style={{
-                color: "#dc2626",
-                margin: "0 0 16px 0",
-                fontSize: "20px",
-              }}
-            >
-              🔒 Authentication Required
-            </h3>
-            <p
-              style={{
-                color: "#7f1d1d",
-                margin: "0 0 20px 0",
-                lineHeight: "1.6",
-              }}
-            >
-              You need to be signed in to fill out this form. Please log in to
-              continue with your application.
+        <div style={{ padding: 24, textAlign: "center", maxWidth: 500, margin: "0 auto" }}>
+          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
+            <h3 style={{ color: "#dc2626", margin: "0 0 16px 0", fontSize: "20px" }}>🔒 Authentication Required</h3>
+            <p style={{ color: "#7f1d1d", margin: "0 0 20px 0", lineHeight: "1.6" }}>
+              You need to be signed in to fill out this form. Please log in to continue with your application.
             </p>
             <button
               onClick={openAuthModal}
-              style={{
-                background: "#dc2626",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                padding: "12px 24px",
-                fontSize: "16px",
-                cursor: "pointer",
-                fontWeight: "500",
-              }}
+              style={{ background: "#dc2626", color: "white", border: "none", borderRadius: "8px", padding: "12px 24px", fontSize: "16px", cursor: "pointer", fontWeight: "500" }}
             >
               Sign In to Continue
             </button>
@@ -361,63 +248,21 @@ export function InterviewView({ app, form, application, step }) {
   // Check if user is admin for admin routes
   if (isAdminRoute && !isAdmin) {
     return (
-      <div
-        style={{
-          padding: 24,
-          textAlign: "center",
-          maxWidth: 500,
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            background: "#fef2f2",
-            border: "1px solid #fecaca",
-            borderRadius: "12px",
-            padding: "24px",
-            marginBottom: "24px",
-          }}
-        >
-          <h3
-            style={{
-              color: "#dc2626",
-              margin: "0 0 16px 0",
-              fontSize: "20px",
-            }}
-          >
-            🚫 Access Denied
-          </h3>
-          <p
-            style={{
-              color: "#7f1d1d",
-              margin: "0 0 20px 0",
-              lineHeight: "1.6",
-            }}
-          >
-            Admin privileges required. Only authorized users can access this
-            area.
+      <div style={{ padding: 24, textAlign: "center", maxWidth: 500, margin: "0 auto" }}>
+        <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
+          <h3 style={{ color: "#dc2626", margin: "0 0 16px 0", fontSize: "20px" }}>🚫 Access Denied</h3>
+          <p style={{ color: "#7f1d1d", margin: "0 0 20px 0", lineHeight: "1.6" }}>
+            Admin privileges required. Only authorized users can access this area.
           </p>
           <button
-            onClick={() => {
-              window.location.href = "/dashboard";
-            }}
-            style={{
-              background: "#dc2626",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "12px 24px",
-              fontSize: "16px",
-              cursor: "pointer",
-              fontWeight: "500",
-            }}
+            onClick={() => { window.location.href = "/dashboard"; }}
+            style={{ background: "#dc2626", color: "white", border: "none", borderRadius: "8px", padding: "12px 24px", fontSize: "16px", cursor: "pointer", fontWeight: "500" }}
           >
             Return to Dashboard
           </button>
         </div>
         <p style={{ color: "#6b7280", fontSize: "14px" }}>
-          This is an admin-only area for managing the <strong>{app}</strong>{" "}
-          application.
+          This is an admin-only area for managing the <strong>{app}</strong> application.
         </p>
       </div>
     );
@@ -426,64 +271,19 @@ export function InterviewView({ app, form, application, step }) {
   // Better "no fields" message
   if (!overlay.fields.length) {
     return (
-      <div
-        style={{
-          padding: 24,
-          textAlign: "center",
-          maxWidth: 600,
-          margin: "0 auto",
-        }}
-      >
-        <div
-          style={{
-            background: "#f0f9ff",
-            border: "1px solid #bae6fd",
-            borderRadius: "12px",
-            padding: "24px",
-            marginBottom: "24px",
-          }}
-        >
-          <h3
-            style={{
-              color: "#0369a1",
-              margin: "0 0 16px 0",
-              fontSize: "20px",
-            }}
-          >
-            📋 No Form Fields Available
-          </h3>
-          <p
-            style={{
-              color: "#0c4a6e",
-              margin: "0 0 16px 0",
-              lineHeight: "1.6",
-            }}
-          >
-            This form doesn't have any fillable fields defined yet. This usually
-            means:
+      <div style={{ padding: 24, textAlign: "center", maxWidth: 600, margin: "0 auto" }}>
+        <div style={{ background: "#f0f9ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
+          <h3 style={{ color: "#0369a1", margin: "0 0 16px 0", fontSize: "20px" }}>📋 No Form Fields Available</h3>
+          <p style={{ color: "#0c4a6e", margin: "0 0 16px 0", lineHeight: "1.6" }}>
+            This form doesn't have any fillable fields defined yet. This usually means:
           </p>
-          <ul
-            style={{
-              textAlign: "left",
-              color: "#0c4a6e",
-              lineHeight: "1.6",
-              margin: "0 0 20px 0",
-              paddingLeft: "20px",
-            }}
-          >
+          <ul style={{ textAlign: "left", color: "#0c4a6e", lineHeight: "1.6", margin: "0 0 20px 0", paddingLeft: "20px" }}>
             <li>The form is still being processed</li>
             <li>This is an informational document only</li>
             <li>Field extraction is in progress</li>
           </ul>
-          <p
-            style={{
-              color: "#0c4a6e",
-              margin: "0",
-              fontSize: "14px",
-            }}
-          >
-            <strong>What to do:</strong> Check back later or contact support if
-            you need this form to be fillable.
+          <p style={{ color: "#0c4a6e", margin: "0", fontSize: "14px" }}>
+            <strong>What to do:</strong> Check back later or contact support if you need this form to be fillable.
           </p>
         </div>
         <p style={{ color: "#6b7280", fontSize: "14px" }}>
@@ -499,7 +299,7 @@ export function InterviewView({ app, form, application, step }) {
         <div className="header-content">
           <h2>PDF Form: {form}</h2>
           <p>Fill out the form fields below to generate your completed PDF</p>
-          
+
           {/* Auto-save status indicator */}
           {user && (
             <div className="auto-save-status">
@@ -513,26 +313,16 @@ export function InterviewView({ app, form, application, step }) {
                   ✓ Saved {lastSaved && `at ${lastSaved.toLocaleTimeString()}`}
                 </span>
               )}
-              {saveStatus === "error" && (
-                <span className="status error">
-                  ❌ Save failed
-                </span>
-              )}
+              {saveStatus === "error" && <span className="status error">❌ Save failed</span>}
               {saveStatus === "idle" && autoSaveCountdown > 0 && (
-                <span className="status pending">
-                  Auto-saving in {autoSaveCountdown}s...
-                </span>
+                <span className="status pending">Auto-saving in {autoSaveCountdown}s...</span>
               )}
             </div>
           )}
         </div>
 
         {user && (
-          <ReportButton
-            onClick={handleReportClick}
-            size="small"
-            variant="subtle"
-          >
+          <ReportButton onClick={handleReportClick} size="small" variant="subtle">
             Report Issue
           </ReportButton>
         )}
@@ -546,14 +336,7 @@ export function InterviewView({ app, form, application, step }) {
           className="preview-button"
           title="Open PDF Preview"
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
             <polyline points="14,2 14,8 20,8"></polyline>
             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -589,9 +372,7 @@ export function InterviewView({ app, form, application, step }) {
                       id={f.id}
                       type="checkbox"
                       checked={!!values[f.id]}
-                      onChange={(e) =>
-                        onChange(f.id, "checkbox", e.target.checked)
-                      }
+                      onChange={(e) => onChange(f.id, "checkbox", e.target.checked)}
                       onFocus={() => handleFieldFocus(f.id)}
                       onBlur={handleFieldBlur}
                       className="checkbox-input"

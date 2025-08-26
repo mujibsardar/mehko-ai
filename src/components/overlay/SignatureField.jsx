@@ -1,153 +1,116 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { generateSignatureImage } from '../../helpers/signatureUtils';
 import './SignatureField.scss';
 
-const SignatureField = ({ 
-  fieldId, 
-  value, 
-  onChange, 
-  onFocus, 
+const SignatureField = ({
+  fieldId,
+  value,
+  onChange,
+  onFocus,
   onBlur,
-  field 
+  field
 }) => {
-  const canvasRef = useRef(null);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [lastX, setLastX] = useState(0);
-  const [lastY, setLastY] = useState(0);
+  const [signatureText, setSignatureText] = useState('');
+  const [previewSignature, setPreviewSignature] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  // Initialize canvas
+  // Keep latest onChange without re-triggering effects
+  const onChangeRef = useRef(onChange);
+  useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
+
+  // Determine if we have an existing image value from parent
+  const hasImageValue = typeof value === 'string' && value.startsWith('data:image');
+
+  // Initialize exactly once with any existing image from parent
+  const didInit = useRef(false);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }, []);
-
-  const startDrawing = (e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    setIsDrawing(true);
-    setLastX(x);
-    setLastY(y);
-  };
-
-  const draw = (e) => {
-    if (!isDrawing) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(x, y);
-    ctx.stroke();
-
-    setLastX(x);
-    setLastY(y);
-  };
-
-  const stopDrawing = () => {
-    setIsDrawing(false);
-    saveSignature();
-  };
-
-  const saveSignature = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    try {
-      const dataUrl = canvas.toDataURL('image/png');
-      onChange(fieldId, 'signature', dataUrl);
-    } catch (error) {
-      console.error('Error saving signature:', error);
+    if (didInit.current) return;
+    if (hasImageValue) {
+      setPreviewSignature(value);
+      setSignatureText(''); // don't backfill text from image
+    } else {
+      setPreviewSignature('');
     }
-  };
+    setIsInitialized(true);
+    didInit.current = true;
+  }, [hasImageValue, value]);
+
+  // Generate the image ONLY when the typed text changes
+  const generatedUrl = useMemo(() => {
+    const t = signatureText.trim();
+    if (!t) return '';
+    // IMPORTANT: generate deterministically from text so equality works
+    // (generateSignatureImage should NOT include timestamps/randomness)
+    return generateSignatureImage(t, { width: 200, height: 50, fontSize: 24 });
+  }, [signatureText]);
+
+  // Sync preview when generatedUrl changes (avoid redundant sets)
+  useEffect(() => {
+    if (!isInitialized) return;
+    if (previewSignature !== generatedUrl) {
+      setPreviewSignature(generatedUrl);
+    }
+  }, [generatedUrl, isInitialized, previewSignature]);
+
+  // Notify parent ONLY when effective image changes and differs from parent value
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    // Effective current image is generatedUrl (from text); empty string clears it
+    const nextValue = generatedUrl;
+
+    // Avoid infinite loops: only call if truly different
+    if (nextValue !== (value || '')) {
+      onChangeRef.current?.(fieldId, 'signature', nextValue);
+    }
+    // dependency on `value` is intentional: if parent pushes a different value later,
+    // this effect will reconcile correctly next render via generatedUrl/preview logic.
+  }, [generatedUrl, fieldId, value, isInitialized]);
 
   const clearSignature = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    onChange(fieldId, 'signature', '');
-  };
-
-  const generateSignatureFromText = () => {
-    const text = prompt('Enter your name for signature:');
-    if (text) {
-      const signatureDataUrl = generateSignatureImage(text, {
-        width: canvasRef.current?.width || 200,
-        height: canvasRef.current?.height || 50,
-        fontSize: 24
-      });
-      onChange(fieldId, 'signature', signatureDataUrl);
-      
-      // Draw the generated signature on canvas
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        const img = new Image();
-        img.onload = () => {
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        };
-        img.src = signatureDataUrl;
-      }
-    }
+    setSignatureText('');
+    // preview will be synced to '' by the effects above
   };
 
   return (
     <div className="signature-field">
-      <canvas
-        ref={canvasRef}
-        width={200}
-        height={50}
-        style={{
-          border: '1px solid #ccc',
-          cursor: 'crosshair',
-          backgroundColor: '#fff'
-        }}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        onFocus={onFocus}
-        onBlur={onBlur}
-      />
+      <div className="signature-input-section">
+        <label htmlFor={`${fieldId}-input`} className="signature-label">
+          Enter your name for signature:
+        </label>
+        <input
+          id={`${fieldId}-input`}
+          type="text"
+          value={signatureText}
+          onChange={(e) => setSignatureText(e.target.value)}
+          placeholder="Type your full name here..."
+          className="signature-text-input"
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
+      </div>
+
+      {previewSignature && (
+        <div className="signature-preview-section">
+          <label className="signature-preview-label">Signature Preview:</label>
+          <div className="signature-preview">
+            <img
+              src={previewSignature}
+              alt="Signature preview"
+              className="signature-preview-image"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="signature-controls">
-        <button
-          type="button"
-          onClick={generateSignatureFromText}
-          className="generate-signature-btn"
-          title="Generate signature from text"
-        >
-          ✍️ Generate
-        </button>
         <button
           type="button"
           onClick={clearSignature}
           className="clear-signature-btn"
           title="Clear signature"
         >
-          ✗ Clear
+          ✗ Clear Signature
         </button>
       </div>
     </div>
