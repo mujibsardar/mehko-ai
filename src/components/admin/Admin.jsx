@@ -1203,37 +1203,93 @@ export default function Admin() {
               <h3 style={{ marginTop: 0 }}>Application Details</h3>
               <div style={{ display: "grid", gap: 12 }}>
                 <div>
-                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                     Application ID
                   </label>
                   <input
                     placeholder="e.g., san_diego_mehko"
                     value={appId}
                     onChange={(e) => setAppId(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#1f2937",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#3b82f6";
+                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e5e7eb";
+                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                    }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                     Application Title
                   </label>
                   <input
                     placeholder="e.g., Orange County MEHKO"
                     value={appTitle}
                     onChange={(e) => setAppTitle(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#1f2937",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#3b82f6";
+                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e5e7eb";
+                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                    }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                     Root Domain
                   </label>
                   <input
                     placeholder="e.g., ocgov.com"
                     value={rootDomain}
                     onChange={(e) => setRootDomain(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e5e7eb",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#1f2937",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#3b82f6";
+                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e5e7eb";
+                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                    }}
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                     Description
                   </label>
                   <textarea
@@ -1241,11 +1297,57 @@ export default function Admin() {
                     rows={3}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    style={{ resize: "vertical" }}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#1f2937",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                      resize: "vertical",
+                      fontFamily: "inherit"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#3b82f6";
+                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e5e7eb";
+                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                    }}
                   />
                 </div>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={saveAppMeta}>Save App</button>
+                  <button 
+                    onClick={saveAppMeta}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: "#10b981",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#059669";
+                      e.target.style.transform = "translateY(-1px)";
+                      e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "#10b981";
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                    }}
+                  >
+                    Save App
+                  </button>
                 </div>
               </div>
             </section>
@@ -1354,12 +1456,32 @@ export default function Admin() {
               <div style={{ display: "grid", gap: 12, alignItems: "start" }}>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <div>
-                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                       Step Type
                     </label>
                     <select
                       value={newType}
                       onChange={(e) => setNewType(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "2px solid #e5e7eb",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        backgroundColor: "#ffffff",
+                        color: "#1f2937",
+                        transition: "all 0.2s ease",
+                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                        cursor: "pointer"
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#3b82f6";
+                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e5e7eb";
+                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                      }}
                     >
                       <option value="info">Information Step</option>
                       <option value="form">Form Step</option>
@@ -1367,19 +1489,38 @@ export default function Admin() {
                     </select>
                   </div>
                   <div>
-                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                       Step Title
                     </label>
                     <input
                       placeholder="Enter step title..."
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "2px solid #e5e7eb",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        backgroundColor: "#ffffff",
+                        color: "#1f2937",
+                        transition: "all 0.2s ease",
+                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#3b82f6";
+                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e5e7eb";
+                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                      }}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                     Step Description
                   </label>
                   <textarea
@@ -1387,37 +1528,95 @@ export default function Admin() {
                     rows={2}
                     value={newContent}
                     onChange={(e) => setNewContent(e.target.value)}
-                    style={{ resize: "vertical" }}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      border: "2px solid #e5e7eb",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#1f2937",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                      resize: "vertical",
+                      fontFamily: "inherit"
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "#3b82f6";
+                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e5e7eb";
+                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                    }}
                   />
                 </div>
 
                 {newType === "form" && (
                   <div>
-                    <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                       Form Name
                     </label>
                     <input
                       placeholder="e.g., MEHKO_SOP-English.pdf"
                       value={newFormName}
                       onChange={(e) => setNewFormName(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "12px 16px",
+                        border: "2px solid #e5e7eb",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        backgroundColor: "#ffffff",
+                        color: "#1f2937",
+                        transition: "all 0.2s ease",
+                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = "#3b82f6";
+                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = "#e5e7eb";
+                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                      }}
                     />
                   </div>
                 )}
 
                 {newType === "pdf" && (
-                  <div style={{ display: "grid", gap: 8 }}>
+                  <div style={{ display: "grid", gap: 12 }}>
                     <div>
-                      <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                      <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                         Form ID
                       </label>
                       <input
                         placeholder="e.g., MEHKO_SOP-English"
                         value={newFormId}
                         onChange={(e) => setNewFormId(e.target.value)}
+                        style={{
+                          width: "100%",
+                          padding: "12px 16px",
+                          border: "2px solid #e5e7eb",
+                          borderRadius: "8px",
+                          fontSize: "14px",
+                          backgroundColor: "#ffffff",
+                          color: "#1f2937",
+                          transition: "all 0.2s ease",
+                          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = "#3b82f6";
+                          e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = "#e5e7eb";
+                          e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                        }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: "block", marginBottom: 4, fontSize: 13, fontWeight: 500, color: "#374151" }}>
+                      <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
                         PDF File
                       </label>
                       <input
@@ -1426,16 +1625,88 @@ export default function Admin() {
                         onChange={(e) =>
                           setNewPdfFile(e.target.files?.[0] || null)
                         }
+                        style={{
+                          width: "100%",
+                          padding: "12px 16px",
+                          border: "2px solid #e5e7eb",
+                          borderRadius: "8px",
+                          fontSize: "14px",
+                          backgroundColor: "#ffffff",
+                          color: "#1f2937",
+                          transition: "all 0.2s ease",
+                          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+                          cursor: "pointer"
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = "#3b82f6";
+                          e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = "#e5e7eb";
+                          e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
+                        }}
                       />
                     </div>
                   </div>
                 )}
 
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <button onClick={addStepToQueue}>Add to Queue</button>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <button 
+                    onClick={addStepToQueue}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: "#3b82f6",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "#2563eb";
+                      e.target.style.transform = "translateY(-1px)";
+                      e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "#3b82f6";
+                      e.target.style.transform = "translateY(0)";
+                      e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                    }}
+                  >
+                    Add to Queue
+                  </button>
                   <button
                     onClick={saveQueuedSteps}
                     disabled={!appId || queuedSteps.length === 0}
+                    style={{
+                      padding: "12px 24px",
+                      backgroundColor: !appId || queuedSteps.length === 0 ? "#9ca3af" : "#10b981",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      cursor: !appId || queuedSteps.length === 0 ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!(!appId || queuedSteps.length === 0)) {
+                        e.target.style.backgroundColor = "#059669";
+                        e.target.style.transform = "translateY(-1px)";
+                        e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!(!appId || queuedSteps.length === 0)) {
+                        e.target.style.backgroundColor = "#10b981";
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
+                      }
+                    }}
                   >
                     Save All Steps
                   </button>
