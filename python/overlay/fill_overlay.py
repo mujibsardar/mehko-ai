@@ -18,6 +18,10 @@ def _checkbox(p: fitz.Page, rect: List[float], v: bool):
         p.draw_line(R.tl, R.br, width=1.5, color=(0,0,0), overlay=True)
         p.draw_line(R.tr, R.bl, width=1.5, color=(0,0,0), overlay=True)
 
+def _signature(p: fitz.Page, rect: List[float], png_bytes: bytes):
+    r = fitz.Rect(*rect)
+    p.insert_image(r, stream=png_bytes, keep_proportion=True, overlay=True)
+
 def _text(p: fitz.Page, rect: List[float], text: str, size=11, align="left", shrink=True):
     R = fitz.Rect(*rect)
     if not text: return
@@ -41,6 +45,17 @@ def fill_pdf_overlay_bytes(pdf_bytes: bytes, overlay: Dict[str,Any], answers: Di
             _checkbox(page, f["rect"], bool(val))
             continue
 
+        if ftype == "signature":
+            # accept either raw PNG bytes or a base64/data URL string
+            png = val
+            if isinstance(val, str) and val.startswith("data:image/png;base64,"):
+                import base64
+                png = base64.b64decode(val.split(",",1)[1])
+            _bg(page, f["rect"], color=(1,1,1)) if f.get("bg") else None
+            _signature(page, f["rect"], png)
+            continue
+
+        # text (existing)
         txt = str(val)
         if f.get("uppercase"): txt = txt.upper()
         if f.get("bg"): _bg(page, f["rect"])  # white-out under text if needed

@@ -7,6 +7,8 @@ import { useAuthModal } from "../../providers/AuthModalProvider";
 import { savePdfFormData, loadPdfFormData } from "../../firebase/userData";
 import ReportButton from "../generic/ReportButton";
 import ReportIssueModal from "../modals/ReportIssueModal";
+import { isSignatureField } from "../../helpers/signatureUtils";
+import SignatureField from "./SignatureField";
 import "./Interview.scss";
 
 const API = "http://127.0.0.1:8000";
@@ -573,7 +575,16 @@ export function InterviewView({ app, form, application, step }) {
                     {f.label || f.id}
                   </label>
 
-                  {String(f.type || "text").toLowerCase() === "checkbox" ? (
+                  {isSignatureField(f) ? (
+                    <SignatureField
+                      fieldId={f.id}
+                      value={values[f.id] ?? ""}
+                      onChange={onChange}
+                      onFocus={() => handleFieldFocus(f.id)}
+                      onBlur={handleFieldBlur}
+                      field={f}
+                    />
+                  ) : String(f.type || "text").toLowerCase() === "checkbox" ? (
                     <input
                       id={f.id}
                       type="checkbox"

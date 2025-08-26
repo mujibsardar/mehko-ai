@@ -49,7 +49,7 @@
       "id": "ai_field_19",
       "label": "OWNER'S SIGNATURE",
       "page": 1,
-      "type": "text",
+      "type": "signature",
       "rect": [
         268.5,
         708.75,
