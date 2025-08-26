@@ -159,31 +159,27 @@
           display: flex;
           flex-direction: column;
           gap: 8px;
-          width: 100%;
-          padding: 12px 0;
+          margin-bottom: 16px;
 
           .field-label {
             font-weight: 600;
             color: #374151;
             font-size: 0.875rem;
-            line-height: 1.4;
-            word-break: break-word;
-            margin-bottom: 2px;
+            margin: 0;
+          }
+
+          .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
           }
 
           .text-input {
             padding: 10px 12px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
-            font-size: 14px;
-            background: #ffffff;
+            font-size: 0.875rem;
             transition: border-color 0.2s ease;
-            width: 100%;
-            box-sizing: border-box;
-            min-width: 0;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
 
             &:focus {
               outline: none;
@@ -196,11 +192,41 @@
             }
           }
 
-          .checkbox-input {
-            width: 18px;
-            height: 18px;
-            margin-top: 4px;
-            accent-color: #3b82f6;
+          .signature-field {
+            .signature-input {
+              padding: 10px 12px;
+              border: 1px solid #d1d5db;
+              border-radius: 6px;
+              font-size: 0.875rem;
+              transition: border-color 0.2s ease;
+              margin-bottom: 8px;
+
+              &:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+              }
+
+              &::placeholder {
+                color: #9ca3af;
+              }
+            }
+
+            .signature-preview {
+              border: 1px solid #e5e7eb;
+              border-radius: 6px;
+              padding: 8px;
+              background: #f9fafb;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 50px;
+
+              .signature-svg {
+                max-width: 100%;
+                height: auto;
+              }
+            }
           }
         }
       }

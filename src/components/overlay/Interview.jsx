@@ -18,19 +18,39 @@ export function InterviewView({ app, form, application, step }) {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [currentFieldId, setCurrentFieldId] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  
+
   // Auto-save state
   const [autoSaveTimeout, setAutoSaveTimeout] = useState(null);
   const [autoSaveCountdown, setAutoSaveCountdown] = useState(0);
   const [saveStatus, setSaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
   const [lastSaved, setLastSaved] = useState(null);
-  
+
   const { user, isAdmin } = useAuth();
   const location = useLocation();
   const { openAuthModal } = useAuthModal();
 
   // Check if we're in admin context or user context
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // Generate signature path for preview
+  const generateSignaturePath = (name) => {
+    if (!name || !name.trim()) return "";
+
+    const nameLen = name.trim().length;
+
+    // Create a flowing signature path that matches the backend
+    let path = "M 20 20";
+
+    if (nameLen > 10) {
+      // Longer names get more complex curves with multiple loops
+      path += " Q 35 12, 50 22 Q 65 32, 80 18 Q 95 8, 110 28 Q 125 48, 140 22 Q 155 12, 170 26";
+    } else {
+      // Shorter names get simpler curves
+      path += " Q 45 17, 70 27 Q 95 37, 120 22 Q 145 17, 170 26";
+    }
+
+    return path;
+  };
 
   // Auto-save functionality with debouncing
   const scheduleAutoSave = useCallback(() => {
@@ -71,30 +91,30 @@ export function InterviewView({ app, form, application, step }) {
   // Save form data to Firestore
   const saveFormData = async () => {
     if (!user || !app || !form) return;
-    
+
     try {
       setSaveStatus("saving");
       await savePdfFormData(user.uid, app, form, values);
       setSaveStatus("saved");
       setLastSaved(new Date());
-      
+
       // Clear any pending auto-save
       if (autoSaveTimeout) {
         clearTimeout(autoSaveTimeout);
         setAutoSaveTimeout(null);
       }
-      
+
       // Show success status briefly
       setTimeout(() => {
         if (saveStatus === "saved") {
           setSaveStatus("idle");
         }
       }, 2000);
-      
+
     } catch (error) {
       console.error("Failed to save form data:", error);
       setSaveStatus("error");
-      
+
       // Show error status briefly
       setTimeout(() => {
         setSaveStatus("idle");
@@ -111,14 +131,14 @@ export function InterviewView({ app, form, application, step }) {
       console.log("template response:", tpl); // debug
       const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
       setOverlay({ fields });
-      
+
       // Debug: Log field order for verification
       console.log("Field order loaded:", fields.map(f => ({ id: f.id, label: f.label, page: f.page })));
-      
+
       // Initialize form values
       const init = {};
       for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
-      
+
       // Load saved data if user is authenticated
       if (user && app && form) {
         try {
@@ -134,7 +154,7 @@ export function InterviewView({ app, form, application, step }) {
       } else {
         setValues(init);
       }
-      
+
       setLoading(false);
     })();
   }, [app, form, user]);
@@ -142,7 +162,7 @@ export function InterviewView({ app, form, application, step }) {
   function onChange(id, type, v) {
     const newValues = { ...values, [id]: type === "checkbox" ? !!v : v };
     setValues(newValues);
-    
+
     // Schedule auto-save for form changes
     if (user) {
       scheduleAutoSave();
@@ -159,12 +179,12 @@ export function InterviewView({ app, form, application, step }) {
 
   async function onSubmit(e) {
     e.preventDefault();
-    
+
     // Save form data before submitting
     if (user) {
       await saveFormData();
     }
-    
+
     const fd = new FormData();
     fd.append("answers_json", JSON.stringify(values));
     const r = await fetch(`${API}/apps/${app}/forms/${form}/fill`, {
@@ -190,7 +210,7 @@ export function InterviewView({ app, form, application, step }) {
       if (!g.has(p)) g.set(p, []);
       g.get(p).push(f);
     }
-    
+
     // Sort fields within each page by their order in the overlay array
     // This preserves the exact order established in the mapper
     for (const [pageNum, fields] of g.entries()) {
@@ -198,22 +218,22 @@ export function InterviewView({ app, form, application, step }) {
       const pageFieldOrder = overlay.fields
         .filter(f => (f.page ?? 0) === pageNum)
         .map(f => f.id);
-      
+
       // Debug: Log field ordering for this page
       console.log(`Page ${pageNum} field order:`, pageFieldOrder);
       console.log(`Page ${pageNum} fields before sort:`, fields.map(f => ({ id: f.id, label: f.label })));
-      
+
       // Sort fields according to their original order
       fields.sort((a, b) => {
         const aIndex = pageFieldOrder.indexOf(a.id);
         const bIndex = pageFieldOrder.indexOf(b.id);
         return aIndex - bIndex;
       });
-      
+
       // Debug: Log fields after sorting
       console.log(`Page ${pageNum} fields after sort:`, fields.map(f => ({ id: f.id, label: f.label })));
     }
-    
+
     return [...g.entries()].sort((a, b) => a[0] - b[0]);
   }, [overlay]);
 
@@ -497,7 +517,7 @@ export function InterviewView({ app, form, application, step }) {
         <div className="header-content">
           <h2>PDF Form: {form}</h2>
           <p>Fill out the form fields below to generate your completed PDF</p>
-          
+
           {/* Auto-save status indicator */}
           {user && (
             <div className="auto-save-status">
@@ -585,6 +605,37 @@ export function InterviewView({ app, form, application, step }) {
                       onBlur={handleFieldBlur}
                       className="checkbox-input"
                     />
+                  ) : String(f.type || "text").toLowerCase() === "signature" ? (
+                    <div className="signature-field">
+                      <input
+                        id={f.id}
+                        type="text"
+                        value={values[f.id] ?? ""}
+                        onChange={(e) => onChange(f.id, "signature", e.target.value)}
+                        placeholder="Enter your name for signature"
+                        onFocus={() => handleFieldFocus(f.id)}
+                        onBlur={handleFieldBlur}
+                        className="signature-input"
+                      />
+                      {values[f.id] && (
+                        <div className="signature-preview">
+                          <svg
+                            width="100%"
+                            height="40"
+                            viewBox="0 0 200 40"
+                            className="signature-svg"
+                          >
+                            <path
+                              d={generateSignaturePath(values[f.id])}
+                              fill="none"
+                              stroke="#000"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <input
                       id={f.id}
