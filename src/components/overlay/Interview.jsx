@@ -1,9 +1,10 @@
 // Interview.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PDFPreviewPanel from "../applications/PDFPreviewPanel";
 import useAuth from "../../hooks/useAuth";
 import { useAuthModal } from "../../providers/AuthModalProvider";
+import { savePdfFormData, loadPdfFormData } from "../../firebase/userData";
 import ReportButton from "../generic/ReportButton";
 import ReportIssueModal from "../modals/ReportIssueModal";
 import "./Interview.scss";
@@ -17,12 +18,89 @@ export function InterviewView({ app, form, application, step }) {
   const [isPdfPreviewOpen, setIsPdfPreviewOpen] = useState(false);
   const [currentFieldId, setCurrentFieldId] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  
+  // Auto-save state
+  const [autoSaveTimeout, setAutoSaveTimeout] = useState(null);
+  const [autoSaveCountdown, setAutoSaveCountdown] = useState(0);
+  const [saveStatus, setSaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
+  const [lastSaved, setLastSaved] = useState(null);
+  
   const { user, isAdmin } = useAuth();
   const location = useLocation();
   const { openAuthModal } = useAuthModal();
 
   // Check if we're in admin context or user context
   const isAdminRoute = location.pathname.startsWith("/admin");
+
+  // Auto-save functionality with debouncing
+  const scheduleAutoSave = useCallback(() => {
+    if (autoSaveTimeout) {
+      clearTimeout(autoSaveTimeout);
+    }
+
+    setSaveStatus("saving");
+    setAutoSaveCountdown(2);
+
+    const timeout = setTimeout(() => {
+      saveFormData();
+    }, 2000); // Auto-save after 2 seconds of inactivity
+
+    setAutoSaveTimeout(timeout);
+
+    // Update countdown every second
+    const countdownInterval = setInterval(() => {
+      setAutoSaveCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(countdownInterval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [autoSaveTimeout]);
+
+  // Cleanup auto-save timeout
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+      }
+    };
+  }, [autoSaveTimeout]);
+
+  // Save form data to Firestore
+  const saveFormData = async () => {
+    if (!user || !app || !form) return;
+    
+    try {
+      setSaveStatus("saving");
+      await savePdfFormData(user.uid, app, form, values);
+      setSaveStatus("saved");
+      setLastSaved(new Date());
+      
+      // Clear any pending auto-save
+      if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+        setAutoSaveTimeout(null);
+      }
+      
+      // Show success status briefly
+      setTimeout(() => {
+        if (saveStatus === "saved") {
+          setSaveStatus("idle");
+        }
+      }, 2000);
+      
+    } catch (error) {
+      console.error("Failed to save form data:", error);
+      setSaveStatus("error");
+      
+      // Show error status briefly
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 3000);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -37,15 +115,38 @@ export function InterviewView({ app, form, application, step }) {
       // Debug: Log field order for verification
       console.log("Field order loaded:", fields.map(f => ({ id: f.id, label: f.label, page: f.page })));
       
+      // Initialize form values
       const init = {};
       for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
-      setValues(init);
+      
+      // Load saved data if user is authenticated
+      if (user && app && form) {
+        try {
+          const savedData = await loadPdfFormData(user.uid, app, form);
+          // Merge saved data with initial values
+          const mergedValues = { ...init, ...savedData };
+          setValues(mergedValues);
+          console.log("Loaded saved form data:", savedData);
+        } catch (error) {
+          console.error("Failed to load saved form data:", error);
+          setValues(init);
+        }
+      } else {
+        setValues(init);
+      }
+      
       setLoading(false);
     })();
-  }, [app, form]);
+  }, [app, form, user]);
 
   function onChange(id, type, v) {
-    setValues((prev) => ({ ...prev, [id]: type === "checkbox" ? !!v : v }));
+    const newValues = { ...values, [id]: type === "checkbox" ? !!v : v };
+    setValues(newValues);
+    
+    // Schedule auto-save for form changes
+    if (user) {
+      scheduleAutoSave();
+    }
   }
 
   const handleFieldFocus = (fieldId) => {
@@ -58,6 +159,12 @@ export function InterviewView({ app, form, application, step }) {
 
   async function onSubmit(e) {
     e.preventDefault();
+    
+    // Save form data before submitting
+    if (user) {
+      await saveFormData();
+    }
+    
     const fd = new FormData();
     fd.append("answers_json", JSON.stringify(values));
     const r = await fetch(`${API}/apps/${app}/forms/${form}/fill`, {
@@ -390,6 +497,32 @@ export function InterviewView({ app, form, application, step }) {
         <div className="header-content">
           <h2>PDF Form: {form}</h2>
           <p>Fill out the form fields below to generate your completed PDF</p>
+          
+          {/* Auto-save status indicator */}
+          {user && (
+            <div className="auto-save-status">
+              {saveStatus === "saving" && (
+                <span className="status saving">
+                  {autoSaveCountdown > 0 ? `Auto-saving in ${autoSaveCountdown}s...` : "Saving..."}
+                </span>
+              )}
+              {saveStatus === "saved" && (
+                <span className="status saved">
+                  ✓ Saved {lastSaved && `at ${lastSaved.toLocaleTimeString()}`}
+                </span>
+              )}
+              {saveStatus === "error" && (
+                <span className="status error">
+                  ❌ Save failed
+                </span>
+              )}
+              {saveStatus === "idle" && autoSaveCountdown > 0 && (
+                <span className="status pending">
+                  Auto-saving in {autoSaveCountdown}s...
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {user && (

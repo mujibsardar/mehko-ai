@@ -48,6 +48,45 @@
         font-size: 0.875rem;
         line-height: 1.5;
       }
+
+      .auto-save-status {
+        margin-top: 12px;
+        
+        .status {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 8px;
+          border-radius: 6px;
+          font-size: 0.75rem;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          
+          &.saving {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+          }
+          
+          &.saved {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+          }
+          
+          &.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+          }
+          
+          &.pending {
+            background: #e0f2fe;
+            color: #0c4a6e;
+            border: 1px solid #38bdf8;
+          }
+        }
+      }
     }
   }
 

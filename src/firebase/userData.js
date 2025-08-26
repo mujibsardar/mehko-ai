@@ -23,6 +23,18 @@ export async function loadFormData(userId, applicationId, formName) {
   return snap.exists() ? snap.data()[formName] || {} : {};
 }
 
+// PDF form specific functions
+export async function savePdfFormData(userId, applicationId, formId, data) {
+  const ref = doc(db, "users", userId, "formProgress", applicationId);
+  await setDoc(ref, { [formId]: data }, { merge: true });
+}
+
+export async function loadPdfFormData(userId, applicationId, formId) {
+  const ref = doc(db, "users", userId, "formProgress", applicationId);
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data()[formId] || {} : {};
+}
+
 export async function pinApplication(userId, applicationId, source = "form") {
   const ref = doc(db, "users", userId, "pinnedApplications", applicationId);
   await setDoc(
