@@ -1,6 +1,81 @@
 {
   "fields": [
     {
+      "id": "ai_field_16",
+      "label": "I would like to apply for the MEHKO Initial Application Review Subsidy",
+      "page": 1,
+      "type": "checkbox",
+      "rect": [
+        39,
+        347,
+        52,
+        358
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_17",
+      "label": "first and last name",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        48,
+        367.75,
+        198,
+        380.25
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_18",
+      "label": "OWNER'S NAME",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        57.5,
+        708.75,
+        207.5,
+        721.25
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_19",
+      "label": "OWNER'S SIGNATURE",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        268.5,
+        708.75,
+        418.5,
+        721.25
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
+      "id": "ai_field_20",
+      "label": "DATE",
+      "page": 1,
+      "type": "text",
+      "rect": [
+        480.5,
+        705.75,
+        530.5,
+        718.25
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
       "id": "ai_field_1",
       "label": "Date of Application",
       "page": 0,
@@ -121,6 +196,21 @@
       "shrink": true
     },
     {
+      "id": "ai_field_5_1",
+      "label": "Zip Code",
+      "page": 0,
+      "type": "text",
+      "rect": [
+        522.5,
+        294.5,
+        564.5,
+        313.5
+      ],
+      "fontSize": 11,
+      "align": "left",
+      "shrink": true
+    },
+    {
       "id": "ai_field_9",
       "label": "Send invoice to business address",
       "page": 0,
@@ -220,96 +310,6 @@
         410.25,
         572,
         422.75
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_16",
-      "label": "I would like to apply for the MEHKO Initial Application Review Subsidy",
-      "page": 1,
-      "type": "text",
-      "rect": [
-        25,
-        100,
-        325,
-        115
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_17",
-      "label": "first and last name",
-      "page": 1,
-      "type": "text",
-      "rect": [
-        25,
-        120,
-        175,
-        132.5
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_18",
-      "label": "OWNER'S NAME",
-      "page": 1,
-      "type": "text",
-      "rect": [
-        25,
-        150,
-        175,
-        162.5
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_19",
-      "label": "OWNER'S SIGNATURE",
-      "page": 1,
-      "type": "text",
-      "rect": [
-        25,
-        170,
-        175,
-        182.5
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_20",
-      "label": "DATE",
-      "page": 1,
-      "type": "text",
-      "rect": [
-        389,
-        437.25,
-        439,
-        449.75
-      ],
-      "fontSize": 11,
-      "align": "left",
-      "shrink": true
-    },
-    {
-      "id": "ai_field_5_1",
-      "label": "Zip Code",
-      "page": 0,
-      "type": "text",
-      "rect": [
-        522.5,
-        294.5,
-        564.5,
-        313.5
       ],
       "fontSize": 11,
       "align": "left",

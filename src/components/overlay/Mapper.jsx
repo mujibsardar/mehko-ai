@@ -86,6 +86,14 @@ export default function Mapper() {
   const [draggedField, setDraggedField] = useState(null); // New: Track field being dragged
   const [resizeHandle, setResizeHandle] = useState(null); // New: Track resize handle
 
+  // Field reordering state
+  const [reorderMode, setReorderMode] = useState(false);
+  const [draggedFieldId, setDraggedFieldId] = useState(null);
+  const [dragOverFieldId, setDragOverFieldId] = useState(null);
+    const [fieldOrder, setFieldOrder] = useState([]);
+  const [showInsertDialog, setShowInsertDialog] = useState(false);
+  const [insertPosition, setInsertPosition] = useState(0);
+  
   // Save state management
   const [saveStatus, setSaveStatus] = useState(SAVE_STATUS.SAVED);
   const [lastSaved, setLastSaved] = useState(null);
@@ -483,6 +491,112 @@ export default function Mapper() {
 
   // Enhanced overlay update that triggers auto-save
   const handleOverlayUpdate = (newOverlay) => {
+    setOverlay(newOverlay);
+    scheduleAutoSave();
+  };
+
+  // Field reordering functions
+  const toggleReorderMode = () => {
+    setReorderMode(!reorderMode);
+    if (reorderMode) {
+      setDraggedFieldId(null);
+      setDragOverFieldId(null);
+    } else {
+      // Initialize field order when entering reorder mode
+      const currentOrder = overlay.fields
+        .filter(f => f.page === page)
+        .map(f => f.id);
+      setFieldOrder(currentOrder);
+    }
+  };
+
+  const handleFieldDragStart = (e, fieldId) => {
+    if (!reorderMode) return;
+    setDraggedFieldId(fieldId);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', fieldId);
+  };
+
+  const handleFieldDragOver = (e, fieldId) => {
+    if (!reorderMode || draggedFieldId === fieldId) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverFieldId(fieldId);
+  };
+
+  const handleFieldDrop = (e, targetFieldId) => {
+    if (!reorderMode || !draggedFieldId || draggedFieldId === targetFieldId) return;
+    e.preventDefault();
+
+    const draggedField = overlay.fields.find(f => f.id === draggedFieldId);
+    const targetField = overlay.fields.find(f => f.id === targetFieldId);
+
+    if (!draggedField || !targetField) return;
+
+    // Reorder fields on the current page
+    const pageFields = overlay.fields.filter(f => f.page === page);
+    const draggedIndex = pageFields.findIndex(f => f.id === draggedFieldId);
+    const targetIndex = pageFields.findIndex(f => f.id === targetFieldId);
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Create new field order
+    const newPageFields = [...pageFields];
+    const [removed] = newPageFields.splice(draggedIndex, 1);
+    newPageFields.splice(targetIndex, 0, removed);
+
+    // Update overlay with new order
+    const otherFields = overlay.fields.filter(f => f.page !== page);
+    const newOverlay = {
+      ...overlay,
+      fields: [...otherFields, ...newPageFields]
+    };
+
+    setOverlay(newOverlay);
+    setFieldOrder(newPageFields.map(f => f.id));
+    scheduleAutoSave();
+
+    setDraggedFieldId(null);
+    setDragOverFieldId(null);
+  };
+
+  const handleFieldDragEnd = () => {
+    setDraggedFieldId(null);
+    setDragOverFieldId(null);
+  };
+
+  const insertFieldAtPosition = (position, newField) => {
+    const pageFields = overlay.fields.filter(f => f.page === page);
+    const otherFields = overlay.fields.filter(f => f.page !== page);
+
+    // Insert field at specific position
+    const newPageFields = [...pageFields];
+    newPageFields.splice(position, 0, newField);
+
+    const newOverlay = {
+      ...overlay,
+      fields: [...otherFields, ...newPageFields]
+    };
+
+    setOverlay(newOverlay);
+    scheduleAutoSave();
+  };
+
+  const moveFieldToPosition = (fieldId, newPosition) => {
+    const pageFields = overlay.fields.filter(f => f.page === page);
+    const otherFields = overlay.fields.filter(f => f.page !== page);
+
+    const fieldIndex = pageFields.findIndex(f => f.id === fieldId);
+    if (fieldIndex === -1) return;
+
+    const [movedField] = pageFields.splice(fieldIndex, 1);
+    pageFields.splice(newPosition, 0, movedField);
+
+    const newOverlay = {
+      ...overlay,
+      fields: [...otherFields, ...pageFields]
+    };
+
     setOverlay(newOverlay);
     scheduleAutoSave();
   };
@@ -1017,6 +1131,22 @@ export default function Mapper() {
           >
             {editMode ? "✋ Exit Edit Mode" : "✏️ Edit Fields"}
           </button>
+
+          <button
+            onClick={toggleReorderMode}
+            style={{
+              background: reorderMode ? "#dc2626" : "#8b5cf6",
+              color: "white",
+              border: "none",
+              padding: "8px 16px",
+              borderRadius: "6px",
+              fontWeight: "600",
+              cursor: "pointer",
+              marginLeft: "8px",
+            }}
+          >
+            {reorderMode ? "✋ Exit Reorder Mode" : "🔄 Reorder Fields"}
+          </button>
           <div
             style={{
               marginLeft: "auto",
@@ -1146,6 +1276,23 @@ export default function Mapper() {
           </div>
         )}
 
+        {/* Reorder Mode Instructions */}
+        {reorderMode && (
+          <div
+            style={{
+              background: "#f0f9ff",
+              border: "1px solid #0ea5e9",
+              borderRadius: "6px",
+              padding: "8px 12px",
+              marginBottom: "8px",
+              fontSize: "14px",
+            }}
+          >
+            <strong>🔄 Reorder Mode Active:</strong>
+            Drag and drop fields to reorder them. The order will be preserved when users fill out the form.
+          </div>
+        )}
+
         <div
           style={{
             border: unsavedChanges ? "2px solid #f59e0b" : "1px solid #ccc",
@@ -1170,6 +1317,23 @@ export default function Mapper() {
               zIndex: 10
             }}>
               ⚠ Unsaved Changes
+            </div>
+          )}
+          
+          {reorderMode && (
+            <div style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              backgroundColor: "#8b5cf6",
+              color: "white",
+              padding: "4px 8px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              fontWeight: "600",
+              zIndex: 10
+            }}>
+              🔄 Reorder Mode
             </div>
           )}
           <canvas
@@ -1334,6 +1498,227 @@ export default function Mapper() {
           </div>
         )}
         <hr style={{ margin: "12px 0" }} />
+        
+        {/* Field Order Management */}
+        {reorderMode && (
+          <div style={{ marginBottom: "16px" }}>
+            <div style={{ marginBottom: "8px" }}>
+              <strong>Field Order (Page {page + 1}):</strong>
+            </div>
+            <div style={{ 
+              fontSize: "12px", 
+              color: "#666",
+              maxHeight: "200px",
+              overflowY: "auto",
+              border: "1px solid #e5e7eb",
+              borderRadius: "4px",
+              padding: "8px"
+            }}>
+              {overlay.fields
+                .filter(f => f.page === page)
+                .map((field, index) => (
+                  <div
+                    key={field.id}
+                    draggable={reorderMode}
+                    onDragStart={(e) => handleFieldDragStart(e, field.id)}
+                    onDragOver={(e) => handleFieldDragOver(e, field.id)}
+                    onDrop={(e) => handleFieldDrop(e, field.id)}
+                    onDragEnd={handleFieldDragEnd}
+                    style={{
+                      padding: "6px 8px",
+                      margin: "2px 0",
+                      backgroundColor: draggedFieldId === field.id ? "#fef3c7" : 
+                                   dragOverFieldId === field.id ? "#dbeafe" : "#f9fafb",
+                      border: draggedFieldId === field.id ? "1px solid #f59e0b" :
+                             dragOverFieldId === field.id ? "1px solid #3b82f6" : "1px solid #e5e7eb",
+                      borderRadius: "4px",
+                      cursor: reorderMode ? "grab" : "default",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px"
+                    }}
+                  >
+                    <span style={{ 
+                      fontSize: "10px", 
+                      color: "#6b7280",
+                      minWidth: "20px"
+                    }}>
+                      {index + 1}
+                    </span>
+                    <span style={{ flex: 1, fontSize: "11px" }}>
+                      {field.label || field.id}
+                    </span>
+                    <span style={{ 
+                      fontSize: "10px", 
+                      color: field.id.startsWith("ai_field_") ? "#3b82f6" : "#10b981"
+                    }}>
+                      {field.id.startsWith("ai_field_") ? "🤖" : "✏️"}
+                    </span>
+                  </div>
+                ))}
+            </div>
+            <div style={{ 
+              fontSize: "11px", 
+              color: "#6b7280", 
+              marginTop: "8px",
+              fontStyle: "italic"
+            }}>
+              Drag fields to reorder. Order affects form display sequence.
+            </div>
+            
+            {/* Field Order Actions */}
+            <div style={{ 
+              marginTop: "12px", 
+              display: "flex", 
+              gap: "8px",
+              flexDirection: "column"
+            }}>
+              <button
+                onClick={() => {
+                  const orderData = {
+                    app: app,
+                    form: form,
+                    page: page,
+                    fieldOrder: overlay.fields
+                      .filter(f => f.page === page)
+                      .map(f => ({ id: f.id, label: f.label }))
+                  };
+                  const blob = new Blob([JSON.stringify(orderData, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${app}_${form}_page${page + 1}_field_order.json`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "11px",
+                  backgroundColor: "#3b82f6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+                title="Export current field order"
+              >
+                📤 Export Order
+              </button>
+              
+              <button
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.json';
+                  input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                        try {
+                          const orderData = JSON.parse(e.target.result);
+                          if (orderData.app === app && orderData.form === form && orderData.page === page) {
+                            // Reorder fields based on imported order
+                            const newOrder = orderData.fieldOrder.map(f => f.id);
+                            const pageFields = overlay.fields.filter(f => f.page === page);
+                            const otherFields = overlay.fields.filter(f => f.page !== page);
+                            
+                            // Sort page fields according to imported order
+                            const sortedPageFields = newOrder.map(id => 
+                              pageFields.find(f => f.id === id)
+                            ).filter(Boolean);
+                            
+                            // Add any fields not in the imported order
+                            const missingFields = pageFields.filter(f => !newOrder.includes(f.id));
+                            sortedPageFields.push(...missingFields);
+                            
+                            const newOverlay = {
+                              ...overlay,
+                              fields: [...otherFields, ...sortedPageFields]
+                            };
+                            
+                            setOverlay(newOverlay);
+                            scheduleAutoSave();
+                            alert('Field order imported successfully!');
+                          } else {
+                            alert('Import file does not match current form/page');
+                          }
+                        } catch (error) {
+                          alert('Invalid import file format');
+                        }
+                      };
+                      reader.readAsText(file);
+                    }
+                  };
+                  input.click();
+                }}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "11px",
+                  backgroundColor: "#f59e0b",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+                title="Import field order from file"
+              >
+                📥 Import Order
+              </button>
+            </div>
+            
+            {/* Quick Insert Field */}
+            <div style={{ marginTop: "12px" }}>
+              <button
+                onClick={() => {
+                  const newField = {
+                    id: `f_${Date.now()}`,
+                    label: `New Field ${overlay.fields.filter(f => f.page === page).length + 1}`,
+                    page: page,
+                    type: "text",
+                    rect: [100, 100, 200, 120],
+                    fontSize: 11,
+                    align: "left",
+                    shrink: true,
+                  };
+                  insertFieldAtPosition(0, newField); // Insert at top
+                }}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "11px",
+                  backgroundColor: "#10b981",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  width: "100%"
+                }}
+                title="Add new field at the top of this page"
+              >
+                ➕ Insert Field at Top
+              </button>
+              
+              <button
+                onClick={() => setShowInsertDialog(true)}
+                style={{
+                  padding: "6px 12px",
+                  fontSize: "11px",
+                  backgroundColor: "#8b5cf6",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  width: "100%",
+                  marginTop: "8px"
+                }}
+                title="Insert field at specific position"
+              >
+                📍 Insert at Position
+              </button>
+            </div>
+          </div>
+        )}
+        
         <div>
           <div style={{ marginBottom: "8px" }}>
             <strong>Field Statistics:</strong>
@@ -1401,6 +1786,124 @@ export default function Mapper() {
                 setEditMode(true);
               }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* Insert Field Dialog */}
+      {showInsertDialog && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.5)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              borderRadius: "12px",
+              maxWidth: "400px",
+              width: "100%",
+              padding: "24px",
+              position: "relative",
+            }}
+          >
+            <h3 style={{ margin: "0 0 16px 0", color: "#1f2937" }}>
+              📍 Insert Field at Position
+            </h3>
+            
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+                Position (1-{overlay.fields.filter(f => f.page === page).length + 1}):
+              </label>
+              <input
+                type="number"
+                min="1"
+                max={overlay.fields.filter(f => f.page === page).length + 1}
+                value={insertPosition + 1}
+                onChange={(e) => setInsertPosition(Math.max(0, parseInt(e.target.value) - 1))}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "4px",
+                  fontSize: "14px"
+                }}
+              />
+            </div>
+            
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ display: "block", marginBottom: "8px", fontWeight: "500" }}>
+                Field Label:
+              </label>
+              <input
+                type="text"
+                id="newFieldLabel"
+                placeholder="Enter field label"
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #d1d5db",
+                  borderRadius: "4px",
+                  fontSize: "14px"
+                }}
+              />
+            </div>
+            
+            <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
+              <button
+                onClick={() => setShowInsertDialog(false)}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#6b7280",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "14px"
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  const label = document.getElementById('newFieldLabel').value || `New Field ${insertPosition + 1}`;
+                  const newField = {
+                    id: `f_${Date.now()}`,
+                    label: label,
+                    page: page,
+                    type: "text",
+                    rect: [100, 100 + (insertPosition * 30), 200, 120 + (insertPosition * 30)],
+                    fontSize: 11,
+                    align: "left",
+                    shrink: true,
+                  };
+                  insertFieldAtPosition(insertPosition, newField);
+                  setShowInsertDialog(false);
+                  document.getElementById('newFieldLabel').value = '';
+                }}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#10b981",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "14px"
+                }}
+              >
+                Insert Field
+              </button>
+            </div>
           </div>
         </div>
       )}
