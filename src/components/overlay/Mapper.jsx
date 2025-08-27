@@ -239,6 +239,87 @@ export default function Mapper() {
     }
   };
 
+  // Auto-placement function for AI-detected fields
+  const handleAutoPlaceFields = async () => {
+    if (selectedFields.length === 0) {
+      setAiError("Please select at least one field to place automatically");
+      return;
+    }
+
+    try {
+      setCurrentStep("auto-placing");
+      setAiError(null);
+
+      // Get selected field data
+      const fieldsToPlace = aiSuggestions.filter(field => selectedFields.includes(field.id));
+      
+      // Convert AI-detected coordinates to screen coordinates and add to overlay
+      const newFields = fieldsToPlace.map(aiField => {
+        // Convert AI coordinates (which are typically in document space) to screen space
+        let screenRect;
+        
+        if (metrics) {
+          // Use metrics to convert from document coordinates to screen coordinates
+          const scaleX = metrics.pixelWidth / metrics.pointsWidth;
+          const scaleY = metrics.pixelHeight / metrics.pointsHeight;
+          
+          screenRect = [
+            aiField.rect[0] * scaleX,
+            aiField.rect[1] * scaleY,
+            aiField.rect[2] * scaleX,
+            aiField.rect[3] * scaleY
+          ];
+        } else {
+          // Fallback: use original coordinates as-is
+          screenRect = [...aiField.rect];
+        }
+
+        // Ensure minimum field size
+        const width = screenRect[2] - screenRect[0];
+        const height = screenRect[3] - screenRect[1];
+        if (width < 50) {
+          screenRect[2] = screenRect[0] + 50;
+        }
+        if (height < 20) {
+          screenRect[3] = screenRect[1] + 20;
+        }
+
+        return {
+          id: `auto_${aiField.id}_${Date.now()}`,
+          label: aiField.label || `Field ${overlay.fields.length + 1}`,
+          page: aiField.page,
+          type: aiField.type,
+          rect: screenRect,
+          fontSize: aiField.fontSize || 11,
+          align: aiField.align || "left",
+          shrink: aiField.shrink !== false,
+          confidence: aiField.confidence,
+          aiReasoning: aiField.aiReasoning,
+          isAIPlaced: true, // Mark as AI-placed for UI styling
+        };
+      });
+
+      // Add fields to overlay
+      const newOverlay = {
+        ...overlay,
+        fields: [...overlay.fields, ...newFields],
+      };
+
+      setOverlay(newOverlay);
+      setCurrentStep("auto-placed");
+      scheduleAutoSave();
+
+      // Clear selected fields since they've been placed
+      setSelectedFields([]);
+
+      console.log(`Successfully auto-placed ${newFields.length} fields`);
+    } catch (err) {
+      console.error('Auto-placement error:', err);
+      setAiError(`Auto-placement failed: ${err.message}`);
+      setCurrentStep("fields-ready");
+    }
+  };
+
   // Field Tray Drag and Drop Functions
   const handleFieldTrayDragStart = (e, field) => {
     e.dataTransfer.setData('application/json', JSON.stringify(field));
@@ -443,13 +524,18 @@ export default function Mapper() {
           const [x0, y0, x1, y1] = f.rect;
           const isSelected = f.id === selectedId;
           const isAIField = f.id.startsWith("ai_field_");
+          const isAIPlaced = f.isAIPlaced;
+          const isAutoField = f.id.startsWith("auto_");
 
           // Different colors for different field types
           if (isSelected) {
             ctx.strokeStyle = "#e00"; // Red for selected
             ctx.lineWidth = 3;
+          } else if (isAIPlaced || isAutoField) {
+            ctx.strokeStyle = "#9333ea"; // Purple for AI auto-placed fields
+            ctx.lineWidth = 2;
           } else if (isAIField) {
-            ctx.strokeStyle = "#00a"; // Blue for AI fields
+            ctx.strokeStyle = "#00a"; // Blue for AI fields (in tray)
             ctx.lineWidth = 2;
           } else {
             ctx.strokeStyle = "#0a0"; // Green for manual fields
@@ -818,13 +904,15 @@ export default function Mapper() {
   const fieldStats = useMemo(() => {
     const pageFields = overlay.fields.filter((f) => f.page === page);
     const aiFields = pageFields.filter((f) => f.id.startsWith("ai_field_"));
+    const autoPlacedFields = pageFields.filter((f) => f.isAIPlaced || f.id.startsWith("auto_"));
     const manualFields = pageFields.filter(
-      (f) => !f.id.startsWith("ai_field_")
+      (f) => !f.id.startsWith("ai_field_") && !f.isAIPlaced && !f.id.startsWith("auto_")
     );
 
     return {
       total: pageFields.length,
       ai: aiFields.length,
+      autoPlaced: autoPlacedFields.length,
       manual: manualFields.length,
     };
   }, [overlay, page]);
@@ -1722,6 +1810,44 @@ export default function Mapper() {
             </div>
           )}
 
+          {/* Auto-Placement Success Display */}
+          {currentStep === "auto-placed" && (
+            <div style={{
+              background: '#faf5ff',
+              border: '1px solid #d8b4fe',
+              color: '#7c2d12',
+              padding: '8px',
+              borderRadius: '6px',
+              marginBottom: '12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{ fontSize: '16px' }}>🪄</span>
+              Fields have been automatically placed on the PDF! Review and adjust positions as needed.
+            </div>
+          )}
+
+          {/* Auto-Placement Progress */}
+          {currentStep === "auto-placing" && (
+            <div style={{
+              background: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              color: '#1e40af',
+              padding: '8px',
+              borderRadius: '6px',
+              marginBottom: '12px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}>
+              <span style={{ fontSize: '16px' }}>⏳</span>
+              Auto-placing fields on PDF...
+            </div>
+          )}
+
           {/* AI Field Suggestions */}
           {currentStep === "reviewing" && aiSuggestions.length > 0 && (
             <div style={{ marginBottom: '16px' }}>
@@ -1777,27 +1903,55 @@ export default function Mapper() {
               </div>
 
               {aiSuggestions.length > 0 && (
-                <button
-                  onClick={handleApplyMapping}
-                  disabled={selectedFields.length === 0}
-                  style={{
-                    background: selectedFields.length > 0 ? '#10b981' : '#9ca3af',
-                    color: 'white',
-                    border: 'none',
-                    padding: '8px 12px',
-                    borderRadius: '6px',
-                    fontWeight: '600',
-                    cursor: selectedFields.length > 0 ? 'pointer' : 'not-allowed',
-                    fontSize: '12px',
-                    width: '100%',
-                    marginTop: '8px'
-                  }}
-                >
-                  {currentStep === "fields-ready"
-                    ? `✓ ${selectedFields.length} Fields Ready for Dragging`
-                    : `Prepare ${selectedFields.length} Fields for Dragging`
-                  }
-                </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+                  <button
+                    onClick={handleApplyMapping}
+                    disabled={selectedFields.length === 0}
+                    style={{
+                      background: selectedFields.length > 0 ? '#10b981' : '#9ca3af',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      fontWeight: '600',
+                      cursor: selectedFields.length > 0 ? 'pointer' : 'not-allowed',
+                      fontSize: '12px',
+                      width: '100%'
+                    }}
+                  >
+                    {currentStep === "fields-ready"
+                      ? `✓ ${selectedFields.length} Fields Ready for Dragging`
+                      : `Prepare ${selectedFields.length} Fields for Dragging`
+                    }
+                  </button>
+
+                  <button
+                    onClick={handleAutoPlaceFields}
+                    disabled={selectedFields.length === 0 || currentStep === "auto-placing"}
+                    style={{
+                      background: selectedFields.length > 0 && currentStep !== "auto-placing" ? '#9333ea' : '#9ca3af',
+                      color: 'white',
+                      border: 'none',
+                      padding: '8px 12px',
+                      borderRadius: '6px',
+                      fontWeight: '600',
+                      cursor: selectedFields.length > 0 && currentStep !== "auto-placing" ? 'pointer' : 'not-allowed',
+                      fontSize: '12px',
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '4px'
+                    }}
+                    title="Automatically place fields on PDF using AI-detected positions"
+                  >
+                    {currentStep === "auto-placing" ? (
+                      <>⏳ Placing Fields...</>
+                    ) : (
+                      <>🪄 Place Fields for Me ({selectedFields.length})</>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
           )}
@@ -1815,9 +1969,13 @@ export default function Mapper() {
             <div style={{ fontWeight: '600', marginBottom: '4px' }}>How to use:</div>
             <div>1. 📄 Upload a PDF to extract fields</div>
             <div>2. ✅ Select fields you want to use</div>
-            <div>3. 🔄 Click "Prepare Fields for Dragging"</div>
-            <div>4. 🖱️ Drag fields from tray to PDF</div>
-            <div>5. 📍 Position fields exactly where needed</div>
+            <div><strong>Option A (Manual):</strong></div>
+            <div>3a. 🔄 Click "Prepare Fields for Dragging"</div>
+            <div>4a. 🖱️ Drag fields from tray to PDF</div>
+            <div>5a. 📍 Position fields exactly where needed</div>
+            <div><strong>Option B (Auto):</strong></div>
+            <div>3b. 🪄 Click "Place Fields for Me"</div>
+            <div>4b. 🔧 Review and adjust AI-placed positions</div>
           </div>
 
           {/* Field Count */}
@@ -1834,7 +1992,7 @@ export default function Mapper() {
                 Total Fields: {overlay.fields.length}
               </div>
               <div style={{ fontSize: '10px', color: '#3b82f6' }}>
-                {overlay.fields.filter(f => f.id.startsWith('ai_field_')).length} AI detected
+                {overlay.fields.filter(f => f.id.startsWith('ai_field_')).length} AI detected · {overlay.fields.filter(f => f.isAIPlaced || f.id.startsWith('auto_')).length} auto-placed
               </div>
             </div>
           )}
@@ -2234,6 +2392,7 @@ export default function Mapper() {
             <div style={{ fontSize: "14px", color: "#666" }}>
               <div>📊 Total: {fieldStats.total}</div>
               <div>🤖 AI Detected: {fieldStats.ai}</div>
+              <div>🪄 Auto-Placed: {fieldStats.autoPlaced}</div>
               <div>✏️ Manual: {fieldStats.manual}</div>
             </div>
           </div>
