@@ -1,10 +1,10 @@
-// src/components/overlay/MapperClean.jsx - Clean implementation with react-rnd and dnd-kit
+// PDF Field Mapper - Simple, clean implementation
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Rnd } from "react-rnd";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
-import { processAICoordinates, screenToPdfCoords, snapToGrid, rectPxToPt, rectPtToPx } from "../../utils/pdfCoords";
+import { processAICoordinates, snapToGrid, rectPxToPt, rectPtToPx } from "../../utils/pdfCoords";
 
 const API = "/api";
 const normalizeForFilesystem = (str) => str.replace(/\s+/g, "_");
@@ -424,71 +424,128 @@ export default function Mapper() {
 
   const selected = overlay.fields.find(f => f.id === selectedId);
 
+  // Add new field manually
+  const addField = () => {
+    const newField = {
+      id: `field_${Date.now()}`,
+      label: "New Field",
+      page: page,
+      type: "text",
+      rect: rectPxToPt([50, 50, 200, 75]),
+      fontSize: 11,
+      align: "left",
+      shrink: true,
+    };
+    setOverlay(prev => ({ ...prev, fields: [...prev.fields, newField] }));
+    setSelectedId(newField.id);
+    scheduleAutoSave();
+  };
+
+  // Clear all fields
+  const clearAllFields = () => {
+    if (confirm("Delete all fields? This cannot be undone.")) {
+      setOverlay({ fields: [] });
+      setSelectedId(null);
+      scheduleAutoSave();
+    }
+  };
+
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="p-4">
+      <div className="min-h-screen bg-gray-50">
         {/* Header */}
-        <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg flex justify-between items-center">
-          <div className="font-semibold text-gray-700">
-            🤖 AI Field Mapping Tool - {app}/{form}
-          </div>
-          <Link
-            to="/admin"
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-sm font-medium"
-          >
-            ← Back to Admin Dashboard
-          </Link>
-        </div>
-
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          
-          {/* PDF Canvas */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-4 mb-4">
-              <h2 className="font-semibold">PDF Preview</h2>
-              <div className="flex items-center gap-2">
-                <button
-                  disabled={page <= 0}
-                  onClick={() => setPage(p => Math.max(0, p - 1))}
-                  className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                >
-                  ◀ Prev
-                </button>
-                <span className="text-sm">Page {page + 1} / {pages}</span>
-                <button
-                  disabled={page >= pages - 1}
-                  onClick={() => setPage(p => Math.min(pages - 1, p + 1))}
-                  className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-                >
-                  Next ▶
-                </button>
-              </div>
-              <div className={`text-sm px-2 py-1 rounded ${
-                saveStatus === SAVE_STATUS.SAVED ? 'bg-green-100 text-green-800' :
-                saveStatus === SAVE_STATUS.SAVING ? 'bg-blue-100 text-blue-800' :
-                saveStatus === SAVE_STATUS.UNSAVED ? 'bg-yellow-100 text-yellow-800' :
-                'bg-red-100 text-red-800'
+        <div className="bg-white border-b border-gray-200 px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <h1 className="text-xl font-bold text-gray-800">Field Mapper</h1>
+              <span className="text-sm text-gray-500">{app}/{form}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className={`px-3 py-1 rounded text-sm font-medium ${
+                saveStatus === SAVE_STATUS.SAVED ? 'bg-green-100 text-green-700' :
+                saveStatus === SAVE_STATUS.SAVING ? 'bg-blue-100 text-blue-700' :
+                saveStatus === SAVE_STATUS.UNSAVED ? 'bg-yellow-100 text-yellow-700' :
+                'bg-red-100 text-red-700'
               }`}>
                 {saveStatus === SAVE_STATUS.SAVED ? '✓ Saved' :
                  saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' :
                  saveStatus === SAVE_STATUS.UNSAVED ? '● Unsaved' : '⚠ Error'}
               </div>
+              <button
+                onClick={() => save()}
+                disabled={saveStatus === SAVE_STATUS.SAVING}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                Save Now
+              </button>
+              <Link to="/admin" className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                ← Admin
+              </Link>
             </div>
-            
+          </div>
+        </div>
+
+        {/* Toolbar */}
+        <div className="bg-white border-b border-gray-200 px-4 py-2">
+          <div className="flex items-center gap-2">
+            <button
+              disabled={page <= 0}
+              onClick={() => setPage(p => Math.max(0, p - 1))}
+              className="px-3 py-1 bg-gray-100 border rounded hover:bg-gray-200 disabled:opacity-50"
+            >
+              ◀ Prev
+            </button>
+            <span className="px-3 py-1 text-sm">Page {page + 1} / {pages}</span>
+            <button
+              disabled={page >= pages - 1}
+              onClick={() => setPage(p => Math.min(pages - 1, p + 1))}
+              className="px-3 py-1 bg-gray-100 border rounded hover:bg-gray-200 disabled:opacity-50"
+            >
+              Next ▶
+            </button>
+            <div className="w-px h-6 bg-gray-300 mx-2"></div>
+            <button onClick={addField} className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+              + Add Field
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".pdf"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isProcessing}
+              className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+            >
+              🤖 AI Detect
+            </button>
+            <button onClick={clearAllFields} className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+              Clear All
+            </button>
+            <div className="ml-auto text-sm text-gray-600">
+              {overlay.fields.filter(f => f.page === page).length} fields on this page
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex flex-1">
+          {/* PDF Canvas */}
+          <div className="flex-1 p-4">
             <DroppablePDFCanvas>
-              <div className="border border-gray-300 rounded-lg overflow-hidden relative">
+              <div className="bg-white border border-gray-300 rounded-lg overflow-hidden relative shadow-sm">
                 {imgUrl && (
                   <img
                     ref={canvasRef}
                     src={imgUrl}
                     alt={`Page ${page + 1}`}
-                    className="max-w-full h-auto"
-                    style={{ display: 'block' }}
+                    className="max-w-full h-auto block"
                   />
                 )}
                 
-                {/* Resizable field boxes */}
+                {/* Field boxes */}
                 {overlay.fields
                   .filter(f => f.page === page)
                   .map(field => (
@@ -505,150 +562,96 @@ export default function Mapper() {
             </DroppablePDFCanvas>
           </div>
 
-          {/* AI Field Tray */}
-          <div>
-            <div className="space-y-4">
-              
-              {/* Upload Section */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold mb-3">🤖 AI Field Detection</h3>
+          {/* Right Sidebar */}
+          <div className="w-80 bg-white border-l border-gray-200 p-4">
+            {/* AI Progress */}
+            {isProcessing && (
+              <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+                </div>
+                <div className="text-sm text-gray-600">
+                  {currentStep === "analyzing" && "🤖 AI analyzing PDF..."}
+                  {currentStep === "mapping" && "📋 Mapping fields..."}
+                  {currentStep === "reviewing" && "✅ Ready for review"}
+                </div>
+              </div>
+            )}
+
+            {/* AI Error */}
+            {aiError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
+                ⚠️ {aiError}
+              </div>
+            )}
+
+            {/* AI Field Tray */}
+            {(currentStep === "reviewing" || currentStep === "fields-ready") && aiSuggestions.length > 0 && (
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">AI Detected Fields ({aiSuggestions.length})</h3>
                 
-                {!isProcessing && currentStep === "idle" && (
+                {currentStep === "reviewing" && (
+                  <button
+                    onClick={handleApplyMapping}
+                    disabled={selectedFields.length === 0}
+                    className={`w-full mb-3 px-4 py-2 rounded text-sm font-medium ${
+                      selectedFields.length > 0
+                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
+                  >
+                    Enable Dragging ({selectedFields.length} selected)
+                  </button>
+                )}
+
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {aiSuggestions.map(field => (
+                    <DraggableFieldItem key={field.id} field={field} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Field Editor */}
+            {selected && (
+              <div className="mb-4">
+                <h3 className="font-semibold mb-2">Edit Field</h3>
+                <div className="space-y-2">
                   <div>
-                    <div
-                      className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors"
-                      onClick={() => fileInputRef.current?.click()}
-                    >
-                      <div className="text-2xl mb-2">📄</div>
-                      <div className="text-sm font-medium text-gray-700">Click to upload PDF</div>
-                      <div className="text-xs text-gray-500">AI will detect form fields</div>
-                    </div>
+                    <label className="block text-xs font-medium text-gray-600">Label</label>
                     <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileUpload}
-                      className="hidden"
+                      value={selected.label || ""}
+                      onChange={(e) => updateField({ ...selected, label: e.target.value })}
+                      className="w-full px-2 py-1 border rounded text-sm"
                     />
                   </div>
-                )}
-
-                {isProcessing && (
-                  <div className="text-center">
-                    <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full transition-all"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      {currentStep === "analyzing" && "AI analyzing PDF..."}
-                      {currentStep === "mapping" && "Mapping detected fields..."}
-                      {currentStep === "reviewing" && "Ready for review..."}
-                    </div>
-                  </div>
-                )}
-
-                {aiError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded text-sm">
-                    ⚠️ {aiError}
-                  </div>
-                )}
-
-                {currentStep === "fields-ready" && (
-                  <div className="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded text-sm">
-                    ✅ Fields ready! Drag them to the PDF to position them.
-                  </div>
-                )}
-              </div>
-
-              {/* AI Suggestions */}
-              {(currentStep === "reviewing" || currentStep === "fields-ready") && aiSuggestions.length > 0 && (
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-3">Detected Fields ({aiSuggestions.length})</h3>
-                  
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
-                    {aiSuggestions.map(field => (
-                      <DraggableFieldItem key={field.id} field={field} />
-                    ))}
-                  </div>
-
-                  {currentStep === "reviewing" && (
-                    <button
-                      onClick={handleApplyMapping}
-                      disabled={selectedFields.length === 0}
-                      className={`w-full mt-3 px-4 py-2 rounded font-medium ${
-                        selectedFields.length > 0
-                          ? 'bg-blue-600 text-white hover:bg-blue-700'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      }`}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">Type</label>
+                    <select
+                      value={selected.type || "text"}
+                      onChange={(e) => updateField({ ...selected, type: e.target.value })}
+                      className="w-full px-2 py-1 border rounded text-sm"
                     >
-                      Prepare {selectedFields.length} Fields for Dragging
-                    </button>
-                  )}
-                  
-                  <div className="text-xs text-gray-500 mt-2 p-2 bg-gray-50 rounded">
-                    💡 <strong>How to use:</strong> Select fields above, then drag them from this tray onto the PDF where you want them positioned.
+                      <option value="text">Text</option>
+                      <option value="checkbox">Checkbox</option>
+                      <option value="signature">Signature</option>
+                    </select>
                   </div>
-                </div>
-              )}
-
-              {/* Field Editor */}
-              {selected && (
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold mb-3">Field Editor</h3>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">ID</label>
-                      <input
-                        value={selected.id}
-                        onChange={(e) => updateField({ ...selected, id: e.target.value })}
-                        className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Label</label>
-                      <input
-                        value={selected.label || ""}
-                        onChange={(e) => updateField({ ...selected, label: e.target.value })}
-                        className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">Type</label>
-                      <select
-                        value={selected.type || "text"}
-                        onChange={(e) => updateField({ ...selected, type: e.target.value })}
-                        className="w-full mt-1 px-2 py-1 border border-gray-300 rounded text-sm"
-                      >
-                        <option value="text">text</option>
-                        <option value="checkbox">checkbox</option>
-                        <option value="signature">signature</option>
-                      </select>
-                    </div>
-                    
-                    <button
-                      onClick={() => deleteField(selected.id)}
-                      className="w-full px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium"
-                    >
-                      Delete Field
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Stats */}
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h3 className="font-semibold mb-2">Statistics</h3>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <div>📊 Total Fields: {overlay.fields.length}</div>
-                  <div>📄 Current Page: {page + 1}/{pages}</div>
-                  <div>🤖 AI Detected: {aiSuggestions.length}</div>
+                  <button
+                    onClick={() => deleteField(selected.id)}
+                    className="w-full px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
+            )}
+
+            {/* Quick Stats */}
+            <div className="text-xs text-gray-600 space-y-1 pt-4 border-t">
+              <div>Total Fields: {overlay.fields.length}</div>
+              <div>This Page: {overlay.fields.filter(f => f.page === page).length}</div>
+              <div>AI Detected: {aiSuggestions.length}</div>
             </div>
           </div>
         </div>
