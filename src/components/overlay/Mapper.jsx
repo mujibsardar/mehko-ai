@@ -190,23 +190,44 @@ export default function Mapper() {
   };
 
   const processAISuggestions = (aiFields) => {
-    return aiFields.map((field, index) => ({
-      id: `ai_field_${index + 1}`,
-      label: field.label || `Field ${index + 1}`,
-      page: field.page || 0,
-      type: field.type || "text",
-      rect: field.rect || [0, 0, 100, 20],
-      fontSize: field.fontSize || 11,
-      align: field.align || "left",
-      shrink: field.shrink !== false,
-      confidence: field.confidence || 0.5,
-      aiReasoning: field.reasoning || "AI detected form field",
-      originalId: field.originalId,
-      // Add metadata for better coordinate handling
-      originalRect: field.rect,
-      width: field.rect ? field.rect[2] - field.rect[0] : 100,
-      height: field.rect ? field.rect[3] - field.rect[1] : 20,
-    }));
+    return aiFields.map((field, index) => {
+      // Handle coordinate conversion from AI format to our format
+      let rect = field.rect || [0, 0, 100, 20];
+      
+      // Check if coordinates are in [x, y, width, height] format (typical AI response)
+      // vs [x1, y1, x2, y2] format (what we use internally)
+      if (rect.length >= 4) {
+        const [a, b, c, d] = rect;
+        
+        // If c and d are small values (< canvas size), they're likely width/height
+        // If they're large values (> 500), they're likely x2/y2 coordinates
+        if (c < 500 && d < 200) {
+          // Convert from [x, y, width, height] to [x1, y1, x2, y2]
+          rect = [a, b, a + c, b + d];
+        }
+      }
+
+      const width = rect[2] - rect[0];
+      const height = rect[3] - rect[1];
+
+      return {
+        id: `ai_field_${index + 1}`,
+        label: field.label || `Field ${index + 1}`,
+        page: field.page || 0,
+        type: field.type || "text",
+        rect: rect,
+        fontSize: field.fontSize || 11,
+        align: field.align || "left",
+        shrink: field.shrink !== false,
+        confidence: field.confidence || 0.5,
+        aiReasoning: field.reasoning || "AI detected form field",
+        originalId: field.originalId,
+        // Add metadata for better coordinate handling
+        originalRect: field.rect,
+        width: width,
+        height: height,
+      };
+    });
   };
 
   const handleFieldSelection = (fieldId, isSelected) => {
@@ -253,26 +274,30 @@ export default function Mapper() {
       // Get selected field data
       const fieldsToPlace = aiSuggestions.filter(field => selectedFields.includes(field.id));
       
+      // Debug logging
+      console.log('Auto-placing fields:', fieldsToPlace);
+      console.log('Current metrics:', metrics);
+      console.log('Canvas dimensions:', canvasRef.current ? { width: canvasRef.current.width, height: canvasRef.current.height } : 'No canvas');
+      
       // Convert AI-detected coordinates to screen coordinates and add to overlay
-      const newFields = fieldsToPlace.map(aiField => {
-        // Convert AI coordinates (which are typically in document space) to screen space
+      const newFields = fieldsToPlace.map((aiField, index) => {
+        // AI coordinates should be in the correct format for the current page
         let screenRect;
         
-        if (metrics) {
-          // Use metrics to convert from document coordinates to screen coordinates
-          const scaleX = metrics.pixelWidth / metrics.pointsWidth;
-          const scaleY = metrics.pixelHeight / metrics.pointsHeight;
-          
-          screenRect = [
-            aiField.rect[0] * scaleX,
-            aiField.rect[1] * scaleY,
-            aiField.rect[2] * scaleX,
-            aiField.rect[3] * scaleY
-          ];
-        } else {
-          // Fallback: use original coordinates as-is
+        if (aiField.rect && aiField.rect.length >= 4) {
           screenRect = [...aiField.rect];
+        } else {
+          // Fallback: create a default rectangle
+          screenRect = [100, 100, 200, 120];
         }
+
+        // Debug logging for each field
+        console.log(`Field ${index + 1} (${aiField.label}):`, {
+          originalRect: aiField.originalRect,
+          processedRect: aiField.rect,
+          screenRect: screenRect,
+          confidence: aiField.confidence
+        });
 
         // Ensure minimum field size
         const width = screenRect[2] - screenRect[0];
@@ -1849,7 +1874,7 @@ export default function Mapper() {
           )}
 
           {/* AI Field Suggestions */}
-          {currentStep === "reviewing" && aiSuggestions.length > 0 && (
+          {(currentStep === "reviewing" || currentStep === "fields-ready") && aiSuggestions.length > 0 && (
             <div style={{ marginBottom: '16px' }}>
               <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px', color: '#1f2937' }}>
                 AI Field Suggestions
