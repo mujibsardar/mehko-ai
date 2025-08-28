@@ -6,6 +6,9 @@ import Admin from "./components/admin/Admin";
 import Mapper from "./components/overlay/Mapper";
 import Interview from "./components/overlay/Interview";
 import ProtectedAdminRoute from "./components/auth/ProtectedAdminRoute";
+import PrivacyPolicy from "./components/legal/PrivacyPolicy";
+import TermsOfService from "./components/legal/TermsOfService";
+import CookiePolicy from "./components/legal/CookiePolicy";
 
 export default function App() {
   return (
@@ -38,6 +41,11 @@ export default function App() {
           </ProtectedAdminRoute>
         }
       />
+
+      {/* Legal Pages */}
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/cookies" element={<CookiePolicy />} />
 
       {/* Default */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

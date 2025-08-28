@@ -4,6 +4,7 @@ import Sidebar from "../layout/Sidebar";
 import ApplicationCardGrid from "../layout/ApplicationCardGrid";
 import ApplicationOverview from "../applications/ApplicationOverview";
 import Header from "../layout/Header";
+import Footer from "../layout/Footer";
 import AIChat from "../applications/AIChat";
 import CommentsSection from "../applications/CommentsSection";
 import InfoStep from "../applications/InfoStep";
@@ -698,6 +699,9 @@ export default function DashboardApp() {
           )}
         </div>
       </div>
+      
+      {/* Footer with Legal Links */}
+      <Footer />
     </>
   );
 }
