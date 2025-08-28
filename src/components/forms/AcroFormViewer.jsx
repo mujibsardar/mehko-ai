@@ -140,26 +140,7 @@ const AcroFormViewer = ({
 
     return (
         <div className="acroform-viewer">
-            <div className="viewer-header">
-                <div className="header-info">
-                    <h2>{form.replace(/_/g, " ").replace(/.pdf$/i, "")}</h2>
-                    <p>
-                        {isAcroFormAvailable
-                            ? "Fill out the form fields directly on the PDF below"
-                            : "Form fields will be overlaid on the PDF when you download"
-                        }
-                    </p>
-                </div>
 
-                <div className="header-actions">
-                    <button onClick={resetForm} className="reset-button">
-                        Reset Form
-                    </button>
-                    <button onClick={downloadFilledPdf} className="download-button">
-                        Download Filled PDF
-                    </button>
-                </div>
-            </div>
 
             <div className="pdf-container">
                 {pdfUrl && (
