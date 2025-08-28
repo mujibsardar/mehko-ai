@@ -11,6 +11,7 @@ import {
   collection,
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
+import "./Admin.scss";
 
 const API = "/api";
 
