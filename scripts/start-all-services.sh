@@ -75,7 +75,7 @@ sleep 2
 # Start API Gateway
 echo -e "${YELLOW}🌐 Starting API Gateway...${NC}"
 echo -e "${GREEN}🚀 Starting API Gateway on port 3001...${NC}"
-node api-gateway.js > logs/gateway.log 2>&1 &
+node scripts/api-gateway.js > logs/gateway.log 2>&1 &
 GATEWAY_PID=$!
 
 # Wait a moment for Gateway to start

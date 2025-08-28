@@ -11,7 +11,7 @@
     "seed:dry": "node seed/seed-apps.mjs --path seed/apps --dry-run",
     "seed": "node seed/seed-apps.mjs --path seed/apps",
     "test": "vitest run",
-    "gateway": "node api-gateway.js",
+    "gateway": "node scripts/api-gateway.js",
     "dev:gateway": "concurrently \"npm run gateway\" \"npm run dev\"",
     "ai:rules": "echo '🤖 READ .cursor/rules/README.md BEFORE MAKING CHANGES!'",
     "ai:check": "echo '📋 AI: Check .cursor/rules/ and ask permission before changes'",
