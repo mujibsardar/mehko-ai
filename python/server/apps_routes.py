@@ -293,11 +293,10 @@ def get_pdf_acroform_fields(app: str, form: str):
 async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...)):
     pdf_path = form_dir(app, form) / "form.pdf"
     tpl_path = form_dir(app, form) / "overlay.json"
+    acroform_path = form_dir(app, form) / "acroform-definition.json"
 
     if not pdf_path.exists():
         raise HTTPException(404, f"missing PDF at {pdf_path}")
-    if not tpl_path.exists():
-        raise HTTPException(404, f"missing overlay at {tpl_path}")
 
     try:
         answers: Dict[str, Any] = json.loads(answers_json)
@@ -305,6 +304,26 @@ async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...
         raise HTTPException(400, "answers_json must be valid JSON")
 
     pdf_bytes = pdf_path.read_bytes()
+    
+    # Check if we have AcroForm definition first (new system)
+    if acroform_path.exists():
+        try:
+            from overlay.acroform_handler import fill_acroform_pdf_bytes
+            print(f"Using AcroForm filling for {form}")
+            filled = fill_acroform_pdf_bytes(pdf_bytes, answers)
+            return StreamingResponse(
+                io.BytesIO(filled),
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{app}_{form}_filled.pdf"'},
+            )
+        except Exception as e:
+            print(f"AcroForm filling failed: {e}")
+            # Fall through to overlay method
+    
+    # Fall back to overlay method (old system)
+    if not tpl_path.exists():
+        raise HTTPException(404, f"missing overlay at {tpl_path} and no AcroForm definition found")
+
     overlay = json.loads(tpl_path.read_text())
     
     # Try AcroForm filling first, fall back to overlay if not available

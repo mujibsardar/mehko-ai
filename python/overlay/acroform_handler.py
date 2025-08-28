@@ -128,30 +128,41 @@ class AcroFormHandler:
     
     def fill_acroform_pdf(self, pdf_bytes: bytes, answers: Dict[str, Any]) -> bytes:
         """Fill an existing AcroForm PDF with user answers"""
-        # Load the PDF
-        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
-        pdf_writer = PyPDF2.PdfWriter()
-        
-        # Copy pages
-        for page in pdf_reader.pages:
-            pdf_writer.add_page(page)
-        
-        # Fill form fields
-        if '/AcroForm' in pdf_reader.trailer['/Root']:
-            form = pdf_reader.trailer['/Root']['/AcroForm']
-            if '/Fields' in form:
-                fields = form['/Fields']
-                for field_ref in fields:
-                    field = field_ref.get_object()
-                    if '/T' in field:  # Field name
-                        field_name = field['/T']
-                        if field_name in answers:
-                            self._fill_form_field(field, answers[field_name])
-        
-        # Save to bytes
-        output = io.BytesIO()
-        pdf_writer.write(output)
-        return output.getvalue()
+        try:
+            # Load the PDF
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+            pdf_writer = PyPDF2.PdfWriter()
+            
+            # Copy all pages
+            for page in pdf_reader.pages:
+                pdf_writer.add_page(page)
+            
+            # Copy the root object (including AcroForm data)
+            if '/Root' in pdf_reader.trailer:
+                root = pdf_reader.trailer['/Root']
+                pdf_writer._root_object = root
+            
+            # Fill form fields in the reader (this modifies the original objects)
+            if '/AcroForm' in pdf_reader.trailer['/Root']:
+                form = pdf_reader.trailer['/Root']['/AcroForm']
+                if '/Fields' in form:
+                    fields = form['/Fields']
+                    for field_ref in fields:
+                        field = field_ref.get_object()
+                        if '/T' in field:  # Field name
+                            field_name = field['/T']
+                            if field_name in answers:
+                                self._fill_form_field(field, answers[field_name])
+                                print(f"Filled field '{field_name}' with '{answers[field_name]}'")
+            
+            # Save to bytes
+            output = io.BytesIO()
+            pdf_writer.write(output)
+            return output.getvalue()
+            
+        except Exception as e:
+            print(f"Error filling AcroForm PDF: {e}")
+            raise e
     
     def _fill_form_field(self, field, value):
         """Fill a form field based on its type"""

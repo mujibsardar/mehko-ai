@@ -1,27 +1,28 @@
 {
   "formMetadata": {
-    "title": "MEHKO Public Health Permit Application",
-    "description": "Public Health Permit Application Form for MEHKO",
+    "title": "MEHKO PublicHealthPermitApplication-ENG",
+    "description": "Auto-generated from existing AcroForm fields in MEHKO_PublicHealthPermitApplication-ENG",
     "version": "1.0",
-    "created": "2025-08-27T19:01:00Z",
-    "type": "acroform"
+    "type": "acroform",
+    "source": "pdf_acroform_fields",
+    "generatedAt": "2025-08-28T02:32:13.075Z"
   },
   "fields": [
     {
-      "id": "business_name",
-      "label": "Business Name",
+      "id": "Date of Application",
+      "label": "Date of Application",
       "type": "text",
       "page": 0,
-      "required": true,
+      "required": false,
       "validation": {
         "required": true,
         "minLength": 2,
         "maxLength": 100
       },
       "properties": {
-        "placeholder": "Enter your business name",
         "defaultValue": "",
         "readOnly": false,
+        "placeholder": "Enter text",
         "maxLength": 100
       },
       "styling": {
@@ -30,51 +31,24 @@
         "textAlign": "left",
         "color": "#000000"
       },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Standard business name field in permit applications"
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
     },
     {
-      "id": "business_address",
-      "label": "Business Address",
-      "type": "textarea",
-      "page": 0,
-      "required": true,
-      "validation": {
-        "required": true,
-        "minLength": 10,
-        "maxLength": 200
-      },
-      "properties": {
-        "placeholder": "Enter complete business address",
-        "defaultValue": "",
-        "readOnly": false,
-        "maxLength": 200,
-        "rows": 3
-      },
-      "styling": {
-        "fontSize": 12,
-        "fontFamily": "Helvetica",
-        "textAlign": "left",
-        "color": "#000000"
-      },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Address field required for permit processing"
-    },
-    {
-      "id": "owner_name",
-      "label": "Owner/Applicant Name",
+      "id": "BUSINESS NAME",
+      "label": "BUSINESS NAME:",
       "type": "text",
       "page": 0,
-      "required": true,
+      "required": false,
       "validation": {
         "required": true,
         "minLength": 2,
         "maxLength": 100
       },
       "properties": {
-        "placeholder": "Enter owner's full name",
         "defaultValue": "",
         "readOnly": false,
+        "placeholder": "Enter text",
         "maxLength": 100
       },
       "styling": {
@@ -83,48 +57,24 @@
         "textAlign": "left",
         "color": "#000000"
       },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Owner identification required for permit"
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
     },
     {
-      "id": "phone_number",
-      "label": "Phone Number",
-      "type": "tel",
+      "id": "BUSINESS ADDRESS",
+      "label": "BUSINESS ADDRESS:",
+      "type": "text",
       "page": 0,
-      "required": true,
+      "required": false,
       "validation": {
         "required": true,
-        "pattern": "^[\\+]?[1-9]\\d{1,14}$"
+        "minLength": 2,
+        "maxLength": 100
       },
       "properties": {
-        "placeholder": "(555) 123-4567",
         "defaultValue": "",
         "readOnly": false,
-        "maxLength": 15
-      },
-      "styling": {
-        "fontSize": 12,
-        "fontFamily": "Helvetica",
-        "textAlign": "left",
-        "color": "#000000"
-      },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Contact information required"
-    },
-    {
-      "id": "email_address",
-      "label": "Email Address",
-      "type": "email",
-      "page": 0,
-      "required": true,
-      "validation": {
-        "required": true,
-        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-      },
-      "properties": {
-        "placeholder": "owner@business.com",
-        "defaultValue": "",
-        "readOnly": false,
+        "placeholder": "Enter text",
         "maxLength": 100
       },
       "styling": {
@@ -133,84 +83,25 @@
         "textAlign": "left",
         "color": "#000000"
       },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Email for permit communications"
-    },
-    {
-      "id": "business_type",
-      "label": "Type of Business",
-      "type": "select",
-      "page": 0,
-      "required": true,
-      "validation": {
-        "required": true
-      },
-      "properties": {
-        "placeholder": "Select business type",
-        "defaultValue": "",
-        "readOnly": false,
-        "options": [
-          "Restaurant",
-          "Food Truck",
-          "Catering",
-          "Grocery Store",
-          "Food Manufacturing",
-          "Other"
-        ]
-      },
-      "styling": {
-        "fontSize": 12,
-        "fontFamily": "Helvetica",
-        "textAlign": "left",
-        "color": "#000000"
-      },
       "aiConfidence": 0.8,
-      "aiReasoning": "Business classification for permit type"
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
     },
     {
-      "id": "permit_type",
-      "label": "Permit Type Requested",
-      "type": "select",
+      "id": "UNIT",
+      "label": "UNIT:",
+      "type": "text",
       "page": 0,
-      "required": true,
-      "validation": {
-        "required": true
-      },
-      "properties": {
-        "placeholder": "Select permit type",
-        "defaultValue": "",
-        "readOnly": false,
-        "options": [
-          "New Permit",
-          "Renewal",
-          "Modification",
-          "Transfer"
-        ]
-      },
-      "styling": {
-        "fontSize": 12,
-        "fontFamily": "Helvetica",
-        "textAlign": "left",
-        "color": "#000000"
-      },
-      "aiConfidence": 0.8,
-      "aiReasoning": "Permit application type"
-    },
-    {
-      "id": "anticipated_open_date",
-      "label": "Anticipated Opening Date",
-      "type": "date",
-      "page": 0,
-      "required": true,
+      "required": false,
       "validation": {
         "required": true,
-        "minDate": "2025-01-01",
-        "maxDate": "2030-12-31"
+        "minLength": 2,
+        "maxLength": 100
       },
       "properties": {
-        "placeholder": "MM/DD/YYYY",
         "defaultValue": "",
-        "readOnly": false
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
       },
       "styling": {
         "fontSize": 12,
@@ -219,47 +110,149 @@
         "color": "#000000"
       },
       "aiConfidence": 0.8,
-      "aiReasoning": "Business opening timeline"
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
     },
     {
-      "id": "signature",
-      "label": "Applicant Signature",
-      "type": "signature",
+      "id": "CITY",
+      "label": "CITY:",
+      "type": "text",
       "page": 0,
-      "required": true,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "ZIP CODE",
+      "label": "ZIP CODE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "OWNERS NAME",
+      "label": "OWNER\u2019S NAME:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "EMAIL ADDRESS",
+      "label": "E-MAIL ADDRESS:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "PHONE",
+      "label": "PHONE #:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "undefined",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false,
       "validation": {
         "required": true
       },
       "properties": {
-        "placeholder": "Click to sign",
-        "defaultValue": "",
-        "readOnly": false
-      },
-      "styling": {
-        "fontSize": 12,
-        "fontFamily": "Helvetica",
-        "textAlign": "center",
-        "color": "#000000",
-        "borderStyle": "dashed",
-        "borderWidth": 1
-      },
-      "aiConfidence": 0.9,
-      "aiReasoning": "Signature required for application"
-    },
-    {
-      "id": "application_date",
-      "label": "Application Date",
-      "type": "date",
-      "page": 0,
-      "required": true,
-      "validation": {
-        "required": true,
-        "minDate": "2025-01-01",
-        "maxDate": "2030-12-31"
-      },
-      "properties": {
-        "placeholder": "MM/DD/YYYY",
-        "defaultValue": "",
+        "defaultValue": false,
         "readOnly": false
       },
       "styling": {
@@ -269,7 +262,641 @@
         "color": "#000000"
       },
       "aiConfidence": 0.8,
-      "aiReasoning": "Application submission date"
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "undefined_2",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "defaultValue": false,
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "ADDRESS",
+      "label": "ADDRESS:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "UNIT_2",
+      "label": "UNIT:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "CITY_2",
+      "label": "CITY:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "STATE",
+      "label": "STATE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "ZIP",
+      "label": "ZIP:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "toggle_3",
+      "label": "Initial Application Review: \ufb01rst home kitchen evaluation, application, review of the Standard Operating",
+      "type": "checkbox",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "defaultValue": false,
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "Site evaluation fee for changes made to the menu or equipment after initial approval hourly",
+      "label": "Site evaluation fee for changes made to the menu or equipment after initial approval (hourly",
+      "type": "checkbox",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "defaultValue": false,
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "167Total Due",
+      "label": "$167_Total Due:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "I would like to apply for the MEHKO Initial Application Review Subsidy",
+      "label": "I would like to apply for the MEHKO Initial Application Review Subsidy",
+      "type": "checkbox",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "defaultValue": false,
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "first and last name declare under penalty of perjury under the laws of the State of",
+      "label": "first and last name) declare under penalty of perjury under the laws of the State of",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "OWNERS NAME_2",
+      "label": "OWNER\u2019S NAME:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "OWNERS SIGNATURE",
+      "label": "OWNER\u2019S SIGNATURE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "DATE",
+      "label": "DATE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "RECEIVED BY",
+      "label": "RECEIVED BY:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "REVIEWED BY",
+      "label": "REVIEWED BY:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "PAYMENT DATE",
+      "label": "PAYMENT DATE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "INVOICE",
+      "label": "INVOICE #:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "COMMENTS",
+      "label": "COMMENTS:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "SR",
+      "label": "SR #:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "PHP APPROVED BY",
+      "label": "PHP APPROVED BY:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "PHP APPROVED DATE",
+      "label": "PHP APPROVED DATE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "PHP INVOICE",
+      "label": "PHP INVOICE #:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "INVOICE DATE",
+      "label": "INVOICE DATE:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
+    },
+    {
+      "id": "COMMENTS_2",
+      "label": "COMMENTS:",
+      "type": "text",
+      "page": 0,
+      "required": false,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "defaultValue": "",
+        "readOnly": false,
+        "placeholder": "Enter text",
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Extracted from existing PDF AcroForm fields"
     }
   ],
   "formSettings": {
