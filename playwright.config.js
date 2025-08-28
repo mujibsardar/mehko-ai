@@ -1,4 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -41,6 +46,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
-  globalSetup: require.resolve('./tests/e2e/global-setup.js'),
-  globalTeardown: require.resolve('./tests/e2e/global-teardown.js'),
+  globalSetup: resolve(__dirname, './tests/e2e/global-setup.js'),
+  globalTeardown: resolve(__dirname, './tests/e2e/global-teardown.js'),
 });
