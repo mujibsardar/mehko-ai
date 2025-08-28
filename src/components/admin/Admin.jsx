@@ -78,6 +78,7 @@ export default function Admin() {
   const [bulkPreview, setBulkPreview] = useState([]);
   const [bulkStatus, setBulkStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   // AcroForm conversion state
   const [isConverting, setIsConverting] = useState(false);
@@ -128,21 +129,60 @@ export default function Admin() {
   }, []);
 
   // ----------- Bulk Import Functions -----------
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   const handleFileDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
     const files = Array.from(e.dataTransfer.files);
     const jsonFiles = files.filter(
       (file) => file.type === "application/json" || file.name.endsWith(".json")
     );
-    setBulkFiles((prev) => [...prev, ...jsonFiles]);
+
+    if (jsonFiles.length > 0) {
+      setBulkFiles((prev) => [...prev, ...jsonFiles]);
+      pushStatus(`Added ${jsonFiles.length} JSON file(s)`);
+    } else {
+      pushStatus("No JSON files found. Please drop .json files only.");
+    }
   };
 
   const handleFileSelect = (e) => {
+    console.log('File select triggered', e.target.files);
     const files = Array.from(e.target.files);
+    console.log('Files selected:', files);
+
     const jsonFiles = files.filter(
       (file) => file.type === "application/json" || file.name.endsWith(".json")
     );
-    setBulkFiles((prev) => [...prev, ...jsonFiles]);
+    console.log('JSON files filtered:', jsonFiles);
+
+    if (jsonFiles.length > 0) {
+      setBulkFiles((prev) => [...prev, ...jsonFiles]);
+      pushStatus(`Added ${jsonFiles.length} JSON file(s)`);
+    } else {
+      pushStatus("No JSON files found. Please select .json files only.");
+    }
+
+    // Reset the input so the same file can be selected again
+    e.target.value = '';
   };
 
   const removeFile = (index) => {
@@ -664,21 +704,33 @@ export default function Admin() {
 
             <div className="import-area">
               <div
-                className="drop-zone"
+                className={`drop-zone ${isDragOver ? 'drag-over' : ''}`}
                 onDrop={handleFileDrop}
-                onDragOver={(e) => e.preventDefault()}
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
               >
-                <p>Drop JSON files here or</p>
-                <input
-                  type="file"
-                  multiple
-                  accept=".json"
-                  onChange={handleFileSelect}
-                  className="file-input"
-                />
-                <label htmlFor="file-input" className="btn-primary">
-                  Select Files
-                </label>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7,10 12,15 17,10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <p>{isDragOver ? 'Drop your JSON files here!' : 'Drop JSON files here or'}</p>
+                {!isDragOver && (
+                  <>
+                    <input
+                      type="file"
+                      multiple
+                      accept=".json"
+                      onChange={handleFileSelect}
+                      className="file-input"
+                      id="file-input"
+                    />
+                    <label htmlFor="file-input" className="btn-primary">
+                      Select Files
+                    </label>
+                  </>
+                )}
               </div>
 
               {bulkFiles.length > 0 && (

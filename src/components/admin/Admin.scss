@@ -590,13 +590,24 @@
       background: #f0f9ff;
     }
 
+    &.drag-over {
+      border-color: #10b981;
+      background: #ecfdf5;
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+    }
+
     p {
       margin: 0 0 1rem 0;
       color: #6b7280;
     }
 
     .file-input {
-      display: none;
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
     }
 
     label {
