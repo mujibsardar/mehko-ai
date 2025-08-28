@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
@@ -11,13 +11,12 @@ import {
   collection,
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
-import CountyProcessor from "./CountyProcessor";
 
-const API = "/api"; // <-- prefix all backend calls
+const API = "/api";
 
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "bulk"
+  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import"
 
   // Check if user is authenticated and is admin
   if (loading) {
@@ -51,12 +50,9 @@ export default function Admin() {
   }
 
   // App list + selection
-  const [apps, setApps] = useState([]); // [{id, title, rootDomain, description, steps:[]}]
-  const [selectedAppId, setSelectedAppId] = useState(""); // active app id
-  const selectedApp = useMemo(
-    () => apps.find((a) => a.id === selectedAppId) || null,
-    [apps, selectedAppId]
-  );
+  const [apps, setApps] = useState([]);
+  const [selectedAppId, setSelectedAppId] = useState("");
+  const selectedApp = apps.find((a) => a.id === selectedAppId) || null;
 
   // App form (prefilled when selecting)
   const [appId, setAppId] = useState("");
@@ -64,17 +60,17 @@ export default function Admin() {
   const [rootDomain, setRootDomain] = useState("");
   const [description, setDescription] = useState("");
 
-  // Existing steps for selected app (read-only until you edit/delete)
+  // Existing steps for selected app
   const [steps, setSteps] = useState([]);
 
   // New step queue (add multiple, then Save)
-  const [newType, setNewType] = useState("info"); // info | form | pdf
+  const [newType, setNewType] = useState("info");
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
-  const [newFormName, setNewFormName] = useState(""); // for 'form'
-  const [newFormId, setNewFormId] = useState(""); // for 'pdf'
-  const [newPdfFile, setNewPdfFile] = useState(null); // for 'pdf'
-  const [queuedSteps, setQueuedSteps] = useState([]); // [{...step, _file?: File}]
+  const [newFormName, setNewFormName] = useState("");
+  const [newFormId, setNewFormId] = useState("");
+  const [newPdfFile, setNewPdfFile] = useState(null);
+  const [queuedSteps, setQueuedSteps] = useState([]);
 
   // Bulk import state
   const [bulkFiles, setBulkFiles] = useState([]);
@@ -82,19 +78,12 @@ export default function Admin() {
   const [bulkStatus, setBulkStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // AcroForm bulk conversion state
-  const [isBulkConverting, setIsBulkConverting] = useState(false);
-  const [bulkConversionStatus, setBulkConversionStatus] = useState(null);
-
-  // PDF Download state
-  const [pdfDownloadUrl, setPdfDownloadUrl] = useState("");
-  const [pdfDownloadAppId, setPdfDownloadAppId] = useState("");
-  const [pdfDownloadFormId, setPdfDownloadFormId] = useState("");
-  const [pdfDownloadStatus, setPdfDownloadStatus] = useState("");
-  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false);
+  // AcroForm conversion state
+  const [isConverting, setIsConverting] = useState(false);
+  const [conversionStatus, setConversionStatus] = useState(null);
 
   // UI feedback
-  const [status, setStatus] = useState(""); // short inline status banner
+  const [status, setStatus] = useState("");
 
   // ----------- Helpers -----------
   const pushStatus = (msg) => {
@@ -203,1833 +192,542 @@ export default function Admin() {
       }
 
       try {
-        const appData = preview.data;
-
-        // Create backend folder structure
-        const r = await fetch(`${API}/apps`, {
+        const response = await fetch(`${API}/county`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            app: appData.id,
-            title: appData.title,
-            description: appData.description || "",
-            rootDomain: appData.rootDomain || "",
-          }),
+          body: JSON.stringify(preview.data),
         });
 
-        if (!r.ok) {
-          const j = await r.json().catch(() => ({}));
-          throw new Error(j.detail || `Backend failed for ${appData.id}`);
+        if (response.ok) {
+          successCount++;
+        } else {
+          errorCount++;
         }
-
-        // Save to Firestore
-        const ref = doc(db, "applications", appData.id);
-        await setDoc(
-          ref,
-          {
-            id: appData.id,
-            title: appData.title,
-            rootDomain: appData.rootDomain || "",
-            description: appData.description || "",
-            steps: appData.steps || [],
-            supportTools: appData.supportTools || {
-              aiEnabled: true,
-              commentsEnabled: true,
-            },
-            // Preserve all other fields from the JSON
-            ...appData,
-          },
-          { merge: true }
-        );
-
-        successCount++;
-        setBulkStatus(`Processed ${successCount}/${bulkPreview.length}...`);
       } catch (error) {
-        console.error(`Error processing ${preview.filename}:`, error);
         errorCount++;
       }
     }
 
-    setIsProcessing(false);
     setBulkStatus(
-      `✅ Import complete! ${successCount} successful, ${errorCount} failed`
+      `Import complete: ${successCount} successful, ${errorCount} failed`
     );
-
-    // Refresh app list
-    await loadApps();
-
-    // Clear files after successful import
-    if (successCount > 0) {
-      setTimeout(() => {
-        setBulkFiles([]);
-        setBulkPreview([]);
-        setBulkStatus("");
-      }, 3000);
-    }
+    setIsProcessing(false);
+    setBulkFiles([]);
+    setBulkPreview([]);
+    loadApps();
   };
 
-  // ----------- App create/update -----------
-  async function saveAppMeta() {
-    if (!appId) return alert("App id required");
-    // ensure backend folder
-    const r = await fetch(`${API}/apps`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        app: appId,
-        title: appTitle,
-        description,
-        rootDomain,
-      }),
-    });
-    let j = {};
-    try {
-      j = await r.json();
-    } catch { }
-    if (!r.ok) return alert(j.detail || "Backend /api/apps failed");
-
-    const ref = doc(db, "applications", appId);
-    const snap = await getDoc(ref);
-    const payload = {
-      id: appId,
-      title:
-        appTitle ||
-        appId.replace(/_/g, " ").replace(/\b\w/g, (m) => m.toUpperCase()),
-      rootDomain: rootDomain || "",
-      description: description || "",
-      steps: snap.exists() ? snap.data().steps || [] : [],
-    };
-    await setDoc(ref, payload, { merge: true });
-    await loadApps();
-    setSelectedAppId(appId);
-    pushStatus("✅ App saved");
-  }
-
-  // ----------- Step queue + save -----------
-  function addStepToQueue() {
-    if (!appId) return alert("Select or create an app first");
-    if (!newTitle) return alert("Step title is required");
-
-    const base = {
-      id: `${Date.now()}_${newType}`,
-      title: newTitle,
-      type: newType,
-      content: newContent || "",
-      appId, // harmless extra context
-    };
-
-    if (newType === "form") {
-      if (!newFormName) return alert("formName is required for a form step");
-      setQueuedSteps((q) => [...q, { ...base, formName: newFormName }]);
-    } else if (newType === "pdf") {
-      if (!newFormId) return alert("formId is required for a PDF step");
-      if (!newPdfFile) return alert("Select a PDF file to upload");
-      setQueuedSteps((q) => [
-        ...q,
-        { ...base, formId: newFormId, _file: newPdfFile },
-      ]);
-    } else {
-      setQueuedSteps((q) => [...q, base]); // info
+  // ----------- Step Management Functions -----------
+  const addStepToQueue = () => {
+    if (!newTitle.trim()) {
+      pushStatus("Please enter a step title");
+      return;
     }
 
-    // reset inputs (keep type)
+    const step = {
+      id: `step_${Date.now()}`,
+      title: newTitle.trim(),
+      type: newType,
+      content: newContent.trim(),
+      formName: newFormName.trim(),
+      formId: newFormId.trim(),
+      _file: newPdfFile,
+    };
+
+    setQueuedSteps((prev) => [...prev, step]);
     setNewTitle("");
     setNewContent("");
     setNewFormName("");
     setNewFormId("");
     setNewPdfFile(null);
-    pushStatus("✅ Step queued");
-  }
+    pushStatus("Step added to queue");
+  };
 
-  function removeQueued(i) {
-    setQueuedSteps((q) => q.filter((_, idx) => idx !== i));
-  }
+  const removeQueued = (index) => {
+    setQueuedSteps((prev) => prev.filter((_, i) => i !== index));
+  };
 
-  async function saveQueuedSteps() {
-    if (!appId) return alert("App id required");
-    if (queuedSteps.length === 0) return pushStatus("No steps queued");
+  const saveQueuedSteps = async () => {
+    if (!appId || queuedSteps.length === 0) return;
 
-    // 1) For PDF steps, upload files first
-    for (let i = 0; i < queuedSteps.length; i++) {
-      const s = queuedSteps[i];
-      if (s.type === "pdf" && s._file) {
-        const fd = new FormData();
-        fd.append("file", s._file);
-        const r = await fetch(`${API}/apps/${appId}/forms/${s.formId}/pdf`, {
-          method: "POST",
-          body: fd,
-        });
-        let j = {};
-        try {
-          j = await r.json();
-        } catch { }
-        if (!r.ok)
-          return alert(j.detail || `PDF upload failed for ${s.formId}`);
-      }
-    }
-
-  // ----------- AcroForm Bulk Conversion -----------
-  async function handleBulkAcroFormConversion() {
-    setIsBulkConverting(true);
-    setBulkConversionStatus(null);
-    
     try {
-      const results = [];
-      let successCount = 0;
-      let errorCount = 0;
-      
-      // Process each application
-      for (const app of apps) {
-        if (!app.steps || !Array.isArray(app.steps)) continue;
-        
-        // Find PDF steps
-        const pdfSteps = app.steps.filter(step => step.type === "pdf");
-        
-        for (const step of pdfSteps) {
-          try {
-            const formId = step.formId;
-            if (!formId) continue;
-            
-            // Check if overlay exists
-            const overlayResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/template`);
-            
-            if (overlayResponse.ok) {
-              const overlayData = await overlayResponse.json();
-              
-              // Convert overlay to AcroForm definition
-              const converted = convertOverlayToAcroForm(overlayData, formId);
-              
-              // Save the new definition
-              const saveResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/acroform-definition`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(converted)
-              });
-              
-              if (saveResponse.ok) {
-                successCount++;
-                results.push(`✅ ${app.id}/${formId}: Converted from overlay (${converted.fields.length} fields)`);
-              } else {
-                errorCount++;
-                results.push(`❌ ${app.id}/${formId}: Failed to save definition`);
-              }
-            } else {
-              // No overlay, create basic template
-              const basicTemplate = createBasicAcroFormTemplate(formId);
-              
-              const saveResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/acroform-definition`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(basicTemplate)
-              });
-              
-              if (saveResponse.ok) {
-                successCount++;
-                results.push(`✅ ${app.id}/${formId}: Created basic template (${basicTemplate.fields.length} fields)`);
-              } else {
-                errorCount++;
-                results.push(`❌ ${app.id}/${formId}: Failed to save template`);
-              }
-            }
-          } catch (err) {
-            errorCount++;
-            results.push(`❌ ${app.id}/${step.formId}: ${err.message}`);
+      const updatedSteps = [...steps];
+
+      for (const queuedStep of queuedSteps) {
+        const { _file, ...stepData } = queuedStep;
+
+        if (stepData.type === "pdf" && _file) {
+          // Handle PDF upload
+          const formData = new FormData();
+          formData.append("pdf", _file);
+          formData.append("formId", stepData.formId);
+
+          const uploadResponse = await fetch(`${API}/apps/${appId}/forms/${stepData.formId}/upload`, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error(`Failed to upload PDF for ${stepData.formId}`);
           }
         }
-      }
-      
-      setBulkConversionStatus({
-        type: "success",
-        title: "Bulk Conversion Complete!",
-        message: `Successfully processed ${successCount} forms. ${errorCount > 0 ? `${errorCount} errors occurred.` : 'No errors!'}`,
-        details: results.join('\n')
-      });
-      
-    } catch (err) {
-      setBulkConversionStatus({
-        type: "error",
-        title: "Bulk Conversion Failed",
-        message: err.message,
-        details: "An unexpected error occurred during bulk conversion."
-      });
-    } finally {
-      setIsBulkConverting(false);
-    }
-  }
 
-  // Helper functions for bulk conversion
-  function convertOverlayToAcroForm(overlay, formName) {
-    return {
-      formMetadata: {
-        title: formName.replace(/_/g, " ").replace(/.pdf$/i, ""),
-        description: `Converted from overlay: ${formName}`,
-        version: "1.0",
-        type: "acroform",
-        converted: true,
-        convertedAt: new Date().toISOString()
-      },
-      fields: overlay.fields.map(field => ({
-        id: field.id,
-        label: field.label,
-        type: field.type,
-        page: field.page || 0,
-        required: true,
-        validation: getDefaultValidation(field.type),
-        properties: getDefaultProperties(field.type),
-        styling: {
-          fontSize: field.fontSize || 12,
-          fontFamily: "Helvetica",
-          textAlign: field.align || "left",
-          color: "#000000"
-        },
-        aiConfidence: 0.8,
-        aiReasoning: "Converted from overlay coordinates"
-      })),
-      formSettings: {
-        autoSave: true,
-        validationMode: "real-time",
-        submitBehavior: "download",
-        theme: "default"
-      }
-    };
-  }
-
-  function getDefaultValidation(type) {
-    const base = { required: true };
-    switch (type) {
-      case "text":
-      case "textarea":
-        return { ...base, minLength: 2, maxLength: 100 };
-      case "email":
-        return { ...base, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" };
-      case "tel":
-        return { ...base, pattern: "^[\\+]?[1-9]\\d{1,14}$" };
-      case "number":
-        return { ...base, min: 0, max: 999999 };
-      case "date":
-        return { ...base, minDate: "1900-01-01", maxDate: "2100-12-31" };
-      default:
-        return base;
-    }
-  }
-
-  function getDefaultProperties(type) {
-    const base = { defaultValue: "", readOnly: false };
-    switch (type) {
-      case "text":
-      case "email":
-      case "tel":
-        return { ...base, placeholder: `Enter ${type}`, maxLength: 100 };
-      case "textarea":
-        return { ...base, placeholder: "Enter text", maxLength: 500, rows: 3 };
-      case "number":
-        return { ...base, placeholder: "0", min: 0, max: 999999 };
-      case "date":
-        return { ...base, placeholder: "MM/DD/YYYY" };
-      case "checkbox":
-        return { ...base, defaultValue: false };
-      case "signature":
-        return { ...base, placeholder: "Click to sign" };
-      default:
-        return base;
-    }
-  }
-
-  function createBasicAcroFormTemplate(formName) {
-    const formTitle = formName.replace(/_/g, " ").replace(/.pdf$/i, "");
-    
-    return {
-      formMetadata: {
-        title: formTitle,
-        description: `Basic AcroForm template for ${formTitle}`,
-        version: "1.0",
-        type: "acroform",
-        autoGenerated: true,
-        generatedAt: new Date().toISOString()
-      },
-      fields: [
-        {
-          id: "applicant_name",
-          label: "Applicant Name",
-          type: "text",
-          page: 0,
-          required: true,
-          validation: { required: true, minLength: 2, maxLength: 100 },
-          properties: { placeholder: "Enter applicant name", defaultValue: "", readOnly: false, maxLength: 100 },
-          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
-          aiConfidence: 0.0,
-          aiReasoning: "Basic template field - customize as needed"
-        },
-        {
-          id: "business_name",
-          label: "Business Name",
-          type: "text",
-          page: 0,
-          required: true,
-          validation: { required: true, minLength: 2, maxLength: 100 },
-          properties: { placeholder: "Enter business name", defaultValue: "", readOnly: false, maxLength: 100 },
-          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
-          aiConfidence: 0.0,
-          aiReasoning: "Basic template field - customize as needed"
-        },
-        {
-          id: "contact_email",
-          label: "Contact Email",
-          type: "email",
-          page: 0,
-          required: true,
-          validation: { required: true, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
-          properties: { placeholder: "Enter email address", defaultValue: "", readOnly: false, maxLength: 100 },
-          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
-          aiConfidence: 0.0,
-          aiReasoning: "Basic template field - customize as needed"
-        },
-        {
-          id: "signature",
-          label: "Signature",
-          type: "signature",
-          page: 0,
-          required: true,
-          validation: { required: true },
-          properties: { placeholder: "Click to sign", defaultValue: "", readOnly: false },
-          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "center", color: "#000000" },
-          aiConfidence: 0.0,
-          aiReasoning: "Basic template field - customize as needed"
-        }
-      ],
-      formSettings: {
-        autoSave: true,
-        validationMode: "real-time",
-        submitBehavior: "download",
-        theme: "default"
-      }
-    };
-  }
-
-    // 2) Merge into Firestore (keep order)
-    const ref = doc(db, "applications", appId);
-    const snap = await getDoc(ref);
-    const existing =
-      snap.exists() && Array.isArray(snap.data().steps)
-        ? snap.data().steps
-        : [];
-
-    // strip client-only _file and append
-    const cleaned = queuedSteps.map(({ _file, ...rest }) => rest);
-    const merged = [...existing, ...cleaned];
-
-    await updateDoc(ref, { steps: merged });
-    await loadApps();
-    setQueuedSteps([]);
-    // refresh steps panel
-    const updated = (await getDoc(ref)).data();
-    setSteps(updated.steps || []);
-    pushStatus("✅ Steps saved");
-  }
-
-  // ----------- Edit/Delete existing steps -----------
-  async function deleteStep(stepId) {
-    if (!appId) return alert("App id required");
-    if (!window.confirm("Delete this step?")) return;
-    const ref = doc(db, "applications", appId);
-    const snap = await getDoc(ref);
-    const existing = snap.exists() ? snap.data().steps || [] : [];
-    const filtered = existing.filter((s) => s.id !== stepId);
-    await updateDoc(ref, { steps: filtered });
-    setSteps(filtered);
-    await loadApps();
-    pushStatus("🗑️ Step deleted");
-  }
-
-  // ----------- PDF Download Functions -----------
-  const handlePdfDownload = async () => {
-    if (!pdfDownloadUrl || !pdfDownloadAppId || !pdfDownloadFormId) {
-      setPdfDownloadStatus("❌ Please fill in all fields");
-      return;
-    }
-
-    setIsDownloadingPdf(true);
-    setPdfDownloadStatus("Downloading PDF...");
-
-    try {
-      const response = await fetch("/api/download-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: pdfDownloadUrl,
-          appId: pdfDownloadAppId,
-          formId: pdfDownloadFormId,
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.detail || "Failed to download PDF");
+        updatedSteps.push(stepData);
       }
 
-      const result = await response.json();
-      setPdfDownloadStatus(
-        `✅ PDF downloaded successfully to applications/${pdfDownloadAppId}/forms/${pdfDownloadFormId}/form.pdf`
-      );
+      // Update the application
+      const appRef = doc(db, "applications", appId);
+      await updateDoc(appRef, { steps: updatedSteps });
 
-      // Clear form after successful download
-      setTimeout(() => {
-        setPdfDownloadUrl("");
-        setPdfDownloadAppId("");
-        setPdfDownloadFormId("");
-        setPdfDownloadStatus("");
-      }, 3000);
+      setSteps(updatedSteps);
+      setQueuedSteps([]);
+      pushStatus("Steps saved successfully");
+      loadApps();
     } catch (error) {
-      console.error("Error downloading PDF:", error);
-      setPdfDownloadStatus(`❌ Error: ${error.message}`);
-    } finally {
-      setIsDownloadingPdf(false);
+      pushStatus(`Error saving steps: ${error.message}`);
     }
   };
 
-  // ----------- UI -----------
+  // ----------- AcroForm Conversion Functions -----------
+  const convertToAcroForm = async (step) => {
+    if (step.type !== "pdf") return;
+
+    setIsConverting(true);
+    setConversionStatus("Converting to AcroForm...");
+
+    try {
+      // Convert the PDF step to AcroForm
+      const response = await fetch(`${API}/apps/${selectedApp.id}/forms/${step.formId}/convert-to-acroform`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stepId: step.id }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setConversionStatus({
+          type: "success",
+          message: `Successfully converted ${step.formId} to AcroForm`,
+          details: result
+        });
+
+        // Update the step type
+        const updatedSteps = steps.map(s =>
+          s.id === step.id ? { ...s, type: "acroform" } : s
+        );
+        setSteps(updatedSteps);
+
+        // Update in database
+        const appRef = doc(db, "applications", selectedApp.id);
+        await updateDoc(appRef, { steps: updatedSteps });
+
+        loadApps();
+      } else {
+        throw new Error("Conversion failed");
+      }
+    } catch (error) {
+      setConversionStatus({
+        type: "error",
+        message: "Failed to convert to AcroForm",
+        details: error.message
+      });
+    } finally {
+      setIsConverting(false);
+    }
+  };
+
+  const saveApp = async () => {
+    if (!appId.trim() || !appTitle.trim()) {
+      pushStatus("Please fill in required fields");
+      return;
+    }
+
+    try {
+      const appData = {
+        id: appId.trim(),
+        title: appTitle.trim(),
+        rootDomain: rootDomain.trim(),
+        description: description.trim(),
+        steps: steps,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      await setDoc(doc(db, "applications", appId.trim()), appData);
+      pushStatus("Application saved successfully");
+      loadApps();
+      newApp();
+    } catch (error) {
+      pushStatus(`Error saving application: ${error.message}`);
+    }
+  };
+
+  const deleteApp = async (id) => {
+    if (!confirm("Are you sure you want to delete this application?")) return;
+
+    try {
+      // Delete from Firestore
+      await setDoc(doc(db, "applications", id), { deleted: true });
+      pushStatus("Application deleted");
+      loadApps();
+      if (selectedAppId === id) newApp();
+    } catch (error) {
+      pushStatus(`Error deleting application: ${error.message}`);
+    }
+  };
+
   return (
-    <div style={{ display: "flex", height: "100vh", minHeight: 600 }}>
-      {/* Sidebar */}
-      <aside
-        className="admin-sidebar"
-        style={{
-          width: 280,
-          borderRight: "1px solid #eee",
-          overflowY: "auto",
-          padding: 12,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <h3 style={{ margin: 0 }}>Admin Panel</h3>
-        </div>
+    <div className="admin-dashboard">
+      {/* Header */}
+      <header className="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p>Manage applications and forms</p>
+      </header>
 
-        <div style={{ marginTop: 16 }}>
-          <button
-            onClick={() => setActiveTab("apps")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginBottom: "8px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "apps" ? "#eef2ff" : "#fff",
-              color: activeTab === "apps" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            Applications
-          </button>
-          <button
-            onClick={() => setActiveTab("bulk")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginBottom: "8px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "bulk" ? "#eef2ff" : "#fff",
-              color: activeTab === "bulk" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            Bulk Import
-          </button>
-          <button
-            onClick={() => setActiveTab("reports")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "reports" ? "#eef2ff" : "#fff",
-              color: activeTab === "reports" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            Issue Reports
-          </button>
-          <button
-            onClick={() => setActiveTab("pdf-download")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginTop: "8px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "pdf-download" ? "#eef2ff" : "#fff",
-              color: activeTab === "pdf-download" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            PDF Download
-          </button>
-          <button
-            onClick={() => setActiveTab("counties")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginTop: "8px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "counties" ? "#eef2ff" : "#fff",
-              color: activeTab === "counties" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            County Processor
-          </button>
-          <button
-            onClick={() => setActiveTab("acroform-bulk")}
-            style={{
-              width: "100%",
-              padding: "8px 12px",
-              marginTop: "8px",
-              border: "1px solid #e5e7eb",
-              borderRadius: "6px",
-              background: activeTab === "acroform-bulk" ? "#eef2ff" : "#fff",
-              color: activeTab === "acroform-bulk" ? "#3730a3" : "#374151",
-              cursor: "pointer",
-            }}
-          >
-            🎯 AcroForm Bulk Convert
-          </button>
-        </div>
+      {/* Navigation Tabs */}
+      <nav className="admin-nav">
+        <button
+          className={`nav-tab ${activeTab === "apps" ? "active" : ""}`}
+          onClick={() => setActiveTab("apps")}
+        >
+          Applications
+        </button>
+        <button
+          className={`nav-tab ${activeTab === "import" ? "active" : ""}`}
+          onClick={() => setActiveTab("import")}
+        >
+          Import Application Data
+        </button>
+        <button
+          className={`nav-tab ${activeTab === "reports" ? "active" : ""}`}
+          onClick={() => setActiveTab("reports")}
+        >
+          Issue Reports
+        </button>
+      </nav>
 
+      {/* Status Banner */}
+      {status && (
+        <div className="status-banner">
+          {status}
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="admin-main">
         {activeTab === "apps" && (
           <>
-            <div style={{ marginTop: 8 }}>
-              <button onClick={newApp} style={{ width: "100%" }}>
-                + New Application
-              </button>
-            </div>
+            {/* Applications List */}
+            <section className="apps-section">
+              <div className="section-header">
+                <h2>Applications</h2>
+                <button onClick={newApp} className="btn-primary">
+                  + New Application
+                </button>
+              </div>
 
-            <ul style={{ listStyle: "none", padding: 0, marginTop: 12 }}>
-              {apps.map((a) => (
-                <li key={a.id} style={{ marginBottom: 6 }}>
-                  <button
-                    onClick={() => selectApp(a.id)}
-                    style={{
-                      width: "100%",
-                      textAlign: "left",
-                      padding: "6px 8px",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: 8,
-                      background: selectedAppId === a.id ? "#eef2ff" : "#fff",
-                    }}
+              <div className="apps-grid">
+                {apps.map((app) => (
+                  <div
+                    key={app.id}
+                    className={`app-card ${selectedAppId === app.id ? "selected" : ""}`}
+                    onClick={() => selectApp(app.id)}
                   >
-                    <div style={{ fontWeight: 600 }}>{a.title || a.id}</div>
-                    <div style={{ fontSize: 12, color: "#6b7280" }}>{a.id}</div>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
-      </aside>
-
-      {/* Main panel */}
-      <main style={{ flex: 1, overflowY: "auto", padding: 16 }}>
-        <div
-          style={{
-            position: "sticky",
-            top: 0,
-            background: "#fff",
-            zIndex: 5,
-            paddingBottom: 8,
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
-          <h2 style={{ margin: 0, flex: 1 }}>
-            {activeTab === "apps" && "Admin Dashboard"}
-            {activeTab === "bulk" && "Bulk Import Applications"}
-            {activeTab === "reports" && "Issue Reports"}
-            {activeTab === "pdf-download" && "Download PDF Forms"}
-            {activeTab === "counties" && "County Processor"}
-          </h2>
-          <Link
-            to="/dashboard"
-            className="back-to-dashboard-link"
-            style={{ fontSize: 13, color: "#3b82f6" }}
-          >
-            ← Back to Dashboard
-          </Link>
-          {activeTab === "apps" && status && (
-            <div
-              style={{
-                marginLeft: 8,
-                padding: "6px 10px",
-                background: "#ecfeff",
-                border: "1px solid #a5f3fc",
-                borderRadius: 8,
-                color: "#155e75",
-                fontSize: 13,
-              }}
-            >
-              {status}
-            </div>
-          )}
-          {activeTab === "bulk" && bulkStatus && (
-            <div
-              style={{
-                marginLeft: 8,
-                padding: "6px 10px",
-                background: bulkStatus.includes("✅") ? "#ecfdf5" : "#fef3c7",
-                border: bulkStatus.includes("✅")
-                  ? "1px solid #a7f3d0"
-                  : "1px solid #fde68a",
-                borderRadius: 8,
-                color: bulkStatus.includes("✅") ? "#065f46" : "#92400e",
-                fontSize: 13,
-              }}
-            >
-              {bulkStatus}
-            </div>
-          )}
-          {activeTab === "pdf-download" && pdfDownloadStatus && (
-            <div
-              style={{
-                marginLeft: 8,
-                padding: "6px 10px",
-                background: pdfDownloadStatus.includes("✅")
-                  ? "#ecfdf5"
-                  : "#fef3c7",
-                border: pdfDownloadStatus.includes("✅")
-                  ? "1px solid #a7f3d0"
-                  : "1px solid #fde68a",
-                borderRadius: 8,
-                color: pdfDownloadStatus.includes("✅") ? "#065f46" : "#92400e",
-                fontSize: 13,
-              }}
-            >
-              {pdfDownloadStatus}
-            </div>
-          )}
-        </div>
-
-        {activeTab === "reports" ? (
-          <ReportsViewer />
-        ) : activeTab === "bulk" ? (
-          <div style={{ maxWidth: 800 }}>
-            {/* Bulk Import Instructions */}
-            <section
-              style={{
-                border: "1px solid #e5e7eb",
-                borderRadius: 12,
-                padding: 16,
-                marginTop: 12,
-                background: "#f9fafb",
-              }}
-            >
-              <h3 style={{ marginTop: 0, color: "#374151" }}>
-                📋 Bulk Import Instructions
-              </h3>
-              <div style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.5 }}>
-                <p>
-                  Upload one or more JSON files to create new county
-                  applications:
-                </p>
-                <ul style={{ margin: "8px 0", paddingLeft: 20 }}>
-                  <li>
-                    Each JSON should follow the{" "}
-                    <code>county-template.json</code> structure
-                  </li>
-                  <li>Files will be validated before processing</li>
-                  <li>
-                    Applications will be created in both backend and Firestore
-                  </li>
-                  <li>Duplicate IDs will update existing applications</li>
-                </ul>
-                <p>
-                  <strong>Tip:</strong> Use the template in{" "}
-                  <code>data/county-template.json</code> as a starting point.
-                </p>
+                    <h3>{app.title}</h3>
+                    <p className="app-domain">{app.rootDomain}</p>
+                    <p className="app-description">{app.description}</p>
+                    <div className="app-steps">
+                      {app.steps?.length || 0} steps
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteApp(app.id);
+                      }}
+                      className="btn-delete"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
               </div>
             </section>
 
-            {/* File Upload Area */}
-            <section
-              style={{
-                border: "2px dashed #d1d5db",
-                borderRadius: 12,
-                padding: 24,
-                marginTop: 16,
-                background: "#fafafa",
-                textAlign: "center",
-                transition: "all 0.2s",
-              }}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleFileDrop}
-            >
-              <div style={{ fontSize: 48, marginBottom: 16 }}>📁</div>
-              <h3 style={{ margin: "0 0 8px", color: "#374151" }}>
-                Drop JSON files here
-              </h3>
-              <p style={{ margin: "0 0 16px", color: "#6b7280" }}>
-                or click to select files
-              </p>
-              <input
-                type="file"
-                multiple
-                accept=".json,application/json"
-                onChange={handleFileSelect}
-                style={{ display: "none" }}
-                id="file-input"
-              />
-              <label
-                htmlFor="file-input"
-                style={{
-                  display: "inline-block",
-                  padding: "8px 16px",
-                  background: "#3b82f6",
-                  color: "white",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontSize: 14,
-                }}
-              >
-                Select Files
-              </label>
-            </section>
-
-            {/* File List */}
-            {bulkFiles.length > 0 && (
-              <section
-                style={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 12,
-                  padding: 16,
-                  marginTop: 16,
-                  background: "#fff",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 16,
-                  }}
-                >
-                  <h3 style={{ margin: 0 }}>
-                    Selected Files ({bulkFiles.length})
-                  </h3>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <button
-                      onClick={previewFiles}
-                      style={{
-                        padding: "6px 12px",
-                        background: "#3b82f6",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontSize: 13,
-                      }}
-                    >
-                      Preview
-                    </button>
-                    <button
-                      onClick={() => {
-                        setBulkFiles([]);
-                        setBulkPreview([]);
-                      }}
-                      style={{
-                        padding: "6px 12px",
-                        background: "#ef4444",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontSize: 13,
-                      }}
-                    >
-                      Clear All
-                    </button>
+            {/* Application Form */}
+            {selectedAppId && (
+              <section className="app-form-section">
+                <h3>Edit Application: {selectedApp.title}</h3>
+                <div className="form-grid">
+                  <div>
+                    <label>Application ID</label>
+                    <input
+                      value={appId}
+                      onChange={(e) => setAppId(e.target.value)}
+                      placeholder="e.g., los_angeles_county_mehko"
+                    />
+                  </div>
+                  <div>
+                    <label>Title</label>
+                    <input
+                      value={appTitle}
+                      onChange={(e) => setAppTitle(e.target.value)}
+                      placeholder="e.g., Los Angeles County MEHKO"
+                    />
+                  </div>
+                  <div>
+                    <label>Root Domain</label>
+                    <input
+                      value={rootDomain}
+                      onChange={(e) => setRootDomain(e.target.value)}
+                      placeholder="e.g., sandiegocounty.gov"
+                    />
+                  </div>
+                  <div>
+                    <label>Description</label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Brief description of the application"
+                    />
                   </div>
                 </div>
+                <button onClick={saveApp} className="btn-primary">
+                  Save Application
+                </button>
+              </section>
+            )}
 
-                <div style={{ display: "grid", gap: 8 }}>
-                  {bulkFiles.map((file, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        padding: "8px 12px",
-                        border: "1px solid #e5e7eb",
-                        borderRadius: "6px",
-                        background: "#f9fafb",
-                      }}
+            {/* Steps Management */}
+            {selectedAppId && (
+              <section className="steps-section">
+                <h3>Steps for {selectedApp.title}</h3>
+
+                {/* Existing Steps */}
+                <div className="existing-steps">
+                  <h4>Current Steps</h4>
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="step-item">
+                      <span className="step-number">{index + 1}</span>
+                      <span className="step-title">{step.title}</span>
+                      <span className="step-type">{step.type}</span>
+                      {step.type === "pdf" && (
+                        <button
+                          onClick={() => convertToAcroForm(step)}
+                          disabled={isConverting}
+                          className="btn-convert"
+                        >
+                          {isConverting ? "Converting..." : "Convert to AcroForm"}
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Add New Step */}
+                <div className="add-step-form">
+                  <h4>Add New Step</h4>
+                  <div className="step-form-grid">
+                    <div>
+                      <label>Step Title</label>
+                      <input
+                        value={newTitle}
+                        onChange={(e) => setNewTitle(e.target.value)}
+                        placeholder="e.g., Submit Application"
+                      />
+                    </div>
+                    <div>
+                      <label>Step Type</label>
+                      <select
+                        value={newType}
+                        onChange={(e) => setNewType(e.target.value)}
+                      >
+                        <option value="info">Information</option>
+                        <option value="form">Form</option>
+                        <option value="pdf">PDF</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label>Content/Description</label>
+                      <textarea
+                        value={newContent}
+                        onChange={(e) => setNewContent(e.target.value)}
+                        placeholder="Step description or instructions"
+                      />
+                    </div>
+
+                    {newType === "form" && (
+                      <div>
+                        <label>Form Name</label>
+                        <input
+                          value={newFormName}
+                          onChange={(e) => setNewFormName(e.target.value)}
+                          placeholder="e.g., MEHKO_SOP-English.pdf"
+                        />
+                      </div>
+                    )}
+
+                    {newType === "pdf" && (
+                      <>
+                        <div>
+                          <label>Form ID</label>
+                          <input
+                            value={newFormId}
+                            onChange={(e) => setNewFormId(e.target.value)}
+                            placeholder="e.g., MEHKO_SOP-English"
+                          />
+                        </div>
+                        <div>
+                          <label>PDF File</label>
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) => setNewPdfFile(e.target.files?.[0] || null)}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="step-actions">
+                    <button onClick={addStepToQueue} className="btn-secondary">
+                      Add to Queue
+                    </button>
+                    <button
+                      onClick={saveQueuedSteps}
+                      disabled={!appId || queuedSteps.length === 0}
+                      className="btn-primary"
                     >
-                      <span style={{ fontSize: 14, color: "#374151" }}>
-                        {file.name}
-                      </span>
+                      Save All Steps
+                    </button>
+                    <span className="queue-count">
+                      {queuedSteps.length} step{queuedSteps.length !== 1 ? 's' : ''} queued
+                    </span>
+                  </div>
+
+                  {queuedSteps.length > 0 && (
+                    <div className="queued-steps">
+                      <strong>Queued Steps:</strong>
+                      <ul>
+                        {queuedSteps.map((step, index) => (
+                          <li key={index}>
+                            {step.title} <em>({step.type})</em>
+                            {step.type === "pdf" && ` — formId: ${step.formId}`}
+                            {step.type === "form" && ` — formName: ${step.formName}`}
+                            <button
+                              onClick={() => removeQueued(index)}
+                              className="btn-remove"
+                            >
+                              Remove
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </section>
+            )}
+
+            {/* Conversion Status */}
+            {conversionStatus && (
+              <div className={`conversion-status ${conversionStatus.type}`}>
+                <h4>{conversionStatus.type === "success" ? "✅ Success" : "❌ Error"}</h4>
+                <p>{conversionStatus.message}</p>
+                {conversionStatus.details && (
+                  <details>
+                    <summary>Details</summary>
+                    <pre>{JSON.stringify(conversionStatus.details, null, 2)}</pre>
+                  </details>
+                )}
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === "import" && (
+          <section className="import-section">
+            <h2>Import Application Data</h2>
+            <p>Upload JSON files to bulk import applications</p>
+
+            <div className="import-area">
+              <div
+                className="drop-zone"
+                onDrop={handleFileDrop}
+                onDragOver={(e) => e.preventDefault()}
+              >
+                <p>Drop JSON files here or</p>
+                <input
+                  type="file"
+                  multiple
+                  accept=".json"
+                  onChange={handleFileSelect}
+                  className="file-input"
+                />
+                <label htmlFor="file-input" className="btn-primary">
+                  Select Files
+                </label>
+              </div>
+
+              {bulkFiles.length > 0 && (
+                <div className="file-list">
+                  <h4>Selected Files:</h4>
+                  {bulkFiles.map((file, index) => (
+                    <div key={index} className="file-item">
+                      <span>{file.name}</span>
                       <button
                         onClick={() => removeFile(index)}
-                        style={{
-                          padding: "4px 8px",
-                          background: "#ef4444",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontSize: 12,
-                        }}
+                        className="btn-remove"
                       >
                         Remove
                       </button>
                     </div>
                   ))}
+                  <div className="file-actions">
+                    <button onClick={previewFiles} className="btn-secondary">
+                      Preview Files
+                    </button>
+                    <button
+                      onClick={processBulkImport}
+                      disabled={isProcessing || bulkPreview.length === 0}
+                      className="btn-primary"
+                    >
+                      {isProcessing ? "Processing..." : "Import All"}
+                    </button>
+                  </div>
                 </div>
-              </section>
-            )}
+              )}
 
-            {/* Preview Results */}
-            {bulkPreview.length > 0 && (
-              <section
-                style={{
-                  border: "1px solid #e5e7eb",
-                  borderRadius: 12,
-                  padding: 16,
-                  marginTop: 16,
-                  background: "#fff",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 16,
-                  }}
-                >
-                  <h3 style={{ margin: 0 }}>Preview Results</h3>
-                  <button
-                    onClick={processBulkImport}
-                    disabled={
-                      isProcessing ||
-                      bulkPreview.filter((p) => p.valid).length === 0
-                    }
-                    style={{
-                      padding: "8px 16px",
-                      background:
-                        isProcessing ||
-                          bulkPreview.filter((p) => p.valid).length === 0
-                          ? "#9ca3af"
-                          : "#3b82f6",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor:
-                        isProcessing ||
-                          bulkPreview.filter((p) => p.valid).length === 0
-                          ? "not-allowed"
-                          : "pointer",
-                      fontSize: 14,
-                    }}
-                  >
-                    {isProcessing
-                      ? "Processing..."
-                      : `Import ${bulkPreview.filter((p) => p.valid).length
-                      } Applications`}
-                  </button>
-                </div>
-
-                <div style={{ display: "grid", gap: 12 }}>
+              {bulkPreview.length > 0 && (
+                <div className="preview-list">
+                  <h4>File Preview:</h4>
                   {bulkPreview.map((preview, index) => (
                     <div
                       key={index}
-                      style={{
-                        border: "1px solid #e5e7eb",
-                        borderRadius: "8px",
-                        padding: "12px",
-                        background: preview.valid ? "#f0fdf4" : "#fef2f2",
-                      }}
+                      className={`preview-item ${preview.valid ? "valid" : "invalid"}`}
                     >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                          marginBottom: 8,
-                        }}
-                      >
-                        <span style={{ fontSize: 16 }}>
-                          {preview.valid ? "✅" : "❌"}
-                        </span>
-                        <strong
-                          style={{
-                            color: preview.valid ? "#065f46" : "#dc2626",
-                          }}
-                        >
-                          {preview.filename}
-                        </strong>
-                      </div>
-
-                      {preview.valid ? (
-                        <div style={{ fontSize: 13, color: "#374151" }}>
-                          <div>
-                            <strong>ID:</strong> {preview.data.id}
-                          </div>
-                          <div>
-                            <strong>Title:</strong> {preview.data.title}
-                          </div>
-                          <div>
-                            <strong>Domain:</strong>{" "}
-                            {preview.data.rootDomain || "Not specified"}
-                          </div>
-                          <div>
-                            <strong>Steps:</strong>{" "}
-                            {preview.data.steps?.length || 0} steps
-                          </div>
-                          {preview.data.description && (
-                            <div>
-                              <strong>Description:</strong>{" "}
-                              {preview.data.description.substring(0, 100)}...
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div style={{ fontSize: 13, color: "#dc2626" }}>
-                          <strong>Error:</strong>{" "}
-                          {preview.error || "Invalid JSON structure"}
-                        </div>
+                      <span>{preview.filename}</span>
+                      <span className="status">
+                        {preview.valid ? "✅ Valid" : "❌ Invalid"}
+                      </span>
+                      {preview.error && (
+                        <span className="error">{preview.error}</span>
                       )}
                     </div>
                   ))}
                 </div>
-              </section>
-            )}
-          </div>
-        ) : activeTab === "pdf-download" ? (
-          <div style={{ maxWidth: 600 }}>
-            <div style={{ marginBottom: 16 }}>
-              <h3 style={{ marginTop: 0 }}>Download PDF Form</h3>
-              <p>
-                Enter the application ID and form ID to download a PDF, or load
-                from an existing application.
-              </p>
-            </div>
+              )}
 
-            {/* Load from Application Section */}
-            <div
-              style={{
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                padding: "16px",
-                marginBottom: "16px",
-                background: "#f9fafb",
-              }}
-            >
-              <h4 style={{ marginTop: 0, marginBottom: "12px" }}>
-                Load from Application
-              </h4>
-              <div style={{ display: "grid", gap: "8px" }}>
-                <select
-                  value={selectedAppId || ""}
-                  onChange={(e) => {
-                    const appId = e.target.value;
-                    if (appId) {
-                      const app = apps.find((a) => a.id === appId);
-                      if (app) {
-                        // Find PDF steps and populate fields
-                        const pdfSteps =
-                          app.steps?.filter((s) => s.type === "pdf") || [];
-                        if (pdfSteps.length > 0) {
-                          setPdfDownloadAppId(app.id);
-                          setPdfDownloadFormId(pdfSteps[0].formId || "");
-                          setPdfDownloadUrl(pdfSteps[0].pdfUrl || "");
-                        }
-                      }
-                    }
-                  }}
-                  style={{
-                    padding: "8px",
-                    borderRadius: "4px",
-                    border: "1px solid #d1d5db",
-                  }}
-                >
-                  <option value="">Select an application...</option>
-                  {apps.map((app) => (
-                    <option key={app.id} value={app.id}>
-                      {app.title || app.id}
-                    </option>
-                  ))}
-                </select>
-                {selectedAppId && (
-                  <div style={{ fontSize: "13px", color: "#6b7280" }}>
-                    Found{" "}
-                    {apps
-                      .find((a) => a.id === selectedAppId)
-                      ?.steps?.filter((s) => s.type === "pdf").length || 0}{" "}
-                    PDF forms
-                  </div>
-                )}
-
-                {/* Show available PDF forms */}
-                {selectedAppId && (
-                  <div style={{ marginTop: "12px" }}>
-                    <h5 style={{ margin: "8px 0", fontSize: "14px" }}>
-                      Available PDF Forms:
-                    </h5>
-                    <div style={{ display: "grid", gap: "8px" }}>
-                      {apps
-                        .find((a) => a.id === selectedAppId)
-                        ?.steps?.filter((s) => s.type === "pdf")
-                        .map((step, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              padding: "8px",
-                              border: "1px solid #d1d5db",
-                              borderRadius: "4px",
-                              background: "#fff",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => {
-                              setPdfDownloadFormId(step.formId || "");
-                              setPdfDownloadUrl(step.pdfUrl || "");
-                            }}
-                          >
-                            <div
-                              style={{ fontWeight: "600", fontSize: "13px" }}
-                            >
-                              {step.title}
-                            </div>
-                            <div style={{ fontSize: "12px", color: "#6b7280" }}>
-                              Form ID: {step.formId}
-                            </div>
-                            <div
-                              style={{
-                                fontSize: "11px",
-                                color: "#9ca3af",
-                                wordBreak: "break-all",
-                              }}
-                            >
-                              {step.pdfUrl}
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div style={{ display: "grid", gap: 8 }}>
-              <input
-                type="text"
-                placeholder="Application ID (e.g., alameda_county_mehko)"
-                value={pdfDownloadAppId}
-                onChange={(e) => setPdfDownloadAppId(e.target.value)}
-                disabled={isDownloadingPdf}
-              />
-              <input
-                type="text"
-                placeholder="Form ID (e.g., ALAMEDA_MEHKO_SOP-English)"
-                value={pdfDownloadFormId}
-                onChange={(e) => setPdfDownloadFormId(e.target.value)}
-                disabled={isDownloadingPdf}
-              />
-              <input
-                type="url"
-                placeholder="PDF URL (e.g., https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf)"
-                value={pdfDownloadUrl}
-                onChange={(e) => setPdfDownloadUrl(e.target.value)}
-                disabled={isDownloadingPdf}
-              />
-              <button
-                onClick={handlePdfDownload}
-                disabled={
-                  isDownloadingPdf ||
-                  !pdfDownloadUrl ||
-                  !pdfDownloadAppId ||
-                  !pdfDownloadFormId
-                }
-                style={{
-                  padding: "8px 16px",
-                  background:
-                    isDownloadingPdf ||
-                      !pdfDownloadUrl ||
-                      !pdfDownloadAppId ||
-                      !pdfDownloadFormId
-                      ? "#9ca3af"
-                      : "#3b82f6",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                  cursor:
-                    isDownloadingPdf ||
-                      !pdfDownloadUrl ||
-                      !pdfDownloadAppId ||
-                      !pdfDownloadFormId
-                      ? "not-allowed"
-                      : "pointer",
-                  fontSize: 14,
-                }}
-              >
-                {isDownloadingPdf ? "Downloading..." : "Download PDF"}
-              </button>
-              {pdfDownloadStatus && (
-                <div
-                  style={{
-                    marginTop: 12,
-                    padding: "8px 12px",
-                    background: pdfDownloadStatus.includes("✅")
-                      ? "#ecfdf5"
-                      : "#fef3c7",
-                    border: pdfDownloadStatus.includes("✅")
-                      ? "1px solid #a7f3d0"
-                      : "1px solid #fde68a",
-                    borderRadius: 8,
-                    color: pdfDownloadStatus.includes("✅")
-                      ? "#065f46"
-                      : "#92400e",
-                    fontSize: 13,
-                  }}
-                >
-                  {pdfDownloadStatus}
+              {bulkStatus && (
+                <div className="import-status">
+                  {bulkStatus}
                 </div>
               )}
             </div>
-            <div style={{ marginTop: 20 }}>
-              <h4 style={{ marginTop: 0 }}>How to use:</h4>
-              <ol style={{ paddingLeft: 20 }}>
-                <li>
-                  <strong>Application ID:</strong> The county identifier (e.g.,
-                  "sonoma_county_mehko")
-                </li>
-                <li>
-                  <strong>Form ID:</strong> The form identifier (e.g.,
-                  "MEHKO_SOP-English")
-                </li>
-                <li>
-                  <strong>PDF URL:</strong> Direct link to the PDF file
-                </li>
-                <li>
-                  Click "Download PDF" to save it to{" "}
-                  <code>
-                    applications/{pdfDownloadAppId}/forms/{pdfDownloadFormId}
-                    /form.pdf
-                  </code>
-                </li>
-                <li>
-                  Use the mapper tool to extract form fields from the downloaded
-                  PDF
-                </li>
-              </ol>
-            </div>
-            <div style={{ marginTop: 20 }}>
-              <h4 style={{ marginTop: 0 }}>Example:</h4>
-              <div style={{ paddingLeft: 20 }}>
-                <p>
-                  <strong>Application ID:</strong> alameda_county_mehko
-                </p>
-                <p>
-                  <strong>Form ID:</strong> ALAMEDA_MEHKO_SOP-English
-                </p>
-                <p>
-                  <strong>PDF URL:</strong>{" "}
-                  https://deh.acgov.org/operations-assets/docs/cottagefood/AA%20MEHKO%20App-SOP%201.23.2025.pdf
-                </p>
-                <p>
-                  <strong>Result:</strong> PDF saved to{" "}
-                  <code>
-                    applications/alameda_county_mehko/forms/ALAMEDA_MEHKO_SOP-English/form.pdf
-                  </code>
-                </p>
-              </div>
-            </div>
-          </div>
-        ) : activeTab === "counties" ? (
-          <CountyProcessor />
-        ) : activeTab === "acroform-bulk" ? (
-          <AcroFormBulkConverter />
-        ) : (
-          <>
-            {/* App form */}
-            <section
-              style={{
-                border: "1px solid #eee",
-                borderRadius: 12,
-                padding: 12,
-                marginTop: 12,
-                background: "#fff",
-              }}
-            >
-              <h3 style={{ marginTop: 0 }}>Application Details</h3>
-              <div style={{ display: "grid", gap: 12 }}>
-                <div>
-                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                    Application ID
-                  </label>
-                  <input
-                    placeholder="e.g., san_diego_mehko"
-                    value={appId}
-                    onChange={(e) => setAppId(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e5e7eb",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      backgroundColor: "#ffffff",
-                      color: "#1f2937",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#3b82f6";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#e5e7eb";
-                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                    Application Title
-                  </label>
-                  <input
-                    placeholder="e.g., Orange County MEHKO"
-                    value={appTitle}
-                    onChange={(e) => setAppTitle(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e5e7eb",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      backgroundColor: "#ffffff",
-                      color: "#1f2937",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#3b82f6";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#e5e7eb";
-                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                    Root Domain
-                  </label>
-                  <input
-                    placeholder="e.g., ocgov.com"
-                    value={rootDomain}
-                    onChange={(e) => setRootDomain(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e5e7eb",
-                      fontSize: "14px",
-                      backgroundColor: "#ffffff",
-                      color: "#1f2937",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#3b82f6";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#e5e7eb";
-                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                    Description
-                  </label>
-                  <textarea
-                    placeholder="Enter application description..."
-                    rows={3}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e5e7eb",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      backgroundColor: "#ffffff",
-                      color: "#1f2937",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                      resize: "vertical",
-                      fontFamily: "inherit"
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#3b82f6";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#e5e7eb";
-                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                    }}
-                  />
-                </div>
-                <div style={{ display: "flex", gap: 8 }}>
-                  <button
-                    onClick={saveAppMeta}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "#10b981",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#059669";
-                      e.target.style.transform = "translateY(-1px)";
-                      e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#10b981";
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
-                    }}
-                  >
-                    Save App
-                  </button>
-                </div>
-              </div>
-            </section>
+          </section>
+        )}
 
-            {/* Steps list */}
-            {selectedApp && (
-              <section
-                style={{
-                  border: "1px solid #eee",
-                  borderRadius: 12,
-                  padding: 12,
-                  marginTop: 12,
-                  background: "#fff",
-                }}
-              >
-                <h3 style={{ marginTop: 0 }}>Current Application Steps</h3>
-                {steps.length === 0 ? (
-                  <p style={{ color: "#6b7280" }}>No steps yet.</p>
-                ) : (
-                  <ol style={{ paddingLeft: 18 }}>
-                    {steps.map((s, i) => (
-                      <li key={s.id} style={{ marginBottom: 8 }}>
-                        <div
-                          style={{
-                            border: "1px solid #e5e7eb",
-                            borderRadius: 8,
-                            padding: 8,
-                            background: "#fafafa",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 8,
-                            }}
-                          >
-                            <strong style={{ flex: 1 }}>
-                              {i + 1}. {s.title}{" "}
-                              <span style={{ color: "#6b7280" }}>
-                                ({s.type})
-                              </span>
-                            </strong>
-                            <button
-                              onClick={() => deleteStep(s.id)}
-                              style={{
-                                color: "#dc2626",
-                                borderColor: "#fecaca",
-                              }}
-                              title="Delete step"
-                            >
-                              Delete
-                            </button>
-                          </div>
-
-                          {s.type === "pdf" && (
-                            <div style={{ fontSize: 13, color: "#374151" }}>
-                              formId: <code>{s.formId}</code> |{" "}
-                              <Link to={`/admin/mapper/${appId}/${s.formId}`}>
-                                Mapper
-                              </Link>{" "}
-                              |{" "}
-                              <Link
-                                to={`/admin/acroform-editor/${appId}/${s.formId}`}
-                                style={{ color: "#10b981", fontWeight: "600" }}
-                                title="🎯 Modern AcroForm Field Editor"
-                              >
-                                AcroForm Editor
-                              </Link>{" "}
-                              |{" "}
-                              <Link
-                                to={`/admin/interview/${appId}/${s.formId}`}
-                              >
-                                Interview
-                              </Link>
-                            </div>
-                          )}
-                          {s.type === "form" && (
-                            <div style={{ fontSize: 13, color: "#374151" }}>
-                              formName: <code>{s.formName}</code>
-                            </div>
-                          )}
-                          {s.content && (
-                            <div
-                              style={{
-                                marginTop: 4,
-                                fontSize: 13,
-                                color: "#6b7280",
-                              }}
-                            >
-                              {s.content}
-                            </div>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                )}
-              </section>
-            )}
-
-            {/* Add steps (queue) */}
-            <section
-              style={{
-                border: "1px solid #eee",
-                borderRadius: 12,
-                padding: 12,
-                marginTop: 12,
-                background: "#fff",
-                marginBottom: 24,
-              }}
-            >
-              <h3 style={{ marginTop: 0 }}>Create New Step</h3>
-              <div style={{ display: "grid", gap: 12, alignItems: "start" }}>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                  <div>
-                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                      Step Type
-                    </label>
-                    <select
-                      value={newType}
-                      onChange={(e) => setNewType(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        border: "2px solid #e5e7eb",
-                        borderRadius: "8px",
-                        fontSize: "14px",
-                        backgroundColor: "#ffffff",
-                        color: "#1f2937",
-                        transition: "all 0.2s ease",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                        cursor: "pointer"
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = "#3b82f6";
-                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = "#e5e7eb";
-                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                      }}
-                    >
-                      <option value="info">Information Step</option>
-                      <option value="form">Form Step</option>
-                      <option value="pdf">PDF Step</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                      Step Title
-                    </label>
-                    <input
-                      placeholder="Enter step title..."
-                      value={newTitle}
-                      onChange={(e) => setNewTitle(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        border: "2px solid #e5e7eb",
-                        borderRadius: "8px",
-                        fontSize: "14px",
-                        backgroundColor: "#ffffff",
-                        color: "#1f2937",
-                        transition: "all 0.2s ease",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = "#3b82f6";
-                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = "#e5e7eb";
-                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                    Step Description
-                  </label>
-                  <textarea
-                    placeholder="Enter step description or content..."
-                    rows={2}
-                    value={newContent}
-                    onChange={(e) => setNewContent(e.target.value)}
-                    style={{
-                      width: "100%",
-                      padding: "12px 16px",
-                      border: "2px solid #e5e7eb",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      backgroundColor: "#ffffff",
-                      color: "#1f2937",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                      resize: "vertical",
-                      fontFamily: "inherit"
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = "#3b82f6";
-                      e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = "#e5e7eb";
-                      e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                    }}
-                  />
-                </div>
-
-                {newType === "form" && (
-                  <div>
-                    <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                      Form Name
-                    </label>
-                    <input
-                      placeholder="e.g., MEHKO_SOP-English.pdf"
-                      value={newFormName}
-                      onChange={(e) => setNewFormName(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "12px 16px",
-                        border: "2px solid #e5e7eb",
-                        borderRadius: "8px",
-                        fontSize: "14px",
-                        backgroundColor: "#ffffff",
-                        color: "#1f2937",
-                        transition: "all 0.2s ease",
-                        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = "#3b82f6";
-                        e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = "#e5e7eb";
-                        e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                      }}
-                    />
-                  </div>
-                )}
-
-                {newType === "pdf" && (
-                  <div style={{ display: "grid", gap: 12 }}>
-                    <div>
-                      <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                        Form ID
-                      </label>
-                      <input
-                        placeholder="e.g., MEHKO_SOP-English"
-                        value={newFormId}
-                        onChange={(e) => setNewFormId(e.target.value)}
-                        style={{
-                          width: "100%",
-                          padding: "12px 16px",
-                          border: "2px solid #e5e7eb",
-                          borderRadius: "8px",
-                          fontSize: "14px",
-                          backgroundColor: "#ffffff",
-                          color: "#1f2937",
-                          transition: "all 0.2s ease",
-                          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)"
-                        }}
-                        onFocus={(e) => {
-                          e.target.style.borderColor = "#3b82f6";
-                          e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                        }}
-                        onBlur={(e) => {
-                          e.target.style.borderColor = "#e5e7eb";
-                          e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <label style={{ display: "block", marginBottom: 6, fontSize: 14, fontWeight: 600, color: "#1f2937" }}>
-                        PDF File
-                      </label>
-                      <input
-                        type="file"
-                        accept="application/pdf"
-                        onChange={(e) =>
-                          setNewPdfFile(e.target.files?.[0] || null)
-                        }
-                        style={{
-                          width: "100%",
-                          padding: "12px 16px",
-                          border: "2px solid #e5e7eb",
-                          borderRadius: "8px",
-                          fontSize: "14px",
-                          backgroundColor: "#ffffff",
-                          color: "#1f2937",
-                          transition: "all 0.2s ease",
-                          boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-                          cursor: "pointer"
-                        }}
-                        onFocus={(e) => {
-                          e.target.style.borderColor = "#3b82f6";
-                          e.target.style.boxShadow = "0 0 0 3px rgba(59, 130, 246, 0.1)";
-                        }}
-                        onBlur={(e) => {
-                          e.target.style.borderColor = "#e5e7eb";
-                          e.target.style.boxShadow = "0 1px 2px rgba(0, 0, 0, 0.05)";
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  <button
-                    onClick={addStepToQueue}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: "#3b82f6",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      cursor: "pointer",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "#2563eb";
-                      e.target.style.transform = "translateY(-1px)";
-                      e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "#3b82f6";
-                      e.target.style.transform = "translateY(0)";
-                      e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
-                    }}
-                  >
-                    Add to Queue
-                  </button>
-                  <button
-                    onClick={saveQueuedSteps}
-                    disabled={!appId || queuedSteps.length === 0}
-                    style={{
-                      padding: "12px 24px",
-                      backgroundColor: !appId || queuedSteps.length === 0 ? "#9ca3af" : "#10b981",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      cursor: !appId || queuedSteps.length === 0 ? "not-allowed" : "pointer",
-                      transition: "all 0.2s ease",
-                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!(!appId || queuedSteps.length === 0)) {
-                        e.target.style.backgroundColor = "#059669";
-                        e.target.style.transform = "translateY(-1px)";
-                        e.target.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!(!appId || queuedSteps.length === 0)) {
-                        e.target.style.backgroundColor = "#10b981";
-                        e.target.style.transform = "translateY(0)";
-                        e.target.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
-                      }
-                    }}
-                  >
-                    Save All Steps
-                  </button>
-                  <div
-                    style={{
-                      alignSelf: "center",
-                      fontSize: 13,
-                      color: "#6b7280",
-                    }}
-                  >
-                    {queuedSteps.length} step{queuedSteps.length !== 1 ? 's' : ''} queued
-                  </div>
-                </div>
-
-                {queuedSteps.length > 0 && (
-                  <div
-                    style={{
-                      marginTop: 8,
-                      border: "1px dashed #e5e7eb",
-                      borderRadius: 8,
-                      padding: 8,
-                    }}
-                  >
-                    <strong>Queued</strong>
-                    <ul style={{ margin: "6px 0 0", paddingLeft: 18 }}>
-                      {queuedSteps.map((q, i) => (
-                        <li key={i} style={{ marginBottom: 6 }}>
-                          {q.title} <em>({q.type})</em>
-                          {q.type === "pdf" && (
-                            <>
-                              {" "}
-                              — formId: <code>{q.formId}</code>
-                            </>
-                          )}
-                          {q.type === "form" && (
-                            <>
-                              {" "}
-                              — formName: <code>{q.formName}</code>
-                            </>
-                          )}
-                          <button
-                            onClick={() => removeQueued(i)}
-                            style={{ marginLeft: 8, fontSize: 12 }}
-                            title="Remove from queue"
-                          >
-                            remove
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </section>
-          </>
+        {activeTab === "reports" && (
+          <ReportsViewer />
         )}
       </main>
     </div>
