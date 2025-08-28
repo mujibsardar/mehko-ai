@@ -76,6 +76,15 @@ if check_port_status 3000 "Node.js Server" "http://localhost:3000/api/ai-chat"; 
 fi
 echo ""
 
+# Check API Gateway
+echo -e "${YELLOW}🌐 API Gateway (Unified Frontend)${NC}"
+echo "----------------------------------------"
+if check_port_status 3001 "API Gateway" "http://localhost:3001/health"; then
+    GATEWAY_PID=$(lsof -Pi :3001 -sTCP:LISTEN -t 2>/dev/null | head -1)
+    get_uptime "$GATEWAY_PID"
+fi
+echo ""
+
 # Check React dev server
 echo -e "${YELLOW}⚛️  React Dev Server (Frontend)${NC}"
 echo "----------------------------------------"

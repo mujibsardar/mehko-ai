@@ -30,13 +30,19 @@ if [ ! -f "temp/.service-pids" ]; then
         echo -e "${YELLOW}   PID: $NODE_PID${NC}"
     fi
     
+    if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
+        echo -e "${YELLOW}🌐 Found service running on port 3001 (API Gateway)${NC}"
+        GATEWAY_PID=$(lsof -ti:3001)
+        echo -e "${YELLOW}   PID: $GATEWAY_PID${NC}"
+    fi
+    
     if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null 2>&1; then
         echo -e "${YELLOW}⚛️  Found service running on port 5173 (React)${NC}"
         REACT_PID=$(lsof -ti:5173)
         echo -e "${YELLOW}   PID: $REACT_PID${NC}"
     fi
     
-    if [ -z "$PYTHON_PID" ] && [ -z "$NODE_PID" ] && [ -z "$REACT_PID" ]; then
+    if [ -z "$PYTHON_PID" ] && [ -z "$NODE_PID" ] && [ -z "$GATEWAY_PID" ] && [ -z "$REACT_PID" ]; then
         echo -e "${GREEN}✅ No services found running on expected ports.${NC}"
         exit 0
     fi
@@ -53,7 +59,7 @@ if [ ! -f "temp/.service-pids" ]; then
     fi
 else
     # Read PIDs from file
-    read PYTHON_PID NODE_PID REACT_PID < temp/.service-pids
+    read PYTHON_PID NODE_PID GATEWAY_PID REACT_PID < temp/.service-pids
     
     echo -e "${YELLOW}🔍 Stopping services using saved PIDs...${NC}"
     
@@ -75,6 +81,15 @@ else
         echo -e "${YELLOW}ℹ️  Node.js server not running or PID not found${NC}"
     fi
     
+    # Stop API Gateway
+    if [ ! -z "$GATEWAY_PID" ] && kill -0 $GATEWAY_PID 2>/dev/null; then
+        echo -e "${YELLOW}🌐 Stopping API Gateway (PID: $GATEWAY_PID)...${NC}"
+        kill -TERM $GATEWAY_PID 2>/dev/null || kill -KILL $GATEWAY_PID 2>/dev/null
+        echo -e "${GREEN}✅ API Gateway stopped${NC}"
+    else
+        echo -e "${YELLOW}ℹ️  API Gateway not running or PID not found${NC}"
+    fi
+    
     # Stop React dev server
     if [ ! -z "$REACT_PID" ] && kill -0 $REACT_PID 2>/dev/null; then
         echo -e "${YELLOW}⚛️  Stopping React dev server (PID: $REACT_PID)...${NC}"
@@ -94,7 +109,7 @@ echo ""
 echo -e "${YELLOW}🧹 Final cleanup - checking for any remaining script-started processes...${NC}"
 
 # Kill any remaining processes on our expected ports
-for port in 8000 3000 5173; do
+for port in 8000 3000 3001 5173; do
     REMAINING_PID=$(lsof -ti:$port)
     if [ ! -z "$REMAINING_PID" ]; then
         echo -e "${YELLOW}🔫 Force killing remaining process on port $port (PID: $REMAINING_PID)...${NC}"

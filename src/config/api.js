@@ -3,16 +3,17 @@
 
 const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
 
-// Base URLs
+// Base URLs - Now using unified API Gateway
 export const API_CONFIG = {
-  // Python FastAPI backend
-  PYTHON_API: isDevelopment ? 'http://127.0.0.1:8000' : '/api',
+  // Unified API Gateway (handles routing to both backends)
+  GATEWAY_API: isDevelopment ? 'http://localhost:3001' : '/api',
   
-  // Node.js backend (if different from Python)
+  // Legacy direct access (for debugging if needed)
+  PYTHON_API: isDevelopment ? 'http://127.0.0.1:8000' : '/api',
   NODE_API: isDevelopment ? 'http://localhost:3000' : '/api',
   
-  // Default API (use Python backend as primary)
-  DEFAULT_API: isDevelopment ? 'http://127.0.0.1:8000' : '/api'
+  // Default API (now uses gateway)
+  DEFAULT_API: isDevelopment ? 'http://localhost:3001' : '/api'
 };
 
 // Specific endpoint builders
@@ -25,8 +26,8 @@ export const ENDPOINTS = {
   APP_BY_ID: (base = API_CONFIG.DEFAULT_API, appId) => buildEndpoint(base, `/apps/${encodeURIComponent(appId)}`),
   
   // AI endpoints
-  AI_CHAT: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/ai-chat'),
-  AI_ANALYZE_PDF: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/ai-analyze-pdf'),
+  AI_CHAT: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/api/ai-chat'),
+  AI_ANALYZE_PDF: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/api/ai-analyze-pdf'),
   
   // Form endpoints
   FORM_FIELDS: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/api/form-fields'),

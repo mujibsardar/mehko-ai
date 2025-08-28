@@ -26,9 +26,10 @@ check_port() {
 echo -e "${YELLOW}🔍 Checking port availability...${NC}"
 if ! check_port 8000; then exit 1; fi  # Python FastAPI (PDF service)
 if ! check_port 3000; then exit 1; fi  # Node.js server (AI chat)
+if ! check_port 3001; then exit 1; fi  # API Gateway (unified frontend)
 if ! check_port 5173; then exit 1; fi  # React dev server (frontend)
 echo -e "${GREEN}✅ All ports are available${NC}"
-echo -e "${BLUE}💡 Note: Frontend now configured to use FastAPI on port 8000${NC}"
+echo -e "${BLUE}💡 Note: Frontend now configured to use API Gateway on port 3001${NC}"
 echo ""
 
 # Start Python FastAPI server
@@ -71,6 +72,15 @@ NODE_PID=$!
 # Wait a moment for Node server to start
 sleep 2
 
+# Start API Gateway
+echo -e "${YELLOW}🌐 Starting API Gateway...${NC}"
+echo -e "${GREEN}🚀 Starting API Gateway on port 3001...${NC}"
+node api-gateway.js > logs/gateway.log 2>&1 &
+GATEWAY_PID=$!
+
+# Wait a moment for Gateway to start
+sleep 2
+
 # Start React dev server
 echo -e "${YELLOW}⚛️  Starting React dev server...${NC}"
 echo -e "${GREEN}🚀 Starting React dev server on port 5173...${NC}"
@@ -100,6 +110,13 @@ else
     echo -e "${RED}❌ Node.js server failed to start${NC}"
 fi
 
+# Check API Gateway
+if curl -s http://localhost:3001/health > /dev/null; then
+    echo -e "${GREEN}✅ API Gateway is running on http://localhost:3001${NC}"
+else
+    echo -e "${RED}❌ API Gateway failed to start${NC}"
+fi
+
 # Check React dev server
 if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null; then
     echo -e "${GREEN}✅ React dev server is running on http://localhost:5173${NC}"
@@ -116,6 +133,7 @@ echo ""
 echo -e "${BLUE}📱 Services running:${NC}"
 echo -e "  • Python FastAPI: ${GREEN}http://localhost:8000${NC}"
 echo -e "  • Node.js Server: ${GREEN}http://localhost:3000${NC}"
+echo -e "  • API Gateway:    ${GREEN}http://localhost:3001${NC}"
 echo -e "  • React App:      ${GREEN}http://localhost:5173${NC}"
 echo ""
 echo -e "${YELLOW}💡 To restart all services, run: ${NC}./scripts/restart-all-services.sh"
@@ -125,4 +143,4 @@ echo ""
 echo -e "${GREEN}🚀 You're all set! Happy coding! 🚀${NC}"
 
 # Save PIDs to a file for easy stopping
-echo "$PYTHON_PID $NODE_PID $REACT_PID" > temp/.service-pids
+echo "$PYTHON_PID $NODE_PID $GATEWAY_PID $REACT_PID" > temp/.service-pids
