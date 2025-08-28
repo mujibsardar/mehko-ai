@@ -205,6 +205,65 @@ def download_acroform_pdf(app: str, form: str, inline: bool = False):
         headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}_acroform.pdf"'},
     )
 
+# --- AcroForm Definition Management ---
+@router.get("/{app}/forms/{form}/acroform-definition")
+def get_acroform_definition(app: str, form: str):
+    """Get the AcroForm definition for a form"""
+    p = form_dir(app, form) / "acroform-definition.json"
+    if not p.exists():
+        raise HTTPException(404, f"missing AcroForm definition at {p}")
+    
+    try:
+        definition = json.loads(p.read_text())
+        return definition
+    except Exception as e:
+        raise HTTPException(500, f"error reading AcroForm definition: {e}")
+
+@router.post("/{app}/forms/{form}/acroform-definition")
+async def save_acroform_definition(app: str, form: str, request: Request):
+    """Save or update the AcroForm definition for a form"""
+    ensure_dir(form_dir(app, form))
+    
+    try:
+        definition = await request.json()
+        
+        # Validate the definition structure
+        if not isinstance(definition, dict):
+            raise HTTPException(400, "definition must be a JSON object")
+        
+        if "fields" not in definition:
+            raise HTTPException(400, "definition must contain 'fields' array")
+        
+        if not isinstance(definition["fields"], list):
+            raise HTTPException(400, "fields must be an array")
+        
+        # Save to file
+        p = form_dir(app, form) / "acroform-definition.json"
+        p.write_text(json.dumps(definition, indent=2))
+        
+        return {
+            "ok": True, 
+            "message": f"AcroForm definition saved for {form}",
+            "fields_count": len(definition["fields"]),
+            "path": str(p.relative_to(ROOT))
+        }
+        
+    except Exception as e:
+        raise HTTPException(500, f"error saving AcroForm definition: {e}")
+
+@router.delete("/{app}/forms/{form}/acroform-definition")
+def delete_acroform_definition(app: str, form: str):
+    """Delete the AcroForm definition for a form"""
+    p = form_dir(app, form) / "acroform-definition.json"
+    if not p.exists():
+        raise HTTPException(404, f"missing AcroForm definition at {p}")
+    
+    try:
+        p.unlink()
+        return {"ok": True, "message": f"AcroForm definition deleted for {form}"}
+    except Exception as e:
+        raise HTTPException(500, f"error deleting AcroForm definition: {e}")
+
 # --- Filling ---
 @router.post("/{app}/forms/{form}/fill")
 async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...)):
