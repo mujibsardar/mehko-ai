@@ -1,0 +1,107 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e6] [cursor=pointer]:
+        - heading "🏛️ MEHKO.ai" [level=1] [ref=e7] [cursor=pointer]:
+          - generic [ref=e8] [cursor=pointer]: 🏛️
+          - text: MEHKO.ai
+        - paragraph [ref=e9] [cursor=pointer]: MEHKO Applications Made Simple
+      - button "🔐 Sign In" [ref=e12] [cursor=pointer]:
+        - generic [ref=e13] [cursor=pointer]: 🔐
+        - text: Sign In
+  - generic [ref=e14]:
+    - generic [ref=e15]:
+      - heading "Your Applications" [level=3] [ref=e17]
+      - list [ref=e18]:
+        - generic [ref=e19] [cursor=pointer]:
+          - generic [ref=e20] [cursor=pointer]:
+            - generic [ref=e21] [cursor=pointer]: San Diego County MEHKO
+            - generic [ref=e24] [cursor=pointer]:
+              - generic [ref=e25] [cursor=pointer]: 0 of 10 steps complete
+              - generic [ref=e26] [cursor=pointer]: 0%
+            - generic [ref=e27] [cursor=pointer]:
+              - button "▼" [ref=e28] [cursor=pointer]
+              - button "✕" [ref=e29] [cursor=pointer]
+          - generic [ref=e30] [cursor=pointer]:
+            - list [ref=e31] [cursor=pointer]:
+              - listitem [ref=e32] [cursor=pointer]: Overview (10 steps)
+              - listitem [ref=e33] [cursor=pointer]:
+                - generic [ref=e34] [cursor=pointer]: ▼ Steps
+            - list [ref=e35] [cursor=pointer]:
+              - listitem [ref=e36] [cursor=pointer]:
+                - generic [ref=e37] [cursor=pointer]:
+                  - generic [ref=e38] [cursor=pointer]: ℹ️
+                  - generic [ref=e39] [cursor=pointer]: "Step 1: Plan Your MEHKO"
+              - listitem [ref=e40] [cursor=pointer]:
+                - generic [ref=e41] [cursor=pointer]:
+                  - generic [ref=e42] [cursor=pointer]: ℹ️
+                  - generic [ref=e43] [cursor=pointer]: "Step 2: Approvals & Training"
+              - listitem [ref=e44] [cursor=pointer]:
+                - generic [ref=e45] [cursor=pointer]:
+                  - generic [ref=e46] [cursor=pointer]: ℹ️
+                  - generic [ref=e47] [cursor=pointer]: "Step 3: Prepare Required Documents"
+              - listitem [ref=e48] [cursor=pointer]:
+                - generic [ref=e49] [cursor=pointer]:
+                  - generic [ref=e50] [cursor=pointer]: 📄
+                  - generic [ref=e51] [cursor=pointer]: "Step 4: Standard Operating Procedures (SOP)"
+              - listitem [ref=e52] [cursor=pointer]:
+                - generic [ref=e53] [cursor=pointer]:
+                  - generic [ref=e54] [cursor=pointer]: 📄
+                  - generic [ref=e55] [cursor=pointer]: "Step 5: Health Permit Application"
+              - listitem [ref=e56] [cursor=pointer]:
+                - generic [ref=e57] [cursor=pointer]:
+                  - generic [ref=e58] [cursor=pointer]: ℹ️
+                  - generic [ref=e59] [cursor=pointer]: "Step 6: Submit Application & Fees"
+              - listitem [ref=e60] [cursor=pointer]:
+                - generic [ref=e61] [cursor=pointer]:
+                  - generic [ref=e62] [cursor=pointer]: ℹ️
+                  - generic [ref=e63] [cursor=pointer]: "Step 7: Schedule & Pass Inspection"
+              - listitem [ref=e64] [cursor=pointer]:
+                - generic [ref=e65] [cursor=pointer]:
+                  - generic [ref=e66] [cursor=pointer]: ℹ️
+                  - generic [ref=e67] [cursor=pointer]: "Step 8: Receive Permit"
+              - listitem [ref=e68] [cursor=pointer]:
+                - generic [ref=e69] [cursor=pointer]:
+                  - generic [ref=e70] [cursor=pointer]: ℹ️
+                  - generic [ref=e71] [cursor=pointer]: "Step 9: Operate & Stay Compliant"
+              - listitem [ref=e72] [cursor=pointer]:
+                - generic [ref=e73] [cursor=pointer]:
+                  - generic [ref=e74] [cursor=pointer]: ℹ️
+                  - generic [ref=e75] [cursor=pointer]: "Step 10: Contact Info"
+            - list [ref=e77] [cursor=pointer]:
+              - listitem [ref=e78] [cursor=pointer]:
+                - generic [ref=e79] [cursor=pointer]: ▼ Support
+              - listitem [ref=e80] [cursor=pointer]:
+                - generic [ref=e81] [cursor=pointer]: 💭
+                - generic [ref=e82] [cursor=pointer]: Community Comments
+    - generic [ref=e83]:
+      - main [ref=e84]:
+        - generic [ref=e86]:
+          - button "Back to Application Grid" [ref=e87] [cursor=pointer]: ← Back
+          - generic [ref=e88]: Home > San Diego County MEHKO
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - generic [ref=e92]:
+              - heading "San Diego County MEHKO" [level=2] [ref=e93]
+              - paragraph [ref=e94]: Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.
+            - generic [ref=e96]:
+              - heading "How to Apply" [level=3] [ref=e97]
+              - list [ref=e98]:
+                - listitem [ref=e99]: Plan Your MEHKO
+                - listitem [ref=e100]: Approvals & Training
+                - listitem [ref=e101]: Prepare Required Documents
+                - listitem [ref=e102]: Standard Operating Procedures (SOP)
+                - listitem [ref=e103]: Health Permit Application
+                - listitem [ref=e104]: Submit Application & Fees
+                - listitem [ref=e105]: Schedule & Pass Inspection
+                - listitem [ref=e106]: Receive Permit
+                - listitem [ref=e107]: Operate & Stay Compliant
+                - listitem [ref=e108]: Contact Info
+          - button "Start application →" [ref=e109] [cursor=pointer]
+      - complementary [ref=e110]:
+        - generic [ref=e111]: Your AI Assistant
+        - paragraph [ref=e114]: Please log in to use this feature.
+```

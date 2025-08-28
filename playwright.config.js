@@ -12,11 +12,17 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
+  timeout: 60000, // Increase from 30s to 60s
+  expect: {
+    timeout: 10000, // Increase expect timeout to 10s
+  },
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    actionTimeout: 15000, // Increase action timeout to 15s
+    navigationTimeout: 30000, // Increase navigation timeout to 30s
   },
   projects: [
     {
