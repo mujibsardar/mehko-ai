@@ -339,6 +339,144 @@
   }
 }
 
+/* Forgot Password Link */
+.forgot-password-section {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #5a67d8;
+  }
+
+  &:focus {
+    outline: none;
+    color: #5a67d8;
+  }
+}
+
+/* Password Reset Section */
+.password-reset-section {
+  padding: 32px 40px;
+}
+
+.reset-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.reset-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.025em;
+}
+
+.reset-subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.reset-form {
+  margin-bottom: 24px;
+}
+
+/* Reset Success */
+.reset-success {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+
+  svg {
+    color: white;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.success-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px 0;
+}
+
+.success-message {
+  font-size: 16px;
+  color: #374151;
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+
+  strong {
+    color: #111827;
+  }
+}
+
+.success-note {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Reset Footer */
+.reset-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.back-to-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: #374151;
+  }
+
+  &:focus {
+    outline: none;
+    color: #374151;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -409,6 +547,37 @@
     padding: 14px;
     font-size: 16px;
   }
+
+  .password-reset-section {
+    padding: 24px 24px;
+  }
+
+  .reset-title {
+    font-size: 20px;
+  }
+
+  .reset-subtitle {
+    font-size: 14px;
+  }
+
+  .success-icon {
+    width: 60px;
+    height: 60px;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .success-title {
+    font-size: 20px;
+  }
+
+  .success-message,
+  .success-note {
+    font-size: 14px;
+  }
 }
 
 /* Dark mode support */
@@ -444,5 +613,45 @@
 
   .auth-modal-switch {
     color: #9ca3af;
+  }
+
+  .forgot-password-link {
+    color: #8b5cf6;
+
+    &:hover {
+      color: #7c3aed;
+    }
+  }
+
+  .reset-title {
+    color: #f9fafb;
+  }
+
+  .reset-subtitle {
+    color: #9ca3af;
+  }
+
+  .success-title {
+    color: #f9fafb;
+  }
+
+  .success-message {
+    color: #d1d5db;
+
+    strong {
+      color: #f9fafb;
+    }
+  }
+
+  .success-note {
+    color: #9ca3af;
+  }
+
+  .back-to-login-btn {
+    color: #9ca3af;
+
+    &:hover {
+      color: #d1d5db;
+    }
   }
 }

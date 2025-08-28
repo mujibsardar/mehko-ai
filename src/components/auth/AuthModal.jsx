@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
@@ -16,6 +16,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [resetEmailSent, setResetEmailSent] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -23,6 +24,10 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
       if (getComputedStyle(document.body).position !== 'fixed') {
         document.body.style.overflow = 'hidden';
       }
+      // Reset to login mode when modal opens
+      setMode('login');
+      setResetEmailSent(false);
+      setErrors({});
     } else {
       if (getComputedStyle(document.body).position !== 'fixed') {
         document.body.style.overflow = 'unset';
@@ -167,6 +172,63 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     setMode(mode === 'login' ? 'signup' : 'login');
     setFormData({ name: '', email: '', password: '', confirmPassword: '' });
     setErrors({});
+    setResetEmailSent(false);
+  };
+
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email) {
+      setErrors({ email: 'Please enter your email address to reset your password' });
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setErrors({ email: 'Please enter a valid email address' });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await sendPasswordResetEmail(auth, formData.email);
+      setResetEmailSent(true);
+      setErrors({});
+    } catch (error) {
+      let errorMessage = 'An error occurred. Please try again.';
+
+      switch (error.code) {
+        case 'auth/user-not-found':
+          errorMessage = 'No account found with this email address.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'Please enter a valid email address.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Too many attempts. Please try again later.';
+          break;
+        default:
+          errorMessage = error.message;
+      }
+
+      setErrors({ email: errorMessage });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const goBackToLogin = () => {
+    console.log('Going back to login from mode:', mode);
+    setResetEmailSent(false);
+    setErrors({});
+    setMode('login'); // Actually go back to login mode
+  };
+
+  const handleForgotPassword = () => {
+    console.log('Switching to reset mode from:', mode);
+    setMode('reset');
+    setErrors({});
+    setResetEmailSent(false);
   };
 
   if (!isOpen) return null;
@@ -288,6 +350,19 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
               {errors.password && <span className="error-message">{errors.password}</span>}
             </div>
 
+            {/* Forgot Password Link - Only show in login mode */}
+            {mode === 'login' && (
+              <div className="forgot-password-section">
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="forgot-password-link"
+                >
+                  Forgot your password?
+                </button>
+              </div>
+            )}
+
             {mode === 'signup' && (
               <div className="form-group">
                 <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
@@ -338,14 +413,94 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
             </button>
           </form>
 
+          {/* Password Reset Form */}
+          {mode === 'reset' && (
+            <div className="password-reset-section">
+              {!resetEmailSent ? (
+                <>
+                  <div className="reset-header">
+                    <h3 className="reset-title">Reset Your Password</h3>
+                    <p className="reset-subtitle">
+                      Enter your email address and we'll send you a link to reset your password.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handlePasswordReset} className="reset-form">
+                    <div className="form-group">
+                      <label htmlFor="resetEmail" className="form-label">Email Address</label>
+                      <div className="input-wrapper">
+                        <svg className="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                          <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <input
+                          id="resetEmail"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className={`form-input ${errors.email ? 'error' : ''}`}
+                          placeholder="Enter your email address"
+                        />
+                      </div>
+                      {errors.email && <span className="error-message">{errors.email}</span>}
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="auth-submit-btn"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? (
+                        <div className="loading-spinner">
+                          <div className="spinner"></div>
+                          <span>Sending...</span>
+                        </div>
+                      ) : (
+                        'Send Reset Link'
+                      )}
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <div className="reset-success">
+                  <div className="success-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22,4 12,14.01 9,11.01"></polyline>
+                    </svg>
+                  </div>
+                  <h3 className="success-title">Check Your Email</h3>
+                  <p className="success-message">
+                    We've sent a password reset link to <strong>{formData.email}</strong>
+                  </p>
+                  <p className="success-note">
+                    Please check your email and click the link to reset your password. If you don't see it, check your spam folder.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Footer */}
           <div className="auth-modal-footer">
-            <p className="auth-modal-switch">
-              {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
-              <button type="button" onClick={switchMode} className="switch-btn">
-                {mode === 'login' ? 'Sign up' : 'Sign in'}
-              </button>
-            </p>
+            {mode === 'reset' ? (
+              <div className="reset-footer">
+                <button type="button" onClick={goBackToLogin} className="back-to-login-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                  </svg>
+                  Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <p className="auth-modal-switch">
+                {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
+                <button type="button" onClick={switchMode} className="switch-btn">
+                  {mode === 'login' ? 'Sign up' : 'Sign in'}
+                </button>
+              </p>
+            )}
           </div>
         </div>
       </div>
