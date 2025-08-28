@@ -85,6 +85,100 @@ async def create_app(request: Request, app: str = Form(None)):
 
     return {"ok": True, "app": name}
 
+@router.post("/process-county")
+async def process_county_application(request: Request):
+    """Process a complete county application JSON with PDF downloads"""
+    try:
+        # Get the JSON data from the request
+        data = await request.json()
+        
+        # Validate required fields
+        required_fields = ["id", "title", "description", "rootDomain", "steps"]
+        for field in required_fields:
+            if field not in data:
+                raise HTTPException(400, f"Missing required field: {field}")
+        
+        app_id = data["id"]
+        app_title = data["title"]
+        
+        print(f"🔄 Processing county application: {app_title}")
+        
+        # Create application directory
+        ensure_dir(app_dir(app_id))
+        print(f"✅ Created application directory: {app_dir(app_id)}")
+        
+        # Create Firestore document
+        app_ref = db.collection("applications").document(app_id)
+        app_ref.set({
+            **data,
+            "createdAt": firestore.SERVER_TIMESTAMP,
+            "updatedAt": firestore.SERVER_TIMESTAMP,
+            "status": "active",
+            "source": "admin-upload",
+        })
+        print(f"✅ Created Firestore document: {app_id}")
+        
+        # Process PDF steps
+        pdf_steps = [step for step in data["steps"] if step.get("type") == "pdf"]
+        downloaded_count = 0
+        
+        for step in pdf_steps:
+            if not step.get("pdfUrl") or not step.get("formId"):
+                print(f"⚠️  Skipping PDF step {step['id']}: missing pdfUrl or formId")
+                continue
+                
+            try:
+                print(f"📥 Downloading PDF for {step['title']}...")
+                
+                # Create form directory
+                form_path = form_dir(app_id, step["formId"])
+                ensure_dir(form_path)
+                
+                # Download PDF
+                import httpx
+                async with httpx.AsyncClient(timeout=30.0) as client:
+                    response = await client.get(step["pdfUrl"])
+                    response.raise_for_status()
+                    
+                    # Save PDF
+                    pdf_dest = form_path / "form.pdf"
+                    pdf_dest.write_bytes(response.content)
+                    
+                    # Create meta.json
+                    meta_data = {
+                        "id": step["formId"],
+                        "title": step["title"],
+                        "type": "pdf",
+                        "appId": app_id,
+                        "stepId": step["id"],
+                        "pdfUrl": step["pdfUrl"],
+                        "createdAt": firestore.SERVER_TIMESTAMP,
+                    }
+                    
+                    meta_path = form_path / "meta.json"
+                    meta_path.write_text(json.dumps(meta_data, indent=2, default=str))
+                    
+                    print(f"✅ Downloaded {step['title']} ({len(response.content)} bytes)")
+                    downloaded_count += 1
+                    
+            except Exception as e:
+                print(f"❌ Failed to download {step['title']}: {str(e)}")
+                continue
+        
+        print(f"✅ PDF download process completed ({downloaded_count}/{len(pdf_steps)} forms)")
+        
+        return {
+            "ok": True,
+            "app": app_id,
+            "title": app_title,
+            "pdfs_downloaded": downloaded_count,
+            "total_pdf_steps": len(pdf_steps)
+        }
+        
+    except Exception as e:
+        print(f"❌ Error processing county application: {str(e)}")
+        raise HTTPException(500, f"Failed to process county application: {str(e)}")
+
 # --- Form assets (new format only) ---
 @router.post("/{app}/forms/{form}/pdf")
 async def upload_pdf(app: str, form: str, file: UploadFile = File(...)):

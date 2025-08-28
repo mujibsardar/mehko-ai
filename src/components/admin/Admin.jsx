@@ -236,20 +236,14 @@ export default function Admin() {
       }
 
       try {
-        // Use the working Python FastAPI endpoint
-        console.log('Sending request to:', `${API}`);
+        // Use the new Python FastAPI process-county endpoint
+        console.log('Sending request to:', `${API}/process-county`);
         console.log('Application data:', preview.data);
 
-        // The Python server expects the app name as a query parameter or form data
-        const formData = new FormData();
-        formData.append('app', preview.data.id);
-        formData.append('title', preview.data.title);
-        formData.append('description', preview.data.description);
-        formData.append('rootDomain', preview.data.rootDomain);
-
-        const response = await fetch(`${API}`, {
+        const response = await fetch(`${API}/process-county`, {
           method: "POST",
-          body: formData,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(preview.data),
         });
 
         console.log('Response status:', response.status);
@@ -258,24 +252,7 @@ export default function Admin() {
         if (response.ok) {
           const result = await response.json();
           console.log('Success result:', result);
-
-          // Now create the steps in Firestore
-          try {
-            const appRef = doc(db, "applications", preview.data.id);
-            await setDoc(appRef, {
-              ...preview.data,
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              status: "active",
-              source: "admin-upload",
-            });
-
-            console.log('✅ Application created in Firestore:', preview.data.id);
-            successCount++;
-          } catch (dbError) {
-            console.error('❌ Failed to create in Firestore:', dbError);
-            errorCount++;
-          }
+          successCount++;
         } else {
           const errorText = await response.text();
           console.error('Error response:', errorText);
