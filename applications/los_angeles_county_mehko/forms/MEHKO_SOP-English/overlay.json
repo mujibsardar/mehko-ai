@@ -1,3 +1,67 @@
 {
-  "fields": []
+  "fields": [
+    {
+      "id": "business_name",
+      "label": "Business Name",
+      "type": "text",
+      "page": 0,
+      "rect": [100, 200, 300, 220],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "owner_name",
+      "label": "Owner Name",
+      "type": "text", 
+      "page": 0,
+      "rect": [100, 250, 300, 270],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "address",
+      "label": "Business Address",
+      "type": "text",
+      "page": 0,
+      "rect": [100, 300, 350, 320],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "phone",
+      "label": "Phone Number",
+      "type": "text",
+      "page": 0,
+      "rect": [100, 350, 250, 370],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "email",
+      "label": "Email Address",
+      "type": "text",
+      "page": 0,
+      "rect": [100, 400, 300, 420],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "signature",
+      "label": "Signature",
+      "type": "signature",
+      "page": 0,
+      "rect": [100, 500, 250, 550],
+      "fontSize": 12,
+      "align": "left"
+    },
+    {
+      "id": "date",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "rect": [100, 550, 200, 570],
+      "fontSize": 12,
+      "align": "left"
+    }
+  ]
 }

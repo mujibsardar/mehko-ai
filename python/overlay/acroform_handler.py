@@ -101,6 +101,26 @@ class AcroFormHandler:
         # For now, we'll use the overlay approach but prepare for AcroForm
         # This is a simplified version - in production you'd want full AcroForm creation
         pass
+    
+    def _fill_text_field(self, field, value):
+        """Fill a text field (placeholder for now)"""
+        pass
+    
+    def _fill_checkbox_field(self, field, value):
+        """Fill a checkbox field (placeholder for now)"""
+        pass
+    
+    def _fill_dropdown_field(self, field, value):
+        """Fill a dropdown field (placeholder for now)"""
+        pass
+    
+    def _fill_radio_field(self, field, value):
+        """Fill a radio field (placeholder for now)"""
+        pass
+    
+    def _fill_signature_field(self, field, value):
+        """Fill a signature field (placeholder for now)"""
+        pass
 
 
 # Convenience functions for backward compatibility
