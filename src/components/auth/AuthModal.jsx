@@ -19,13 +19,20 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // Handle fixed body positioning - don't change overflow for fixed body
+      if (getComputedStyle(document.body).position !== 'fixed') {
+        document.body.style.overflow = 'hidden';
+      }
     } else {
-      document.body.style.overflow = 'unset';
+      if (getComputedStyle(document.body).position !== 'fixed') {
+        document.body.style.overflow = 'unset';
+      }
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      if (getComputedStyle(document.body).position !== 'fixed') {
+        document.body.style.overflow = 'unset';
+      }
     };
   }, [isOpen]);
 
@@ -48,7 +55,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -92,11 +99,11 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       if (mode === 'login') {
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
@@ -105,31 +112,31 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
       } else {
         // Signup
         const userCredential = await createUserWithEmailAndPassword(
-          auth, 
-          formData.email, 
+          auth,
+          formData.email,
           formData.password
         );
-        
+
         const newUser = userCredential.user;
-        
+
         // Update profile with display name
         await updateProfile(newUser, {
           displayName: formData.name.trim()
         });
-        
+
         // Store additional user data in Firestore
         await setDoc(doc(db, "users", newUser.uid), {
           email: newUser.email,
           displayName: formData.name.trim(),
           createdAt: new Date().toISOString(),
         });
-        
+
         onSuccess();
         onClose();
       }
     } catch (error) {
       let errorMessage = 'An error occurred. Please try again.';
-      
+
       switch (error.code) {
         case 'auth/user-not-found':
           errorMessage = 'No account found with this email.';
@@ -149,7 +156,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         default:
           errorMessage = error.message;
       }
-      
+
       setErrors({ general: errorMessage });
     } finally {
       setIsLoading(false);
@@ -190,8 +197,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
               {mode === 'login' ? 'Welcome Back' : 'Create Account'}
             </h2>
             <p className="auth-modal-subtitle">
-              {mode === 'login' 
-                ? 'Sign in to continue your MEHKO application journey' 
+              {mode === 'login'
+                ? 'Sign in to continue your MEHKO application journey'
                 : 'Join our community and start your MEHKO application'
               }
             </p>

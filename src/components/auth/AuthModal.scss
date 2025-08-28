@@ -2,8 +2,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   z-index: 9998;
@@ -14,13 +15,30 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   padding: 20px;
+
+  /* Ensure proper centering even with fixed body */
+  transform: translateZ(0);
+
+  /* Force proper positioning */
+  position: fixed !important;
+
+  /* Handle mobile devices better */
+  @media (max-height: 600px) {
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 }
 
 .auth-modal-content {
@@ -30,10 +48,13 @@
   width: 100%;
   max-width: 480px;
   max-height: 90vh;
+  max-height: 90svh;
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateZ(0);
+  /* Force hardware acceleration */
 }
 
 /* Close Button */
@@ -53,13 +74,13 @@
   color: #6b7280;
   transition: all 0.2s ease;
   z-index: 10;
-  
+
   &:hover {
     background: rgba(0, 0, 0, 0.1);
     color: #374151;
     transform: scale(1.1);
   }
-  
+
   &:active {
     transform: scale(0.95);
   }
@@ -74,7 +95,7 @@
   border-radius: 24px 24px 0 0;
   position: relative;
   overflow: hidden;
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -102,7 +123,7 @@
   margin: 0 auto;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  
+
   svg {
     color: white;
   }
@@ -165,18 +186,18 @@
   font-size: 16px;
   transition: all 0.2s ease;
   background: #ffffff;
-  
+
   &:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     transform: translateY(-1px);
   }
-  
+
   &::placeholder {
     color: #9ca3af;
   }
-  
+
   &.error {
     border-color: #ef4444;
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
@@ -193,7 +214,7 @@
   padding: 4px;
   border-radius: 6px;
   transition: all 0.2s ease;
-  
+
   &:hover {
     color: #6b7280;
     background: rgba(0, 0, 0, 0.05);
@@ -220,7 +241,7 @@
   margin-bottom: 24px;
   font-size: 14px;
   font-weight: 500;
-  
+
   svg {
     flex-shrink: 0;
   }
@@ -240,22 +261,22 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  
+
   &:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
   }
-  
+
   &:active:not(:disabled) {
     transform: translateY(0);
   }
-  
+
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
   }
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -266,7 +287,7 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.5s;
   }
-  
+
   &:hover::before {
     left: 100%;
   }
@@ -312,7 +333,7 @@
   margin-left: 8px;
   text-decoration: underline;
   transition: color 0.2s ease;
-  
+
   &:hover {
     color: #5a67d8;
   }
@@ -323,6 +344,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -333,6 +355,7 @@
     opacity: 0;
     transform: translateY(30px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -350,38 +373,38 @@
   .auth-modal {
     padding: 16px;
   }
-  
+
   .auth-modal-content {
     border-radius: 20px;
   }
-  
+
   .auth-modal-header {
     padding: 32px 24px 16px;
     border-radius: 20px 20px 0 0;
   }
-  
+
   .auth-modal-form {
     padding: 24px 24px;
   }
-  
+
   .auth-modal-footer {
     padding: 20px 24px 28px;
     border-radius: 0 0 20px 20px;
   }
-  
+
   .auth-modal-title {
     font-size: 24px;
   }
-  
+
   .auth-modal-subtitle {
     font-size: 14px;
   }
-  
+
   .form-input {
     padding: 14px 14px 14px 44px;
     font-size: 16px;
   }
-  
+
   .auth-submit-btn {
     padding: 14px;
     font-size: 16px;
@@ -394,31 +417,31 @@
     background: #1f2937;
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .form-input {
     background: #374151;
     border-color: #4b5563;
     color: #f9fafb;
-    
+
     &:focus {
       border-color: #667eea;
       background: #374151;
     }
-    
+
     &::placeholder {
       color: #9ca3af;
     }
   }
-  
+
   .form-label {
     color: #f9fafb;
   }
-  
+
   .auth-modal-footer {
     background: #111827;
     border-top-color: #374151;
   }
-  
+
   .auth-modal-switch {
     color: #9ca3af;
   }
