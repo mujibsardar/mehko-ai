@@ -5,6 +5,7 @@ import DashboardApp from "./components/dashboard/DashboardApp";
 import Admin from "./components/admin/Admin";
 import Mapper from "./components/overlay/Mapper";
 import Interview from "./components/overlay/Interview";
+import AcroFormFieldEditor from "./components/admin/AcroFormFieldEditor";
 import ProtectedAdminRoute from "./components/auth/ProtectedAdminRoute";
 
 export default function App() {
@@ -27,6 +28,14 @@ export default function App() {
         element={
           <ProtectedAdminRoute>
             <Mapper />
+          </ProtectedAdminRoute>
+        }
+      />
+      <Route
+        path="/admin/acroform-editor/:appId/:formId"
+        element={
+          <ProtectedAdminRoute>
+            <AcroFormFieldEditor />
           </ProtectedAdminRoute>
         }
       />

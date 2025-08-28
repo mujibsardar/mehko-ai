@@ -1,0 +1,191 @@
+{
+  "formMetadata": {
+    "title": "MEHKO SOP-English",
+    "description": "Standard Operating Procedures Form",
+    "version": "1.0",
+    "created": "2025-08-27T18:40:00Z",
+    "type": "acroform"
+  },
+  "fields": [
+    {
+      "id": "business_name",
+      "label": "Business Name",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "minLength": 2,
+        "maxLength": 100,
+        "pattern": "^[a-zA-Z0-9\\s&'-]+$"
+      },
+      "properties": {
+        "placeholder": "Enter your business name",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.95,
+      "aiReasoning": "Clear business name field with underline"
+    },
+    {
+      "id": "owner_name",
+      "label": "Owner Name",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "minLength": 2,
+        "maxLength": 50,
+        "pattern": "^[a-zA-Z\\s'-]+$"
+      },
+      "properties": {
+        "placeholder": "Enter owner's full name",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 50
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.92,
+      "aiReasoning": "Owner name field with clear label"
+    },
+    {
+      "id": "address",
+      "label": "Business Address",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "minLength": 10,
+        "maxLength": 200
+      },
+      "properties": {
+        "placeholder": "Enter complete business address",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 200
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.88,
+      "aiReasoning": "Address field with multiple lines"
+    },
+    {
+      "id": "phone",
+      "label": "Phone Number",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "pattern": "^[\\+]?[1-9]\\d{1,14}$"
+      },
+      "properties": {
+        "placeholder": "(555) 123-4567",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 15
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.90,
+      "aiReasoning": "Phone number field with format hint"
+    },
+    {
+      "id": "email",
+      "label": "Email Address",
+      "type": "email",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      },
+      "properties": {
+        "placeholder": "owner@business.com",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.93,
+      "aiReasoning": "Email field with @ symbol context"
+    },
+    {
+      "id": "signature",
+      "label": "Signature",
+      "type": "signature",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "placeholder": "Click to sign",
+        "defaultValue": "",
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "center",
+        "color": "#000000",
+        "borderStyle": "dashed",
+        "borderWidth": 1
+      },
+      "aiConfidence": 0.97,
+      "aiReasoning": "Signature field with signature line"
+    },
+    {
+      "id": "date",
+      "label": "Date",
+      "type": "date",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "minDate": "1900-01-01",
+        "maxDate": "2100-12-31"
+      },
+      "properties": {
+        "placeholder": "MM/DD/YYYY",
+        "defaultValue": "",
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.89,
+      "aiReasoning": "Date field with calendar context"
+    }
+  ],
+  "formSettings": {
+    "autoSave": true,
+    "validationMode": "real-time",
+    "submitBehavior": "download",
+    "theme": "default"
+  }
+}

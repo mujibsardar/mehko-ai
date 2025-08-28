@@ -1412,6 +1412,14 @@ export default function Admin() {
                               </Link>{" "}
                               |{" "}
                               <Link
+                                to={`/admin/acroform-editor/${appId}/${s.formId}`}
+                                style={{ color: "#10b981", fontWeight: "600" }}
+                                title="🎯 Modern AcroForm Field Editor"
+                              >
+                                AcroForm Editor
+                              </Link>{" "}
+                              |{" "}
+                              <Link
                                 to={`/admin/interview/${appId}/${s.formId}`}
                               >
                                 Interview
