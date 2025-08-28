@@ -1,17 +1,18 @@
-// PDF Field Mapper - Simple, clean implementation
+// PDF Field Mapper - Professional, modern implementation
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Rnd } from "react-rnd";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
 import { processAICoordinates, snapToGrid, rectPxToPt, rectPtToPx } from "../../utils/pdfCoords";
+import "./Mapper.scss";
 
 const API = "/api";
 const normalizeForFilesystem = (str) => str.replace(/\s+/g, "_");
 
 const SAVE_STATUS = {
   SAVED: 'saved',
-  SAVING: 'saving', 
+  SAVING: 'saving',
   UNSAVED: 'unsaved',
   ERROR: 'error'
 };
@@ -31,6 +32,9 @@ export default function Mapper() {
   const [imgUrl, setImgUrl] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [fieldFilter, setFieldFilter] = useState("all");
+  const [zoom, setZoom] = useState(1);
 
   // AI state
   const [aiSuggestions, setAiSuggestions] = useState([]);
@@ -52,18 +56,20 @@ export default function Mapper() {
 
   // Auth check
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-    </div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+      </div>
+    );
   }
 
   if (!user || !isAdmin) {
     return (
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h1>
-        <p className="text-gray-600 mb-4">Admin privileges required.</p>
-        <Link to="/dashboard" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Return to Dashboard
+      <div className="access-denied">
+        <h1 className="denied-title">Access Denied</h1>
+        <p className="denied-message">Admin privileges required to access the Field Mapper.</p>
+        <Link to="/dashboard" className="return-button">
+          ← Return to Dashboard
         </Link>
       </div>
     );
@@ -97,7 +103,7 @@ export default function Mapper() {
   // AI PDF Upload Handler
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    
+
     if (!file || !file.type.includes("pdf")) {
       setAiError("Please select a valid PDF file");
       return;
@@ -166,11 +172,11 @@ export default function Mapper() {
   const scheduleAutoSave = useCallback(() => {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
     setSaveStatus(SAVE_STATUS.UNSAVED);
-    
+
     const timeout = setTimeout(() => {
       save();
     }, 2000);
-    
+
     setAutoSaveTimeout(timeout);
   }, [autoSaveTimeout]);
 
@@ -220,15 +226,12 @@ export default function Mapper() {
     if (over && over.id === 'pdf-canvas') {
       const draggedFieldId = active.id;
       const aiField = aiSuggestions.find(f => f.id === draggedFieldId);
-      
-      if (aiField) {
+
+      if (aiField && metrics) {
         const canvasRect = canvasRef.current.getBoundingClientRect();
         const dropX = event.activatorEvent.clientX - canvasRect.left;
         const dropY = event.activatorEvent.clientY - canvasRect.top;
-        
-        // Convert screen coordinates to PDF points
-        const pdfCoords = screenToPdfCoords(dropX, dropY, metrics);
-        
+
         // Create new field with proper coordinates
         const newField = {
           id: `field_${Date.now()}`,
@@ -313,6 +316,34 @@ export default function Mapper() {
     return () => setImgUrl(null);
   }, [normalizedApp, normalizedForm, page]);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Ctrl/Cmd + S to save
+      if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+        event.preventDefault();
+        save();
+      }
+      // Delete key to delete selected field
+      if (event.key === 'Delete' && selectedId) {
+        event.preventDefault();
+        deleteField(selectedId);
+      }
+      // Escape to deselect
+      if (event.key === 'Escape') {
+        setSelectedId(null);
+      }
+      // N to add new field
+      if (event.key === 'n' && !event.ctrlKey && !event.metaKey) {
+        event.preventDefault();
+        addField();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedId]);
+
   // Draggable Field Tray Item
   const DraggableFieldItem = ({ field }) => {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
@@ -330,29 +361,25 @@ export default function Mapper() {
         style={style}
         {...listeners}
         {...attributes}
-        className={`border rounded-lg p-3 cursor-grab active:cursor-grabbing transition-all ${
-          selectedFields.includes(field.id) ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-white'
-        } ${isDragging ? 'shadow-lg' : 'hover:shadow-md'}`}
+        className={`field-item ${selectedFields.includes(field.id) ? 'selected' : ''}`}
       >
-        <div className="flex items-center gap-2 mb-2">
+        <div className="field-header">
           <input
             type="checkbox"
             checked={selectedFields.includes(field.id)}
             onChange={(e) => handleFieldSelection(field.id, e.target.checked)}
-            className="w-4 h-4"
+            className="field-checkbox"
           />
-          <span className="font-semibold text-sm text-gray-900">{field.label}</span>
-          <span className={`px-2 py-1 rounded text-xs font-medium ${
-            field.confidence > 0.8 ? 'bg-green-100 text-green-800' :
-            field.confidence > 0.6 ? 'bg-yellow-100 text-yellow-800' : 
-            'bg-red-100 text-red-800'
-          }`}>
+          <span className="field-name">{field.label}</span>
+          <span className={`confidence-badge ${field.confidence > 0.8 ? 'high' :
+            field.confidence > 0.6 ? 'medium' : 'low'
+            }`}>
             {Math.round(field.confidence * 100)}%
           </span>
         </div>
-        <div className="text-xs text-gray-600 space-y-1">
+        <div className="field-details">
           <div>Type: {field.type}</div>
-          <div>Size: {field.width}×{field.height}px</div>
+          <div>Size: {Math.round(field.width)}×{Math.round(field.height)}px</div>
         </div>
       </div>
     );
@@ -390,7 +417,7 @@ export default function Mapper() {
         position.x + ref.offsetWidth,
         position.y + ref.offsetHeight
       ]).map(coord => snapToGrid(coord));
-      
+
       onUpdate({ ...field, rect: newRect });
     };
 
@@ -412,10 +439,11 @@ export default function Mapper() {
           bottom: { background: '#3b82f6' },
           left: { background: '#3b82f6' }
         }}
-        className={`border-2 ${isSelected ? 'border-red-500' : 'border-green-500'} bg-transparent`}
+        className={`field-box ${isSelected ? 'selected' : ''}`}
         onClick={() => onSelect(field.id)}
       >
-        <div className="text-xs font-medium text-gray-700 p-1 bg-white bg-opacity-75">
+        <div className="field-label">
+          <div className="field-type-indicator">{field.type}</div>
           {field.label || field.id}
         </div>
       </Rnd>
@@ -435,6 +463,14 @@ export default function Mapper() {
       fontSize: 11,
       align: "left",
       shrink: true,
+      required: false,
+      placeholder: "",
+      validation: {
+        minLength: 0,
+        maxLength: 100,
+        pattern: "",
+        customMessage: ""
+      }
     };
     setOverlay(prev => ({ ...prev, fields: [...prev.fields, newField] }));
     setSelectedId(newField.id);
@@ -452,33 +488,36 @@ export default function Mapper() {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="min-h-screen bg-gray-50">
+      <div className="mapper-container">
         {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold text-gray-800">Field Mapper</h1>
-              <span className="text-sm text-gray-500">{app}/{form}</span>
+        <div className="mapper-header">
+          <div className="header-content">
+            <div className="header-left">
+              <h1 className="header-title">Field Mapper</h1>
+              <span className="header-subtitle">{app}/{form}</span>
+              <div className="field-summary">
+                <span className="total-fields">{overlay.fields.length} total fields</span>
+                <span className="page-fields">{overlay.fields.filter(f => f.page === page).length} on this page</span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className={`px-3 py-1 rounded text-sm font-medium ${
-                saveStatus === SAVE_STATUS.SAVED ? 'bg-green-100 text-green-700' :
-                saveStatus === SAVE_STATUS.SAVING ? 'bg-blue-100 text-blue-700' :
-                saveStatus === SAVE_STATUS.UNSAVED ? 'bg-yellow-100 text-yellow-700' :
-                'bg-red-100 text-red-700'
-              }`}>
+            <div className="header-right">
+              <div className={`save-status ${saveStatus === SAVE_STATUS.SAVED ? 'saved' :
+                saveStatus === SAVE_STATUS.SAVING ? 'saving' :
+                  saveStatus === SAVE_STATUS.UNSAVED ? 'unsaved' :
+                    'error'
+                }`}>
                 {saveStatus === SAVE_STATUS.SAVED ? '✓ Saved' :
-                 saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' :
-                 saveStatus === SAVE_STATUS.UNSAVED ? '● Unsaved' : '⚠ Error'}
+                  saveStatus === SAVE_STATUS.SAVING ? '⏳ Saving...' :
+                    saveStatus === SAVE_STATUS.UNSAVED ? '● Unsaved' : '⚠ Error'}
               </div>
               <button
                 onClick={() => save()}
                 disabled={saveStatus === SAVE_STATUS.SAVING}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                className="btn-primary"
               >
                 Save Now
               </button>
-              <Link to="/admin" className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              <Link to="/admin" className="btn-secondary">
                 ← Admin
               </Link>
             </div>
@@ -486,65 +525,87 @@ export default function Mapper() {
         </div>
 
         {/* Toolbar */}
-        <div className="bg-white border-b border-gray-200 px-4 py-2">
-          <div className="flex items-center gap-2">
-            <button
-              disabled={page <= 0}
-              onClick={() => setPage(p => Math.max(0, p - 1))}
-              className="px-3 py-1 bg-gray-100 border rounded hover:bg-gray-200 disabled:opacity-50"
-            >
-              ◀ Prev
-            </button>
-            <span className="px-3 py-1 text-sm">Page {page + 1} / {pages}</span>
-            <button
-              disabled={page >= pages - 1}
-              onClick={() => setPage(p => Math.min(pages - 1, p + 1))}
-              className="px-3 py-1 bg-gray-100 border rounded hover:bg-gray-200 disabled:opacity-50"
-            >
-              Next ▶
-            </button>
-            <div className="w-px h-6 bg-gray-300 mx-2"></div>
-            <button onClick={addField} className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
-              + Add Field
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".pdf"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isProcessing}
-              className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
-            >
-              🤖 AI Detect
-            </button>
-            <button onClick={clearAllFields} className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-              Clear All
-            </button>
-            <div className="ml-auto text-sm text-gray-600">
+        <div className="mapper-toolbar">
+          <div className="toolbar-content">
+            <div className="page-navigation">
+              <button
+                disabled={page <= 0}
+                onClick={() => setPage(p => Math.max(0, p - 1))}
+                className="btn-nav"
+              >
+                ◀ Prev
+              </button>
+              <span className="page-info">Page {page + 1} / {pages}</span>
+              <button
+                disabled={page >= pages - 1}
+                onClick={() => setPage(p => Math.min(pages - 1, p + 1))}
+                className="btn-nav"
+              >
+                Next ▶
+              </button>
+            </div>
+            <div className="divider"></div>
+            <div className="zoom-controls">
+              <button
+                onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}
+                className="btn-zoom"
+                disabled={zoom <= 0.5}
+              >
+                🔍−
+              </button>
+              <span className="zoom-level">{Math.round(zoom * 100)}%</span>
+              <button
+                onClick={() => setZoom(Math.min(3, zoom + 0.1))}
+                className="btn-zoom"
+                disabled={zoom >= 3}
+              >
+                🔍+
+              </button>
+            </div>
+            <div className="divider"></div>
+            <div className="action-buttons">
+              <button onClick={addField} className="btn-action btn-add">
+                + Add Field
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isProcessing}
+                className="btn-action btn-ai"
+              >
+                🤖 AI Detect
+              </button>
+              <button onClick={clearAllFields} className="btn-action btn-clear">
+                Clear All
+              </button>
+            </div>
+            <div className="field-counter">
               {overlay.fields.filter(f => f.page === page).length} fields on this page
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="flex flex-1">
+        <div className="mapper-content">
           {/* PDF Canvas */}
-          <div className="flex-1 p-4">
+          <div className="pdf-canvas-container">
             <DroppablePDFCanvas>
-              <div className="bg-white border border-gray-300 rounded-lg overflow-hidden relative shadow-sm">
+              <div className="pdf-canvas" style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}>
                 {imgUrl && (
                   <img
                     ref={canvasRef}
                     src={imgUrl}
                     alt={`Page ${page + 1}`}
-                    className="max-w-full h-auto block"
+                    className="pdf-image"
                   />
                 )}
-                
+
                 {/* Field boxes */}
                 {overlay.fields
                   .filter(f => f.page === page)
@@ -563,95 +624,204 @@ export default function Mapper() {
           </div>
 
           {/* Right Sidebar */}
-          <div className="w-80 bg-white border-l border-gray-200 p-4">
-            {/* AI Progress */}
-            {isProcessing && (
-              <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+          <div className="mapper-sidebar">
+            <div className="sidebar-content">
+              {/* Search and Filter */}
+              <div className="search-filter-section">
+                <div className="form-group">
+                  <label className="form-label">Search Fields</label>
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="form-input"
+                    placeholder="Search field labels..."
+                  />
                 </div>
-                <div className="text-sm text-gray-600">
-                  {currentStep === "analyzing" && "🤖 AI analyzing PDF..."}
-                  {currentStep === "mapping" && "📋 Mapping fields..."}
-                  {currentStep === "reviewing" && "✅ Ready for review"}
-                </div>
-              </div>
-            )}
-
-            {/* AI Error */}
-            {aiError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
-                ⚠️ {aiError}
-              </div>
-            )}
-
-            {/* AI Field Tray */}
-            {(currentStep === "reviewing" || currentStep === "fields-ready") && aiSuggestions.length > 0 && (
-              <div className="mb-4">
-                <h3 className="font-semibold mb-2">AI Detected Fields ({aiSuggestions.length})</h3>
-                
-                {currentStep === "reviewing" && (
-                  <button
-                    onClick={handleApplyMapping}
-                    disabled={selectedFields.length === 0}
-                    className={`w-full mb-3 px-4 py-2 rounded text-sm font-medium ${
-                      selectedFields.length > 0
-                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
+                <div className="form-group">
+                  <label className="form-label">Filter by Type</label>
+                  <select
+                    value={fieldFilter}
+                    onChange={(e) => setFieldFilter(e.target.value)}
+                    className="form-select"
                   >
-                    Enable Dragging ({selectedFields.length} selected)
-                  </button>
-                )}
-
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {aiSuggestions.map(field => (
-                    <DraggableFieldItem key={field.id} field={field} />
-                  ))}
+                    <option value="all">All Types</option>
+                    <option value="text">Text Inputs</option>
+                    <option value="checkbox">Checkboxes</option>
+                    <option value="signature">Signatures</option>
+                    <option value="select">Dropdowns</option>
+                    <option value="date">Date Pickers</option>
+                  </select>
                 </div>
               </div>
-            )}
 
-            {/* Field Editor */}
-            {selected && (
-              <div className="mb-4">
-                <h3 className="font-semibold mb-2">Edit Field</h3>
-                <div className="space-y-2">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600">Label</label>
+              {/* AI Progress */}
+              {isProcessing && (
+                <div className="ai-progress">
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{ width: `${progress}%` }} />
+                  </div>
+                  <div className="progress-text">
+                    {currentStep === "analyzing" && "🤖 AI analyzing PDF..."}
+                    {currentStep === "mapping" && "📋 Mapping fields..."}
+                    {currentStep === "reviewing" && "✅ Ready for review"}
+                  </div>
+                </div>
+              )}
+
+              {/* AI Error */}
+              {aiError && (
+                <div className="ai-error">
+                  ⚠️ {aiError}
+                </div>
+              )}
+
+              {/* AI Field Tray */}
+              {(currentStep === "reviewing" || currentStep === "fields-ready") && aiSuggestions.length > 0 && (
+                <div className="ai-field-tray">
+                  <div className="tray-header">
+                    <h3 className="tray-title">AI Detected Fields</h3>
+                    <span className="field-count">{aiSuggestions.length}</span>
+                  </div>
+
+                  {currentStep === "reviewing" && (
+                    <button
+                      onClick={handleApplyMapping}
+                      disabled={selectedFields.length === 0}
+                      className="apply-button"
+                    >
+                      Enable Dragging ({selectedFields.length} selected)
+                    </button>
+                  )}
+
+                  <div className="field-list">
+                    {aiSuggestions.map(field => (
+                      <DraggableFieldItem key={field.id} field={field} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Field Editor */}
+              {selected && (
+                <div className="field-editor">
+                  <h3 className="editor-title">Edit Field</h3>
+                  <div className="form-group">
+                    <label className="form-label">Label</label>
                     <input
                       value={selected.label || ""}
                       onChange={(e) => updateField({ ...selected, label: e.target.value })}
-                      className="w-full px-2 py-1 border rounded text-sm"
+                      className="form-input"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600">Type</label>
+                  <div className="form-group">
+                    <label className="form-label">Type</label>
                     <select
                       value={selected.type || "text"}
                       onChange={(e) => updateField({ ...selected, type: e.target.value })}
-                      className="w-full px-2 py-1 border rounded text-sm"
+                      className="form-select"
                     >
-                      <option value="text">Text</option>
+                      <option value="text">Text Input</option>
+                      <option value="textarea">Text Area</option>
                       <option value="checkbox">Checkbox</option>
+                      <option value="radio">Radio Button</option>
+                      <option value="select">Dropdown</option>
                       <option value="signature">Signature</option>
+                      <option value="date">Date Picker</option>
+                      <option value="number">Number Input</option>
+                      <option value="email">Email Input</option>
+                      <option value="phone">Phone Input</option>
                     </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Font Size</label>
+                    <input
+                      type="number"
+                      min="8"
+                      max="72"
+                      value={selected.fontSize || 11}
+                      onChange={(e) => updateField({ ...selected, fontSize: parseInt(e.target.value) || 11 })}
+                      className="form-input"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Alignment</label>
+                    <select
+                      value={selected.align || "left"}
+                      onChange={(e) => updateField({ ...selected, align: e.target.value })}
+                      className="form-select"
+                    >
+                      <option value="left">Left</option>
+                      <option value="center">Center</option>
+                      <option value="right">Right</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Required</label>
+                    <input
+                      type="checkbox"
+                      checked={selected.required || false}
+                      onChange={(e) => updateField({ ...selected, required: e.target.checked })}
+                      className="form-checkbox"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Placeholder</label>
+                    <input
+                      type="text"
+                      value={selected.placeholder || ""}
+                      onChange={(e) => updateField({ ...selected, placeholder: e.target.value })}
+                      className="form-input"
+                      placeholder="Enter placeholder text..."
+                    />
                   </div>
                   <button
                     onClick={() => deleteField(selected.id)}
-                    className="w-full px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                    className="delete-button"
                   >
-                    Delete
+                    Delete Field
                   </button>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Quick Stats */}
-            <div className="text-xs text-gray-600 space-y-1 pt-4 border-t">
-              <div>Total Fields: {overlay.fields.length}</div>
-              <div>This Page: {overlay.fields.filter(f => f.page === page).length}</div>
-              <div>AI Detected: {aiSuggestions.length}</div>
+              {/* Quick Stats */}
+              <div className="quick-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Total Fields:</span>
+                  <span className="stat-value">{overlay.fields.length}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">This Page:</span>
+                  <span className="stat-value">{overlay.fields.filter(f => f.page === page).length}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">AI Detected:</span>
+                  <span className="stat-value">{aiSuggestions.length}</span>
+                </div>
+              </div>
+
+              {/* Keyboard Shortcuts */}
+              <div className="keyboard-shortcuts">
+                <h4 className="shortcuts-title">Keyboard Shortcuts</h4>
+                <div className="shortcuts-list">
+                  <div className="shortcut-item">
+                    <span className="shortcut-key">Ctrl/Cmd + S</span>
+                    <span className="shortcut-desc">Save</span>
+                  </div>
+                  <div className="shortcut-item">
+                    <span className="shortcut-key">Delete</span>
+                    <span className="shortcut-desc">Delete Field</span>
+                  </div>
+                  <div className="shortcut-item">
+                    <span className="shortcut-key">Escape</span>
+                    <span className="shortcut-desc">Deselect</span>
+                  </div>
+                  <div className="shortcut-item">
+                    <span className="shortcut-key">N</span>
+                    <span className="shortcut-desc">New Field</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -660,7 +830,7 @@ export default function Mapper() {
       {/* Drag Overlay */}
       <DragOverlay>
         {activeDragId ? (
-          <div className="bg-blue-100 border border-blue-300 rounded p-2 text-sm opacity-90">
+          <div className="drag-overlay">
             Dragging: {aiSuggestions.find(f => f.id === activeDragId)?.label}
           </div>
         ) : null}
