@@ -65,18 +65,80 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 2rem;
-  text-align: center;
 
-  h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 2.5rem;
-    font-weight: 700;
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
-  p {
-    margin: 0;
-    font-size: 1.1rem;
-    opacity: 0.9;
+  .header-left {
+    text-align: left;
+
+    h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .back-to-dashboard-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.2s ease;
+      color: #1f2937;
+    }
+
+    &:hover {
+      background: #f3f4f6;
+      border-color: #e5e7eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      color: #111827;
+
+      svg {
+        transform: translateX(-2px);
+        color: #111827;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      background: #e5e7eb;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
   }
 }
 
@@ -720,6 +782,25 @@
 @media (max-width: 768px) {
   .admin-header {
     padding: 1.5rem 1rem;
+
+    .header-content {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .header-left {
+      text-align: center;
+    }
+
+    .header-right {
+      justify-content: center;
+    }
+
+    .back-to-dashboard-btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
 
     h1 {
       font-size: 2rem;

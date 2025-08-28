@@ -381,8 +381,20 @@ export default function Admin() {
     <div className="admin-dashboard">
       {/* Header */}
       <header className="admin-header">
-        <h1>Admin Dashboard</h1>
-        <p>Manage applications and forms</p>
+        <div className="header-content">
+          <div className="header-left">
+            <h1>Admin Dashboard</h1>
+            <p>Manage applications and forms</p>
+          </div>
+          <div className="header-right">
+            <Link to="/dashboard" className="back-to-dashboard-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+              </svg>
+              Back to User Dashboard
+            </Link>
+          </div>
+        </div>
       </header>
 
       {/* Navigation Tabs */}
