@@ -1,11 +1,12 @@
 .acroform-viewer {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: #f8fafc;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // Use full viewport height
+  min-height: 800px; // Ensure minimum height
+  background: #f8fafc;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 
     .viewer-header {
         display: flex;
@@ -67,18 +68,21 @@
         }
     }
 
-    .pdf-container {
-        flex: 1;
-        position: relative;
-        overflow: hidden;
+      .pdf-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    min-height: 600px; // Increase minimum height
+    height: 70vh; // Make it much larger - 70% of viewport height
 
-        .pdf-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
-        }
+    .pdf-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+      min-height: 600px; // Ensure iframe also has minimum height
     }
+  }
 
     .fallback-form {
         padding: 20px;

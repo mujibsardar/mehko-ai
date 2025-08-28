@@ -296,6 +296,19 @@ export function InterviewView({ app, form, application, step }) {
 
   return (
     <div className="pdf-form-container">
+      {/* Step Header with Report Issue Button */}
+      <div className="step-header">
+        <div className="header-content">
+          <h2>{step?.title || `Form: ${form.replace(/_/g, " ").replace(/.pdf$/i, "")}`}</h2>
+          <p>Fill out the form fields directly on the PDF below</p>
+        </div>
+        {user && (
+          <ReportButton onClick={handleReportClick} size="small" variant="subtle">
+            Report Issue
+          </ReportButton>
+        )}
+      </div>
+
       {/* Use AcroFormViewer for modern form filling experience */}
       <AcroFormViewer
         app={app}
@@ -308,15 +321,6 @@ export function InterviewView({ app, form, application, step }) {
           scheduleAutoSave();
         }}
       />
-
-      {/* Report Issue Button */}
-      {user && (
-        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
-          <ReportButton onClick={handleReportClick} size="small" variant="subtle">
-            Report Issue
-          </ReportButton>
-        </div>
-      )}
 
       {/* Report Issue Modal */}
       <ReportIssueModal
