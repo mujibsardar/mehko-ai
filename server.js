@@ -120,7 +120,7 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
       JSON.stringify(manifest, null, 2)
     );
     // Create application directory
-    const applicationsDir = path.resolve("applications");
+    const applicationsDir = path.resolve("data", "applications");
     const countyDir = path.join(applicationsDir, county.id);
     const formsDir = path.join(countyDir, "forms");
     await fs.promises.mkdir(countyDir, { recursive: true });
@@ -493,7 +493,7 @@ app.post("/api/download-pdf", async (req, res) => {
       });
     }
     // Create directory structure
-    const appDir = path.join(process.cwd(), "applications", appId);
+    const appDir = path.join(process.cwd(), "data", "applications", appId);
     const formsDir = path.join(appDir, "forms");
     const formDir = path.join(formsDir, formId);
     // Ensure directories exist

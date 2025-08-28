@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { getApiBase } from "../../config/api";
 import "./AcroFormViewer.scss";
 
 const AcroFormViewer = ({
@@ -18,7 +19,7 @@ const AcroFormViewer = ({
     const iframeRef = useRef(null);
     const formDataRef = useRef(formData);
 
-    const API_BASE = "http://127.0.0.1:8000";
+    const API_BASE = getApiBase('python');
 
     useEffect(() => {
         loadPdfData();

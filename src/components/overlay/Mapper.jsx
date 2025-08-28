@@ -4,7 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import Moveable from "react-moveable";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
-import { ENDPOINTS } from "../../config/api";
+import { getApiBase, ENDPOINTS } from "../../config/api";
 import {
   processAICoordinates,
   snapToGrid,
@@ -16,7 +16,7 @@ import {
 } from "../../utils/pdfCoords";
 import "./Mapper.scss";
 
-const API = "/api";
+const API = getApiBase('python');
 const normalizeForFilesystem = (str) => str.replace(/\s+/g, "_");
 
 const SAVE_STATUS = {
@@ -311,7 +311,7 @@ export default function Mapper() {
     const q = (obj) => new URLSearchParams(obj).toString();
     async function load() {
       const m = await fetch(
-        `${API}/apps/${normalizedApp}/forms/${normalizedForm}/page-metrics?${q({
+        `${API}/${normalizedApp}/forms/${normalizedForm}/page-metrics?${q({
           page,
           dpi: 144,
         })}`
@@ -320,7 +320,7 @@ export default function Mapper() {
       setPages(m.pages || 1);
 
       const blob = await fetch(
-        `${API}/apps/${normalizedApp}/forms/${normalizedForm}/preview-page?${q({
+        `${API}/${normalizedApp}/forms/${normalizedForm}/preview-page?${q({
           page,
           dpi: 144,
         })}`

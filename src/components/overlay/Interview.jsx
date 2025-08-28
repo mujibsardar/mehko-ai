@@ -14,7 +14,7 @@ import "./Interview.scss";
 
 import { getApiBase } from "../../config/api";
 
-const API = getApiBase();
+const API = getApiBase('python');
 
 export function InterviewView({ app, form, application, step }) {
   const [overlay, setOverlay] = useState({ fields: [] });
