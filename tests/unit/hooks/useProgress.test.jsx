@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { useProgress } from '../../../src/hooks/useProgress';
+import useProgress from '../../../src/hooks/useProgress';
 
 // Mock Firebase modules
 vi.mock('../../../src/firebase/firebase', () => ({
