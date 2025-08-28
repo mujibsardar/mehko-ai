@@ -13,7 +13,7 @@ import {
 import ReportsViewer from "./ReportsViewer";
 import "./Admin.scss";
 
-const API = "/api";
+const API = "/api/apps";
 
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
@@ -217,6 +217,9 @@ export default function Admin() {
     setBulkPreview(previews);
   };
 
+  // Note: PDF downloads will be handled by the Python server
+  // The Python server has the working PDF download logic
+
   const processBulkImport = async () => {
     if (bulkPreview.length === 0) return;
 
@@ -233,15 +236,49 @@ export default function Admin() {
       }
 
       try {
-        const response = await fetch(`${API}/county`, {
+        // Use the working Python FastAPI endpoint
+        console.log('Sending request to:', `${API}`);
+        console.log('Application data:', preview.data);
+
+        // The Python server expects the app name as a query parameter or form data
+        const formData = new FormData();
+        formData.append('app', preview.data.id);
+        formData.append('title', preview.data.title);
+        formData.append('description', preview.data.description);
+        formData.append('rootDomain', preview.data.rootDomain);
+
+        const response = await fetch(`${API}`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(preview.data),
+          body: formData,
         });
 
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
+
         if (response.ok) {
-          successCount++;
+          const result = await response.json();
+          console.log('Success result:', result);
+
+          // Now create the steps in Firestore
+          try {
+            const appRef = doc(db, "applications", preview.data.id);
+            await setDoc(appRef, {
+              ...preview.data,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              status: "active",
+              source: "admin-upload",
+            });
+
+            console.log('✅ Application created in Firestore:', preview.data.id);
+            successCount++;
+          } catch (dbError) {
+            console.error('❌ Failed to create in Firestore:', dbError);
+            errorCount++;
+          }
         } else {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
           errorCount++;
         }
       } catch (error) {
