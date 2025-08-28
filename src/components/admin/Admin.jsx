@@ -82,6 +82,10 @@ export default function Admin() {
   const [bulkStatus, setBulkStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // AcroForm bulk conversion state
+  const [isBulkConverting, setIsBulkConverting] = useState(false);
+  const [bulkConversionStatus, setBulkConversionStatus] = useState(null);
+
   // PDF Download state
   const [pdfDownloadUrl, setPdfDownloadUrl] = useState("");
   const [pdfDownloadAppId, setPdfDownloadAppId] = useState("");
@@ -364,6 +368,244 @@ export default function Admin() {
       }
     }
 
+  // ----------- AcroForm Bulk Conversion -----------
+  async function handleBulkAcroFormConversion() {
+    setIsBulkConverting(true);
+    setBulkConversionStatus(null);
+    
+    try {
+      const results = [];
+      let successCount = 0;
+      let errorCount = 0;
+      
+      // Process each application
+      for (const app of apps) {
+        if (!app.steps || !Array.isArray(app.steps)) continue;
+        
+        // Find PDF steps
+        const pdfSteps = app.steps.filter(step => step.type === "pdf");
+        
+        for (const step of pdfSteps) {
+          try {
+            const formId = step.formId;
+            if (!formId) continue;
+            
+            // Check if overlay exists
+            const overlayResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/template`);
+            
+            if (overlayResponse.ok) {
+              const overlayData = await overlayResponse.json();
+              
+              // Convert overlay to AcroForm definition
+              const converted = convertOverlayToAcroForm(overlayData, formId);
+              
+              // Save the new definition
+              const saveResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/acroform-definition`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(converted)
+              });
+              
+              if (saveResponse.ok) {
+                successCount++;
+                results.push(`✅ ${app.id}/${formId}: Converted from overlay (${converted.fields.length} fields)`);
+              } else {
+                errorCount++;
+                results.push(`❌ ${app.id}/${formId}: Failed to save definition`);
+              }
+            } else {
+              // No overlay, create basic template
+              const basicTemplate = createBasicAcroFormTemplate(formId);
+              
+              const saveResponse = await fetch(`${API}/apps/${app.id}/forms/${formId}/acroform-definition`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(basicTemplate)
+              });
+              
+              if (saveResponse.ok) {
+                successCount++;
+                results.push(`✅ ${app.id}/${formId}: Created basic template (${basicTemplate.fields.length} fields)`);
+              } else {
+                errorCount++;
+                results.push(`❌ ${app.id}/${formId}: Failed to save template`);
+              }
+            }
+          } catch (err) {
+            errorCount++;
+            results.push(`❌ ${app.id}/${step.formId}: ${err.message}`);
+          }
+        }
+      }
+      
+      setBulkConversionStatus({
+        type: "success",
+        title: "Bulk Conversion Complete!",
+        message: `Successfully processed ${successCount} forms. ${errorCount > 0 ? `${errorCount} errors occurred.` : 'No errors!'}`,
+        details: results.join('\n')
+      });
+      
+    } catch (err) {
+      setBulkConversionStatus({
+        type: "error",
+        title: "Bulk Conversion Failed",
+        message: err.message,
+        details: "An unexpected error occurred during bulk conversion."
+      });
+    } finally {
+      setIsBulkConverting(false);
+    }
+  }
+
+  // Helper functions for bulk conversion
+  function convertOverlayToAcroForm(overlay, formName) {
+    return {
+      formMetadata: {
+        title: formName.replace(/_/g, " ").replace(/.pdf$/i, ""),
+        description: `Converted from overlay: ${formName}`,
+        version: "1.0",
+        type: "acroform",
+        converted: true,
+        convertedAt: new Date().toISOString()
+      },
+      fields: overlay.fields.map(field => ({
+        id: field.id,
+        label: field.label,
+        type: field.type,
+        page: field.page || 0,
+        required: true,
+        validation: getDefaultValidation(field.type),
+        properties: getDefaultProperties(field.type),
+        styling: {
+          fontSize: field.fontSize || 12,
+          fontFamily: "Helvetica",
+          textAlign: field.align || "left",
+          color: "#000000"
+        },
+        aiConfidence: 0.8,
+        aiReasoning: "Converted from overlay coordinates"
+      })),
+      formSettings: {
+        autoSave: true,
+        validationMode: "real-time",
+        submitBehavior: "download",
+        theme: "default"
+      }
+    };
+  }
+
+  function getDefaultValidation(type) {
+    const base = { required: true };
+    switch (type) {
+      case "text":
+      case "textarea":
+        return { ...base, minLength: 2, maxLength: 100 };
+      case "email":
+        return { ...base, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" };
+      case "tel":
+        return { ...base, pattern: "^[\\+]?[1-9]\\d{1,14}$" };
+      case "number":
+        return { ...base, min: 0, max: 999999 };
+      case "date":
+        return { ...base, minDate: "1900-01-01", maxDate: "2100-12-31" };
+      default:
+        return base;
+    }
+  }
+
+  function getDefaultProperties(type) {
+    const base = { defaultValue: "", readOnly: false };
+    switch (type) {
+      case "text":
+      case "email":
+      case "tel":
+        return { ...base, placeholder: `Enter ${type}`, maxLength: 100 };
+      case "textarea":
+        return { ...base, placeholder: "Enter text", maxLength: 500, rows: 3 };
+      case "number":
+        return { ...base, placeholder: "0", min: 0, max: 999999 };
+      case "date":
+        return { ...base, placeholder: "MM/DD/YYYY" };
+      case "checkbox":
+        return { ...base, defaultValue: false };
+      case "signature":
+        return { ...base, placeholder: "Click to sign" };
+      default:
+        return base;
+    }
+  }
+
+  function createBasicAcroFormTemplate(formName) {
+    const formTitle = formName.replace(/_/g, " ").replace(/.pdf$/i, "");
+    
+    return {
+      formMetadata: {
+        title: formTitle,
+        description: `Basic AcroForm template for ${formTitle}`,
+        version: "1.0",
+        type: "acroform",
+        autoGenerated: true,
+        generatedAt: new Date().toISOString()
+      },
+      fields: [
+        {
+          id: "applicant_name",
+          label: "Applicant Name",
+          type: "text",
+          page: 0,
+          required: true,
+          validation: { required: true, minLength: 2, maxLength: 100 },
+          properties: { placeholder: "Enter applicant name", defaultValue: "", readOnly: false, maxLength: 100 },
+          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
+          aiConfidence: 0.0,
+          aiReasoning: "Basic template field - customize as needed"
+        },
+        {
+          id: "business_name",
+          label: "Business Name",
+          type: "text",
+          page: 0,
+          required: true,
+          validation: { required: true, minLength: 2, maxLength: 100 },
+          properties: { placeholder: "Enter business name", defaultValue: "", readOnly: false, maxLength: 100 },
+          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
+          aiConfidence: 0.0,
+          aiReasoning: "Basic template field - customize as needed"
+        },
+        {
+          id: "contact_email",
+          label: "Contact Email",
+          type: "email",
+          page: 0,
+          required: true,
+          validation: { required: true, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" },
+          properties: { placeholder: "Enter email address", defaultValue: "", readOnly: false, maxLength: 100 },
+          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "left", color: "#000000" },
+          aiConfidence: 0.0,
+          aiReasoning: "Basic template field - customize as needed"
+        },
+        {
+          id: "signature",
+          label: "Signature",
+          type: "signature",
+          page: 0,
+          required: true,
+          validation: { required: true },
+          properties: { placeholder: "Click to sign", defaultValue: "", readOnly: false },
+          styling: { fontSize: 12, fontFamily: "Helvetica", textAlign: "center", color: "#000000" },
+          aiConfidence: 0.0,
+          aiReasoning: "Basic template field - customize as needed"
+        }
+      ],
+      formSettings: {
+        autoSave: true,
+        validationMode: "real-time",
+        submitBehavior: "download",
+        theme: "default"
+      }
+    };
+  }
+
     // 2) Merge into Firestore (keep order)
     const ref = doc(db, "applications", appId);
     const snap = await getDoc(ref);
@@ -536,6 +778,21 @@ export default function Admin() {
             }}
           >
             County Processor
+          </button>
+          <button
+            onClick={() => setActiveTab("acroform-bulk")}
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              marginTop: "8px",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
+              background: activeTab === "acroform-bulk" ? "#eef2ff" : "#fff",
+              color: activeTab === "acroform-bulk" ? "#3730a3" : "#374151",
+              cursor: "pointer",
+            }}
+          >
+            🎯 AcroForm Bulk Convert
           </button>
         </div>
 
@@ -1189,6 +1446,8 @@ export default function Admin() {
           </div>
         ) : activeTab === "counties" ? (
           <CountyProcessor />
+        ) : activeTab === "acroform-bulk" ? (
+          <AcroFormBulkConverter />
         ) : (
           <>
             {/* App form */}

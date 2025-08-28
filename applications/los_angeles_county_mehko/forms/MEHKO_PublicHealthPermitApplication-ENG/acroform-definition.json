@@ -1,0 +1,281 @@
+{
+  "formMetadata": {
+    "title": "MEHKO Public Health Permit Application",
+    "description": "Public Health Permit Application Form for MEHKO",
+    "version": "1.0",
+    "created": "2025-08-27T19:01:00Z",
+    "type": "acroform"
+  },
+  "fields": [
+    {
+      "id": "business_name",
+      "label": "Business Name",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "placeholder": "Enter your business name",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Standard business name field in permit applications"
+    },
+    {
+      "id": "business_address",
+      "label": "Business Address",
+      "type": "textarea",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "minLength": 10,
+        "maxLength": 200
+      },
+      "properties": {
+        "placeholder": "Enter complete business address",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 200,
+        "rows": 3
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Address field required for permit processing"
+    },
+    {
+      "id": "owner_name",
+      "label": "Owner/Applicant Name",
+      "type": "text",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100
+      },
+      "properties": {
+        "placeholder": "Enter owner's full name",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Owner identification required for permit"
+    },
+    {
+      "id": "phone_number",
+      "label": "Phone Number",
+      "type": "tel",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "pattern": "^[\\+]?[1-9]\\d{1,14}$"
+      },
+      "properties": {
+        "placeholder": "(555) 123-4567",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 15
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Contact information required"
+    },
+    {
+      "id": "email_address",
+      "label": "Email Address",
+      "type": "email",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      },
+      "properties": {
+        "placeholder": "owner@business.com",
+        "defaultValue": "",
+        "readOnly": false,
+        "maxLength": 100
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Email for permit communications"
+    },
+    {
+      "id": "business_type",
+      "label": "Type of Business",
+      "type": "select",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "placeholder": "Select business type",
+        "defaultValue": "",
+        "readOnly": false,
+        "options": [
+          "Restaurant",
+          "Food Truck",
+          "Catering",
+          "Grocery Store",
+          "Food Manufacturing",
+          "Other"
+        ]
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Business classification for permit type"
+    },
+    {
+      "id": "permit_type",
+      "label": "Permit Type Requested",
+      "type": "select",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "placeholder": "Select permit type",
+        "defaultValue": "",
+        "readOnly": false,
+        "options": [
+          "New Permit",
+          "Renewal",
+          "Modification",
+          "Transfer"
+        ]
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Permit application type"
+    },
+    {
+      "id": "anticipated_open_date",
+      "label": "Anticipated Opening Date",
+      "type": "date",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "minDate": "2025-01-01",
+        "maxDate": "2030-12-31"
+      },
+      "properties": {
+        "placeholder": "MM/DD/YYYY",
+        "defaultValue": "",
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Business opening timeline"
+    },
+    {
+      "id": "signature",
+      "label": "Applicant Signature",
+      "type": "signature",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true
+      },
+      "properties": {
+        "placeholder": "Click to sign",
+        "defaultValue": "",
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "center",
+        "color": "#000000",
+        "borderStyle": "dashed",
+        "borderWidth": 1
+      },
+      "aiConfidence": 0.9,
+      "aiReasoning": "Signature required for application"
+    },
+    {
+      "id": "application_date",
+      "label": "Application Date",
+      "type": "date",
+      "page": 0,
+      "required": true,
+      "validation": {
+        "required": true,
+        "minDate": "2025-01-01",
+        "maxDate": "2030-12-31"
+      },
+      "properties": {
+        "placeholder": "MM/DD/YYYY",
+        "defaultValue": "",
+        "readOnly": false
+      },
+      "styling": {
+        "fontSize": 12,
+        "fontFamily": "Helvetica",
+        "textAlign": "left",
+        "color": "#000000"
+      },
+      "aiConfidence": 0.8,
+      "aiReasoning": "Application submission date"
+    }
+  ],
+  "formSettings": {
+    "autoSave": true,
+    "validationMode": "real-time",
+    "submitBehavior": "download",
+    "theme": "default"
+  }
+}

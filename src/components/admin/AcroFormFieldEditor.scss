@@ -33,6 +33,28 @@
       display: flex;
       gap: 12px;
 
+      .auto-generate-btn {
+        padding: 10px 16px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
       .ai-analysis-btn {
         padding: 10px 16px;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -435,7 +457,8 @@
           color: #374151;
         }
 
-        input, select {
+        input,
+        select {
           flex: 1;
           padding: 8px 12px;
           border: 1px solid #d1d5db;
@@ -547,7 +570,8 @@
               min-width: auto;
             }
 
-            input, select {
+            input,
+            select {
               width: 100%;
             }
           }
