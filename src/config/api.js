@@ -1,7 +1,7 @@
 // API Configuration
 // This file centralizes all API endpoints and configuration
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
 
 // Base URLs
 export const API_CONFIG = {
@@ -25,12 +25,12 @@ export const ENDPOINTS = {
   APP_BY_ID: (base = API_CONFIG.DEFAULT_API, appId) => buildEndpoint(base, `/apps/${encodeURIComponent(appId)}`),
   
   // AI endpoints
-  AI_CHAT: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/ai-chat'),
-  AI_ANALYZE_PDF: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/ai-analyze-pdf'),
+  AI_CHAT: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/ai-chat'),
+  AI_ANALYZE_PDF: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/ai-analyze-pdf'),
   
   // Form endpoints
-  FORM_FIELDS: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/form-fields'),
-  FILL_PDF: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/fill-pdf'),
+  FORM_FIELDS: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/api/form-fields'),
+  FILL_PDF: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/api/fill-pdf'),
   
   // County processing
   PROCESS_COUNTY: (base = API_CONFIG.DEFAULT_API) => buildEndpoint(base, '/process-county')
