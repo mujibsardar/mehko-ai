@@ -243,13 +243,61 @@ export default function AcroFormFieldEditor() {
     try {
       // First, check if we already have a complete AcroForm definition
       if (acroformDefinition && acroformDefinition.fields && acroformDefinition.fields.length > 0) {
-        const response = confirm(`This form already has ${acroformDefinition.fields.length} AcroForm fields defined.\n\nWould you like to:\n1. Keep the existing definition (Cancel)\n2. Regenerate from overlay (OK)\n3. Create a new basic template (will overwrite existing)`);
+        const response = confirm(`This form already has ${acroformDefinition.fields.length} AcroForm fields defined.\n\nWould you like to:\n1. Keep the existing definition (Cancel)\n2. Regenerate from overlay (OK)\n3. Create a new basic template (will overwrite existing)\n4. Read existing fields from PDF (best option for AcroForm PDFs)`);
 
         if (response === null) {
           // User cancelled - keep existing
           setIsProcessing(false);
           return;
         }
+      }
+
+      // Try to read existing AcroForm fields from the PDF first (best option for AcroForm PDFs)
+      console.log("Attempting to read existing AcroForm fields from PDF...");
+      try {
+        const acroFormFieldsResponse = await fetch(`${API}/apps/${app}/forms/${form}/acroform-fields`);
+        if (acroFormFieldsResponse.ok) {
+          const existingFields = await acroFormFieldsResponse.json();
+          if (existingFields && existingFields.length > 0) {
+            const enhancedDefinition = {
+              formMetadata: {
+                title: form.replace(/_/g, " ").replace(/.pdf$/i, ""),
+                description: `Auto-generated from existing AcroForm fields in ${form}`,
+                version: "1.0",
+                type: "acroform",
+                source: "pdf_acroform_fields",
+                generatedAt: new Date().toISOString()
+              },
+              fields: existingFields.map(field => ({
+                ...field,
+                validation: getDefaultValidation(field.type || 'text'),
+                properties: getDefaultProperties(field.type || 'text'),
+                styling: {
+                  fontSize: 12,
+                  fontFamily: "Helvetica",
+                  textAlign: "left",
+                  color: "#000000"
+                },
+                aiConfidence: 0.8,
+                aiReasoning: "Extracted from existing PDF AcroForm fields"
+              })),
+              formSettings: {
+                autoSave: true,
+                validationMode: "real-time",
+                submitBehavior: "download",
+                theme: "default"
+              }
+            };
+
+            setAcroformDefinition(enhancedDefinition);
+            alert(`✅ Extracted ${existingFields.length} existing AcroForm fields from PDF!\n\nFound ${existingFields.length} fields that were already built into the PDF. These have been enhanced with validation and styling.`);
+            await handleSave();
+            setIsProcessing(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.log("Could not read existing AcroForm fields from PDF:", e);
       }
 
       // Try to load existing overlay

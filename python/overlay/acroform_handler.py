@@ -10,7 +10,8 @@ from reportlab.lib.pagesizes import letter
 class AcroFormHandler:
     """Handle PDF AcroForm field filling using PyPDF2 and ReportLab"""
     
-    def __init__(self):
+    def __init__(self, pdf_bytes: bytes = None):
+        self.pdf_bytes = pdf_bytes
         self.field_types = {
             'text': self._fill_text_field,
             'checkbox': self._fill_checkbox_field,
@@ -34,6 +35,77 @@ class AcroFormHandler:
         except Exception as e:
             print(f"Error checking AcroForm: {e}")
             return False
+
+    def get_existing_fields(self) -> List[Dict[str, Any]]:
+        """Extract existing AcroForm fields from a PDF"""
+        if not self.pdf_bytes:
+            return []
+        
+        try:
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(self.pdf_bytes))
+            fields = []
+            
+            # Check if PDF has AcroForm
+            if '/AcroForm' in pdf_reader.trailer['/Root']:
+                form = pdf_reader.trailer['/Root']['/AcroForm']
+                if '/Fields' in form:
+                    for field_ref in form['/Fields']:
+                        field = field_ref.get_object()
+                        field_info = self._extract_field_info(field)
+                        if field_info:
+                            fields.append(field_info)
+            
+            return fields
+        except Exception as e:
+            print(f"Error extracting AcroForm fields: {e}")
+            return []
+
+    def _extract_field_info(self, field) -> Optional[Dict[str, Any]]:
+        """Extract field information from a PDF field object"""
+        try:
+            field_info = {
+                'id': field.get('/T', 'unknown_field'),
+                'label': field.get('/TU', field.get('/T', 'Unknown Field')),
+                'type': self._get_field_type(field),
+                'page': 0,  # Default to first page
+                'required': False,  # Default to not required
+            }
+            
+            # Add page number if available
+            if '/P' in field:
+                try:
+                    field_info['page'] = int(field['/P'].split()[1])
+                except:
+                    pass
+            
+            return field_info
+        except Exception as e:
+            print(f"Error extracting field info: {e}")
+            return None
+
+    def _get_field_type(self, field) -> str:
+        """Determine field type from PDF field"""
+        if '/FT' not in field:
+            return 'text'
+        
+        field_type = field['/FT']
+        
+        if field_type == '/Tx':  # Text field
+            if '/MaxLen' in field and field['/MaxLen'] == 1:
+                return 'checkbox'  # Single character text field is often a checkbox
+            return 'text'
+        elif field_type == '/Btn':  # Button
+            if '/Ff' in field and field['/Ff'] & 32768:  # Radio button flag
+                return 'radio'
+            else:
+                return 'checkbox'
+        elif field_type == '/Ch':  # Choice field
+            if '/Ff' in field and field['/Ff'] & 131072:  # Combo box flag
+                return 'dropdown'
+            else:
+                return 'select'
+        else:
+            return 'text'
     
     def create_acroform_pdf(self, pdf_bytes: bytes, field_definitions: List[Dict[str, Any]]) -> bytes:
         """Create a new PDF with AcroForm fields based on AI-detected field definitions"""

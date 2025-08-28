@@ -264,6 +264,30 @@ def delete_acroform_definition(app: str, form: str):
     except Exception as e:
         raise HTTPException(500, f"error deleting AcroForm definition: {e}")
 
+@router.get("/{app}/forms/{form}/acroform-fields")
+def get_pdf_acroform_fields(app: str, form: str):
+    """Extract existing AcroForm fields from a PDF"""
+    pdf_path = form_dir(app, form) / "form.pdf"
+    if not pdf_path.exists():
+        raise HTTPException(404, f"missing PDF at {pdf_path}")
+    
+    try:
+        from overlay.acroform_handler import AcroFormHandler
+        
+        # Read the PDF and extract existing AcroForm fields
+        pdf_bytes = pdf_path.read_bytes()
+        handler = AcroFormHandler(pdf_bytes)
+        
+        # Get existing fields from the PDF
+        existing_fields = handler.get_existing_fields()
+        
+        return existing_fields or []
+        
+    except Exception as e:
+        # If we can't extract fields, return empty array
+        print(f"Error extracting AcroForm fields: {e}")
+        return []
+
 # --- Filling ---
 @router.post("/{app}/forms/{form}/fill")
 async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...)):

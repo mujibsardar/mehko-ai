@@ -103,14 +103,34 @@ export function InterviewView({ app, form, application, step }) {
     (async () => {
       setLoading(true);
       try {
-        const r = await fetch(`${API}/apps/${app}/forms/${form}/template`);
-        const tpl = await r.json();
-        const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
-        setOverlay({ fields });
+        // Check for AcroForm definition first (new system)
+        let acroFormDefinition = null;
+        try {
+          const acroResponse = await fetch(`${API}/apps/${app}/forms/${form}/acroform-definition`);
+          if (acroResponse.ok) {
+            acroFormDefinition = await acroResponse.json();
+            console.log("Found AcroForm definition with", acroFormDefinition.fields.length, "fields");
+          }
+        } catch (e) {
+          console.log("No AcroForm definition found, checking for overlay");
+        }
+
+        // Fall back to overlay.json (old system) if no AcroForm definition
+        if (!acroFormDefinition) {
+          const r = await fetch(`${API}/apps/${app}/forms/${form}/template`);
+          const tpl = await r.json();
+          const fields = Array.isArray(tpl?.fields) ? tpl.fields : [];
+          setOverlay({ fields });
+          console.log("Using overlay.json with", fields.length, "fields");
+        } else {
+          // Use AcroForm definition fields
+          setOverlay({ fields: acroFormDefinition.fields || [] });
+          console.log("Using AcroForm definition with", acroFormDefinition.fields.length, "fields");
+        }
 
         // Initialize form values
         const init = {};
-        for (const f of fields) init[f.id] = f.type === "checkbox" ? false : "";
+        for (const f of overlay.fields) init[f.id] = f.type === "checkbox" ? false : "";
 
         // Load saved data if user is authenticated
         if (user && app && form) {
@@ -126,7 +146,7 @@ export function InterviewView({ app, form, application, step }) {
           setValues(init);
         }
       } catch (e) {
-        console.error("Template fetch failed:", e);
+        console.error("Form loading failed:", e);
         setOverlay({ fields: [] });
         setValues({});
       } finally {
@@ -276,15 +296,16 @@ export function InterviewView({ app, form, application, step }) {
         <div style={{ background: "#f0f9ff", border: "1px solid #bae6fd", borderRadius: "12px", padding: "24px", marginBottom: "24px" }}>
           <h3 style={{ color: "#0369a1", margin: "0 0 16px 0", fontSize: "20px" }}>📋 No Form Fields Available</h3>
           <p style={{ color: "#0c4a6e", margin: "0 0 16px 0", lineHeight: "1.6" }}>
-            This form doesn't have any fillable fields defined yet. This usually means:
+            This form doesn't have any fillable fields defined yet. This could mean:
           </p>
           <ul style={{ textAlign: "left", color: "#0c4a6e", lineHeight: "1.6", margin: "0 0 20px 0", paddingLeft: "20px" }}>
-            <li>The form is still being processed</li>
+            <li>The PDF is a static document without fillable fields</li>
+            <li>No field mapping has been created yet</li>
             <li>This is an informational document only</li>
-            <li>Field extraction is in progress</li>
+            <li>The form needs to be processed by an admin first</li>
           </ul>
           <p style={{ color: "#0c4a6e", margin: "0", fontSize: "14px" }}>
-            <strong>What to do:</strong> Check back later or contact support if you need this form to be fillable.
+            <strong>What to do:</strong> Contact an administrator to set up field mapping or use AI detection to extract fields from the PDF.
           </p>
         </div>
         <p style={{ color: "#6b7280", fontSize: "14px" }}>
