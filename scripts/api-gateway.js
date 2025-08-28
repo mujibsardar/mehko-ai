@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
-const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
-const path = require('path');
-const cors = require('cors');
+import express from 'express';
+import path from 'path';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,8 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+  res.json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
     backends: {
       python: 'http://127.0.0.1:8000',
@@ -25,81 +28,70 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Route Python backend calls (FastAPI)
-app.use('/api/python', createProxyMiddleware({
-  target: 'http://127.0.0.1:8000',
-  changeOrigin: true,
-  pathRewrite: { '^/api/python': '' },
-  logLevel: 'debug',
-  onError: (err, req, res) => {
-    console.error('Python backend error:', err.message);
-    res.status(502).json({ 
-      error: 'Python backend unavailable', 
-      details: err.message 
+// Helper function to forward requests
+async function forwardRequest(targetUrl, req, res) {
+  try {
+    const url = new URL(req.path, targetUrl);
+    url.search = req.url.split('?')[1] || '';
+    
+    const options = {
+      method: req.method,
+      headers: {
+        'Content-Type': req.headers['content-type'] || 'application/json',
+        ...req.headers
+      }
+    };
+
+    if (req.body && Object.keys(req.body).length > 0) {
+      options.body = JSON.stringify(req.body);
+    }
+
+    const response = await fetch(url.toString(), options);
+    const data = await response.text();
+    
+    res.status(response.status).set(response.headers.raw()).send(data);
+  } catch (error) {
+    console.error(`Error forwarding to ${targetUrl}:`, error.message);
+    res.status(502).json({
+      error: 'Backend unavailable',
+      details: error.message
     });
   }
-}));
+}
 
-// Route Node.js backend calls
-app.use('/api/node', createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  pathRewrite: { '^/api/node': '' },
-  logLevel: 'debug',
-  onError: (err, req, res) => {
-    console.error('Node.js backend error:', err.message);
-    res.status(502).json({ 
-      error: 'Node.js backend unavailable', 
-      details: err.message 
-    });
-  }
-}));
+// AI endpoints (Node.js backend)
+app.use('/api/ai-chat', async (req, res) => {
+  await forwardRequest('http://localhost:3000', req, res);
+});
 
-// Smart routing based on endpoint patterns
-app.use('/api/ai-chat', createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+app.use('/api/ai-analyze-pdf', async (req, res) => {
+  await forwardRequest('http://localhost:3000', req, res);
+});
 
-app.use('/api/ai-analyze-pdf', createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+app.use('/api/form-fields', async (req, res) => {
+  await forwardRequest('http://localhost:3000', req, res);
+});
 
-app.use('/api/form-fields', createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
-
-app.use('/api/fill-pdf', createProxyMiddleware({
-  target: 'http://localhost:3000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+app.use('/api/fill-pdf', async (req, res) => {
+  await forwardRequest('http://localhost:3000', req, res);
+});
 
 // Application endpoints (Python backend)
-app.use('/api/apps', createProxyMiddleware({
-  target: 'http://127.0.0.1:8000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+app.use('/api/apps', async (req, res) => {
+  await forwardRequest('http://127.0.0.1:8000', req, res);
+});
 
 // County processing (Python backend)
-app.use('/api/process-county', createProxyMiddleware({
-  target: 'http://127.0.0.1:8000',
-  changeOrigin: true,
-  logLevel: 'debug'
-}));
+app.use('/api/process-county', async (req, res) => {
+  await forwardRequest('http://127.0.0.1:8000', req, res);
+});
 
 // Serve static files from dist directory (for production)
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // Catch-all route for SPA
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 // Error handling middleware
