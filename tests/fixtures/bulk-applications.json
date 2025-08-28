@@ -1,0 +1,70 @@
+[
+    {
+        "id": "orange_county_mehko",
+        "title": "Orange County MEHKO",
+        "description": "Home Kitchen Operations Permit for Orange County",
+        "rootDomain": "ocgov.com",
+        "supportTools": {
+            "aiEnabled": true,
+            "commentsEnabled": true
+        },
+        "steps": [
+            {
+                "id": "planning_overview",
+                "title": "Planning Overview",
+                "type": "info",
+                "action_required": false,
+                "fill_pdf": false,
+                "content": "Start your MEHKO journey in Orange County with planning resources and guides."
+            },
+            {
+                "id": "approvals_training",
+                "title": "Approvals & Training",
+                "type": "info",
+                "action_required": true,
+                "fill_pdf": false,
+                "content": "Complete required training and obtain necessary approvals for Orange County."
+            },
+            {
+                "id": "sop_form",
+                "title": "Standard Operating Procedures",
+                "type": "pdf",
+                "action_required": true,
+                "fill_pdf": true,
+                "content": "Download and complete the SOP form for Orange County MEHKO.",
+                "formId": "ORANGE_COUNTY_SOP-English",
+                "appId": "orange_county_mehko"
+            }
+        ]
+    },
+    {
+        "id": "riverside_county_mehko",
+        "title": "Riverside County MEHKO",
+        "description": "Home Kitchen Operations Permit for Riverside County",
+        "rootDomain": "rivco.org",
+        "supportTools": {
+            "aiEnabled": true,
+            "commentsEnabled": true
+        },
+        "steps": [
+            {
+                "id": "planning_overview",
+                "title": "Planning Overview",
+                "type": "info",
+                "action_required": false,
+                "fill_pdf": false,
+                "content": "Begin your MEHKO application process in Riverside County."
+            },
+            {
+                "id": "permit_application_form",
+                "title": "Permit Application",
+                "type": "pdf",
+                "action_required": true,
+                "fill_pdf": true,
+                "content": "Complete the main permit application form for Riverside County.",
+                "formId": "RIVERSIDE_COUNTY_PERMIT-English",
+                "appId": "riverside_county_mehko"
+            }
+        ]
+    }
+]
