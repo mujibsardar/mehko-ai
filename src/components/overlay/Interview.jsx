@@ -1,7 +1,7 @@
 // Interview.jsx
 import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import PDFPreviewPanel from "../applications/PDFPreviewPanel";
+
 import AcroFormViewer from "../forms/AcroFormViewer";
 import useAuth from "../../hooks/useAuth";
 import { useAuthModal } from "../../providers/AuthModalProvider";
@@ -12,7 +12,9 @@ import { isSignatureField } from "../../helpers/signatureUtils";
 import SignatureField from "./SignatureField";
 import "./Interview.scss";
 
-const API = "http://127.0.0.1:8000";
+import { getApiBase } from "../../config/api";
+
+const API = getApiBase();
 
 export function InterviewView({ app, form, application, step }) {
   const [overlay, setOverlay] = useState({ fields: [] });

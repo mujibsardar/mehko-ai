@@ -4,10 +4,11 @@ import { useParams, Link } from "react-router-dom";
 import Moveable from "react-moveable";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
-import { 
-  processAICoordinates, 
-  snapToGrid, 
-  rectPxToPt, 
+import { ENDPOINTS } from "../../config/api";
+import {
+  processAICoordinates,
+  snapToGrid,
+  rectPxToPt,
   rectPtToPx,
   clampRectPx,
   ensureMinSize,
@@ -128,7 +129,7 @@ export default function Mapper() {
       const formData = new FormData();
       formData.append("pdf", file);
 
-      const uploadResponse = await fetch("http://localhost:3000/api/ai-analyze-pdf", {
+      const uploadResponse = await fetch(ENDPOINTS.AI_ANALYZE_PDF(), {
         method: "POST",
         body: formData,
       });
@@ -240,14 +241,14 @@ export default function Mapper() {
         // Calculate cursor center position
         const cursorX = event.activatorEvent.clientX;
         const cursorY = event.activatorEvent.clientY;
-        
+
         // Convert cursor position to field rectangle
         const fieldRect = cursorToFieldRect(cursorX, cursorY, pdfCanvasRef, zoom, [aiField.width, aiField.height]);
-        
+
         // Clamp to canvas boundaries and ensure minimum size
         const clampedRect = clampRectPx(fieldRect, pdfCanvasRef, zoom);
         const sizedRect = ensureMinSize(clampedRect, 24, 16);
-        
+
         // Convert to PDF coordinates and snap to grid
         const pdfCoords = rectPxToPt(sizedRect).map(coord => snapToGrid(coord));
 
@@ -361,9 +362,9 @@ export default function Mapper() {
   // Draggable Field Tray Item
   const DraggableFieldItem = ({ field }) => {
     const canDrag = currentStep === 'fields-ready' && selectedFields.includes(field.id);
-    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ 
-      id: field.id, 
-      disabled: !canDrag 
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+      id: field.id,
+      disabled: !canDrag
     });
 
     const style = transform ? {
@@ -428,11 +429,11 @@ export default function Mapper() {
         transform.x + width,
         transform.y + height
       ]).map(coord => snapToGrid(coord));
-      
+
       // Clamp to canvas boundaries
       const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
       const finalRect = rectPxToPt(clampedRect);
-      
+
       onUpdate({ ...field, rect: finalRect });
     };
 
@@ -443,12 +444,12 @@ export default function Mapper() {
         drag.x + newWidth,
         drag.y + newHeight
       ]).map(coord => snapToGrid(coord));
-      
+
       // Ensure minimum size and clamp to boundaries
       const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
       const sizedRect = ensureMinSize(clampedRect, 24, 16);
       const finalRect = rectPxToPt(sizedRect);
-      
+
       onUpdate({ ...field, rect: finalRect });
     };
 
@@ -472,7 +473,7 @@ export default function Mapper() {
             {field.label || field.id}
           </div>
         </div>
-        
+
         {isSelected && (
           <Moveable
             target={document.querySelector(`[data-field-id="${field.id}"]`)}
@@ -647,9 +648,9 @@ export default function Mapper() {
           {/* PDF Canvas */}
           <div className="pdf-canvas-container">
             <DroppablePDFCanvas>
-              <div 
+              <div
                 ref={pdfCanvasRef}
-                className="pdf-canvas" 
+                className="pdf-canvas"
                 style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
               >
                 {imgUrl && (

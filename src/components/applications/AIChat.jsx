@@ -8,8 +8,10 @@ import {
   loadFormData, // reuse your helpers
 } from "../../firebase/userData";
 
-const API_APP = "http://127.0.0.1:8000";
-const API_CHAT = "http://localhost:3000/api/ai-chat";
+import { getApiBase, ENDPOINTS } from "../../config/api";
+
+const API_APP = getApiBase();
+const API_CHAT = ENDPOINTS.AI_CHAT();
 
 // Loading Spinner Component
 const LoadingSpinner = () => (
@@ -151,7 +153,7 @@ export default function AIChat({
         if (step.type === "pdf" && step.formId) {
           // text
           try {
-            const url = `http://127.0.0.1:8000/apps/${encodeURIComponent(
+            const url = `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/text`;
             console.log(`Fetching PDF text from: ${url}`);
@@ -175,10 +177,10 @@ export default function AIChat({
           // links
           linkMap[step.formId] = {
             title: step.title || step.formId,
-            url: `http://127.0.0.1:8000/apps/${encodeURIComponent(
+            url: `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/pdf?inline=0`,
-            previewBase: `http://127.0.0.1:8000/apps/${encodeURIComponent(
+            previewBase: `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/preview-page?page=`,
           };

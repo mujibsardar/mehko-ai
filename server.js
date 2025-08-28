@@ -4,35 +4,27 @@ import cors from "cors";
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
-
 // Firebase Admin SDK for Firestore
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-
 // import { PDFDocument } from "pdf-lib";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-
 import OpenAI from "openai";
 import multer from "multer";
 dotenv.config();
-
 // Initialize Firebase Admin with service account
 const serviceAccountPath =
   process.env.FIREBASE_SERVICE_ACCOUNT_PATH || "config/serviceAccountKey.json";
 const serviceAccount = require(path.resolve(serviceAccountPath));
-
 initializeApp({
   credential: cert(serviceAccount),
 });
-
 // Initialize Firestore
 const db = getFirestore();
-
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
 // Configure multer for file uploads
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -47,28 +39,23 @@ const upload = multer({
     }
   },
 });
-
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 // Health check endpoint
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
-
 // Admin endpoint for processing county JSON files
 app.post("/api/admin/process-county", upload.none(), async (req, res) => {
   try {
     // Handle FormData - parse the multipart form data
     const countyData = req.body.countyData;
     const filename = req.body.filename;
-
     if (!countyData) {
       return res.status(400).json({ error: "No county data provided" });
     }
-
     // Parse and validate the county data
     let county;
     try {
@@ -76,7 +63,6 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
     } catch (error) {
       return res.status(400).json({ error: "Invalid JSON format" });
     }
-
     // Validate required fields
     const required = [
       "id",
@@ -87,19 +73,16 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
       "steps",
     ];
     const missing = required.filter((field) => !county[field]);
-
     if (missing.length > 0) {
       return res.status(400).json({
         error: `Missing required fields: ${missing.join(", ")}`,
       });
     }
-
     if (!Array.isArray(county.steps) || county.steps.length === 0) {
       return res
         .status(400)
         .json({ error: "County must have at least one step" });
     }
-
     // Validate PDF steps
     const pdfSteps = county.steps.filter((step) => step.type === "pdf");
     for (const step of pdfSteps) {
@@ -109,23 +92,17 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
         });
       }
     }
-
     // Save county JSON to data directory
     const dataDir = path.resolve("data");
     const countyFile = path.join(dataDir, `${county.id}.json`);
-
     await fs.promises.writeFile(countyFile, JSON.stringify(county, null, 2));
-    console.log(`✅ Saved county data to ${countyFile}`);
-
     // Load and update manifest
     const manifestFile = path.join(dataDir, "manifest.json");
     let manifest = [];
-
     if (fs.existsSync(manifestFile)) {
       const manifestContent = await fs.promises.readFile(manifestFile, "utf8");
       manifest = JSON.parse(manifestContent);
     }
-
     // Check if county already exists
     const existingIndex = manifest.findIndex((c) => c.id === county.id);
     if (existingIndex !== -1) {
@@ -137,30 +114,24 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
       console.log(`➕ Adding ${county.id} to manifest...`);
       manifest.push(county);
     }
-
     // Save updated manifest
     await fs.promises.writeFile(
       manifestFile,
       JSON.stringify(manifest, null, 2)
     );
-    console.log(`✅ Manifest updated successfully`);
-
     // Create application directory
     const applicationsDir = path.resolve("applications");
     const countyDir = path.join(applicationsDir, county.id);
     const formsDir = path.join(countyDir, "forms");
-
     await fs.promises.mkdir(countyDir, { recursive: true });
     await fs.promises.mkdir(formsDir, { recursive: true });
     console.log(`✅ Created application directory: ${countyDir}`);
-
     // Download PDF forms
     let downloadedCount = 0;
     for (const step of pdfSteps) {
       try {
         const formDir = path.join(formsDir, step.formId);
         await fs.promises.mkdir(formDir, { recursive: true });
-
         // Create meta.json for the form
         const metaData = {
           id: step.formId,
@@ -171,26 +142,21 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
           pdfUrl: step.pdfUrl,
           createdAt: new Date().toISOString(),
         };
-
         await fs.promises.writeFile(
           path.join(formDir, "meta.json"),
           JSON.stringify(metaData, null, 2)
         );
-
         // Download the PDF
         console.log(`📥 Downloading PDF for ${step.title}...`);
         const response = await fetch(step.pdfUrl);
-
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-
         const pdfBuffer = await response.arrayBuffer();
         await fs.promises.writeFile(
           path.join(formDir, "form.pdf"),
           Buffer.from(pdfBuffer)
         );
-
         console.log(
           `✅ Downloaded ${step.title} (${Math.round(
             pdfBuffer.byteLength / 1024
@@ -202,15 +168,12 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
         // Continue with other forms even if one fails
       }
     }
-
     console.log(
       `✅ PDF download process completed (${downloadedCount}/${pdfSteps.length} forms)`
     );
-
     // Insert county data into Firestore
     try {
       console.log(`🗄️  Inserting ${county.title} into Firestore...`);
-
       // Add to applications collection
       await db
         .collection("applications")
@@ -222,7 +185,6 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
           status: "active",
           source: "admin-upload",
         });
-
       // Add each step to the steps subcollection
       for (const step of county.steps) {
         await db
@@ -236,13 +198,10 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
             updatedAt: new Date().toISOString(),
           });
       }
-
-      console.log(`✅ Successfully inserted ${county.title} into Firestore`);
     } catch (dbError) {
       console.error(`❌ Failed to insert into Firestore:`, dbError.message);
       // Don't fail the entire request if DB insertion fails
     }
-
     res.json({
       success: true,
       message: `Successfully processed ${county.title}`,
@@ -265,9 +224,7 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
     });
   }
 });
-
 const CACHE_PATH = path.resolve("form-label-cache.json");
-
 // Load cache from file
 // function loadFieldCache() {
 //   if (fs.existsSync(CACHE_PATH)) {
@@ -275,36 +232,28 @@ const CACHE_PATH = path.resolve("form-label-cache.json");
 //   }
 //   return {};
 // }
-
 // // Save cache to file
 // function saveFieldCache(cache) {
 //   fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2));
 // }
-
 // function extractNearbyText(fieldName, fullText, radius = 100) {
 //   const cleanField = fieldName.replace(/[_\-]/g, " ").toLowerCase();
 //   const cleanText = fullText.replace(/[\n\r]/g, " ").toLowerCase();
 //   const index = cleanText.indexOf(cleanField);
-
 //   if (index === -1) return fullText.slice(0, radius * 2); // fallback to first snippet
-
 //   const start = Math.max(index - radius, 0);
 //   const end = Math.min(index + cleanField.length + radius, fullText.length);
 //   return fullText.slice(start, end).replace(/\s+/g, " ").trim();
 // }
-
 // function extractJsonFromMarkdown(content) {
 //   const match = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
 //   return match ? match[1] : content;
 // }
-
 app.post("/api/ai-chat", async (req, res) => {
   const { messages = [], applicationId = "unknown", context = {} } = req.body;
-
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: "Invalid messages format" });
   }
-
   try {
     const formSection = Object.entries(context.forms || {})
       .map(([stepId, fields]) => {
@@ -317,16 +266,12 @@ app.post("/api/ai-chat", async (req, res) => {
       })
       .filter(Boolean)
       .join("\n\n");
-
     // Enhanced system prompt with form-specific context
     let systemPrompt = `
       You are an AI assistant helping users apply for a MEHKO permit. You are knowledgeable, patient, and provide practical guidance.
-      
       IMPORTANT: For PDF type steps, users fill out forms within the app and then download the completed PDF to submit. Some forms may need to be downloaded from external sources.
-      
       Application: ${context.application?.title || "MEHKO Permit"}
       Source: ${context.application?.rootDomain || "Government"}
-      
       Available Steps:
       ${(context.steps || [])
         .map(
@@ -336,13 +281,11 @@ app.post("/api/ai-chat", async (req, res) => {
             }`
         )
         .join("\n")}
-      
       User's Progress:
       - Completed Steps: ${
         (context.completedStepIds || []).join(", ") || "None"
       }
       - Current Step: ${context.currentStep?.title || "Not specified"}
-      
       Form Completion Steps:
 ${(context.steps || [])
   .filter((s) => s.type === "pdf")
@@ -351,10 +294,8 @@ ${(context.steps || [])
       `- Step ${i + 1}: ${s.title} (${s.formId}) - Complete the form here`
   )
   .join("\n")}
-
       Form Field Information:
       ${formSection || "No form fields data available"}
-      
       User's Saved Form Data:
       ${
         Object.entries(context.formData || {})
@@ -364,13 +305,11 @@ ${(context.steps || [])
           )
           .join("\n") || "No saved form data"
       }
-      
       Community Insights:
       ${
         (context.comments || []).map((c) => `- ${c.text || c}`).join("\n") ||
         "No community comments yet"
       }`;
-
     // Add form-specific context if selectedForm exists
     if (context.selectedForm) {
       const formStep = (context.steps || []).find(
@@ -380,7 +319,6 @@ ${(context.steps || [])
         const stepIndex =
           (context.steps || []).findIndex((s) => s.id === formStep.id) + 1;
         systemPrompt += `
-          
           FORM-SPECIFIC CONTEXT:
           - Selected Form: ${context.selectedForm.title}
           - Form Type: ${context.selectedForm.formId}
@@ -396,16 +334,13 @@ ${(context.steps || [])
           } fields filled`;
       }
     }
-
     systemPrompt += `
-      
       GUIDANCE PRINCIPLES:
       - For PDF type steps: Guide users to complete forms within the app, then download the filled PDF for submission
       - For external forms: Help users find and download required PDFs from government websites when needed
       - Reference specific step numbers when mentioning forms (e.g., "Complete the SOP form in Step 4")
       - Explain what each form step accomplishes in the overall application process
       - Be clear about which forms are filled in-app vs. downloaded externally
-      
       WHAT NOT TO SAY (AVOID THESE STATEMENTS):
       - "Remember, you can schedule the inspections directly within the app"
       - "Keep in mind that you don't have to download any forms as PDFs"
@@ -413,7 +348,6 @@ ${(context.steps || [])
       - "Be sure to save your progress as you go along"
       - "Forms are NOT downloaded as PDFs"
       - "Users complete forms directly within the application steps"
-      
       GENERAL GUIDELINES:
       - Be concise but thorough
       - Use bullet points for step-by-step instructions
@@ -421,16 +355,13 @@ ${(context.steps || [])
       - Provide practical examples when helpful
       - Direct users to relevant application steps
       - Be encouraging and supportive
-      
       Remember: You're helping someone navigate a government permit application. Some forms are filled out in the app and downloaded, others may need to be downloaded from external sources. Be clear, accurate, and helpful.`.trim();
-
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "system", content: systemPrompt }, ...messages],
       temperature: 0.7,
       max_tokens: 1000,
     });
-
     const reply = response.choices[0].message.content;
     res.json({ reply });
   } catch (err) {
@@ -438,35 +369,28 @@ ${(context.steps || [])
     res.status(500).json({ error: "AI failed to respond" });
   }
 });
-
 app.post("/api/save-progress", async (req, res) => {
   const userId = req.headers["x-user-id"] || "guest";
   const { applicationId, formData } = req.body;
-
   console.log(`Saving progress for user: ${userId}`);
   console.log(`: ${applicationId}`);
   console.log("Form Data:", formData);
-
   // TODO: Save to database or file storage later
   res.status(200).json({ success: true, userId, applicationId });
 });
-
 app.get("/api/form-fields", async (req, res) => {
   const { applicationId, formName } = req.query;
   if (!applicationId || !formName) {
     return res.status(400).json({ error: "Missing applicationId or formName" });
   }
-
   const jsonPath = path.resolve(
     "python",
     applicationId,
     formName.replace(".pdf", ".json")
   );
-
   if (!fs.existsSync(jsonPath)) {
     return res.status(404).json({ error: "Form JSON not found" });
   }
-
   try {
     const mergedFields = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
     return res.json({ fields: mergedFields });
@@ -475,7 +399,6 @@ app.get("/api/form-fields", async (req, res) => {
     return res.status(500).json({ error: "Failed to load form fields" });
   }
 });
-
 app.post("/api/fill-pdf", async (req, res) => {
   try {
     const pyRes = await fetch("http://localhost:8000/fill-pdf", {
@@ -490,7 +413,6 @@ app.post("/api/fill-pdf", async (req, res) => {
     res.status(500).json({ error: "Failed to fill PDF" });
   }
 });
-
 // AI PDF Field Analysis endpoint
 app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
   try {
@@ -498,38 +420,28 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ error: "No PDF file uploaded" });
     }
-
     console.log(
       "Processing PDF upload:",
       req.file.originalname,
       "Size:",
       req.file.size
     );
-
     const pdfFile = req.file;
-
     // File type is already validated by multer
-
     // Convert PDF to images for Vision API analysis
     const pdfImages = await convertPDFToImages(pdfFile.buffer);
     console.log("Converted PDF to", pdfImages.length, "images");
-
     // Analyze each page with AI
     const allFields = [];
-
     for (let pageIndex = 0; pageIndex < pdfImages.length; pageIndex++) {
       try {
         const imageBuffer = pdfImages[pageIndex];
-
         // Convert buffer to base64 for OpenAI
         const base64Image = imageBuffer.toString("base64");
-
         console.log(`Analyzing page ${pageIndex + 1}/${pdfImages.length}`);
-
         // Analyze with OpenAI Vision API
         const pageFields = await analyzePageWithAI(base64Image, pageIndex);
         allFields.push(...pageFields);
-
         console.log(
           `Page ${pageIndex + 1} returned ${pageFields.length} fields`
         );
@@ -538,11 +450,9 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
         // Continue with other pages instead of crashing
       }
     }
-
     // Post-process and validate fields
     const processedFields = postProcessFields(allFields);
     console.log("Total processed fields:", processedFields.length);
-
     res.json({
       success: true,
       fields: processedFields,
@@ -559,17 +469,14 @@ app.post("/api/ai-analyze-pdf", upload.single("pdf"), async (req, res) => {
     });
   }
 });
-
 // PDF Download endpoint
 app.post("/api/download-pdf", async (req, res) => {
   const { url, appId, formId } = req.body;
-
   if (!url || !appId || !formId) {
     return res
       .status(400)
       .json({ error: "Missing required fields: url, appId, formId" });
   }
-
   try {
     // Validate appId format
     if (!/^[a-z0-9_]+$/.test(appId)) {
@@ -578,7 +485,6 @@ app.post("/api/download-pdf", async (req, res) => {
           "Invalid appId format. Use only lowercase letters, numbers, and underscores.",
       });
     }
-
     // Validate formId format
     if (!/^[A-Za-z0-9_-]+$/.test(formId)) {
       return res.status(400).json({
@@ -586,27 +492,22 @@ app.post("/api/download-pdf", async (req, res) => {
           "Invalid formId format. Use only letters, numbers, hyphens, and underscores.",
       });
     }
-
     // Create directory structure
     const appDir = path.join(process.cwd(), "applications", appId);
     const formsDir = path.join(appDir, "forms");
     const formDir = path.join(formsDir, formId);
-
     // Ensure directories exist
     await fs.promises.mkdir(appDir, { recursive: true });
     await fs.promises.mkdir(formsDir, { recursive: true });
     await fs.promises.mkdir(formDir, { recursive: true });
-
     // Download PDF from URL
     console.log(`Downloading PDF from: ${url}`);
     const response = await fetch(url);
-
     if (!response.ok) {
       throw new Error(
         `Failed to download PDF: ${response.status} ${response.statusText}`
       );
     }
-
     // Check if response is actually a PDF
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/pdf")) {
@@ -614,12 +515,10 @@ app.post("/api/download-pdf", async (req, res) => {
         `Warning: Response may not be a PDF. Content-Type: ${contentType}`
       );
     }
-
     // Save PDF to local filesystem
     const pdfPath = path.join(formDir, "form.pdf");
     const pdfBuffer = await response.arrayBuffer();
     await fs.promises.writeFile(pdfPath, Buffer.from(pdfBuffer));
-
     // Create basic meta.json if it doesn't exist
     const metaPath = path.join(formDir, "meta.json");
     if (!fs.existsSync(metaPath)) {
@@ -632,7 +531,6 @@ app.post("/api/download-pdf", async (req, res) => {
       };
       await fs.promises.writeFile(metaPath, JSON.stringify(meta, null, 2));
     }
-
     console.log(`PDF saved to: ${pdfPath}`);
     res.json({
       success: true,
@@ -648,26 +546,20 @@ app.post("/api/download-pdf", async (req, res) => {
     });
   }
 });
-
 // Helper function to convert PDF to images
 async function convertPDFToImages(pdfBuffer) {
   try {
     console.log("Converting PDF to images using pdf2pic...");
-
     // Import pdf2pic dynamically since we're in ES module
     const { fromPath } = await import("pdf2pic");
-
     // Create a temporary PDF file
     const fs = await import("fs");
     const path = await import("path");
     const os = await import("os");
-
     const tempDir = os.tmpdir();
     const tempPdfPath = path.join(tempDir, `temp_${Date.now()}.pdf`);
-
     // Write PDF buffer to temp file
     fs.writeFileSync(tempPdfPath, pdfBuffer);
-
     // Configure pdf2pic options
     const options = {
       density: 300, // Higher DPI for better quality
@@ -677,17 +569,13 @@ async function convertPDFToImages(pdfBuffer) {
       width: 2048, // Max width
       height: 2048, // Max height
     };
-
     // Convert PDF to images
     const convert = fromPath(tempPdfPath, options);
     const pageCount = await convert.bulk(-1); // Convert all pages
-
     console.log(`PDF converted to ${pageCount.length} pages`);
     console.log("Page count result:", pageCount);
-
     // Read the generated images and convert to buffers
     const imageBuffers = [];
-
     // pdf2pic creates files with names like "page.1.png", "page.2.png", etc.
     for (let i = 0; i < pageCount.length; i++) {
       // Try different possible filename patterns - pdf2pic uses dots, not underscores
@@ -700,24 +588,20 @@ async function convertPDFToImages(pdfBuffer) {
         `page${i + 1}.png`,
         `page${i + 1}.jpg`,
       ];
-
       let imageFound = false;
       for (const filename of possibleNames) {
         const imagePath = path.join(tempDir, filename);
         console.log(`Checking for image: ${imagePath}`);
-
         if (fs.existsSync(imagePath)) {
           console.log(`Found image: ${imagePath}`);
           const imageBuffer = fs.readFileSync(imagePath);
           imageBuffers.push(imageBuffer);
-
           // Clean up temp image file
           fs.unlinkSync(imagePath);
           imageFound = true;
           break;
         }
       }
-
       if (!imageFound) {
         console.log(
           `No image found for page ${i + 1}, checking temp directory contents:`
@@ -731,17 +615,14 @@ async function convertPDFToImages(pdfBuffer) {
         console.log("Available image files:", imageFiles);
       }
     }
-
     // Clean up temp PDF file
     fs.unlinkSync(tempPdfPath);
-
     console.log(
       `Successfully converted ${imageBuffers.length} pages to images`
     );
     return imageBuffers;
   } catch (error) {
     console.error("Error converting PDF to images:", error);
-
     // Fallback: return a simple test image if conversion fails
     console.log("Falling back to test image...");
     const testImageBuffer = Buffer.from(
@@ -751,7 +632,6 @@ async function convertPDFToImages(pdfBuffer) {
     return [testImageBuffer];
   }
 }
-
 // Helper function to analyze page with OpenAI Vision API
 async function analyzePageWithAI(base64Image, pageIndex) {
   try {
@@ -769,15 +649,12 @@ async function analyzePageWithAI(base64Image, pageIndex) {
               3. Precise position and size (x, y, width, height coordinates)
               4. Confidence level (0.0-1.0)
               5. Reasoning for your classification
-              
               CRITICAL: Return ONLY a JSON object with a "fields" array. If no fields are visible, return {"fields": []}. No commentary, no code fences, no additional text.
-              
               IMPORTANT: For coordinates, use the format [x, y, width, height] where:
               - x, y = top-left corner of the field
               - width, height = actual dimensions of the field
               - All coordinates should be relative to the image dimensions
               - Focus on the actual input area size, not just the label
-              
               Structure:
               {
                 "fields": [
@@ -790,7 +667,6 @@ async function analyzePageWithAI(base64Image, pageIndex) {
                   }
                 ]
               }
-              
               When unsure or no fields visible → return {"fields": []}. Focus on identifying fillable form fields, not static text or labels.`,
             },
             {
@@ -806,12 +682,9 @@ async function analyzePageWithAI(base64Image, pageIndex) {
       temperature: 0,
       response_format: { type: "json_object" },
     });
-
     const content = response.choices[0].message.content;
-
     // Harden JSON parsing with multiple fallbacks
     let fields = [];
-
     try {
       // First attempt: Parse the entire content as JSON
       const parsed = JSON.parse(content);
@@ -822,7 +695,6 @@ async function analyzePageWithAI(base64Image, pageIndex) {
       }
     } catch (parseError) {
       console.log("Direct JSON parse failed, trying fallbacks...");
-
       // Fallback 1: Extract fenced JSON blocks
       const jsonBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
       if (jsonBlockMatch) {
@@ -837,7 +709,6 @@ async function analyzePageWithAI(base64Image, pageIndex) {
           console.log("JSON block parse failed");
         }
       }
-
       // Fallback 2: Extract array substring
       if (fields.length === 0) {
         const arrayMatch = content.match(/\[[\s\S]*\]/);
@@ -852,7 +723,6 @@ async function analyzePageWithAI(base64Image, pageIndex) {
           }
         }
       }
-
       // If all parsing attempts failed, log for debugging and return empty array
       if (fields.length === 0) {
         console.log(
@@ -863,7 +733,6 @@ async function analyzePageWithAI(base64Image, pageIndex) {
         return []; // Don't throw, return empty array
       }
     }
-
     // Add page information and normalize coordinates
     return fields.map((field) => ({
       ...field,
@@ -877,27 +746,22 @@ async function analyzePageWithAI(base64Image, pageIndex) {
     return [];
   }
 }
-
 // Helper function to normalize AI coordinates from [x, y, width, height] to [x1, y1, x2, y2]
 function normalizeAICoordinates(rect) {
   if (!Array.isArray(rect) || rect.length < 4) {
     return [0, 0, 100, 20]; // Default rectangle
   }
-
   // Handle both formats: [x, y, width, height] and [x1, y1, x2, y2]
   let [x, y, width, height] = rect.map((coord) => Number(coord) || 0);
-
   // If the coordinates look like they're already in [x1, y1, x2, y2] format
   // (i.e., if width/height are very large), convert them
   if (width > 1000 || height > 1000) {
     // Already in [x1, y1, x2, y2] format
     return [x, y, width, height];
   }
-
   // Convert from [x, y, width, height] to [x1, y1, x2, y2]
   return [x, y, x + width, y + height];
 }
-
 // Helper function to post-process AI field suggestions
 function postProcessFields(fields) {
   return fields
@@ -920,7 +784,6 @@ function postProcessFields(fields) {
       return a.rect[1] - b.rect[1];
     });
 }
-
 // Helper function to normalize field types
 function normalizeFieldType(type) {
   const typeMap = {
@@ -935,59 +798,47 @@ function normalizeFieldType(type) {
     textarea: "textarea",
     area: "textarea",
   };
-
   // Harden the function to handle missing/odd values
   if (!type || typeof type !== "string") {
     return "text"; // Default fallback
   }
-
   const normalized = typeMap[type.toLowerCase()] || "text";
   return normalized;
 }
-
 // Helper function to normalize rectangle coordinates with better scaling
 function normalizeRectangle(rect) {
   if (!Array.isArray(rect) || rect.length !== 4) {
     return [0, 0, 100, 20]; // Default rectangle
   }
-
   // Ensure coordinates are numbers and in correct order
   let [x1, y1, x2, y2] = rect.map((coord) => Number(coord) || 0);
-
   // Ensure proper order (x1 < x2, y1 < y2)
   if (x1 > x2) [x1, x2] = [x2, x1];
   if (y1 > y2) [y1, y2] = [y1, y2];
-
   // Apply minimum size constraints for better usability
   const minWidth = 50;
   const minHeight = 20;
-
   if (x2 - x1 < minWidth) {
     const centerX = (x1 + x2) / 2;
     x1 = centerX - minWidth / 2;
     x2 = centerX + minWidth / 2;
   }
-
   if (y2 - y1 < minHeight) {
     const centerY = (y1 + y2) / 2;
     y1 = centerY - minHeight / 2;
     y2 = centerY + minHeight / 2;
   }
-
   return [x1, y1, x2, y2];
 }
-
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🧠 Mock AI server running on http://localhost:${PORT}`);
 });
-
 // Global error handler for unhandled errors
 process.on("uncaughtException", (error) => {
   console.error("Uncaught Exception:", error);
   // Don't crash the server, just log the error
 });
-
 process.on("unhandledRejection", (reason, promise) => {
   console.error("Unhandled Rejection at:", promise, "reason:", reason);
   // Don't crash the server, just log the error

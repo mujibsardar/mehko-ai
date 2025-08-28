@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { ENDPOINTS } from "../../config/api";
 import {
   saveFormData,
   loadFormData,
@@ -35,7 +36,7 @@ export default function DynamicForm({
       setIsLoading(true);
       try {
         const res = await fetch(
-          `http://localhost:3000/api/form-fields?applicationId=${applicationId}&formName=${formName}`
+          `${ENDPOINTS.FORM_FIELDS()}?applicationId=${applicationId}&formName=${formName}`
         );
         const data = await res.json();
         setFieldNames(data.fields || []);
@@ -166,10 +167,10 @@ export default function DynamicForm({
             {status === "saving"
               ? "Saving..."
               : status === "saved"
-              ? "Saved ✅"
-              : status === "error"
-              ? "Error ❌"
-              : ""}
+                ? "Saved ✅"
+                : status === "error"
+                  ? "Error ❌"
+                  : ""}
           </span>
         </div>
 

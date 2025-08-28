@@ -8,13 +8,10 @@ export async function saveProgress(applicationId, formData, userId = null) {
       },
       body: JSON.stringify({ applicationId, formData }),
     });
-
     if (!res.ok) {
       throw new Error("Failed to save progress");
     }
-
     const result = await res.json();
-    console.log("✅ Progress saved:", result);
     return result;
   } catch (err) {
     console.error("❌ Error saving progress:", err);

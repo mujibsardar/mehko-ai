@@ -12,13 +12,10 @@ import {
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
 import "./Admin.scss";
-
 const API = "/api/apps";
-
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import"
-
   // Check if user is authenticated and is admin
   if (loading) {
     return (
@@ -27,7 +24,6 @@ export default function Admin() {
       </div>
     );
   }
-
   if (!user || !isAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -49,21 +45,17 @@ export default function Admin() {
       </div>
     );
   }
-
   // App list + selection
   const [apps, setApps] = useState([]);
   const [selectedAppId, setSelectedAppId] = useState("");
   const selectedApp = apps.find((a) => a.id === selectedAppId) || null;
-
   // App form (prefilled when selecting)
   const [appId, setAppId] = useState("");
   const [appTitle, setAppTitle] = useState("");
   const [rootDomain, setRootDomain] = useState("");
   const [description, setDescription] = useState("");
-
   // Existing steps for selected app
   const [steps, setSteps] = useState([]);
-
   // New step queue (add multiple, then Save)
   const [newType, setNewType] = useState("info");
   const [newTitle, setNewTitle] = useState("");
@@ -72,33 +64,27 @@ export default function Admin() {
   const [newFormId, setNewFormId] = useState("");
   const [newPdfFile, setNewPdfFile] = useState(null);
   const [queuedSteps, setQueuedSteps] = useState([]);
-
   // Bulk import state
   const [bulkFiles, setBulkFiles] = useState([]);
   const [bulkPreview, setBulkPreview] = useState([]);
   const [bulkStatus, setBulkStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-
   // AcroForm conversion state
   const [isConverting, setIsConverting] = useState(false);
   const [conversionStatus, setConversionStatus] = useState(null);
-
   // UI feedback
   const [status, setStatus] = useState("");
-
   // ----------- Helpers -----------
   const pushStatus = (msg) => {
     setStatus(msg);
     setTimeout(() => setStatus(""), 2500);
   };
-
   async function loadApps() {
     const snap = await getDocs(collection(db, "applications"));
     const arr = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
     setApps(arr.sort((a, b) => a.id.localeCompare(b.id)));
   }
-
   // Prefill app form when selecting from sidebar
   function selectApp(id) {
     setSelectedAppId(id);
@@ -112,7 +98,6 @@ export default function Admin() {
     }
     setQueuedSteps([]);
   }
-
   // New app form (clear)
   function newApp() {
     setSelectedAppId("");
@@ -123,39 +108,32 @@ export default function Admin() {
     setSteps([]);
     setQueuedSteps([]);
   }
-
   useEffect(() => {
     loadApps();
   }, []);
-
   // ----------- Bulk Import Functions -----------
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(true);
   };
-
   const handleDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(false);
   };
-
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
-
   const handleFileDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragOver(false);
-
     const files = Array.from(e.dataTransfer.files);
     const jsonFiles = files.filter(
       (file) => file.type === "application/json" || file.name.endsWith(".json")
     );
-
     if (jsonFiles.length > 0) {
       setBulkFiles((prev) => [...prev, ...jsonFiles]);
       pushStatus(`Added ${jsonFiles.length} JSON file(s)`);
@@ -163,36 +141,29 @@ export default function Admin() {
       pushStatus("No JSON files found. Please drop .json files only.");
     }
   };
-
   const handleFileSelect = (e) => {
     console.log('File select triggered', e.target.files);
     const files = Array.from(e.target.files);
     console.log('Files selected:', files);
-
     const jsonFiles = files.filter(
       (file) => file.type === "application/json" || file.name.endsWith(".json")
     );
     console.log('JSON files filtered:', jsonFiles);
-
     if (jsonFiles.length > 0) {
       setBulkFiles((prev) => [...prev, ...jsonFiles]);
       pushStatus(`Added ${jsonFiles.length} JSON file(s)`);
     } else {
       pushStatus("No JSON files found. Please select .json files only.");
     }
-
     // Reset the input so the same file can be selected again
     e.target.value = '';
   };
-
   const removeFile = (index) => {
     setBulkFiles((prev) => prev.filter((_, i) => i !== index));
     setBulkPreview((prev) => prev.filter((_, i) => i !== index));
   };
-
   const previewFiles = async () => {
     if (bulkFiles.length === 0) return;
-
     const previews = [];
     for (const file of bulkFiles) {
       try {
@@ -216,39 +187,29 @@ export default function Admin() {
     }
     setBulkPreview(previews);
   };
-
   // Note: PDF downloads will be handled by the Python server
   // The Python server has the working PDF download logic
-
   const processBulkImport = async () => {
     if (bulkPreview.length === 0) return;
-
     setIsProcessing(true);
     setBulkStatus("Processing applications...");
-
     let successCount = 0;
     let errorCount = 0;
-
     for (const preview of bulkPreview) {
       if (!preview.valid) {
         errorCount++;
         continue;
       }
-
       try {
         // Use the new Python FastAPI process-county endpoint
-        console.log('Sending request to:', `${API}/process-county`);
         console.log('Application data:', preview.data);
-
         const response = await fetch(`${API}/process-county`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(preview.data),
         });
-
         console.log('Response status:', response.status);
         console.log('Response ok:', response.ok);
-
         if (response.ok) {
           const result = await response.json();
           console.log('Success result:', result);
@@ -262,7 +223,6 @@ export default function Admin() {
         errorCount++;
       }
     }
-
     setBulkStatus(
       `Import complete: ${successCount} successful, ${errorCount} failed`
     );
@@ -271,14 +231,12 @@ export default function Admin() {
     setBulkPreview([]);
     loadApps();
   };
-
   // ----------- Step Management Functions -----------
   const addStepToQueue = () => {
     if (!newTitle.trim()) {
       pushStatus("Please enter a step title");
       return;
     }
-
     const step = {
       id: `step_${Date.now()}`,
       title: newTitle.trim(),
@@ -288,7 +246,6 @@ export default function Admin() {
       formId: newFormId.trim(),
       _file: newPdfFile,
     };
-
     setQueuedSteps((prev) => [...prev, step]);
     setNewTitle("");
     setNewContent("");
@@ -297,43 +254,33 @@ export default function Admin() {
     setNewPdfFile(null);
     pushStatus("Step added to queue");
   };
-
   const removeQueued = (index) => {
     setQueuedSteps((prev) => prev.filter((_, i) => i !== index));
   };
-
   const saveQueuedSteps = async () => {
     if (!appId || queuedSteps.length === 0) return;
-
     try {
       const updatedSteps = [...steps];
-
       for (const queuedStep of queuedSteps) {
         const { _file, ...stepData } = queuedStep;
-
         if (stepData.type === "pdf" && _file) {
           // Handle PDF upload
           const formData = new FormData();
           formData.append("pdf", _file);
           formData.append("formId", stepData.formId);
-
           const uploadResponse = await fetch(`${API}/apps/${appId}/forms/${stepData.formId}/upload`, {
             method: "POST",
             body: formData,
           });
-
           if (!uploadResponse.ok) {
             throw new Error(`Failed to upload PDF for ${stepData.formId}`);
           }
         }
-
         updatedSteps.push(stepData);
       }
-
       // Update the application
       const appRef = doc(db, "applications", appId);
       await updateDoc(appRef, { steps: updatedSteps });
-
       setSteps(updatedSteps);
       setQueuedSteps([]);
       pushStatus("Steps saved successfully");
@@ -342,14 +289,11 @@ export default function Admin() {
       pushStatus(`Error saving steps: ${error.message}`);
     }
   };
-
   // ----------- AcroForm Conversion Functions -----------
   const convertToAcroForm = async (step) => {
     if (step.type !== "pdf") return;
-
     setIsConverting(true);
     setConversionStatus("Converting to AcroForm...");
-
     try {
       // Convert the PDF step to AcroForm
       const response = await fetch(`${API}/apps/${selectedApp.id}/forms/${step.formId}/convert-to-acroform`, {
@@ -357,7 +301,6 @@ export default function Admin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stepId: step.id }),
       });
-
       if (response.ok) {
         const result = await response.json();
         setConversionStatus({
@@ -365,17 +308,14 @@ export default function Admin() {
           message: `Successfully converted ${step.formId} to AcroForm`,
           details: result
         });
-
         // Update the step type
         const updatedSteps = steps.map(s =>
           s.id === step.id ? { ...s, type: "acroform" } : s
         );
         setSteps(updatedSteps);
-
         // Update in database
         const appRef = doc(db, "applications", selectedApp.id);
         await updateDoc(appRef, { steps: updatedSteps });
-
         loadApps();
       } else {
         throw new Error("Conversion failed");
@@ -390,13 +330,11 @@ export default function Admin() {
       setIsConverting(false);
     }
   };
-
   const saveApp = async () => {
     if (!appId.trim() || !appTitle.trim()) {
       pushStatus("Please fill in required fields");
       return;
     }
-
     try {
       const appData = {
         id: appId.trim(),
@@ -407,7 +345,6 @@ export default function Admin() {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-
       await setDoc(doc(db, "applications", appId.trim()), appData);
       pushStatus("Application saved successfully");
       loadApps();
@@ -416,10 +353,8 @@ export default function Admin() {
       pushStatus(`Error saving application: ${error.message}`);
     }
   };
-
   const deleteApp = async (id) => {
     if (!confirm("Are you sure you want to delete this application?")) return;
-
     try {
       // Delete from Firestore
       await setDoc(doc(db, "applications", id), { deleted: true });
@@ -430,7 +365,6 @@ export default function Admin() {
       pushStatus(`Error deleting application: ${error.message}`);
     }
   };
-
   return (
     <div className="admin-dashboard">
       {/* Header */}
@@ -450,7 +384,6 @@ export default function Admin() {
           </div>
         </div>
       </header>
-
       {/* Navigation Tabs */}
       <nav className="admin-nav">
         <button
@@ -472,14 +405,12 @@ export default function Admin() {
           Issue Reports
         </button>
       </nav>
-
       {/* Status Banner */}
       {status && (
         <div className="status-banner">
           {status}
         </div>
       )}
-
       {/* Main Content */}
       <main className="admin-main">
         {activeTab === "apps" && (
@@ -492,7 +423,6 @@ export default function Admin() {
                   + New Application
                 </button>
               </div>
-
               <div className="apps-grid">
                 {apps.map((app) => (
                   <div
@@ -519,7 +449,6 @@ export default function Admin() {
                 ))}
               </div>
             </section>
-
             {/* Application Form */}
             {selectedAppId && (
               <section className="app-form-section">
@@ -563,12 +492,10 @@ export default function Admin() {
                 </button>
               </section>
             )}
-
             {/* Steps Management */}
             {selectedAppId && (
               <section className="steps-section">
                 <h3>Steps for {selectedApp.title}</h3>
-
                 {/* Existing Steps */}
                 <div className="existing-steps">
                   <h4>Current Steps</h4>
@@ -589,7 +516,6 @@ export default function Admin() {
                     </div>
                   ))}
                 </div>
-
                 {/* Add New Step */}
                 <div className="add-step-form">
                   <h4>Add New Step</h4>
@@ -621,7 +547,6 @@ export default function Admin() {
                         placeholder="Step description or instructions"
                       />
                     </div>
-
                     {newType === "form" && (
                       <div>
                         <label>Form Name</label>
@@ -632,7 +557,6 @@ export default function Admin() {
                         />
                       </div>
                     )}
-
                     {newType === "pdf" && (
                       <>
                         <div>
@@ -654,7 +578,6 @@ export default function Admin() {
                       </>
                     )}
                   </div>
-
                   <div className="step-actions">
                     <button onClick={addStepToQueue} className="btn-secondary">
                       Add to Queue
@@ -670,7 +593,6 @@ export default function Admin() {
                       {queuedSteps.length} step{queuedSteps.length !== 1 ? 's' : ''} queued
                     </span>
                   </div>
-
                   {queuedSteps.length > 0 && (
                     <div className="queued-steps">
                       <strong>Queued Steps:</strong>
@@ -694,7 +616,6 @@ export default function Admin() {
                 </div>
               </section>
             )}
-
             {/* Conversion Status */}
             {conversionStatus && (
               <div className={`conversion-status ${conversionStatus.type}`}>
@@ -710,12 +631,10 @@ export default function Admin() {
             )}
           </>
         )}
-
         {activeTab === "import" && (
           <section className="import-section">
             <h2>Import Application Data</h2>
             <p>Upload JSON files to bulk import applications</p>
-
             <div className="import-area">
               <div
                 className={`drop-zone ${isDragOver ? 'drag-over' : ''}`}
@@ -746,7 +665,6 @@ export default function Admin() {
                   </>
                 )}
               </div>
-
               {bulkFiles.length > 0 && (
                 <div className="file-list">
                   <h4>Selected Files:</h4>
@@ -775,7 +693,6 @@ export default function Admin() {
                   </div>
                 </div>
               )}
-
               {bulkPreview.length > 0 && (
                 <div className="preview-list">
                   <h4>File Preview:</h4>
@@ -795,7 +712,6 @@ export default function Admin() {
                   ))}
                 </div>
               )}
-
               {bulkStatus && (
                 <div className="import-status">
                   {bulkStatus}
@@ -804,7 +720,6 @@ export default function Admin() {
             </div>
           </section>
         )}
-
         {activeTab === "reports" && (
           <ReportsViewer />
         )}

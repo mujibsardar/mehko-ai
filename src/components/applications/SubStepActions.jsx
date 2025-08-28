@@ -7,7 +7,6 @@ import {
   toggleSubStepDislike,
   getSubStepFeedbackStats,
 } from "../../firebase/stepFeedback";
-
 function SubStepActions({
   subStepText,
   stepId,
@@ -25,14 +24,12 @@ function SubStepActions({
     totalLikes: 0,
     totalDislikes: 0,
   });
-
   // Load existing feedback when component mounts
   useEffect(() => {
     if (user?.uid && applicationId && stepId && subStepIndex !== undefined) {
       loadFeedback();
     }
   }, [user?.uid, applicationId, stepId, subStepIndex]);
-
   const loadFeedback = async () => {
     console.log("🔍 Debug - Loading feedback:", {
       applicationId,
@@ -47,10 +44,8 @@ function SubStepActions({
         subStepIndex,
         user.uid
       );
-      console.log("✅ Feedback loaded:", feedback);
       setLiked(feedback.liked || false);
       setDisliked(feedback.disliked || false);
-
       // Load feedback stats
       const stats = await getSubStepFeedbackStats(
         applicationId,
@@ -62,11 +57,9 @@ function SubStepActions({
       console.error("❌ Error loading feedback:", error);
     }
   };
-
   const handleInternetSearch = () => {
     // Use searchTerms from the step if available, otherwise fall back to content
     let searchText = "";
-
     if (
       step?.searchTerms &&
       Array.isArray(step.searchTerms) &&
@@ -83,9 +76,7 @@ function SubStepActions({
     } else {
       searchText = "MEHKO application";
     }
-
     let location = "";
-
     // First try to get the county name from the title
     if (application?.title) {
       if (application.title.toLowerCase().includes("los angeles")) {
@@ -102,19 +93,16 @@ function SubStepActions({
         location = application.title;
       }
     }
-
     // If no location found from title, use the application ID
     if (!location && application?.id) {
       location = application.id
         .replace(/_/g, " ")
         .replace(/\b\w/g, (m) => m.toUpperCase());
     }
-
     // Final fallback
     if (!location) {
       location = "MEHKO";
     }
-
     // Don't duplicate the county name if it's already in the search text
     let finalSearchText = searchText;
     if (location && searchText.toLowerCase().includes(location.toLowerCase())) {
@@ -124,13 +112,10 @@ function SubStepActions({
       // Otherwise, combine location and search text
       finalSearchText = `${location} ${searchText}`;
     }
-    
     const searchQuery = encodeURIComponent(finalSearchText);
     const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
-
     window.open(searchUrl, "_blank", "noopener,noreferrer");
   };
-
   const handleAIChat = () => {
     // This will be handled by the parent component to open AI chat
     // with context about this specific sub-step
@@ -142,7 +127,6 @@ function SubStepActions({
         step.searchTerms.length > 0
           ? step.searchTerms.join(", ")
           : subStepText;
-
       onCommentRequest({
         type: "ai_chat",
         subStepText: aiContext,
@@ -151,25 +135,20 @@ function SubStepActions({
       });
     }
   };
-
   const handleLike = async () => {
     if (!user || isLoading) return;
-
     console.log("🔍 Debug - Like clicked:", {
       applicationId,
       stepId,
       subStepIndex,
       userId: user.uid,
     });
-
     setIsLoading(true);
-
     // Add timeout to prevent hanging
     const timeoutId = setTimeout(() => {
       console.warn("⚠️ Like operation timed out after 5 seconds");
       setIsLoading(false);
     }, 5000);
-
     try {
       const newFeedback = await toggleSubStepLike(
         applicationId,
@@ -177,10 +156,8 @@ function SubStepActions({
         subStepIndex,
         user.uid
       );
-      console.log("✅ Like updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
-
       // Update local feedback stats
       if (newFeedback.liked) {
         setFeedbackStats((prev) => ({
@@ -203,25 +180,20 @@ function SubStepActions({
       setIsLoading(false);
     }
   };
-
   const handleDislike = async () => {
     if (!user || isLoading) return;
-
     console.log("🔍 Debug - Dislike clicked:", {
       applicationId,
       stepId,
       subStepIndex,
       userId: user.uid,
     });
-
     setIsLoading(true);
-
     // Add timeout to prevent hanging
     const timeoutId = setTimeout(() => {
       console.warn("⚠️ Dislike operation timed out after 5 seconds");
       setIsLoading(false);
     }, 5000);
-
     try {
       const newFeedback = await toggleSubStepDislike(
         applicationId,
@@ -229,10 +201,8 @@ function SubStepActions({
         subStepIndex,
         user.uid
       );
-      console.log("✅ Dislike updated successfully:", newFeedback);
       setLiked(newFeedback.liked);
       setDisliked(newFeedback.disliked);
-
       // Update local feedback stats
       if (newFeedback.disliked) {
         setFeedbackStats((prev) => ({
@@ -255,7 +225,6 @@ function SubStepActions({
       setIsLoading(false);
     }
   };
-
   const handleComment = () => {
     if (!user) return;
     if (onCommentRequest) {
@@ -267,7 +236,6 @@ function SubStepActions({
       });
     }
   };
-
   return (
     <div className="sub-step-actions">
       {/* Action Icons */}
@@ -281,7 +249,6 @@ function SubStepActions({
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
           </svg>
         </button>
-
         <button
           className="action-icon ai-icon"
           onClick={handleAIChat}
@@ -290,7 +257,6 @@ function SubStepActions({
           <span style={{ fontSize: "16px" }}>🤖</span>
         </button>
       </div>
-
       {/* Like/Dislike and Comment */}
       <div className="feedback-actions">
         <button
@@ -307,7 +273,6 @@ function SubStepActions({
             </svg>
           )}
         </button>
-
         <button
           className={`feedback-btn dislike-btn ${disliked ? "active" : ""}`}
           onClick={handleDislike}
@@ -322,7 +287,6 @@ function SubStepActions({
             </svg>
           )}
         </button>
-
         <button
           className="feedback-btn comment-btn"
           onClick={handleComment}
@@ -333,7 +297,6 @@ function SubStepActions({
           </svg>
         </button>
       </div>
-
       {/* Subtle Feedback Counts */}
       {(feedbackStats.totalLikes > 0 || feedbackStats.totalDislikes > 0) && (
         <div className="feedback-counts">
@@ -368,5 +331,4 @@ function SubStepActions({
     </div>
   );
 }
-
 export default SubStepActions;
