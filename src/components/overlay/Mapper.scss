@@ -558,6 +558,18 @@
                 background: #eff6ff;
               }
 
+              &.disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+                background: #f3f4f6;
+                border-color: #d1d5db;
+
+                &:hover {
+                  border-color: #d1d5db;
+                  box-shadow: none;
+                }
+              }
+
               .field-header {
                 display: flex;
                 align-items: center;
@@ -814,6 +826,58 @@
         box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
       }
     }
+  }
+}
+
+// Moveable Component Styles
+.moveable-control-box {
+  .moveable-line {
+    background: #3b82f6;
+    height: 2px;
+    width: 2px;
+  }
+
+  .moveable-control {
+    background: #3b82f6;
+    border: 2px solid white;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    
+    &:hover {
+      background: #2563eb;
+      transform: scale(1.2);
+    }
+  }
+
+  .moveable-direction {
+    &.n, &.s {
+      cursor: ns-resize;
+    }
+    
+    &.e, &.w {
+      cursor: ew-resize;
+    }
+    
+    &.nw, &.se {
+      cursor: nw-resize;
+    }
+    
+    &.ne, &.sw {
+      cursor: ne-resize;
+    }
+  }
+}
+
+// Enhanced Field Box Selection
+.field-box.selected {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3), 0 4px 16px rgba(59, 130, 246, 0.2) !important;
+  z-index: 100;
+  
+  &:hover {
+    transform: scale(1.01);
   }
 }
 

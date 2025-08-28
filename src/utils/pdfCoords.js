@@ -73,3 +73,67 @@ export const processAICoordinates = (aiRect) => {
   
   return [a, b, c, d];
 };
+
+// Get canvas size in pixels (accounting for zoom)
+export const getCanvasSizePx = (canvasRef, zoom = 1) => {
+  if (!canvasRef?.current) return { w: 0, h: 0 };
+  const box = canvasRef.current.getBoundingClientRect();
+  return { 
+    w: box.width / zoom, 
+    h: box.height / zoom 
+  };
+};
+
+// Clamp rectangle coordinates to canvas boundaries
+export const clampRectPx = (rect, canvasRef, zoom = 1) => {
+  const { w, h } = getCanvasSizePx(canvasRef, zoom);
+  const [x1, y1, x2, y2] = rect;
+  
+  return [
+    Math.max(0, Math.min(x1, w)),
+    Math.max(0, Math.min(y1, h)),
+    Math.max(0, Math.min(x2, w)),
+    Math.max(0, Math.min(y2, h))
+  ];
+};
+
+// Ensure minimum field size (24x16 pixels minimum)
+export const ensureMinSize = (rect, minWidth = 24, minHeight = 16) => {
+  const [x1, y1, x2, y2] = rect;
+  const width = x2 - x1;
+  const height = y2 - y1;
+  
+  if (width < minWidth) {
+    const centerX = (x1 + x2) / 2;
+    x1 = centerX - minWidth / 2;
+    x2 = centerX + minWidth / 2;
+  }
+  
+  if (height < minHeight) {
+    const centerY = (y1 + y2) / 2;
+    y1 = centerY - minHeight / 2;
+    y2 = centerY + minHeight / 2;
+  }
+  
+  return [x1, y1, x2, y2];
+};
+
+// Convert cursor position to field rectangle
+export const cursorToFieldRect = (cursorX, cursorY, canvasRef, zoom = 1, fieldSize = [100, 30]) => {
+  if (!canvasRef?.current) return [0, 0, 100, 30];
+  
+  const canvasRect = canvasRef.current.getBoundingClientRect();
+  const [fieldWidth, fieldHeight] = fieldSize;
+  
+  // Calculate position relative to canvas
+  const relativeX = (cursorX - canvasRect.left) / zoom;
+  const relativeY = (cursorY - canvasRect.top) / zoom;
+  
+  // Center field at cursor
+  const x1 = relativeX - fieldWidth / 2;
+  const y1 = relativeY - fieldHeight / 2;
+  const x2 = x1 + fieldWidth;
+  const y2 = y1 + fieldHeight;
+  
+  return [x1, y1, x2, y2];
+};

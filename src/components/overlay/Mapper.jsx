@@ -1,10 +1,18 @@
 // PDF Field Mapper - Professional, modern implementation
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Rnd } from "react-rnd";
+import Moveable from "react-moveable";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
-import { processAICoordinates, snapToGrid, rectPxToPt, rectPtToPx } from "../../utils/pdfCoords";
+import { 
+  processAICoordinates, 
+  snapToGrid, 
+  rectPxToPt, 
+  rectPtToPx,
+  clampRectPx,
+  ensureMinSize,
+  cursorToFieldRect
+} from "../../utils/pdfCoords";
 import "./Mapper.scss";
 
 const API = "/api";
@@ -52,6 +60,7 @@ export default function Mapper() {
   const [autoSaveTimeout, setAutoSaveTimeout] = useState(null);
 
   const canvasRef = useRef(null);
+  const pdfCanvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
   // Auth check
@@ -228,9 +237,19 @@ export default function Mapper() {
       const aiField = aiSuggestions.find(f => f.id === draggedFieldId);
 
       if (aiField && metrics) {
-        const canvasRect = canvasRef.current.getBoundingClientRect();
-        const dropX = event.activatorEvent.clientX - canvasRect.left;
-        const dropY = event.activatorEvent.clientY - canvasRect.top;
+        // Calculate cursor center position
+        const cursorX = event.activatorEvent.clientX;
+        const cursorY = event.activatorEvent.clientY;
+        
+        // Convert cursor position to field rectangle
+        const fieldRect = cursorToFieldRect(cursorX, cursorY, pdfCanvasRef, zoom, [aiField.width, aiField.height]);
+        
+        // Clamp to canvas boundaries and ensure minimum size
+        const clampedRect = clampRectPx(fieldRect, pdfCanvasRef, zoom);
+        const sizedRect = ensureMinSize(clampedRect, 24, 16);
+        
+        // Convert to PDF coordinates and snap to grid
+        const pdfCoords = rectPxToPt(sizedRect).map(coord => snapToGrid(coord));
 
         // Create new field with proper coordinates
         const newField = {
@@ -238,12 +257,7 @@ export default function Mapper() {
           label: aiField.label,
           page: page,
           type: aiField.type,
-          rect: rectPxToPt([
-            dropX - aiField.width / 2,
-            dropY - aiField.height / 2,
-            dropX + aiField.width / 2,
-            dropY + aiField.height / 2
-          ]),
+          rect: pdfCoords,
           fontSize: aiField.fontSize || 11,
           align: aiField.align || "left",
           shrink: aiField.shrink !== false,
@@ -346,8 +360,10 @@ export default function Mapper() {
 
   // Draggable Field Tray Item
   const DraggableFieldItem = ({ field }) => {
-    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-      id: field.id,
+    const canDrag = currentStep === 'fields-ready' && selectedFields.includes(field.id);
+    const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ 
+      id: field.id, 
+      disabled: !canDrag 
     });
 
     const style = transform ? {
@@ -361,7 +377,7 @@ export default function Mapper() {
         style={style}
         {...listeners}
         {...attributes}
-        className={`field-item ${selectedFields.includes(field.id) ? 'selected' : ''}`}
+        className={`field-item ${selectedFields.includes(field.id) ? 'selected' : ''} ${!canDrag ? 'disabled' : ''}`}
       >
         <div className="field-header">
           <input
@@ -398,55 +414,90 @@ export default function Mapper() {
     );
   };
 
-  // Resizable Field Box
-  const ResizableFieldBox = ({ field, isSelected, onUpdate, onSelect }) => {
+  // Moveable Field Box
+  const MoveableFieldBox = ({ field, isSelected, onUpdate, onSelect }) => {
     const screenRect = rectPtToPx(field.rect);
     const [x, y, x2, y2] = screenRect;
     const width = x2 - x;
     const height = y2 - y;
 
-    const handleDragStop = (e, d) => {
-      const newRect = rectPxToPt([d.x, d.y, d.x + width, d.y + height]).map(coord => snapToGrid(coord));
-      onUpdate({ ...field, rect: newRect });
+    const handleDrag = ({ target, transform }) => {
+      const newRect = rectPxToPt([
+        transform.x,
+        transform.y,
+        transform.x + width,
+        transform.y + height
+      ]).map(coord => snapToGrid(coord));
+      
+      // Clamp to canvas boundaries
+      const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
+      const finalRect = rectPxToPt(clampedRect);
+      
+      onUpdate({ ...field, rect: finalRect });
     };
 
-    const handleResizeStop = (e, direction, ref, delta, position) => {
+    const handleResize = ({ target, width: newWidth, height: newHeight, drag }) => {
       const newRect = rectPxToPt([
-        position.x,
-        position.y,
-        position.x + ref.offsetWidth,
-        position.y + ref.offsetHeight
+        drag.x,
+        drag.y,
+        drag.x + newWidth,
+        drag.y + newHeight
       ]).map(coord => snapToGrid(coord));
-
-      onUpdate({ ...field, rect: newRect });
+      
+      // Ensure minimum size and clamp to boundaries
+      const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
+      const sizedRect = ensureMinSize(clampedRect, 24, 16);
+      const finalRect = rectPxToPt(sizedRect);
+      
+      onUpdate({ ...field, rect: finalRect });
     };
 
     return (
-      <Rnd
-        position={{ x, y }}
-        size={{ width, height }}
-        onDragStop={handleDragStop}
-        onResizeStop={handleResizeStop}
-        bounds="parent"
-        enableResizing={true}
-        resizeHandleStyles={{
-          topRight: { background: '#3b82f6' },
-          bottomRight: { background: '#3b82f6' },
-          bottomLeft: { background: '#3b82f6' },
-          topLeft: { background: '#3b82f6' },
-          top: { background: '#3b82f6' },
-          right: { background: '#3b82f6' },
-          bottom: { background: '#3b82f6' },
-          left: { background: '#3b82f6' }
-        }}
-        className={`field-box ${isSelected ? 'selected' : ''}`}
-        onClick={() => onSelect(field.id)}
-      >
-        <div className="field-label">
-          <div className="field-type-indicator">{field.type}</div>
-          {field.label || field.id}
+      <>
+        <div
+          data-field-id={field.id}
+          className={`field-box ${isSelected ? 'selected' : ''}`}
+          style={{
+            position: 'absolute',
+            left: x,
+            top: y,
+            width,
+            height,
+            cursor: 'move'
+          }}
+          onClick={() => onSelect(field.id)}
+        >
+          <div className="field-label">
+            <div className="field-type-indicator">{field.type}</div>
+            {field.label || field.id}
+          </div>
         </div>
-      </Rnd>
+        
+        {isSelected && (
+          <Moveable
+            target={document.querySelector(`[data-field-id="${field.id}"]`)}
+            draggable={true}
+            resizable={true}
+            snappable={true}
+            snapGridWidth={8}
+            snapGridHeight={8}
+            bounds={pdfCanvasRef.current}
+            zoom={zoom}
+            onDrag={handleDrag}
+            onResize={handleResize}
+            renderDirections={['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']}
+            elementGuidelines={overlay.fields
+              .filter(f => f.id !== field.id && f.page === page)
+              .map(f => {
+                const rect = rectPtToPx(f.rect);
+                return {
+                  element: document.querySelector(`[data-field-id="${f.id}"]`),
+                  rect: { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1] }
+                };
+              })}
+          />
+        )}
+      </>
     );
   };
 
@@ -596,7 +647,11 @@ export default function Mapper() {
           {/* PDF Canvas */}
           <div className="pdf-canvas-container">
             <DroppablePDFCanvas>
-              <div className="pdf-canvas" style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}>
+              <div 
+                ref={pdfCanvasRef}
+                className="pdf-canvas" 
+                style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
+              >
                 {imgUrl && (
                   <img
                     ref={canvasRef}
@@ -610,7 +665,7 @@ export default function Mapper() {
                 {overlay.fields
                   .filter(f => f.page === page)
                   .map(field => (
-                    <ResizableFieldBox
+                    <MoveableFieldBox
                       key={field.id}
                       field={field}
                       isSelected={selectedId === field.id}
