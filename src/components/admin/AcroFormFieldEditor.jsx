@@ -241,31 +241,52 @@ export default function AcroFormFieldEditor() {
   const handleAutoGenerate = async () => {
     setIsProcessing(true);
     try {
-      // First, try to load existing overlay
+      // First, check if we already have a complete AcroForm definition
+      if (acroformDefinition && acroformDefinition.fields && acroformDefinition.fields.length > 0) {
+        const response = confirm(`This form already has ${acroformDefinition.fields.length} AcroForm fields defined.\n\nWould you like to:\n1. Keep the existing definition (Cancel)\n2. Regenerate from overlay (OK)\n3. Create a new basic template (will overwrite existing)`);
+
+        if (response === null) {
+          // User cancelled - keep existing
+          setIsProcessing(false);
+          return;
+        }
+      }
+
+      // Try to load existing overlay
       const overlayResponse = await fetch(`${API}/apps/${app}/forms/${form}/template`);
-      
+
       if (overlayResponse.ok) {
         const overlayData = await overlayResponse.json();
         console.log("Found existing overlay, converting to AcroForm...");
-        
-        const converted = convertOverlayToAcroForm(overlayData, form);
-        setAcroformDefinition(converted);
-        
-        // Show success message
-        alert(`✅ Auto-generated AcroForm definition from existing overlay!\n\nFound ${converted.fields.length} fields and converted them to the new format.`);
-        
-        // Auto-save the generated definition
-        await handleSave();
+
+        // Check if overlay actually has fields
+        if (overlayData.fields && overlayData.fields.length > 0) {
+          const converted = convertOverlayToAcroForm(overlayData, form);
+          setAcroformDefinition(converted);
+
+          // Show success message
+          alert(`✅ Auto-generated AcroForm definition from existing overlay!\n\nFound ${converted.fields.length} fields and converted them to the new format.`);
+
+          // Auto-save the generated definition
+          await handleSave();
+        } else {
+          // Overlay exists but has no fields, create basic template
+          console.log("Overlay exists but has no fields, creating basic template...");
+          const basicTemplate = createBasicAcroFormTemplate(form);
+          setAcroformDefinition(basicTemplate);
+
+          alert(`✅ Created basic AcroForm template!\n\nSince the existing overlay has no fields, a basic template has been created. You can now customize the fields manually or use AI Detection to analyze the PDF.`);
+        }
       } else {
         // No overlay found, try to analyze the PDF directly
         console.log("No overlay found, attempting PDF analysis...");
-        
+
         const pdfResponse = await fetch(`${API}/apps/${app}/forms/${form}/pdf?inline=true`);
         if (pdfResponse.ok) {
           // For now, create a basic template - in production this would use AI analysis
           const basicTemplate = createBasicAcroFormTemplate(form);
           setAcroformDefinition(basicTemplate);
-          
+
           alert(`✅ Created basic AcroForm template!\n\nSince no existing overlay was found, a basic template has been created. You can now customize the fields manually or use AI Detection to analyze the PDF.`);
         } else {
           throw new Error("Could not access PDF for analysis");
@@ -281,7 +302,7 @@ export default function AcroFormFieldEditor() {
 
   const createBasicAcroFormTemplate = (formName) => {
     const formTitle = formName.replace(/_/g, " ").replace(/.pdf$/i, "");
-    
+
     return {
       formMetadata: {
         title: formTitle,
@@ -444,6 +465,19 @@ export default function AcroFormFieldEditor() {
           <p>Design and configure form fields for {form.replace(/_/g, " ")}</p>
         </div>
         <div className="header-actions">
+          {acroformDefinition && acroformDefinition.fields && acroformDefinition.fields.length > 0 && (
+            <div className="status-badge" style={{
+              background: "#d1fae5",
+              color: "#065f46",
+              padding: "8px 12px",
+              borderRadius: "6px",
+              fontSize: "12px",
+              fontWeight: "600",
+              border: "1px solid #10b981"
+            }}>
+              ✅ {acroformDefinition.fields.length} fields configured
+            </div>
+          )}
           <button
             className="auto-generate-btn"
             onClick={handleAutoGenerate}
