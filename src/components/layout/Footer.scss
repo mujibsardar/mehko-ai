@@ -2,7 +2,11 @@
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
     color: white;
     padding: 3rem 0 1rem;
-    margin-top: auto;
+    margin-top: 2rem; /* Changed from auto to fixed margin */
+    position: relative; /* Ensure footer is positioned correctly */
+    z-index: 10; /* Ensure footer appears above other content */
+    width: 100%; /* Ensure full width */
+    clear: both; /* Clear any floats */
 
     .footer-content {
         max-width: 1200px;

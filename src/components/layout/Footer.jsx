@@ -5,7 +5,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="footer">
+        <footer className="footer" style={{ border: '2px solid red' }}>
             <div className="footer-content">
                 <div className="footer-section">
                     <h3>MEHKO AI</h3>
