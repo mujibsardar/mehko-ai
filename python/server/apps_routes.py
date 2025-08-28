@@ -120,13 +120,34 @@ async def create_acroform_pdf(app: str, form: str):
 
     if not pdf_path.exists():
         raise HTTPException(404, f"missing PDF at {pdf_path}")
-    if not tpl_path.exists():
-        raise HTTPException(404, f"missing overlay at {tpl_path}")
 
     try:
         pdf_bytes = pdf_path.read_bytes()
+        
+        # Check if PDF is already an AcroForm
+        from overlay.acroform_handler import AcroFormHandler
+        handler = AcroFormHandler()
+        
+        if handler.is_acroform_pdf(pdf_bytes):
+            # PDF already has AcroForm fields, return it directly
+            return StreamingResponse(
+                io.BytesIO(pdf_bytes),
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{app}_{form}_acroform.pdf"'},
+            )
+        
+        # Check if overlay exists for creating new AcroForm fields
+        if not tpl_path.exists():
+            # No overlay, return original PDF
+            return StreamingResponse(
+                io.BytesIO(pdf_bytes),
+                media_type="application/pdf",
+                headers={"Content-Disposition": f'attachment; filename="{app}_{form}_acroform.pdf"'},
+            )
+        
         overlay = json.loads(tpl_path.read_text())
         
+        # Create new AcroForm PDF with overlay fields
         from overlay.acroform_handler import create_acroform_from_overlay
         acroform_pdf = create_acroform_from_overlay(pdf_bytes, overlay)
         

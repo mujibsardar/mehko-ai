@@ -19,6 +19,22 @@ class AcroFormHandler:
             'signature': self._fill_signature_field,
         }
     
+    def is_acroform_pdf(self, pdf_bytes: bytes) -> bool:
+        """Check if a PDF already has AcroForm fields"""
+        try:
+            pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_bytes))
+            
+            # Check if PDF has AcroForm
+            if '/AcroForm' in pdf_reader.trailer['/Root']:
+                form = pdf_reader.trailer['/Root']['/AcroForm']
+                if '/Fields' in form and len(form['/Fields']) > 0:
+                    return True
+            
+            return False
+        except Exception as e:
+            print(f"Error checking AcroForm: {e}")
+            return False
+    
     def create_acroform_pdf(self, pdf_bytes: bytes, field_definitions: List[Dict[str, Any]]) -> bytes:
         """Create a new PDF with AcroForm fields based on AI-detected field definitions"""
         # Load the existing PDF
