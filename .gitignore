@@ -2,7 +2,7 @@
 # 🚫 NEVER make changes without explicit permission from the user!
 # 📚 Required reading: AI_INSTRUCTIONS.md | .cursor/rules/README.md
 
-# Python’s compiled bytecode
+# Python's compiled bytecode
 __pycache__/
 **/__pycache__/
 *.pyc
@@ -91,6 +91,46 @@ temp/
 *.tgz
 *.rar
 *.7z
+
 # Build output
 dist/
 dist-*/
+
+# ===== TESTING =====
+# Playwright test results and reports
+test-results/
+playwright-report/
+playwright/.cache/
+playwright/.cache/
+
+# Vitest coverage reports
+coverage/
+*.lcov
+
+# Test artifacts
+*.webm
+*.mp4
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Test temporary files
+.temp/
+.tmp/
+test-temp/
+
+# E2E test videos and screenshots
+**/test-results/**/*.webm
+**/test-results/**/*.png
+**/test-results/**/*.jpg
+**/test-results/**/*.jpeg
+**/test-results/**/*.gif
+
+# Playwright specific
+**/playwright-report/**/*
+!**/playwright-report/.gitkeep
+
+# Test output directories
+**/test-output/
+**/test-artifacts/
