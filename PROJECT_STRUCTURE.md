@@ -15,7 +15,7 @@ This document describes the organized directory structure for the MEHKO AI proje
 - **`logs/`** - Service log files
 - **`config/`** - Configuration files
 - **`temp/`** - Temporary runtime files
-- **`generated/`** - AI-generated county applications
+- **`data/applications/`** - County application forms and data
 - **`tools/`** - Development and utility tools
 
 ### **Key Directories Explained**
@@ -66,6 +66,11 @@ data/
 ├── manifest.json                 # Master application database
 ├── county-batch.json            # Batch processing configuration
 ├── county-targets.md            # County targeting strategy
+├── applications/                 # County application forms
+│   ├── san_diego_county_mehko/ # San Diego county data
+│   │   └── forms/               # PDF forms and metadata
+│   └── los_angeles_county_mehko/ # LA county data
+│       └── forms/               # PDF forms and metadata
 └── ...                          # Other data files
 ```
 
@@ -116,7 +121,7 @@ data/
 ### **AI Agent Processing**
 ```bash
 node scripts/mehko-agent-enhanced.mjs "https://county.gov/mehko" "County Name"
-# Generated applications saved to generated/ directory
+# County applications stored in data/applications/ directory
 ```
 
 ## 📝 **File Path Updates**

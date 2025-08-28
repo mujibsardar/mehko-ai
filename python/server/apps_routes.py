@@ -30,7 +30,7 @@ MAPPER_ENABLED = env_bool("MAPPER_ENABLED", True)
 
 # --- Paths ---
 ROOT = Path(__file__).resolve().parents[2]        # repo root
-APPS = ROOT / "applications"                      # applications/<app>/<form>/
+APPS = ROOT / "data" / "applications"             # data/applications/<app>/<form>/
 
 def app_dir(app: str) -> Path:
     return APPS / app

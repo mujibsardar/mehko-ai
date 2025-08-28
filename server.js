@@ -535,7 +535,7 @@ app.post("/api/download-pdf", async (req, res) => {
     res.json({
       success: true,
       message: "PDF downloaded successfully",
-      path: `applications/${appId}/forms/${formId}/form.pdf`,
+              path: `data/applications/${appId}/forms/${formId}/form.pdf`,
       size: pdfBuffer.byteLength,
     });
   } catch (error) {
