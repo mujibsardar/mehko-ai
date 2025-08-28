@@ -41,6 +41,7 @@ echo -e "${BLUE}📺 Opening three separate terminal windows/tabs for each servi
 echo -e "${YELLOW}🔍 Checking service status...${NC}"
 PYTHON_RUNNING=false
 NODE_RUNNING=false
+GATEWAY_RUNNING=false
 REACT_RUNNING=false
 
 if check_service 8000 "Python FastAPI"; then
@@ -49,6 +50,10 @@ fi
 
 if check_service 3000 "Node.js Server"; then
     NODE_RUNNING=true
+fi
+
+if check_service 3001 "API Gateway"; then
+    GATEWAY_RUNNING=true
 fi
 
 if check_service 5173 "React Dev Server"; then
@@ -72,6 +77,13 @@ else
     echo -e "   💡 Start with: ./scripts/start-all-services.sh"
 fi
 
+if [ "$GATEWAY_RUNNING" = true ]; then
+    echo -e "🌐 API Gateway: ${GREEN}✅ Running${NC}"
+else
+    echo -e "🌐 API Gateway: ${RED}❌ Not Running${NC}"
+    echo -e "   💡 Start with: ./scripts/start-all-services.sh"
+fi
+
 if [ "$REACT_RUNNING" = true ]; then
     echo -e "⚛️  React Dev Server: ${GREEN}✅ Running${NC}"
 else
@@ -85,6 +97,7 @@ echo ""
 echo -e "${YELLOW}📝 Ensuring log files exist...${NC}"
 create_log_file "logs/fastapi.log" "Python FastAPI"
 create_log_file "logs/node.log" "Node.js Server"
+create_log_file "logs/gateway.log" "API Gateway"
 create_log_file "logs/react.log" "React Dev Server"
 
 echo ""
@@ -190,6 +203,37 @@ tail -f logs/fastapi.log
 while true; do sleep 1; done
 EOF
 
+    # API Gateway log script
+    GATEWAY_SCRIPT=$(mktemp)
+    cat > "$GATEWAY_SCRIPT" << EOF
+#!/bin/bash
+cd "$PROJECT_DIR"
+echo "🚀 MEHKO AI - API Gateway Logs"
+echo "==============================="
+echo "🌐 Monitoring: logs/gateway.log"
+echo "📍 Port: 3001"
+echo ""
+echo "Press Ctrl+C to stop monitoring"
+echo ""
+echo "Starting API Gateway log monitoring..."
+echo ""
+
+if [ ! -f "logs/gateway.log" ]; then
+    echo "❌ logs/gateway.log not found in $(pwd)"
+    echo "💡 Make sure API Gateway is running: ./scripts/start-all-services.sh"
+    echo ""
+    echo "Press any key to exit..."
+    read -n 1
+    exit 1
+fi
+
+echo "✅ Found logs/gateway.log - starting monitoring..."
+echo ""
+tail -f logs/gateway.log
+# Keep the script running
+while true; do sleep 1; done
+EOF
+
     # CPU Performance Monitor script
     CPU_SCRIPT=$(mktemp)
     cat > "$CPU_SCRIPT" << EOF
@@ -220,7 +264,7 @@ echo ""
 source python/.venv/bin/activate && python scripts/monitor-server.py --continuous
 EOF
 
-    chmod +x "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$CPU_SCRIPT"
+    chmod +x "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$GATEWAY_SCRIPT" "$CPU_SCRIPT"
     
     # Open three separate terminal windows
     echo -e "${CYAN}📱 Opening React Dev Server log window...${NC}"
@@ -256,6 +300,17 @@ EOF
 
     sleep 1
     
+    echo -e "${BLUE}🌐 Opening API Gateway log window...${NC}"
+    osascript << EOF
+tell application "Terminal"
+    do script "bash '$GATEWAY_SCRIPT'"
+    set custom title of front window to "API Gateway Logs"
+    activate
+end tell
+EOF
+
+    sleep 1
+    
     echo -e "${CYAN}💻 Opening CPU Performance Monitor window...${NC}"
     osascript << EOF
 tell application "Terminal"
@@ -266,7 +321,7 @@ end tell
 EOF
 
     # Clean up temp scripts after a longer delay to ensure they're executed
-    (sleep 30 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$CPU_SCRIPT") &
+    (sleep 30 && rm -f "$REACT_SCRIPT" "$NODE_SCRIPT" "$FASTAPI_SCRIPT" "$GATEWAY_SCRIPT" "$CPU_SCRIPT") &
 
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     echo -e "${GREEN}🐧 Linux detected - opening three terminal windows${NC}"
@@ -283,6 +338,9 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         
         echo -e "${YELLOW}🐍 Opening Python FastAPI log tab...${NC}"
         gnome-terminal --tab --title="Python FastAPI Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - Python FastAPI Logs'; echo '================================='; echo '🐍 Monitoring: fastapi.log'; echo '📍 Port: 8000'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting FastAPI log monitoring...'; echo ''; if [ ! -f 'fastapi.log' ]; then echo '❌ fastapi.log not found'; echo '💡 Make sure FastAPI server is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found fastapi.log - starting monitoring...'; echo ''; tail -f fastapi.log; exec bash"
+        
+        echo -e "${BLUE}🌐 Opening API Gateway log tab...${NC}"
+        gnome-terminal --tab --title="API Gateway Logs" -- bash -c "cd '$PROJECT_DIR'; echo '🚀 MEHKO AI - API Gateway Logs'; echo '==============================='; echo '🌐 Monitoring: gateway.log'; echo '📍 Port: 3001'; echo ''; echo 'Press Ctrl+C to stop monitoring'; echo ''; echo 'Starting API Gateway log monitoring...'; echo ''; if [ ! -f 'gateway.log' ]; then echo '❌ gateway.log not found'; echo '💡 Make sure API Gateway is running: ./scripts/start-all-services.sh'; read -n 1; exit 1; fi; echo '✅ Found gateway.log - starting monitoring...'; echo ''; tail -f gateway.log; exec bash"
         
     elif command -v konsole &> /dev/null; then
         echo -e "${CYAN}📱 Opening React Dev Server log tab...${NC}"
@@ -303,12 +361,13 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         echo -e "${CYAN}📱 React Dev Server:${NC}"
         echo -e "${GREEN}🔧 Node.js Server:${NC}"
         echo -e "${YELLOW}🐍 Python FastAPI:${NC}"
+        echo -e "${BLUE}🌐 API Gateway:${NC}"
         echo ""
         echo "Press Ctrl+C to stop monitoring"
         echo ""
         echo "Starting log monitoring..."
         echo ""
-        tail -f logs/react.log logs/node.log logs/fastapi.log
+        tail -f logs/react.log logs/node.log logs/gateway.log logs/fastapi.log
     fi
 else
     echo -e "${CYAN}⚠️  Unsupported OS. Running in current terminal instead.${NC}"
@@ -319,25 +378,27 @@ else
     echo -e "${CYAN}📱 React Dev Server:${NC}"
     echo -e "${GREEN}🔧 Node.js Server:${NC}"
     echo -e "${YELLOW}🐍 Python FastAPI:${NC}"
+    echo -e "${BLUE}🌐 API Gateway:${NC}"
     echo ""
     echo "Press Ctrl+C to stop monitoring"
     echo ""
     echo "Starting log monitoring..."
     echo ""
-            tail -f logs/react.log logs/node.log logs/fastapi.log
+            tail -f logs/react.log logs/node.log logs/gateway.log logs/fastapi.log
 fi
 
 echo ""
-    echo -e "${GREEN}✅ Four separate monitoring windows/tabs have been opened!${NC}"
-    echo -e "${CYAN}💡 Each window/tab monitors a specific service or metric:${NC}"
-    echo -e "  📱 React Dev Server (Port 5173) - logs/react.log"
-    echo -e "  🔧 Node.js Server (Port 3000) - logs/node.log"
-    echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
-    echo -e "  💻 CPU Performance Monitor - Real-time system metrics"
+    echo -e "${GREEN}✅ Five separate monitoring windows/tabs have been opened!${NC}"
+echo -e "${CYAN}💡 Each window/tab monitors a specific service or metric:${NC}"
+echo -e "  📱 React Dev Server (Port 5173) - logs/react.log"
+echo -e "  🔧 Node.js Server (Port 3000) - logs/node.log"
+echo -e "  🐍 Python FastAPI (Port 8000) - logs/fastapi.log"
+echo -e "  🌐 API Gateway (Port 3001) - logs/gateway.log"
+echo -e "  💻 CPU Performance Monitor - Real-time system metrics"
 echo ""
 
 # Final status summary using our stored variables
-if [ "$PYTHON_RUNNING" = true ] && [ "$NODE_RUNNING" = true ] && [ "$REACT_RUNNING" = true ]; then
+if [ "$PYTHON_RUNNING" = true ] && [ "$NODE_RUNNING" = true ] && [ "$GATEWAY_RUNNING" = true ] && [ "$REACT_RUNNING" = true ]; then
     echo -e "${GREEN}🎉 All services are running! Logs should be active.${NC}"
 else
     echo -e "${YELLOW}⚠️  Some services are not running. To start all services:${NC}"
