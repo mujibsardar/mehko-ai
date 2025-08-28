@@ -123,6 +123,8 @@
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px); // Account for header and nav height
 }
 
 // Applications Section
