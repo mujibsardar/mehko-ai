@@ -1,0 +1,232 @@
+.acroform-viewer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #f8fafc;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    .viewer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        flex-shrink: 0;
+
+        .header-info {
+            h2 {
+                margin: 0 0 4px 0;
+                font-size: 24px;
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            p {
+                margin: 0;
+                color: #64748b;
+                font-size: 14px;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+
+            button {
+                padding: 8px 16px;
+                border: none;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &.reset-button {
+                    background: #f1f5f9;
+                    color: #475569;
+                    border: 1px solid #cbd5e1;
+
+                    &:hover {
+                        background: #e2e8f0;
+                        border-color: #94a3b8;
+                    }
+                }
+
+                &.download-button {
+                    background: #3b82f6;
+                    color: white;
+
+                    &:hover {
+                        background: #2563eb;
+                    }
+                }
+            }
+        }
+    }
+
+    .pdf-container {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+
+        .pdf-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+    }
+
+    .fallback-form {
+        padding: 20px;
+        background: white;
+        border-top: 1px solid #e2e8f0;
+        flex-shrink: 0;
+
+        h3 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+
+            .form-field {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    margin-bottom: 6px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #374151;
+                }
+
+                input {
+                    padding: 8px 12px;
+                    border: 1px solid #d1d5db;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    transition: border-color 0.2s ease;
+
+                    &:focus {
+                        outline: none;
+                        border-color: #3b82f6;
+                        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                    }
+
+                    &::placeholder {
+                        color: #9ca3af;
+                    }
+                }
+            }
+        }
+    }
+
+    .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        color: #64748b;
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin: 0;
+            font-size: 16px;
+        }
+    }
+
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        text-align: center;
+        color: #64748b;
+
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        p {
+            margin: 0 0 24px 0;
+            font-size: 16px;
+            max-width: 400px;
+        }
+
+        .retry-button {
+            padding: 10px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background: #2563eb;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    .acroform-viewer {
+        .viewer-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        .fallback-form {
+            .form-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}

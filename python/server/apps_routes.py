@@ -112,6 +112,36 @@ def save_template(app: str, form: str, overlay_json: str = Form(...)):
     p.write_text(json.dumps(overlay, indent=2))
     return {"ok": True, "fields": len(overlay.get("fields", []))}
 
+@router.post("/{app}/forms/{form}/create-acroform")
+async def create_acroform_pdf(app: str, form: str):
+    """Create an AcroForm PDF from the existing overlay definition"""
+    pdf_path = form_dir(app, form) / "form.pdf"
+    tpl_path = form_dir(app, form) / "overlay.json"
+
+    if not pdf_path.exists():
+        raise HTTPException(404, f"missing PDF at {pdf_path}")
+    if not tpl_path.exists():
+        raise HTTPException(404, f"missing overlay at {tpl_path}")
+
+    try:
+        pdf_bytes = pdf_path.read_bytes()
+        overlay = json.loads(tpl_path.read_text())
+        
+        from overlay.acroform_handler import create_acroform_from_overlay
+        acroform_pdf = create_acroform_from_overlay(pdf_bytes, overlay)
+        
+        # Save the AcroForm PDF
+        acroform_path = form_dir(app, form) / "form_acroform.pdf"
+        acroform_path.write_bytes(acroform_pdf)
+        
+        return StreamingResponse(
+            io.BytesIO(acroform_pdf),
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="{app}_{form}_acroform.pdf"'},
+        )
+    except Exception as e:
+        raise HTTPException(500, f"Failed to create AcroForm PDF: {str(e)}")
+
 # extract text for AI context
 @router.get("/{app}/forms/{form}/text")
 def get_pdf_text(app: str, form: str):
@@ -136,6 +166,24 @@ def download_pdf(app: str, form: str, inline: bool = False):
         headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}.pdf"'},
     )
 
+# serve AcroForm PDF
+@router.get("/{app}/forms/{form}/acroform-pdf")
+def download_acroform_pdf(app: str, form: str, inline: bool = False):
+    p = form_dir(app, form) / "form_acroform.pdf"
+    if not p.exists():
+        # Fall back to regular PDF if AcroForm doesn't exist
+        p = form_dir(app, form) / "form.pdf"
+        if not p.exists():
+            raise HTTPException(404, f"missing PDF at {p}")
+    
+    disposition = "inline" if inline else "attachment"
+    return FileResponse(
+        path=str(p),
+        media_type="application/pdf",
+        filename=f"{app}_{form}_acroform.pdf",
+        headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}_acroform.pdf"'},
+    )
+
 # --- Filling ---
 @router.post("/{app}/forms/{form}/fill")
 async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...)):
@@ -154,7 +202,15 @@ async def fill_from_stored_pdf(app: str, form: str, answers_json: str = Form(...
 
     pdf_bytes = pdf_path.read_bytes()
     overlay = json.loads(tpl_path.read_text())
-    filled = fill_pdf_overlay_bytes(pdf_bytes, overlay, answers)
+    
+    # Try AcroForm filling first, fall back to overlay if not available
+    try:
+        from overlay.acroform_handler import fill_acroform_pdf_bytes
+        filled = fill_acroform_pdf_bytes(pdf_bytes, answers)
+    except Exception as e:
+        # Fall back to original overlay method
+        print(f"AcroForm filling failed, falling back to overlay: {e}")
+        filled = fill_pdf_overlay_bytes(pdf_bytes, overlay, answers)
 
     return StreamingResponse(
         io.BytesIO(filled),

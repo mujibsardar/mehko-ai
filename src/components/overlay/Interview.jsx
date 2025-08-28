@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import PDFPreviewPanel from "../applications/PDFPreviewPanel";
+import AcroFormViewer from "../forms/AcroFormViewer";
 import useAuth from "../../hooks/useAuth";
 import { useAuthModal } from "../../providers/AuthModalProvider";
 import { savePdfFormData, loadPdfFormData } from "../../firebase/userData";
@@ -295,121 +296,35 @@ export function InterviewView({ app, form, application, step }) {
 
   return (
     <div className="pdf-form-container">
-      <div className="pdf-form-header">
-        <div className="header-content">
-          <h2>PDF Form: {form}</h2>
-          <p>Fill out the form fields below to generate your completed PDF</p>
+      {/* Use AcroFormViewer for modern form filling experience */}
+      <AcroFormViewer
+        app={app}
+        form={form}
+        application={application}
+        step={step}
+        initialFormData={values}
+        onFormDataChange={(newFormData) => {
+          setValues(newFormData);
+          scheduleAutoSave();
+        }}
+      />
 
-          {/* Auto-save status indicator */}
-          {user && (
-            <div className="auto-save-status">
-              {saveStatus === "saving" && (
-                <span className="status saving">
-                  {autoSaveCountdown > 0 ? `Auto-saving in ${autoSaveCountdown}s...` : "Saving..."}
-                </span>
-              )}
-              {saveStatus === "saved" && (
-                <span className="status saved">
-                  ✓ Saved {lastSaved && `at ${lastSaved.toLocaleTimeString()}`}
-                </span>
-              )}
-              {saveStatus === "error" && <span className="status error">❌ Save failed</span>}
-              {saveStatus === "idle" && autoSaveCountdown > 0 && (
-                <span className="status pending">Auto-saving in {autoSaveCountdown}s...</span>
-              )}
-            </div>
-          )}
-        </div>
-
-        {user && (
+      {/* Report Issue Button */}
+      {user && (
+        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 1000 }}>
           <ReportButton onClick={handleReportClick} size="small" variant="subtle">
             Report Issue
           </ReportButton>
-        )}
-      </div>
-
-      {/* PDF Preview Toggle Button */}
-      <div className="pdf-preview-toggle">
-        <button
-          type="button"
-          onClick={() => setIsPdfPreviewOpen(true)}
-          className="preview-button"
-          title="Open PDF Preview"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14,2 14,8 20,8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10,9 9,9 8,9"></polyline>
-          </svg>
-          PDF Preview
-        </button>
-      </div>
-
-      <form onSubmit={onSubmit} className="pdf-form">
-        {group.map(([page, fields]) => (
-          <fieldset key={page} className="form-page">
-            <legend className="page-legend">Page {Number(page) + 1}</legend>
-            <div className="fields-container">
-              {fields.map((f) => (
-                <div key={f.id} className="form-field">
-                  <label htmlFor={f.id} className="field-label">
-                    {f.label || f.id}
-                  </label>
-
-                  {isSignatureField(f) ? (
-                    <SignatureField
-                      fieldId={f.id}
-                      value={values[f.id] ?? ""}
-                      onChange={onChange}
-                      onFocus={() => handleFieldFocus(f.id)}
-                      onBlur={handleFieldBlur}
-                      field={f}
-                    />
-                  ) : String(f.type || "text").toLowerCase() === "checkbox" ? (
-                    <input
-                      id={f.id}
-                      type="checkbox"
-                      checked={!!values[f.id]}
-                      onChange={(e) => onChange(f.id, "checkbox", e.target.checked)}
-                      onFocus={() => handleFieldFocus(f.id)}
-                      onBlur={handleFieldBlur}
-                      className="checkbox-input"
-                    />
-                  ) : (
-                    <input
-                      id={f.id}
-                      type="text"
-                      value={values[f.id] ?? ""}
-                      onChange={(e) => onChange(f.id, "text", e.target.value)}
-                      placeholder={f.description || ""}
-                      onFocus={() => handleFieldFocus(f.id)}
-                      onBlur={handleFieldBlur}
-                      className="text-input"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </fieldset>
-        ))}
-
-        <div className="form-actions">
-          <button type="submit" className="submit-button">
-            Download Filled PDF
-          </button>
         </div>
-      </form>
+      )}
 
-      {/* PDF Preview Panel */}
-      <PDFPreviewPanel
-        isOpen={isPdfPreviewOpen}
-        onClose={() => setIsPdfPreviewOpen(false)}
-        currentFieldId={currentFieldId}
-        formId={form}
-        appId={app}
-        formOverlay={overlay}
+      {/* Report Issue Modal */}
+      <ReportIssueModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        application={application}
+        step={step}
+        onReportSubmitted={handleReportSubmitted}
       />
 
       <ReportIssueModal
