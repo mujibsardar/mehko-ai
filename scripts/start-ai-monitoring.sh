@@ -214,8 +214,8 @@ log "INFO" "✅ Verifying monitoring startup..."
 # Check if all monitoring processes are running
 sleep 2
 if [ -f "$MONITORING_PID_FILE" ]; then
-    local pids=$(cat "$MONITORING_PID_FILE")
-    local all_running=true
+    pids=$(cat "$MONITORING_PID_FILE")
+    all_running=true
     
     for pid in $pids; do
         if ! kill -0 "$pid" 2>/dev/null; then

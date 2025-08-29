@@ -332,7 +332,7 @@ run_knowledge_test \
 run_knowledge_test \
     "field_definition_dependency_pitfall" \
     "AI knows PDF steps require field definitions to function" \
-    "grep -q 'PDF.*steps.*field.*definitions.*required' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "grep -q 'PDF.*steps.*field.*definitions.*render' docs/AI_ASSISTANT_ONBOARDING.md" \
     "true"
 
 # 9. FINAL KNOWLEDGE ASSESSMENT
