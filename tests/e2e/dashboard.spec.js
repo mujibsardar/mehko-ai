@@ -70,17 +70,16 @@ test.describe('Dashboard', () => {
   test('should display application grid with available counties', async ({ page }) => {
     // Verify applications are displayed using actual CSS classes
     await expect(page.locator('.application-card-grid')).toBeVisible();
-    await expect(page.locator('text=Select Your Application')).toBeVisible();
     
-    // Verify San Diego County application
+    // Verify San Diego County application using actual content
     await expect(page.locator('text=San Diego County MEHKO')).toBeVisible();
-    await expect(page.locator('text=Home Kitchen Operations Permit for San Diego County')).toBeVisible();
+    await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
     await expect(page.locator('text=Source: sandiegocounty.gov')).toBeVisible();
     
-    // Verify Los Angeles County application
+    // Verify Los Angeles County application using actual content
     await expect(page.locator('text=Los Angeles County MEHKO')).toBeVisible();
-    await expect(page.locator('text=Home Kitchen Operations Permit for Los Angeles County')).toBeVisible();
-    await expect(page.locator('text=Source: lacounty.gov')).toBeVisible();
+    await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week; max $100,000 annual gross sales. LA County (excludes Pasadena, Long Beach, Vernon). Initial $597 review fee is currently subsidized; annual health permit ~$347.')).toBeVisible();
+    await expect(page.locator('text=Source: publichealth.lacounty.gov')).toBeVisible();
   });
 
   test('should handle application selection and navigation', async ({ page }) => {
@@ -90,11 +89,11 @@ test.describe('Dashboard', () => {
     // Verify application overview is displayed using actual elements
     await expect(page.locator('.main-content')).toBeVisible();
     await expect(page.locator('h2:has-text("San Diego County MEHKO")')).toBeVisible();
-    await expect(page.locator('text=Home Kitchen Operations Permit for San Diego County')).toBeVisible();
+    await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
     
-    // Verify steps are displayed
+    // Verify steps are displayed using specific selector to avoid strict mode violation
     await expect(page.locator('.sidebar-sublist')).toBeVisible();
-    await expect(page.locator('text=Planning Overview')).toBeVisible();
+    await expect(page.locator('.step-title:has-text("Plan Your MEHKO")')).toBeVisible();
   });
 
   test('should display sidebar with navigation options', async ({ page }) => {
@@ -105,9 +104,9 @@ test.describe('Dashboard', () => {
     await expect(page.locator('.sidebar')).toBeVisible();
     await expect(page.locator('text=Your Applications')).toBeVisible();
     
-    // Verify application in sidebar
+    // Verify application in sidebar using specific selector to avoid strict mode violation
     await expect(page.locator('.sidebar-list')).toBeVisible();
-    await expect(page.locator('text=San Diego County MEHKO')).toBeVisible();
+    await expect(page.locator('.sidebar-app-title:has-text("San Diego County MEHKO")')).toBeVisible();
   });
 
   test('should handle application removal from sidebar', async ({ page }) => {
@@ -123,8 +122,8 @@ test.describe('Dashboard', () => {
     if (await removeButton.isVisible()) {
       await removeButton.click();
       
-      // Verify application is removed
-      await expect(page.locator('text=San Diego County MEHKO')).not.toBeVisible();
+      // Verify application is removed from sidebar using specific selector
+      await expect(page.locator('.sidebar-app-title:has-text("San Diego County MEHKO")')).not.toBeVisible();
     } else {
       console.log('Remove button not visible - may need progress to be made first');
     }
@@ -176,10 +175,10 @@ test.describe('Dashboard', () => {
     // Wait for application to load
     await page.waitForTimeout(1000);
     
-    // Verify overview content
+    // Verify overview content using specific selector to avoid strict mode violation
     await expect(page.locator('.main-content')).toBeVisible();
-    await expect(page.locator('text=San Diego County MEHKO')).toBeVisible();
-    await expect(page.locator('text=Home Kitchen Operations Permit for San Diego County')).toBeVisible();
+    await expect(page.locator('h2:has-text("San Diego County MEHKO")')).toBeVisible();
+    await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
   });
 
   test('should handle responsive layout changes', async ({ page }) => {

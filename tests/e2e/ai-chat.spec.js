@@ -19,7 +19,7 @@ test.describe('AI Chat', () => {
             fields: {
               id: { stringValue: 'san_diego_county_mehko' },
               title: { stringValue: 'San Diego County MEHKO' },
-              description: { stringValue: 'Home Kitchen Operations Permit for San Diego County' },
+              description: { stringValue: 'Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.' },
               steps: {
                 arrayValue: {
                   values: [
@@ -50,7 +50,7 @@ test.describe('AI Chat', () => {
                 fields: {
                   id: { stringValue: 'san_diego_county_mehko' },
                   title: { stringValue: 'San Diego County MEHKO' },
-                  description: { stringValue: 'Home Kitchen Operations Permit for San Diego County' },
+                  description: { stringValue: 'Home-based restaurant permit for up to 30 meals/day or 90 meals/day, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.' },
                   steps: {
                     arrayValue: {
                       values: [
