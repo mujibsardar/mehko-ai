@@ -19,6 +19,7 @@
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:headed": "playwright test --headed",
     "test:all": "npm run test && npm run test:e2e",
+    "test:setup-user": "node scripts/setup-test-user.mjs",
     "gateway": "node scripts/api-gateway.js",
     "dev:gateway": "concurrently \"npm run gateway\" \"npm run dev\"",
     "ai:rules": "echo '🤖 READ .cursor/rules/README.md BEFORE MAKING CHANGES!'",
