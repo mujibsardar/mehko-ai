@@ -10,7 +10,7 @@ import {
 
 import { getApiBase, ENDPOINTS } from "../../config/api";
 
-const API_APP = getApiBase();
+const API_APP = getApiBase('python');
 const API_CHAT = ENDPOINTS.AI_CHAT();
 
 // Loading Spinner Component

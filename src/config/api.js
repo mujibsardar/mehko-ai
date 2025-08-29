@@ -19,8 +19,8 @@ export const buildEndpoint = (base, path) => `${base}${path}`;
 // Common endpoints
 export const ENDPOINTS = {
   // Application endpoints (Python backend)
-  APPS: (base = API_CONFIG.PYTHON_API) => buildEndpoint(base, '/api/apps'),
-  APP_BY_ID: (base = API_CONFIG.PYTHON_API, appId) => buildEndpoint(base, `/api/apps/${encodeURIComponent(appId)}`),
+  APPS: (base = API_CONFIG.PYTHON_API) => buildEndpoint(base, '/apps'),
+  APP_BY_ID: (base = API_CONFIG.PYTHON_API, appId) => buildEndpoint(base, `/apps/${encodeURIComponent(appId)}`),
 
   // AI endpoints (Node.js backend)
   AI_CHAT: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/ai-chat'),
@@ -31,7 +31,7 @@ export const ENDPOINTS = {
   FILL_PDF: (base = API_CONFIG.NODE_API) => buildEndpoint(base, '/api/fill-pdf'),
 
   // County processing (Python backend)
-  PROCESS_COUNTY: (base = API_CONFIG.PYTHON_API) => buildEndpoint(base, '/api/process-county')
+  PROCESS_COUNTY: (base = API_CONFIG.PYTHON_API) => buildEndpoint(base, '/apps/process-county')
 };
 
 // Helper function to get the appropriate API base for different services

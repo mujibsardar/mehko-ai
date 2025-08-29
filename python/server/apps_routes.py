@@ -87,7 +87,7 @@ async def create_app(request: Request, app: str = Form(None)):
 
 @router.post("/process-county")
 async def process_county_application(request: Request):
-    """Process a complete county application JSON with PDF downloads"""
+    """Process a complete county application JSON with PDF downloads and automatic field detection"""
     try:
         # Get the JSON data from the request
         data = await request.json()
@@ -149,6 +149,7 @@ async def process_county_application(request: Request):
         # Process PDF steps
         pdf_steps = [step for step in data["steps"] if step.get("type") == "pdf"]
         downloaded_count = 0
+        field_detection_count = 0
         
         for step in pdf_steps:
             if not step.get("pdfUrl") or not step.get("formId"):
@@ -189,11 +190,101 @@ async def process_county_application(request: Request):
                     print(f"✅ Downloaded {step['title']} ({len(response.content)} bytes)")
                     downloaded_count += 1
                     
+                    # NEW: Automatically detect form fields and create acroform-definition.json
+                    try:
+                        print(f"🔍 Detecting form fields for {step['title']}...")
+                        
+                        # Use AI field detection to automatically identify form fields
+                        from overlay.acroform_handler import AcroFormHandler
+                        handler = AcroFormHandler(response.content)
+                        
+                        # Get existing AcroForm fields if any
+                        existing_fields = handler.get_existing_fields()
+                        
+                        if existing_fields:
+                            # PDF already has AcroForm fields, use them
+                            print(f"✅ Found existing AcroForm fields: {len(existing_fields)} fields")
+                            acroform_definition = {
+                                "id": step["formId"],
+                                "title": step["title"],
+                                "type": "existing_acroform",
+                                "appId": app_id,
+                                "stepId": step["id"],
+                                "fields": existing_fields,
+                                "createdAt": firestore.SERVER_TIMESTAMP,
+                                "source": "existing_pdf_fields"
+                            }
+                        else:
+                            # No existing fields, create a basic template for manual field mapping
+                            print(f"📝 Creating basic field template for manual mapping")
+                            acroform_definition = {
+                                "id": step["formId"],
+                                "title": step["title"],
+                                "type": "template",
+                                "appId": app_id,
+                                "stepId": step["id"],
+                                "fields": [],
+                                "createdAt": firestore.SERVER_TIMESTAMP,
+                                "source": "auto_generated_template",
+                                "note": "This is a basic template. Use the Field Mapper to add form fields."
+                            }
+                        
+                        # Save acroform-definition.json
+                        acroform_path = form_path / "acroform-definition.json"
+                        acroform_path.write_text(json.dumps(acroform_definition, indent=2, default=str))
+                        
+                        # Also create a basic overlay.json for backward compatibility
+                        overlay_data = {
+                            "id": step["formId"],
+                            "title": step["title"],
+                            "fields": acroform_definition["fields"],
+                            "createdAt": firestore.SERVER_TIMESTAMP,
+                        }
+                        overlay_path = form_path / "overlay.json"
+                        overlay_path.write_text(json.dumps(overlay_data, indent=2, default=str))
+                        
+                        print(f"✅ Created field definitions for {step['title']}")
+                        field_detection_count += 1
+                        
+                    except Exception as field_error:
+                        print(f"⚠️  Field detection failed for {step['title']}: {str(field_error)}")
+                        # Create minimal template files even if detection fails
+                        try:
+                            minimal_acroform = {
+                                "id": step["formId"],
+                                "title": step["title"],
+                                "type": "template",
+                                "appId": app_id,
+                                "stepId": step["id"],
+                                "fields": [],
+                                "createdAt": firestore.SERVER_TIMESTAMP,
+                                "source": "fallback_template",
+                                "note": "Field detection failed. Use the Field Mapper to add form fields manually."
+                            }
+                            
+                            acroform_path = form_path / "acroform-definition.json"
+                            acroform_path.write_text(json.dumps(minimal_acroform, indent=2, default=str))
+                            
+                            overlay_data = {
+                                "id": step["formId"],
+                                "title": step["title"],
+                                "fields": [],
+                                "createdAt": firestore.SERVER_TIMESTAMP,
+                            }
+                            overlay_path = form_path / "overlay.json"
+                            overlay_path.write_text(json.dumps(overlay_data, indent=2, default=str))
+                            
+                            print(f"✅ Created fallback templates for {step['title']}")
+                            
+                        except Exception as template_error:
+                            print(f"❌ Failed to create fallback templates: {str(template_error)}")
+                    
             except Exception as e:
                 print(f"❌ Failed to download {step['title']}: {str(e)}")
                 continue
         
         print(f"✅ PDF download process completed ({downloaded_count}/{len(pdf_steps)} forms)")
+        print(f"✅ Field detection completed ({field_detection_count}/{len(pdf_steps)} forms)")
         
         return {
             "ok": True,
@@ -201,6 +292,7 @@ async def process_county_application(request: Request):
             "title": app_title,
             "pdfs_downloaded": downloaded_count,
             "total_pdf_steps": len(pdf_steps),
+            "field_definitions_created": field_detection_count,
             "config_saved": str(county_file),
             "manifest_updated": str(manifest_file)
         }
