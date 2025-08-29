@@ -1,9 +1,0 @@
-{
-  "id": "MEHKO_PublicHealthPermitApplication-ENG",
-  "title": "Health Permit Application",
-  "type": "pdf",
-  "appId": "los_angeles_county_mehko",
-  "stepId": "permit_application_form",
-  "pdfUrl": "https://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf",
-  "createdAt": "2025-08-26T16:10:42.435Z"
-}
