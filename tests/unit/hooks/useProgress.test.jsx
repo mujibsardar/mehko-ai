@@ -3,19 +3,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock Firebase modules BEFORE importing the hook
 vi.mock('../../../src/firebase/firebase', () => ({
-    db: {
+    _db: {
         collection: vi.fn(() => 'mock-collection-ref'),
-        doc: vi.fn(() => 'mock-doc-ref'),
-        setDoc: vi.fn(() => Promise.resolve()),
-        onSnapshot: vi.fn(() => vi.fn()), // Returns unsubscribe function
+        _doc: vi.fn(() => 'mock-doc-ref'),
+        _setDoc: vi.fn(() => Promise.resolve()),
+        _onSnapshot: vi.fn(() => vi.fn()), // Returns unsubscribe function
     }
 }));
 
 vi.mock('firebase/firestore', () => ({
-    collection: vi.fn(() => 'mock-collection-ref'),
-    doc: vi.fn(() => 'mock-doc-ref'),
-    setDoc: vi.fn(() => Promise.resolve()),
-    onSnapshot: vi.fn(() => vi.fn()), // Returns unsubscribe function
+    _collection: vi.fn(() => 'mock-collection-ref'),
+    _doc: vi.fn(() => 'mock-doc-ref'),
+    _setDoc: vi.fn(() => Promise.resolve()),
+    _onSnapshot: vi.fn(() => vi.fn()), // Returns unsubscribe function
 }));
 
 // Now import the hook after mocking
@@ -72,16 +72,16 @@ describe('useProgress Hook', () => {
     });
 
     it('should handle different user IDs', () => {
-        const { result: result1 } = renderHook(() => useProgress('user1', 'test-app'));
-        const { result: result2 } = renderHook(() => useProgress('user2', 'test-app'));
+        const { _result: result1 } = renderHook(() => useProgress('user1', 'test-app'));
+        const { _result: result2 } = renderHook(() => useProgress('user2', 'test-app'));
 
         expect(result1.current.completedSteps).toEqual([]);
         expect(result2.current.completedSteps).toEqual([]);
     });
 
     it('should handle different app IDs', () => {
-        const { result: result1 } = renderHook(() => useProgress('test-user', 'app1'));
-        const { result: result2 } = renderHook(() => useProgress('test-user', 'app2'));
+        const { _result: result1 } = renderHook(() => useProgress('test-user', 'app1'));
+        const { _result: result2 } = renderHook(() => useProgress('test-user', 'app2'));
 
         expect(result1.current.completedSteps).toEqual([]);
         expect(result2.current.completedSteps).toEqual([]);
@@ -125,8 +125,8 @@ describe('useProgress Hook', () => {
     });
 
     it('should handle multiple hook instances', () => {
-        const { result: result1 } = renderHook(() => useProgress('user1', 'app1'));
-        const { result: result2 } = renderHook(() => useProgress('user2', 'app2'));
+        const { _result: result1 } = renderHook(() => useProgress('user1', 'app1'));
+        const { _result: result2 } = renderHook(() => useProgress('user2', 'app2'));
 
         expect(result1.current.completedSteps).toEqual([]);
         expect(result2.current.completedSteps).toEqual([]);

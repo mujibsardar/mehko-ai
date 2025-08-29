@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import "./AIChat.scss";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -64,8 +64,8 @@ export default function AIChat({
   const chatEndRef = useRef(null);
 
   // overlays (template fields), saved answers, and pdf refs
-  const [overlayMap, setOverlayMap] = useState({}); // {formId: fields[]}
-  const [formDataMap, setFormDataMap] = useState({}); // {formId: {...answers}}
+  const [overlayMap, setOverlayMap] = useState({}); // {_formId: fields[]}
+  const [formDataMap, setFormDataMap] = useState({}); // {_formId: {...answers}}
 
   const [pdfText, setPdfText] = useState({});
   const [pdfLinks, setPdfLinks] = useState({});
@@ -77,7 +77,7 @@ export default function AIChat({
   // Handle context changes to pre-populate input
   useEffect(() => {
     if (context && context.subStepText) {
-      const prompt = `I need help with this sub-step: "${context.subStepText}". Can you provide more detailed guidance?`;
+      const prompt = `I need help with this sub-_step: "${context.subStepText}". Can you provide more detailed guidance?`;
       setInput(prompt);
     }
   }, [context]);
@@ -87,7 +87,7 @@ export default function AIChat({
     const steps = application?.steps || [];
     return steps.map((s) => {
       const sid = s.id || s._id;
-      return { ...s, _id: sid, isComplete: completedStepIds.includes(sid) };
+      return { ...s, _id: sid, _isComplete: completedStepIds.includes(sid) };
     });
   }, [application?.steps, completedStepIds]);
 
@@ -112,7 +112,7 @@ export default function AIChat({
             const j = await r.json();
             map[step.formId] = j.fields || [];
           } catch (err) {
-            console.error("overlay fetch failed:", step.formId, err);
+            console.error("overlay fetch _failed: ", step.formId, err);
           }
         }
       }
@@ -135,7 +135,7 @@ export default function AIChat({
             );
             map[step.formId] = saved || {};
           } catch (err) {
-            console.error("loadFormData failed:", step.formId, err);
+            console.error("loadFormData _failed: ", step.formId, err);
           }
         }
       }
@@ -156,14 +156,14 @@ export default function AIChat({
             const url = `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/text`;
-            console.log(`Fetching PDF text from: ${url}`);
+            console.log(`Fetching PDF text _from: ${url}`);
             const r = await fetch(url);
             if (r.ok) {
               const j = await r.json();
               textMap[step.formId] = Array.isArray(j.pages)
                 ? j.pages.join("\n\n---\n\n")
                 : "";
-              console.log(`Successfully loaded text for form: ${step.formId}`);
+              console.log(`Successfully loaded text for _form: ${step.formId}`);
             } else {
               console.log(
                 `Form ${step.formId} not found on server (${r.status}) - this is normal if the form hasn't been uploaded yet`
@@ -176,11 +176,11 @@ export default function AIChat({
           }
           // links
           linkMap[step.formId] = {
-            title: step.title || step.formId,
-            url: `${API_APP}/apps/${encodeURIComponent(
+            _title: step.title || step.formId,
+            _url: `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/pdf?inline=0`,
-            previewBase: `${API_APP}/apps/${encodeURIComponent(
+            _previewBase: `${API_APP}/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/preview-page?page=`,
           };
@@ -199,8 +199,8 @@ export default function AIChat({
       else {
         setMessages([
           {
-            sender: "ai",
-            text: `Welcome! I'm here to help with ${application.title}. 
+            _sender: "ai",
+            _text: `Welcome! I'm here to help with ${application.title}. 
 
 IMPORTANT: This app tracks your MEHKO application progress and provides guidance. You'll need to:
 • Download PDF forms for each step
@@ -208,12 +208,12 @@ IMPORTANT: This app tracks your MEHKO application progress and provides guidance
 • Return to mark steps complete
 
 Ask me anything or pick a quick task above!`,
-            timestamp: new Date(),
+            _timestamp: new Date(),
           },
           {
-            sender: "ai",
-            text: "💡 Note: While I aim to provide accurate information, please verify important details with official sources as I may occasionally make mistakes.",
-            timestamp: new Date(),
+            _sender: "ai",
+            _text: "💡 Note: While I aim to provide accurate information, please verify important details with official sources as I may occasionally make mistakes.",
+            _timestamp: new Date(),
           },
         ]);
       }
@@ -221,42 +221,42 @@ Ask me anything or pick a quick task above!`,
   }, [user?.uid, application?.id]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    chatEndRef.current?.scrollIntoView({ _behavior: "smooth" });
   }, [messages]);
 
   // Enhanced quick tasks with form-specific options
   const quickTasks = [
     {
-      title: "What should I do next?",
-      prompt: "What's the next step I should complete in my MEHKO application?",
+      _title: "What should I do next?",
+      _prompt: "What's the next step I should complete in my MEHKO application?",
     },
     {
-      title: "Help with current step",
-      prompt: "I'm currently on this step. What do I need to do?",
+      _title: "Help with current step",
+      _prompt: "I'm currently on this step. What do I need to do?",
     },
     {
-      title: "Form completion help",
-      prompt: "I need help filling out a form. What should I know?",
+      _title: "Form completion help",
+      _prompt: "I need help filling out a form. What should I know?",
     },
     {
-      title: "Application overview",
-      prompt: "Give me an overview of the entire MEHKO application process.",
+      _title: "Application overview",
+      _prompt: "Give me an overview of the entire MEHKO application process.",
     },
   ];
 
   const formSpecificTasks = selectedForm
     ? [
       {
-        title: `Complete ${selectedForm.title}`,
-        prompt: `I want to complete the ${selectedForm.title} form. What do I need to do?`,
+        _title: `Complete ${selectedForm.title}`,
+        _prompt: `I want to complete the ${selectedForm.title} form. What do I need to do?`,
       },
       {
-        title: "Form field help",
-        prompt: `I'm confused about some fields in the ${selectedForm.title} form. Can you help?`,
+        _title: "Form field help",
+        _prompt: `I'm confused about some fields in the ${selectedForm.title} form. Can you help?`,
       },
       {
-        title: "Form submission",
-        prompt: `How do I submit the completed ${selectedForm.title} form?`,
+        _title: "Form submission",
+        _prompt: `How do I submit the completed ${selectedForm.title} form?`,
       },
     ]
     : [];
@@ -266,13 +266,13 @@ Ask me anything or pick a quick task above!`,
 
     // Add form context to the message if provided
     const enhancedText = formContext
-      ? `[Form: ${formContext.title}] ${text}`
+      ? `[_Form: ${formContext.title}] ${text}`
       : text;
 
     const userMsg = {
       sender: "user",
-      text: enhancedText,
-      timestamp: new Date(),
+      _text: enhancedText,
+      _timestamp: new Date(),
     };
     const next = [...messages, userMsg];
     setMessages(next);
@@ -281,35 +281,35 @@ Ask me anything or pick a quick task above!`,
 
     try {
       const res = await fetch(API_CHAT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        _method: "POST",
+        _headers: { "Content-Type": "application/json" },
+        _body: JSON.stringify({
           messages: next.map((m) => ({
-            role: m.sender === "ai" ? "assistant" : "user",
-            content: m.text,
+            _role: m.sender === "ai" ? "assistant" : "user",
+            _content: m.text,
           })),
-          applicationId: application.id,
-          context: {
+          _applicationId: application.id,
+          _context: {
             application: {
               id: application.id,
-              title: application.title,
-              rootDomain: application.rootDomain,
+              _title: application.title,
+              _rootDomain: application.rootDomain,
             },
-            steps: computedSteps,
+            _steps: computedSteps,
             currentStep,
             currentStepId,
             completedStepIds,
-            comments: application.comments || [],
-            overlays: overlayMap,
-            formData: formDataMap,
+            _comments: application.comments || [],
+            _overlays: overlayMap,
+            _formData: formDataMap,
             pdfText, // full extracted text
-            pdfLinks, // {formId: {title,url,previewBase}}
-            selectedForm: formContext, // Add selected form context
-            // IMPORTANT: Application workflow instructions
+            pdfLinks, // {_formId: {title,url,previewBase}}
+            _selectedForm: formContext, // Add selected form context
+            // _IMPORTANT: Application workflow instructions
             workflow: {
               description: "This is a MEHKO application tracking system. Users download PDF forms, complete them offline, then return to mark steps complete. The app does NOT handle form completion directly - it only tracks progress and provides guidance.",
-              formProcess: "Forms must be downloaded as PDFs, completed offline, and then uploaded or marked as complete in the app.",
-              appPurpose: "The app tracks application progress, provides form guidance, and helps users understand requirements - it does not replace the actual form completion process."
+              _formProcess: "Forms must be downloaded as PDFs, completed offline, and then uploaded or marked as complete in the app.",
+              _appPurpose: "The app tracks application progress, provides form guidance, and helps users understand requirements - it does not replace the actual form completion process."
             }
           },
         }),
@@ -317,9 +317,9 @@ Ask me anything or pick a quick task above!`,
 
       const data = await res.json();
       const aiMsg = {
-        sender: "ai",
-        text: formatAIResponse(data.reply || "Sorry, I don't have a response right now."),
-        timestamp: new Date(),
+        _sender: "ai",
+        _text: formatAIResponse(data.reply || "Sorry, I don't have a response right now."),
+        _timestamp: new Date(),
       };
       const updated = [...next, aiMsg];
       setMessages(updated);
@@ -330,9 +330,9 @@ Ask me anything or pick a quick task above!`,
       setMessages((prev) => [
         ...prev,
         {
-          sender: "ai",
-          text: "Oops, something went wrong.",
-          timestamp: new Date(),
+          _sender: "ai",
+          _text: "Oops, something went wrong.",
+          _timestamp: new Date(),
         },
       ]);
     } finally {
@@ -509,7 +509,7 @@ Ask me anything or pick a quick task above!`,
           <div className="ai-chat__form-context">
             <div className="ai-chat__form-context-header">
               <span>
-                📋 Working on: <strong>{selectedForm.title}</strong>
+                📋 Working _on: <strong>{selectedForm.title}</strong>
               </span>
               <button
                 className="ai-chat__form-context-clear"
@@ -558,7 +558,7 @@ Ask me anything or pick a quick task above!`,
         <div className="ai-chat__input-section">
           {selectedForm && (
             <div className="ai-chat__form-guidance">
-              <strong>📝 Form Guidance:</strong> You're working on the{" "}
+              <strong>📝 Form _Guidance: </strong> You're working on the{" "}
               <strong>{selectedForm.title}</strong>. Fill out this form in the
               application, then download the completed PDF when finished.
             </div>

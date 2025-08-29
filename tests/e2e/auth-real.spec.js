@@ -9,7 +9,7 @@ test.describe('Real Firebase Authentication', () => {
   test('should show login modal for unauthenticated users', async ({ page }) => {
     // Check that login modal appears when trying to access protected features
     // Look for any button that might trigger login (Sign In button in header)
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -24,7 +24,7 @@ test.describe('Real Firebase Authentication', () => {
 
   test('should handle login with real test credentials', async ({ page }) => {
     // Open login modal
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -41,7 +41,7 @@ test.describe('Real Firebase Authentication', () => {
     await passwordInput.fill('Test123!');
     
     // Submit form - be more specific to avoid duplicate buttons
-    const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+    const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
     await submitButton.click();
     
     // Wait for authentication to complete
@@ -56,7 +56,7 @@ test.describe('Real Firebase Authentication', () => {
 
   test('should handle login with invalid credentials', async ({ page }) => {
     // Open login modal
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -73,7 +73,7 @@ test.describe('Real Firebase Authentication', () => {
     await passwordInput.fill('wrongpassword');
     
     // Submit form - be more specific to avoid duplicate buttons
-    const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+    const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
     await submitButton.click();
     
     // Wait for error to appear
@@ -85,7 +85,7 @@ test.describe('Real Firebase Authentication', () => {
 
   test('should handle logout after successful login', async ({ page }) => {
     // First login
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -96,7 +96,7 @@ test.describe('Real Firebase Authentication', () => {
       await emailInput.fill('test@test.com');
       await passwordInput.fill('Test123!');
       
-      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
       await submitButton.click();
       
       // Wait for authentication
@@ -107,7 +107,7 @@ test.describe('Real Firebase Authentication', () => {
     await expect(page.locator('.auth-modal, .login-modal, .modal')).not.toBeVisible();
     
     // Find and click logout (could be in user menu or header)
-    const logoutButton = page.locator('button:has-text("Logout"), button:has-text("Sign Out"), .logout-button');
+    const logoutButton = page.locator('_button: has-text("Logout"), _button: has-text("Sign Out"), .logout-button');
     
     if (await logoutButton.isVisible()) {
       await logoutButton.click();
@@ -116,7 +116,7 @@ test.describe('Real Firebase Authentication', () => {
       await page.waitForTimeout(1000);
       
       // Verify user is logged out by checking for login button
-      await expect(page.locator('button:has-text("Sign In"), .auth-button, .signin-button')).toBeVisible();
+      await expect(page.locator('_button: has-text("Sign In"), .auth-button, .signin-button')).toBeVisible();
     } else {
       console.log('No logout button found - may need to open user menu first');
     }

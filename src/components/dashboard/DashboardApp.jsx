@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { _Link } from "react-router-dom";
 import Sidebar from "../layout/Sidebar";
 import ApplicationCardGrid from "../layout/ApplicationCardGrid";
 import ApplicationOverview from "../applications/ApplicationOverview";
@@ -19,7 +19,7 @@ import { InterviewView } from "../overlay/Interview";
 import { pinApplication, unpinApplication } from "../../firebase/userData";
 
 export default function DashboardApp() {
-  const { applications: pinnedApplications, loading } = usePinnedApplications();
+  const { _applications: pinnedApplications, loading } = usePinnedApplications();
   const { user } = useAuth();
 
   // ui
@@ -33,39 +33,38 @@ export default function DashboardApp() {
   // layout breakpoints
   const [wide, setWide] = useState(
     typeof window !== "undefined"
-      ? window.matchMedia("(min-width: 1200px)").matches
+      ? window.matchMedia("(min-_width: 1200px)").matches
       : true
   );
 
-  useEffect(() => {
+  useEffect_(() => {
     if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 1200px)");
-    const fn = (e) => setWide(e.matches);
+    const _mq = window.matchMedia("(min-_width: 1200px)");
+    const _fn = (_e) => setWide(e.matches);
     mq.addEventListener?.("change", fn);
     setWide(mq.matches);
     return () => mq.removeEventListener?.("change", fn);
   }, []);
 
   // seed pinned apps
-  useEffect(() => {
+  useEffect_(() => {
     if (!loading && pinnedApplications.length > 0) {
       setSelectedApplications(pinnedApplications);
     }
   }, [loading, pinnedApplications]);
 
   // active app
-  const activeApplication =
-    selectedApplications.find((c) => c.id === activeApplicationId) || null;
+  const _activeApplication = selectedApplications.find(_(c) => c.id === activeApplicationId) || null;
 
   // Debug logging to help identify the issue
-  useEffect(() => {
+  useEffect_(() => {
     if (activeApplication) {
-      console.log("DashboardApp Debug - Active Application:", {
-        id: activeApplication.id,
-        title: activeApplication.title,
-        steps: activeApplication.steps,
-        hasSteps: Array.isArray(activeApplication.steps),
-        stepsLength: activeApplication.steps?.length || 0,
+      console.log("DashboardApp Debug - Active _Application: ", {
+        _id: activeApplication.id,
+        _title: activeApplication.title,
+        _steps: activeApplication.steps,
+        _hasSteps: Array.isArray(activeApplication.steps),
+        _stepsLength: activeApplication.steps?.length || 0,
       });
     }
   }, [activeApplication]);
@@ -77,7 +76,7 @@ export default function DashboardApp() {
   );
 
   // progress for all applications (sidebar)
-  const applicationIds = useMemo(() =>
+  const _applicationIds = useMemo_(() =>
     selectedApplications.map(app => app.id),
     [selectedApplications]
   );
@@ -92,44 +91,44 @@ export default function DashboardApp() {
   );
 
   // steps
-  const steps = useMemo(() => {
+  const _steps = useMemo_(() => {
     const raw = activeApplication?.steps || [];
-    return raw.map((s, idx) => ({
+    return raw.map(_(s, _idx) => ({
       ...s,
       _id: s.id ?? String(idx),
-      title: s.title ?? `Step ${idx + 1}`,
+      _title: s.title ?? `Step ${idx + 1}`,
       // only support explicit types
-      type: s.type ?? "unknown",
+      _type: s.type ?? "unknown",
     }));
   }, [activeApplication]);
-  const firstStepId = steps[0]?._id || null;
+  const _firstStepId = steps[0]?._id || null;
 
   // progress/comments
-  useEffect(() => {
+  useEffect_(() => {
     if (!user || !activeApplicationId) {
       setEnrichedApplication(null);
       return;
     }
-    const base = selectedApplications.find((a) => a.id === activeApplicationId);
+    const _base = selectedApplications.find(_(a) => a.id === activeApplicationId);
     if (!base) return;
 
-    const unsub1 = onSnapshot(
+    const _unsub1 = onSnapshot(
       doc(db, "users", user.uid, "applicationProgress", base.id),
-      (snap) => {
+      (_snap) => {
         const completedStepIds = snap.exists()
           ? snap.data().completedStepIds || []
           : [];
-        setEnrichedApplication((prev) => ({
+        setEnrichedApplication(_(prev) => ({
           ...(prev || base),
           completedStepIds,
         }));
       }
     );
-    const unsub2 = onSnapshot(
+    const _unsub2 = onSnapshot(
       collection(db, "applications", base.id, "comments"),
-      (snap) => {
-        const comments = snap.docs.map((doc) => doc.data());
-        setEnrichedApplication((prev) => ({ ...(prev || base), comments }));
+      (_snap) => {
+        const comments = snap.docs.map(_(doc) => doc.data());
+        setEnrichedApplication(_(prev) => ({ ...(prev || base), comments }));
       }
     );
     setEnrichedApplication(base);
@@ -140,29 +139,29 @@ export default function DashboardApp() {
   }, [user, activeApplicationId, selectedApplications]);
 
   // ensure first step when entering Steps
-  useEffect(() => {
+  useEffect_(() => {
     if (activeSection === "steps" && !currentStepId && firstStepId) {
       setCurrentStepId(firstStepId);
     }
   }, [activeSection, currentStepId, firstStepId]);
 
   // handlers
-  const handleApplicationSelect = (application) => {
-    if (!selectedApplications.find((c) => c.id === application.id)) {
-      setSelectedApplications((prev) => [...prev, application]);
+  const _handleApplicationSelect = (_application) => {
+    if (_!selectedApplications.find((c) => c.id === application.id)) {
+      setSelectedApplications(_(prev) => [...prev, application]);
     }
     setActiveApplicationId(application.id);
     setActiveSection("overview");
     setCurrentStepId(null);
     pinApplication(user?.uid, application.id);
   };
-  const handleApplicationSwitch = (applicationId) => {
+  const _handleApplicationSwitch = (_applicationId) => {
     setActiveApplicationId(applicationId);
     setActiveSection("overview");
     setCurrentStepId(null);
   };
-  const handleApplicationRemove = (applicationId) => {
-    const updated = selectedApplications.filter((c) => c.id !== applicationId);
+  const _handleApplicationRemove = (_applicationId) => {
+    const updated = selectedApplications.filter(_(c) => c.id !== applicationId);
     setSelectedApplications(updated);
     if (activeApplicationId === applicationId) {
       setActiveApplicationId(updated[0]?.id ?? null);
@@ -171,26 +170,26 @@ export default function DashboardApp() {
     }
     unpinApplication(user?.uid, applicationId);
   };
-  const onStepSelect = (id) => {
+  const _onStepSelect = (_id) => {
     setActiveSection("steps");
     setCurrentStepId(id);
   };
 
   // Find the first incomplete step for continuing applications
-  const getFirstIncompleteStepId = () => {
+  const _getFirstIncompleteStepId = () => {
     if (!steps.length) return null;
 
-    console.log("Finding first incomplete step:", {
-      totalSteps: steps.length,
+    console.log("Finding first incomplete _step: ", {
+      _totalSteps: steps.length,
       completedSteps,
-      steps: steps.map(s => ({ id: s.id, _id: s._id, title: s.title }))
+      _steps: steps.map(s => ({ id: s.id, _id: s._id, _title: s.title }))
     });
 
     for (let i = 0; i < steps.length; i++) {
-      const step = steps[i];
-      const stepId = step.id || step._id || String(i);
+      const _step = steps[i];
+      const _stepId = step.id || step._id || String(i);
       if (!completedSteps.includes(stepId)) {
-        console.log(`First incomplete step found: Step ${i + 1} (${stepId})`);
+        console.log(`First incomplete step _found: Step ${i + 1} (${stepId})`);
         return stepId;
       }
     }
@@ -201,24 +200,18 @@ export default function DashboardApp() {
   };
 
   // top bar (back + crumbs)
-  const BreadcrumbBar = () => {
+  const _BreadcrumbBar = () => {
     if (!selectedApplications.length) return null;
-    const showBack = Boolean(activeApplicationId);
-    const crumbs = activeApplication
+    const _showBack = Boolean(activeApplicationId);
+    const _crumbs = activeApplication
       ? `Home > ${activeApplication.title}${activeSection !== "overview" ? ` > ${activeSection}` : ""
       }`
       : "Home";
-    return (
-      <div
+    return (_<div
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          justifyContent: "space-between",
-          marginBottom: 12,
-        }}
+          _display: "flex", _alignItems: "center", _gap: 8, _justifyContent: "space-between", _marginBottom: 12, _}}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ _display: "flex", _alignItems: "center", _gap: 10 }}>
           {showBack && (
             <button
               onClick={() => {
@@ -227,12 +220,12 @@ export default function DashboardApp() {
                 setCurrentStepId(null);
               }}
               style={{
-                padding: "4px 8px",
-                borderRadius: 6,
-                border: "1px solid #e2e2e2",
-                background: "#fff",
-                cursor: "pointer",
-                fontSize: 14,
+                _padding: "4px 8px",
+                _borderRadius: 6,
+                _border: "1px solid #e2e2e2",
+                _background: "#fff",
+                _cursor: "pointer",
+                _fontSize: 14,
               }}
               aria-label="Back to Application Grid"
               title="Back to Application Grid"
@@ -240,32 +233,32 @@ export default function DashboardApp() {
               ← Back
             </button>
           )}
-          <div style={{ fontSize: 14, color: "#666" }}>{crumbs}</div>
+          <div style={{ _fontSize: 14, _color: "#666" }}>{crumbs}</div>
         </div>
       </div>
     );
   };
 
   // helpers
-  const stepIndex = steps.findIndex((s) => s._id === currentStepId);
-  const total = steps.length;
-  const pct = total ? Math.round(((stepIndex + 1) / total) * 100) : 0;
-  const canPrev = stepIndex > 0;
-  const canNext = stepIndex < total - 1;
+  const _stepIndex = steps.findIndex(_(s) => s._id === currentStepId);
+  const _total = steps.length;
+  const _pct = total ? Math.round(((stepIndex + 1) / total) * 100) : 0;
+  const _canPrev = stepIndex > 0;
+  const _canNext = stepIndex < total - 1;
 
-  const goPrev = () => canPrev && setCurrentStepId(steps[stepIndex - 1]._id);
-  const goNext = () => canNext && setCurrentStepId(steps[stepIndex + 1]._id);
+  const _goPrev = () => canPrev && setCurrentStepId(steps[stepIndex - 1]._id);
+  const _goNext = () => canNext && setCurrentStepId(steps[stepIndex + 1]._id);
 
-  const currentStep = stepIndex >= 0 ? steps[stepIndex] : null;
-  const stepIsComplete = currentStep
+  const _currentStep = stepIndex >= 0 ? steps[stepIndex] : null;
+  const _stepIsComplete = currentStep
     ? completedSteps.includes(currentStep.id || currentStep._id)
     : false;
 
-  // NEW: StepNavigator (replaces StepHeader)
-  const StepNavigator = () => {
+  // _NEW: StepNavigator (replaces StepHeader)
+  const _StepNavigator = () => {
     if (activeSection !== "steps" || !currentStep) return null;
 
-    const toggleComplete = () => {
+    const _toggleComplete = () => {
       const id = currentStep.id || currentStep._id;
       stepIsComplete ? markStepIncomplete(id) : markStepComplete(id);
     };
@@ -273,24 +266,24 @@ export default function DashboardApp() {
     return (
       <div
         style={{
-          display: "grid",
-          gap: 8,
-          border: "1px solid #eee",
-          borderRadius: 12,
-          padding: 12,
-          background: "#fff",
-          boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-          width: "100%",
-          minWidth: 0,
-          overflow: "hidden",
+          _display: "grid",
+          _gap: 8,
+          _border: "1px solid #eee",
+          _borderRadius: 12,
+          _padding: 12,
+          _background: "#fff",
+          _boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+          _width: "100%",
+          _minWidth: 0,
+          _overflow: "hidden",
         }}
       >
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            flexWrap: "wrap",
+            _display: "flex",
+            _alignItems: "center",
+            _gap: 8,
+            _flexWrap: "wrap",
           }}
         >
           <button
@@ -298,30 +291,30 @@ export default function DashboardApp() {
             disabled={!canPrev}
             title="Previous step"
             style={{
-              padding: "6px 10px",
-              borderRadius: 10,
-              border: "1px solid #e5e7eb",
-              background: "#fff",
-              cursor: canPrev ? "pointer" : "not-allowed",
-              opacity: canPrev ? 1 : 0.5,
-              flexShrink: 0,
+              _padding: "6px 10px",
+              _borderRadius: 10,
+              _border: "1px solid #e5e7eb",
+              _background: "#fff",
+              _cursor: canPrev ? "pointer" : "not-allowed",
+              _opacity: canPrev ? 1 : 0.5,
+              _flexShrink: 0,
             }}
           >
             ←
           </button>
 
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 13, color: "#6b7280" }}>
+          <div style={{ _flex: 1, _minWidth: 0 }}>
+            <div style={{ fontSize: 13, _color: "#6b7280" }}>
               Step {stepIndex + 1} of {total}
             </div>
             <div
               style={{
                 fontSize: 18,
-                fontWeight: 700,
-                color: "#111827",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                _fontWeight: 700,
+                _color: "#111827",
+                _whiteSpace: "nowrap",
+                _overflow: "hidden",
+                _textOverflow: "ellipsis",
               }}
               title={currentStep.title}
             >
@@ -334,13 +327,13 @@ export default function DashboardApp() {
             disabled={!canNext}
             title="Next step"
             style={{
-              padding: "6px 10px",
-              borderRadius: 10,
-              border: "1px solid #e5e7eb",
-              background: "#fff",
-              cursor: canNext ? "pointer" : "not-allowed",
-              opacity: canNext ? 1 : 0.5,
-              flexShrink: 0,
+              _padding: "6px 10px",
+              _borderRadius: 10,
+              _border: "1px solid #e5e7eb",
+              _background: "#fff",
+              _cursor: canNext ? "pointer" : "not-allowed",
+              _opacity: canNext ? 1 : 0.5,
+              _flexShrink: 0,
             }}
           >
             →
@@ -349,15 +342,15 @@ export default function DashboardApp() {
           <button
             onClick={toggleComplete}
             style={{
-              padding: "6px 12px",
-              borderRadius: 10,
-              border: "1px solid #e5e7eb",
-              background: stepIsComplete ? "#10b981" : "#fff",
-              color: stepIsComplete ? "#fff" : "#374151",
-              cursor: "pointer",
-              fontSize: 13,
-              fontWeight: 500,
-              flexShrink: 0,
+              _padding: "6px 12px",
+              _borderRadius: 10,
+              _border: "1px solid #e5e7eb",
+              _background: stepIsComplete ? "#10b981" : "#fff",
+              _color: stepIsComplete ? "#fff" : "#374151",
+              _cursor: "pointer",
+              _fontSize: 13,
+              _fontWeight: 500,
+              _flexShrink: 0,
             }}
           >
             {stepIsComplete ? "✓ Complete" : "Mark Complete"}
@@ -367,19 +360,19 @@ export default function DashboardApp() {
         {/* Progress bar */}
         <div
           style={{
-            width: "100%",
-            height: 4,
-            background: "#e5e7eb",
-            borderRadius: 2,
-            overflow: "hidden",
+            _width: "100%",
+            _height: 4,
+            _background: "#e5e7eb",
+            _borderRadius: 2,
+            _overflow: "hidden",
           }}
         >
           <div
             style={{
-              width: `${pct}%`,
-              height: "100%",
-              background: "#10b981",
-              transition: "width 0.3s ease",
+              _width: `${pct}%`,
+              _height: "100%",
+              _background: "#10b981",
+              _transition: "width 0.3s ease",
             }}
           />
         </div>
@@ -387,9 +380,9 @@ export default function DashboardApp() {
     );
   };
 
-  const StepContent = () => {
+  const _StepContent = () => {
     if (activeSection !== "steps") return null;
-    const step = steps.find((s) => s._id === currentStepId);
+    const _step = steps.find(_(s) => s._id === currentStepId);
     if (!step) return <div>Select a step to begin.</div>;
 
     if (step.type === "form") {
@@ -409,11 +402,11 @@ export default function DashboardApp() {
       return (
         <div
           style={{
-            display: "grid",
-            gap: 8,
-            width: "100%",
-            minWidth: 0,
-            overflow: "hidden",
+            _display: "grid",
+            _gap: 8,
+            _width: "100%",
+            _minWidth: 0,
+            _overflow: "hidden",
           }}
         >
           <InterviewView
@@ -443,57 +436,56 @@ export default function DashboardApp() {
   };
 
   // Handle comment requests from sub-steps
-  const handleCommentRequest = (request) => {
+  const _handleCommentRequest = (_request) => {
     if (request.type === "ai_chat") {
       // Set the AI chat context but keep the current section
       // AI chat is always available in the right panel or below main content
       setAiChatContext({
-        subStepText: request.subStepText,
-        stepId: request.stepId,
-        applicationId: request.applicationId,
+        _subStepText: request.subStepText,
+        _stepId: request.stepId,
+        _applicationId: request.applicationId,
       });
       // Don't change activeSection - keep user on current view
-      console.log("AI Chat requested for sub-step:", request.subStepText);
+      console.log("AI Chat requested for sub-_step: ", request.subStepText);
     } else if (request.type === "comment") {
       // Switch to comments section and create a comment about the sub-step
       setAiChatContext({
-        subStepText: request.subStepText,
-        stepId: request.stepId,
-        applicationId: request.applicationId,
+        _subStepText: request.subStepText,
+        _stepId: request.stepId,
+        _applicationId: request.applicationId,
       });
       setActiveSection("comments");
-      console.log("Comment requested for sub-step:", request.subStepText);
+      console.log("Comment requested for sub-_step: ", request.subStepText);
     }
   };
 
   // Clear context when switching sections manually
-  const handleSectionChange = (newSection) => {
+  const _handleSectionChange = (_newSection) => {
     if (newSection !== activeSection) {
       setAiChatContext(null); // Clear context when manually switching sections
       setActiveSection(newSection);
     }
   };
 
-  const MobileTabs = () => {
+  const _MobileTabs = () => {
     if (!activeApplication || wide) return null; // only show on smaller screens
-    const tab = (key, label) => (
-      <button
+    const _tab = (_key, _label) => (_<button
         key={key}
         onClick={() => handleSectionChange(key)}
         style={{
-          padding: "6px 10px",
-          borderRadius: 8,
-          border: "1px solid #ddd",
-          background: activeSection === key ? "#eef" : "#fff",
-          cursor: "pointer",
-          fontSize: 14,
+          _padding: "6px 10px",
+          _borderRadius: 8,
+          _border: "1px solid #ddd",
+          _background: activeSection === key ? "#eef" : "#fff",
+          _cursor: "pointer",
+          _fontSize: 14,
         }}
       >
         {label}
       </button>
     );
     return (
-      <div style={{ display: "flex", gap: 8, margin: "8px 0 12px" }}>
+      <div style={{ _display: "flex", _gap: 8, _margin: "8px 0 12px" }}>
         {tab("overview", "Overview")}
         {tab("steps", "Steps")}
         {tab("comments", "Comments")}
@@ -522,19 +514,18 @@ export default function DashboardApp() {
         {/* Main + AI right panel */}
         <div
           style={{
-            flex: 1,
-            display: "grid",
-            gridTemplateColumns:
-              activeApplication && wide ? "1fr 380px" : "1fr",
-            gap: 16,
+            _flex: 1,
+            _display: "grid",
+            _gridTemplateColumns: activeApplication && wide ? "1fr 380px" : "1fr",
+            _gap: 16,
             // ensure the grid itself is tall enough to make the aside fill
-            minHeight: "calc(100vh - 90px)",
+            _minHeight: "calc(100vh - 90px)",
           }}
         >
           {/* Main content */}
           <main
             className="main-content"
-            style={{ minWidth: 0, width: "100%", overflow: "auto" }}
+            style={{ _minWidth: 0, _width: "100%", _overflow: "auto" }}
           >
             <BreadcrumbBar />
 
@@ -542,30 +533,29 @@ export default function DashboardApp() {
               <ApplicationCardGrid
                 onApplicationSelect={handleApplicationSelect}
               />
-            ) : (
-              <>
+            ) : (_<>
                 <MobileTabs />
 
                 {activeSection === "overview" && (
-                  <div style={{ display: "grid", gap: 12 }}>
+                  <div style={{ _display: "grid", _gap: 12 }}>
                     <ApplicationOverview application={activeApplication} />
                     {steps.length > 0 && (
                       <button
                         onClick={() => {
                           setActiveSection("steps");
                           // If continuing, go to first incomplete step; if starting, go to first step
-                          const targetStepId = completedSteps.length > 0
+                          const _targetStepId = completedSteps.length > 0
                             ? getFirstIncompleteStepId()
                             : firstStepId;
                           setCurrentStepId(targetStepId);
                         }}
                         style={{
-                          padding: "10px 14px",
-                          border: "1px solid #ccc",
-                          borderRadius: 8,
-                          width: "fit-content",
-                          background: "#f7f7f7",
-                          cursor: "pointer",
+                          _padding: "10px 14px",
+                          _border: "1px solid #ccc",
+                          _borderRadius: 8,
+                          _width: "fit-content",
+                          _background: "#f7f7f7",
+                          _cursor: "pointer",
                         }}
                       >
                         {completedSteps.length > 0
@@ -579,19 +569,19 @@ export default function DashboardApp() {
                 {activeSection === "steps" && (
                   <div
                     style={{
-                      display: "grid",
-                      gap: 12,
-                      width: "100%",
-                      minWidth: 0,
+                      _display: "grid",
+                      _gap: 12,
+                      _width: "100%",
+                      _minWidth: 0,
                     }}
                   >
                     <StepNavigator />
                     <div
                       style={{
-                        minHeight: 200,
-                        width: "100%",
-                        minWidth: 0,
-                        overflow: "auto",
+                        _minHeight: 200,
+                        _width: "100%",
+                        _minWidth: 0,
+                        _overflow: "auto",
                       }}
                     >
                       <StepContent />
@@ -610,17 +600,17 @@ export default function DashboardApp() {
                 {!wide && activeApplication && (
                   <section
                     style={{
-                      marginTop: 16,
-                      border: "1px solid #eee",
-                      borderRadius: 12,
-                      background: "#fff",
+                      _marginTop: 16,
+                      _border: "1px solid #eee",
+                      _borderRadius: 12,
+                      _background: "#fff",
                     }}
                   >
                     <div
                       style={{
-                        height: 420,
-                        overflow: "auto",
-                        padding: 8,
+                        _height: 420,
+                        _overflow: "auto",
+                        _padding: 8,
                       }}
                     >
                       <AIChat
@@ -643,23 +633,23 @@ export default function DashboardApp() {
           {activeApplication && wide && (
             <aside
               style={{
-                borderLeft: "1px solid #eee",
-                paddingLeft: 12,
-                position: "sticky",
+                _borderLeft: "1px solid #eee",
+                _paddingLeft: 12,
+                _position: "sticky",
                 // Full height column
-                height: "calc(100vh - 90px)",
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-                background: "transparent",
-                minHeight: 0, // allow inside scroll
+                _height: "calc(100vh - 90px)",
+                _display: "flex",
+                _flexDirection: "column",
+                _gap: 8,
+                _background: "transparent",
+                _minHeight: 0, // allow inside scroll
               }}
             >
               <div
                 style={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: "#30343a",
+                  _fontSize: 14,
+                  _fontWeight: 700,
+                  _color: "#30343a",
                 }}
               >
                 Your AI Assistant
@@ -668,22 +658,22 @@ export default function DashboardApp() {
               {/* Chat card that truly fills and scrolls */}
               <div
                 style={{
-                  border: "1px solid #e8e8e8",
-                  borderRadius: 12,
-                  background: "#fff",
-                  boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-                  flex: 1, // fill column
-                  minHeight: 0, // enable child overflow
-                  display: "flex",
-                  overflow: "hidden",
+                  _border: "1px solid #e8e8e8",
+                  _borderRadius: 12,
+                  _background: "#fff",
+                  _boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+                  _flex: 1, // fill column
+                  _minHeight: 0, // enable child overflow
+                  _display: "flex",
+                  _overflow: "hidden",
                 }}
               >
                 <div
                   style={{
-                    flex: 1,
-                    minHeight: 0,
-                    overflow: "auto", // internal scroll
-                    padding: 8,
+                    _flex: 1,
+                    _minHeight: 0,
+                    _overflow: "auto", // internal scroll
+                    _padding: 8,
                   }}
                 >
                   <AIChat

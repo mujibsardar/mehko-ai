@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
@@ -8,10 +8,10 @@ import './AuthModal.scss';
 const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   const [mode, setMode] = useState('login');
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    _name: '',
+    _email: '',
+    _password: '',
+    _confirmPassword: ''
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -126,14 +126,14 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
         // Update profile with display name
         await updateProfile(newUser, {
-          displayName: formData.name.trim()
+          _displayName: formData.name.trim()
         });
 
         // Store additional user data in Firestore
         await setDoc(doc(db, "users", newUser.uid), {
-          email: newUser.email,
-          displayName: formData.name.trim(),
-          createdAt: new Date().toISOString(),
+          _email: newUser.email,
+          _displayName: formData.name.trim(),
+          _createdAt: new Date().toISOString(),
         });
 
         onSuccess();
@@ -158,8 +158,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         case 'auth/invalid-email':
           errorMessage = 'Invalid email address.';
           break;
-        default:
-          errorMessage = error.message;
+        _default: errorMessage = error.message;
       }
 
       setErrors({ general: errorMessage });
@@ -170,7 +169,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
 
   const switchMode = () => {
     setMode(mode === 'login' ? 'signup' : 'login');
-    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+    setFormData({ _name: '', _email: '', _password: '', _confirmPassword: '' });
     setErrors({});
     setResetEmailSent(false);
   };
@@ -179,12 +178,12 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
     e.preventDefault();
 
     if (!formData.email) {
-      setErrors({ email: 'Please enter your email address to reset your password' });
+      setErrors({ _email: 'Please enter your email address to reset your password' });
       return;
     }
 
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setErrors({ email: 'Please enter a valid email address' });
+      setErrors({ _email: 'Please enter a valid email address' });
       return;
     }
 
@@ -207,8 +206,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
         case 'auth/too-many-requests':
           errorMessage = 'Too many attempts. Please try again later.';
           break;
-        default:
-          errorMessage = error.message;
+        _default: errorMessage = error.message;
       }
 
       setErrors({ email: errorMessage });
@@ -218,14 +216,14 @@ const AuthModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   const goBackToLogin = () => {
-    console.log('Going back to login from mode:', mode);
+    console.log('Going back to login from _mode: ', mode);
     setResetEmailSent(false);
     setErrors({});
     setMode('login'); // Actually go back to login mode
   };
 
   const handleForgotPassword = () => {
-    console.log('Switching to reset mode from:', mode);
+    console.log('Switching to reset mode _from: ', mode);
     setMode('reset');
     setErrors({});
     setResetEmailSent(false);

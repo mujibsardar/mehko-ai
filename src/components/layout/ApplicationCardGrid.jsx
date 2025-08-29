@@ -18,11 +18,11 @@ const ApplicationCardGrid = ({ onApplicationSelect }) => {
         const snapshot = await getDocs(collection(db, "applications"));
         const result = {};
         snapshot.forEach((doc) => {
-          result[doc.id] = { id: doc.id, ...doc.data() };
+          result[doc.id] = { _id: doc.id, ...doc.data() };
         });
         setApplications(result);
       } catch (err) {
-        console.error("Failed to fetch applications:", err);
+        console.error("Failed to fetch _applications: ", err);
       } finally {
         setLoading(false);
       }

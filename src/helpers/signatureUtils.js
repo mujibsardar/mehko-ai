@@ -6,11 +6,11 @@
  * Generate a signature image from text using HTML5 Canvas
  * @param {string} text - The text to convert to signature
  * @param {Object} options - Options for signature generation
- * @param {number} options.width - Width of the canvas (default: 300)
- * @param {number} options.height - Height of the canvas (default: 80)
- * @param {number} options.fontSize - Font size (default: 48)
- * @param {string} options.fontFamily - Font family (default: cursive)
- * @param {string} options.color - Text color (default: #000000)
+ * @param {number} options.width - Width of the canvas (_default: 300)
+ * @param {number} options.height - Height of the canvas (_default: 80)
+ * @param {number} options.fontSize - Font size (_default: 48)
+ * @param {string} options.fontFamily - Font family (_default: cursive)
+ * @param {string} options.color - Text color (_default: #000000)
  * @returns {string} Data URL of the generated signature image
  */
 export function generateSignatureImage(text, options = {}) {
@@ -112,6 +112,6 @@ export function generateSignatureForField(text, field) {
     width,
     height,
     fontSize,
-    fontFamily: 'cursive'
+    _fontFamily: 'cursive'
   });
 }

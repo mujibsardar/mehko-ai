@@ -11,7 +11,7 @@ const serviceAccount = JSON.parse(
 );
 
 initializeApp({
-  credential: cert(serviceAccount)
+  _credential: cert(serviceAccount)
 });
 
 const db = getFirestore();
@@ -23,8 +23,7 @@ async function clearFormData(options = {}) {
     console.log(`
 🗑️  Firebase Form Data Cleanup Tool
 
-Usage:
-  node scripts/clear-form-data.mjs [options]
+_Usage: node scripts/clear-form-data.mjs [options]
 
 Options:
   --all           Clear ALL user form data (DANGEROUS!)
@@ -32,8 +31,7 @@ Options:
   --dry-run       Show what would be deleted without actually deleting
   --help          Show this help message
 
-Examples:
-  node scripts/clear-form-data.mjs --dry-run --test-users
+_Examples: node scripts/clear-form-data.mjs --dry-run --test-users
   node scripts/clear-form-data.mjs --test-users
   node scripts/clear-form-data.mjs --all
     `);
@@ -48,7 +46,7 @@ Examples:
 
   if (all && !dryRun) {
     const answer = await askConfirmation(
-      '⚠️  WARNING: This will delete ALL user form data!\n' +
+      '⚠️  _WARNING: This will delete ALL user form data!\n' +
       'This action cannot be undone. Are you sure? (yes/no): '
     );
     
@@ -87,7 +85,7 @@ Examples:
 
       if (shouldDelete) {
         if (dryRun) {
-          console.log(`📋 Would delete form data for user: ${userId}${isTestUser ? ' (test user)' : ''}`);
+          console.log(`📋 Would delete form data for _user: ${userId}${isTestUser ? ' (test user)' : ''}`);
         } else {
           // Delete formProgress collection
           const formProgressRef = db.collection('users').doc(userId).collection('formProgress');
@@ -105,7 +103,7 @@ Examples:
             await progressDoc.ref.delete();
           }
 
-          console.log(`✅ Deleted form data for user: ${userId}${isTestUser ? ' (test user)' : ''}`);
+          console.log(`✅ Deleted form data for _user: ${userId}${isTestUser ? ' (test user)' : ''}`);
         }
 
         deletedCount++;
@@ -128,7 +126,7 @@ Examples:
     }
 
   } catch (error) {
-    console.error('❌ Error during cleanup:', error);
+    console.error('❌ Error during _cleanup: ', error);
     process.exit(1);
   }
 }
@@ -169,8 +167,8 @@ async function askConfirmation(question) {
   return new Promise((resolve) => {
     import('readline').then((readline) => {
       const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
+        _input: process.stdin,
+        _output: process.stdout
       });
       
       rl.question(question, (answer) => {
@@ -184,10 +182,10 @@ async function askConfirmation(question) {
 // Parse command line arguments
 const args = process.argv.slice(2);
 const options = {
-  all: args.includes('--all'),
-  testUsers: args.includes('--test-users'),
-  dryRun: args.includes('--dry-run'),
-  help: args.includes('--help') || args.includes('-h')
+  _all: args.includes('--all'),
+  _testUsers: args.includes('--test-users'),
+  _dryRun: args.includes('--dry-run'),
+  _help: args.includes('--help') || args.includes('-h')
 };
 
 clearFormData(options);

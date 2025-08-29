@@ -8,9 +8,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY,
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  _apiKey: process.env.VITE_FIREBASE_API_KEY,
+  _authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  _projectId: process.env.VITE_FIREBASE_PROJECT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -23,8 +23,8 @@ const TEST_USER_NAME = 'Test User';
 
 async function setupTestUser() {
   console.log('🔧 Setting up test user for AI Chat tests...');
-  console.log(`Email: ${TEST_USER_EMAIL}`);
-  console.log(`Password: ${TEST_USER_PASSWORD}`);
+  console.log(`_Email: ${TEST_USER_EMAIL}`);
+  console.log(`_Password: ${TEST_USER_PASSWORD}`);
   console.log('');
 
   try {
@@ -38,23 +38,23 @@ async function setupTestUser() {
       await auth.signOut();
       console.log('✅ Test user setup complete - user exists and can authenticate');
       console.log('');
-      console.log('🧪 You can now run E2E tests that require authentication:');
-      console.log('   npm run test:e2e tests/e2e/auth-real.spec.js');
-      console.log('   npm run test:e2e tests/e2e/ai-chat-real.spec.js');
+      console.log('🧪 You can now run E2E tests that require _authentication: ');
+      console.log('   npm run _test: e2e tests/e2e/auth-real.spec.js');
+      console.log('   npm run _test: e2e tests/e2e/ai-chat-real.spec.js');
       console.log('');
-      console.log('📚 For more testing options, see:');
-      console.log('   npm run test:e2e --help');
+      console.log('📚 For more testing options, _see: ');
+      console.log('   npm run _test: e2e --help');
       return;
     } catch (signInError) {
       if (signInError.code === 'auth/user-not-found') {
         console.log('❌ Test user does not exist, creating new account...');
       } else if (signInError.code === 'auth/wrong-password') {
         console.log('❌ Test user exists but password is incorrect, updating...');
-        // Note: Firebase doesn't allow password updates without re-authentication
+        // _Note: Firebase doesn't allow password updates without re-authentication
         // We'll need to create a new user with the correct password
         console.log('⚠️  Cannot update password without re-auth, creating new user...');
       } else {
-        console.log(`❌ Unexpected error during sign in: ${signInError.code}`);
+        console.log(`❌ Unexpected error during sign _in: ${signInError.code}`);
         throw signInError;
       }
     }
@@ -68,20 +68,20 @@ async function setupTestUser() {
     );
 
     const user = userCredential.user;
-    console.log(`✅ Test user created with UID: ${user.uid}`);
+    console.log(`✅ Test user created with _UID: ${user.uid}`);
 
     // Update profile with display name
     console.log('📝 Setting display name...');
-    // Note: updateProfile requires the user to be signed in, which we are after creation
+    // _Note: updateProfile requires the user to be signed in, which we are after creation
     
     // Store additional user data in Firestore
     console.log('💾 Storing user data in Firestore...');
     await setDoc(doc(db, "users", user.uid), {
-      email: user.email,
-      displayName: TEST_USER_NAME,
-      createdAt: new Date().toISOString(),
-      role: 'user', // Regular user role
-      isTestUser: true, // Mark as test user
+      _email: user.email,
+      _displayName: TEST_USER_NAME,
+      _createdAt: new Date().toISOString(),
+      _role: 'user', // Regular user role
+      _isTestUser: true, // Mark as test user
     });
 
     console.log('✅ Test user data stored in Firestore');
@@ -98,21 +98,21 @@ async function setupTestUser() {
     await auth.signOut();
     console.log('✅ Test user setup complete!');
     console.log('');
-    console.log('🧪 You can now run E2E tests that require authentication:');
-    console.log('   npm run test:e2e tests/e2e/auth-real.spec.js');
-    console.log('   npm run test:e2e tests/e2e/ai-chat-real.spec.js');
+    console.log('🧪 You can now run E2E tests that require _authentication: ');
+    console.log('   npm run _test: e2e tests/e2e/auth-real.spec.js');
+    console.log('   npm run _test: e2e tests/e2e/ai-chat-real.spec.js');
     console.log('');
-    console.log('📚 For more testing options, see:');
-    console.log('   npm run test:e2e --help');
+    console.log('📚 For more testing options, _see: ');
+    console.log('   npm run _test: e2e --help');
 
   } catch (error) {
-    console.error('❌ Error setting up test user:', error);
-    console.error('Error code:', error.code);
-    console.error('Error message:', error.message);
+    console.error('❌ Error setting up test _user: ', error);
+    console.error('Error _code: ', error.code);
+    console.error('Error _message: ', error.message);
     
     if (error.code === 'auth/email-already-in-use') {
       console.log('');
-      console.log('💡 The test email is already in use. You may need to:');
+      console.log('💡 The test email is already in use. You may need _to: ');
       console.log('   1. Delete the existing user from Firebase Console');
       console.log('   2. Or use a different test email address');
       console.log('   3. Or reset the password for the existing user');

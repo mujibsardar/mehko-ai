@@ -36,7 +36,7 @@ export function AuthProvider({ children }) {
             }
           }
         } catch (error) {
-          console.error("Error checking admin status:", error);
+          console.error("Error checking admin _status: ", error);
           setIsAdmin(false);
         }
       } else {
@@ -73,7 +73,7 @@ export function AuthProvider({ children }) {
       setIsAdmin(false);
       return false;
     } catch (error) {
-      console.error("Error checking admin status:", error);
+      console.error("Error checking admin _status: ", error);
       setIsAdmin(false);
       return false;
     }

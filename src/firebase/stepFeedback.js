@@ -10,7 +10,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-// Structure: applications/{applicationId}/steps/{stepId}/substeps/{subStepIndex}/feedback/{userId}
+// _Structure: applications/{applicationId}/steps/{stepId}/substeps/{subStepIndex}/feedback/{userId}
 // Each user can have one feedback record per sub-step
 
 export async function getSubStepFeedback(
@@ -39,16 +39,16 @@ export async function getSubStepFeedback(
 
     // Return default feedback state if none exists
     return {
-      liked: false,
-      disliked: false,
-      timestamp: null,
+      _liked: false,
+      _disliked: false,
+      _timestamp: null,
     };
   } catch (error) {
-    console.error("Error fetching sub-step feedback:", error);
+    console.error("Error fetching sub-step _feedback: ", error);
     return {
-      liked: false,
-      disliked: false,
-      timestamp: null,
+      _liked: false,
+      _disliked: false,
+      _timestamp: null,
     };
   }
 }
@@ -78,14 +78,14 @@ export async function updateSubStepFeedback(
       feedbackRef,
       {
         ...feedback,
-        updatedAt: serverTimestamp(),
+        _updatedAt: serverTimestamp(),
       },
-      { merge: true }
+      { _merge: true }
     );
 
     return true;
   } catch (error) {
-    console.error("Error updating sub-step feedback:", error);
+    console.error("Error updating sub-step _feedback: ", error);
     throw error;
   }
 }
@@ -105,9 +105,9 @@ export async function toggleSubStepLike(
     );
 
     const newFeedback = {
-      liked: !currentFeedback.liked,
-      disliked: false, // Remove dislike when liking
-      timestamp: serverTimestamp(),
+      _liked: !currentFeedback.liked,
+      _disliked: false, // Remove dislike when liking
+      _timestamp: serverTimestamp(),
     };
 
     await updateSubStepFeedback(
@@ -119,7 +119,7 @@ export async function toggleSubStepLike(
     );
     return newFeedback;
   } catch (error) {
-    console.error("Error toggling sub-step like:", error);
+    console.error("Error toggling sub-step _like: ", error);
     throw error;
   }
 }
@@ -139,9 +139,9 @@ export async function toggleSubStepDislike(
     );
 
     const newFeedback = {
-      liked: false, // Remove like when disliking
-      disliked: !currentFeedback.disliked,
-      timestamp: serverTimestamp(),
+      _liked: false, // Remove like when disliking
+      _disliked: !currentFeedback.disliked,
+      _timestamp: serverTimestamp(),
     };
 
     await updateSubStepFeedback(
@@ -153,7 +153,7 @@ export async function toggleSubStepDislike(
     );
     return newFeedback;
   } catch (error) {
-    console.error("Error toggling sub-step dislike:", error);
+    console.error("Error toggling sub-step _dislike: ", error);
     throw error;
   }
 }
@@ -221,14 +221,14 @@ export async function getSubStepFeedbackStats(
     return {
       totalLikes,
       totalDislikes,
-      totalFeedback: snapshot.size,
+      _totalFeedback: snapshot.size,
     };
   } catch (error) {
-    console.error("Error fetching sub-step feedback stats:", error);
+    console.error("Error fetching sub-step feedback _stats: ", error);
     return {
-      totalLikes: 0,
-      totalDislikes: 0,
-      totalFeedback: 0,
+      _totalLikes: 0,
+      _totalDislikes: 0,
+      _totalFeedback: 0,
     };
   }
 }
@@ -239,16 +239,16 @@ export async function getStepFeedbackStats(applicationId, stepId) {
     // For now, we'll return a placeholder structure
     // In a production app, you might want to use Cloud Functions or maintain counters
     return {
-      totalLikes: 0, // Would need to be calculated
-      totalDislikes: 0, // Would need to be calculated
-      totalFeedback: 0, // Would need to be calculated
+      _totalLikes: 0, // Would need to be calculated
+      _totalDislikes: 0, // Would need to be calculated
+      _totalFeedback: 0, // Would need to be calculated
     };
   } catch (error) {
-    console.error("Error fetching step feedback stats:", error);
+    console.error("Error fetching step feedback _stats: ", error);
     return {
-      totalLikes: 0,
-      totalDislikes: 0,
-      totalFeedback: 0,
+      _totalLikes: 0,
+      _totalDislikes: 0,
+      _totalFeedback: 0,
     };
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+
 import useAuth from "../../hooks/useAuth";
 import AuthModal from "../auth/AuthModal";
 import { useAuthModal } from "../../providers/AuthModalProvider";

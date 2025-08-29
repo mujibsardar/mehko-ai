@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from 'react'
+import {createContext, useContext, useEffect, useState} from "react";
 import {useData} from "/src/providers/DataProvider.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 
@@ -28,7 +28,7 @@ export const FeedbacksProvider = ({children}) => {
         if(spinnerActivities.find(activity => activity.id === activityId))
             return
 
-        const data = { id: activityId, message: message }
+        const data = { _id: activityId, _message: message }
         setSpinnerActivities(prevActivities => [...prevActivities, data])
     }
 
@@ -62,9 +62,9 @@ export const FeedbacksProvider = ({children}) => {
     // NOTIFICATIONS...
     const displayNotification = (type, title, message) => {
         setDisplayingNotification({
-            type: type,
-            title: title,
-            message: message
+            _type: type,
+            _title: title,
+            _message: message
         })
     }
 
@@ -75,9 +75,9 @@ export const FeedbacksProvider = ({children}) => {
     // YOUTUBE VIDEOS...
     const displayYoutubeVideo = (url, title, description) => {
         setDisplayingYoutubeVideo({
-            url: url,
-            title: title,
-            description: description
+            _url: url,
+            _title: title,
+            _description: description
         })
     }
 
@@ -87,11 +87,11 @@ export const FeedbacksProvider = ({children}) => {
 
     const showConfirmationDialog = (title, message, cancelButtonLabel, confirmButtonLabel, onConfirm) => {
         setPendingConfirmation({
-            title: title,
-            message: message,
-            cancelButtonLabel: cancelButtonLabel,
-            confirmButtonLabel: confirmButtonLabel,
-            onConfirm: onConfirm
+            _title: title,
+            _message: message,
+            _cancelButtonLabel: cancelButtonLabel,
+            _confirmButtonLabel: confirmButtonLabel,
+            _onConfirm: onConfirm
         })
     }
 
@@ -102,10 +102,10 @@ export const FeedbacksProvider = ({children}) => {
     // GALLERY...
     const displayGallery = (screenshots, aspectRatio, title, description) => {
         setDisplayingGallery({
-            screenshots: screenshots,
-            aspectRatio: aspectRatio,
-            title: title,
-            description: description
+            _screenshots: screenshots,
+            _aspectRatio: aspectRatio,
+            _title: title,
+            _description: description
         })
     }
 

@@ -5,27 +5,27 @@ test.describe('Dashboard', () => {
     // Mock applications data
     await page.route('**/firestore/v1/projects/*/databases/*/documents/applications**', async route => {
       await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
+        _status: 200,
+        _contentType: 'application/json',
+        _body: JSON.stringify({
           documents: [
             {
               name: 'projects/test/databases/test/documents/applications/san_diego_county_mehko',
-              fields: {
+              _fields: {
                 id: { stringValue: 'san_diego_county_mehko' },
-                title: { stringValue: 'San Diego County MEHKO' },
-                description: { stringValue: 'Home Kitchen Operations Permit for San Diego County' },
-                rootDomain: { stringValue: 'sandiegocounty.gov' },
-                steps: {
+                _title: { stringValue: 'San Diego County MEHKO' },
+                _description: { stringValue: 'Home Kitchen Operations Permit for San Diego County' },
+                _rootDomain: { stringValue: 'sandiegocounty.gov' },
+                _steps: {
                   arrayValue: {
                     values: [
                       {
                         mapValue: {
                           fields: {
                             id: { stringValue: 'planning_overview' },
-                            title: { stringValue: 'Planning Overview' },
-                            type: { stringValue: 'info' },
-                            content: { stringValue: 'Start your MEHKO journey' }
+                            _title: { stringValue: 'Planning Overview' },
+                            _type: { stringValue: 'info' },
+                            _content: { stringValue: 'Start your MEHKO journey' }
                           }
                         }
                       }
@@ -35,22 +35,22 @@ test.describe('Dashboard', () => {
               }
             },
             {
-              name: 'projects/test/databases/test/documents/applications/los_angeles_county_mehko',
-              fields: {
+              _name: 'projects/test/databases/test/documents/applications/los_angeles_county_mehko',
+              _fields: {
                 id: { stringValue: 'los_angeles_county_mehko' },
-                title: { stringValue: 'Los Angeles County MEHKO' },
-                description: { stringValue: 'Home Kitchen Operations Permit for Los Angeles County' },
-                rootDomain: { stringValue: 'lacounty.gov' },
-                steps: {
+                _title: { stringValue: 'Los Angeles County MEHKO' },
+                _description: { stringValue: 'Home Kitchen Operations Permit for Los Angeles County' },
+                _rootDomain: { stringValue: 'lacounty.gov' },
+                _steps: {
                   arrayValue: {
                     values: [
                       {
                         mapValue: {
                           fields: {
                             id: { stringValue: 'planning_overview' },
-                            title: { stringValue: 'Planning Overview' },
-                            type: { stringValue: 'info' },
-                            content: { stringValue: 'Begin your LA County MEHKO application' }
+                            _title: { stringValue: 'Planning Overview' },
+                            _type: { stringValue: 'info' },
+                            _content: { stringValue: 'Begin your LA County MEHKO application' }
                           }
                         }
                       }
@@ -74,12 +74,12 @@ test.describe('Dashboard', () => {
     // Verify San Diego County application using actual content
     await expect(page.locator('text=San Diego County MEHKO')).toBeVisible();
     await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
-    await expect(page.locator('text=Source: sandiegocounty.gov')).toBeVisible();
+    await expect(page.locator('text=_Source: sandiegocounty.gov')).toBeVisible();
     
     // Verify Los Angeles County application using actual content
     await expect(page.locator('text=Los Angeles County MEHKO')).toBeVisible();
     await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week; max $100,000 annual gross sales. LA County (excludes Pasadena, Long Beach, Vernon). Initial $597 review fee is currently subsidized; annual health permit ~$347.')).toBeVisible();
-    await expect(page.locator('text=Source: publichealth.lacounty.gov')).toBeVisible();
+    await expect(page.locator('text=_Source: publichealth.lacounty.gov')).toBeVisible();
   });
 
   test('should handle application selection and navigation', async ({ page }) => {
@@ -88,12 +88,12 @@ test.describe('Dashboard', () => {
     
     // Verify application overview is displayed using actual elements
     await expect(page.locator('.main-content')).toBeVisible();
-    await expect(page.locator('h2:has-text("San Diego County MEHKO")')).toBeVisible();
+    await expect(page.locator('_h2: has-text("San Diego County MEHKO")')).toBeVisible();
     await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
     
     // Verify steps are displayed using specific selector to avoid strict mode violation
     await expect(page.locator('.sidebar-sublist')).toBeVisible();
-    await expect(page.locator('.step-title:has-text("Plan Your MEHKO")')).toBeVisible();
+    await expect(page.locator('.step-_title: has-text("Plan Your MEHKO")')).toBeVisible();
   });
 
   test('should display sidebar with navigation options', async ({ page }) => {
@@ -106,7 +106,7 @@ test.describe('Dashboard', () => {
     
     // Verify application in sidebar using specific selector to avoid strict mode violation
     await expect(page.locator('.sidebar-list')).toBeVisible();
-    await expect(page.locator('.sidebar-app-title:has-text("San Diego County MEHKO")')).toBeVisible();
+    await expect(page.locator('.sidebar-app-_title: has-text("San Diego County MEHKO")')).toBeVisible();
   });
 
   test('should handle application removal from sidebar', async ({ page }) => {
@@ -123,7 +123,7 @@ test.describe('Dashboard', () => {
       await removeButton.click();
       
       // Verify application is removed from sidebar using specific selector
-      await expect(page.locator('.sidebar-app-title:has-text("San Diego County MEHKO")')).not.toBeVisible();
+      await expect(page.locator('.sidebar-app-_title: has-text("San Diego County MEHKO")')).not.toBeVisible();
     } else {
       console.log('Remove button not visible - may need progress to be made first');
     }
@@ -177,13 +177,13 @@ test.describe('Dashboard', () => {
     
     // Verify overview content using specific selector to avoid strict mode violation
     await expect(page.locator('.main-content')).toBeVisible();
-    await expect(page.locator('h2:has-text("San Diego County MEHKO")')).toBeVisible();
+    await expect(page.locator('_h2: has-text("San Diego County MEHKO")')).toBeVisible();
     await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.')).toBeVisible();
   });
 
   test('should handle responsive layout changes', async ({ page }) => {
     // Set viewport to mobile size
-    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.setViewportSize({ _width: 768, _height: 1024 });
     
     // Navigate to dashboard
     await page.goto('/dashboard');
@@ -198,7 +198,7 @@ test.describe('Dashboard', () => {
     await page.waitForTimeout(1000);
     
     // Look for mobile navigation tabs
-    const mobileTabs = page.locator('button:has-text("Overview"), button:has-text("Steps"), button:has-text("Comments")');
+    const mobileTabs = page.locator('_button: has-text("Overview"), _button: has-text("Steps"), _button: has-text("Comments")');
     
     if (await mobileTabs.first().isVisible()) {
       await expect(mobileTabs.first()).toBeVisible();

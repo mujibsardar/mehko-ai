@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
-
+import { createContext, useContext, useState } from "react";
 const AuthModalContext = createContext();
 
 export const useAuthModal = () => {

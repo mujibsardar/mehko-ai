@@ -3,7 +3,7 @@ import { db } from "./firebase";
 
 export async function saveChatMessages(userId, applicationId, messages) {
   const ref = doc(db, "users", userId, "aiChats", applicationId);
-  await setDoc(ref, { messages }, { merge: true });
+  await setDoc(ref, { messages }, { _merge: true });
 }
 
 export async function loadChatMessages(userId, applicationId) {
@@ -14,7 +14,7 @@ export async function loadChatMessages(userId, applicationId) {
 
 export async function saveFormData(userId, applicationId, formName, data) {
   const ref = doc(db, "users", userId, "formProgress", applicationId);
-  await setDoc(ref, { [formName]: data }, { merge: true });
+  await setDoc(ref, { [formName]: data }, { _merge: true });
 }
 
 export async function loadFormData(userId, applicationId, formName) {
@@ -26,7 +26,7 @@ export async function loadFormData(userId, applicationId, formName) {
 // PDF form specific functions
 export async function savePdfFormData(userId, applicationId, formId, data) {
   const ref = doc(db, "users", userId, "formProgress", applicationId);
-  await setDoc(ref, { [formId]: data }, { merge: true });
+  await setDoc(ref, { [formId]: data }, { _merge: true });
 }
 
 export async function loadPdfFormData(userId, applicationId, formId) {
@@ -40,10 +40,10 @@ export async function pinApplication(userId, applicationId, source = "form") {
   await setDoc(
     ref,
     {
-      pinnedAt: new Date(),
-      triggeredBy: source,
+      _pinnedAt: new Date(),
+      _triggeredBy: source,
     },
-    { merge: true }
+    { _merge: true }
   );
 }
 

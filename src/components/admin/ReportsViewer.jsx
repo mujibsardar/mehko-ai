@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getReports, updateReportStatus, deleteReport, getReportStats } from "../../firebase/reports";
 import "./ReportsViewer.scss";
 
@@ -20,7 +20,7 @@ export default function ReportsViewer() {
       const fetchedReports = await getReports();
       setReports(fetchedReports);
     } catch (error) {
-      console.error("Failed to load reports:", error);
+      console.error("Failed to load _reports: ", error);
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ export default function ReportsViewer() {
       const reportStats = await getReportStats();
       setStats(reportStats);
     } catch (error) {
-      console.error("Failed to load stats:", error);
+      console.error("Failed to load _stats: ", error);
     }
   };
 
@@ -41,7 +41,7 @@ export default function ReportsViewer() {
       await loadReports(); // Refresh the list
       await loadStats(); // Refresh stats
     } catch (error) {
-      console.error("Failed to update report status:", error);
+      console.error("Failed to update report _status: ", error);
       alert("Failed to update report status");
     }
   };
@@ -56,7 +56,7 @@ export default function ReportsViewer() {
       await loadReports(); // Refresh the list
       await loadStats(); // Refresh stats
     } catch (error) {
-      console.error("Failed to delete report:", error);
+      console.error("Failed to delete _report: ", error);
       alert("Failed to delete report");
     }
   };
@@ -73,7 +73,7 @@ export default function ReportsViewer() {
       case "high": return "#ea580c";
       case "medium": return "#d97706";
       case "low": return "#059669";
-      default: return "#6b7280";
+      _default: return "#6b7280";
     }
   };
 
@@ -83,7 +83,7 @@ export default function ReportsViewer() {
       case "in-progress": return "#f59e0b";
       case "resolved": return "#10b981";
       case "closed": return "#6b7280";
-      default: return "#6b7280";
+      _default: return "#6b7280";
     }
   };
 
@@ -184,13 +184,13 @@ export default function ReportsViewer() {
               <div className="report-meta">
                 <span
                   className="severity-badge"
-                  style={{ backgroundColor: getSeverityColor(report.severity) }}
+                  style={{ _backgroundColor: getSeverityColor(report.severity) }}
                 >
                   {report.severity}
                 </span>
                 <span
                   className="status-badge"
-                  style={{ backgroundColor: getStatusColor(report.status) }}
+                  style={{ _backgroundColor: getStatusColor(report.status) }}
                 >
                   {report.status}
                 </span>
@@ -216,7 +216,7 @@ export default function ReportsViewer() {
 
             <div className="report-details">
               <div className="detail-item">
-                <strong>Application:</strong> {report.applicationTitle}
+                <strong>_Application: </strong> {report.applicationTitle}
               </div>
               {report.stepTitle && (
                 <div className="detail-item">
@@ -224,7 +224,7 @@ export default function ReportsViewer() {
                 </div>
               )}
               <div className="detail-item">
-                <strong>Issue Type:</strong> {report.issueType}
+                <strong>Issue _Type: </strong> {report.issueType}
               </div>
               <div className="detail-item">
                 <strong>Severity:</strong> {report.severity}

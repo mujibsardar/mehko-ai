@@ -7,49 +7,48 @@ import OpenAI from "openai";
 import admin from "firebase-admin";
 dotenv.config();
 const require = createRequire(import.meta.url);
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI({ _apiKey: process.env.OPENAI_API_KEY });
 // 🔥 Firebase Admin Init
 const serviceAccount = JSON.parse(
   fs.readFileSync("./config/serviceAccountKey.json")
 );
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+admin.initializeApp({ _credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 // Assistant ID from .env or hardcoded fallback
 const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
 async function extractFieldsFromPDF(pdfPath) {
   // 1️⃣ Upload PDF
   const uploadedFile = await openai.files.create({
-    file: fs.createReadStream(pdfPath),
-    purpose: "assistants",
+    _file: fs.createReadStream(pdfPath),
+    _purpose: "assistants",
   });
   // 2️⃣ Create Assistant explicitly (temporary, ensures correct config)
   const assistant = await openai.beta.assistants.create({
-    name: "MEHKO Field Extractor",
-    instructions:
-      "Extract all fillable fields from the uploaded PDF form in top-to-bottom visual order. Return JSON array only.",
-    model: "gpt-4-turbo", // Confirmed valid model
-    tools: [{ type: "file_search" }],
+    _name: "MEHKO Field Extractor",
+    _instructions: "Extract all fillable fields from the uploaded PDF form in top-to-bottom visual order. Return JSON array only.",
+    _model: "gpt-4-turbo", // Confirmed valid model
+    _tools: [{ type: "file_search" }],
   });
   // 3️⃣ Create Thread with proper file attachments and tool resources
   const thread = await openai.beta.threads.create({
-    messages: [
+    _messages: [
       {
         role: "user",
-        content: "Extract all fillable fields. JSON only.",
-        attachments: [
-          { file_id: uploadedFile.id, tools: [{ type: "file_search" }] },
+        _content: "Extract all fillable fields. JSON only.",
+        _attachments: [
+          { file_id: uploadedFile.id, _tools: [{ type: "file_search" }] },
         ],
       },
     ],
-    tool_resources: {
+    _tool_resources: {
       file_search: { vector_store_ids: [] },
     },
   });
   if (!thread?.id)
-    throw new Error(`Invalid thread creation: ${JSON.stringify(thread)}`);
+    throw new Error(`Invalid thread _creation: ${JSON.stringify(thread)}`);
   // 4️⃣ Start the Assistant run
   const run = await openai.beta.threads.runs.create(thread.id, {
-    assistant_id: assistant.id,
+    _assistant_id: assistant.id,
   });
   // 5️⃣ Poll for completion
   let status;
@@ -58,7 +57,7 @@ async function extractFieldsFromPDF(pdfPath) {
     const check = await openai.beta.threads.runs.retrieve(thread.id, run.id);
     status = check.status;
   } while (status === "queued" || status === "in_progress");
-  if (status !== "completed") throw new Error(`Run failed: ${status}`);
+  if (status !== "completed") throw new Error(`Run _failed: ${status}`);
   // 6️⃣ Retrieve results clearly
   const messages = await openai.beta.threads.messages.list(thread.id);
   const lastMessage = messages.data.find((m) => m.role === "assistant");
@@ -90,8 +89,8 @@ export async function processForms() {
       try {
         const labeledFields = await extractFieldsFromPDF(pdfPath);
         await docRef.set({
-          fields: labeledFields,
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          _fields: labeledFields,
+          _createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
       } catch (err) {
         console.error(`❌ Failed on ${cacheKey}:`, err.message);

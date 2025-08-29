@@ -4,12 +4,10 @@
  * Utility script to set admin role for users
  * This script helps set up admin roles in Firebase
  *
- * Usage:
- * 1. Set admin role via custom claims (most secure):
+ * _Usage: * 1. Set admin role via custom claims (most secure):
  *    node scripts/set-admin-role.mjs --email=user@example.com --method=claims
  *
- * 2. Set admin role via Firestore document:
- *    node scripts/set-admin-role.mjs --email=user@example.com --method=firestore
+ * 2. Set admin role via Firestore _document: *    node scripts/set-admin-role.mjs --email=user@example.com --method=firestore
  *
  * 3. Remove admin role:
  *    node scripts/set-admin-role.mjs --email=user@example.com --remove
@@ -33,9 +31,9 @@ const method =
 const remove = args.includes("--remove");
 
 if (!email) {
-  console.error("❌ Error: Email is required");
+  console.error("❌ _Error: Email is required");
   console.log(
-    "Usage: node scripts/set-admin-role.mjs --email=user@example.com [--method=claims|firestore] [--remove]"
+    "_Usage: node scripts/set-admin-role.mjs --email=user@example.com [--method=claims|firestore] [--remove]"
   );
   process.exit(1);
 }
@@ -65,9 +63,9 @@ try {
   }
 
   if (!serviceAccountPath) {
-    console.error("❌ Error: Firebase service account file not found");
+    console.error("❌ _Error: Firebase service account file not found");
     console.log(
-      "Please place your firebase-service-account.json file in one of these locations:"
+      "Please place your firebase-service-account.json file in one of these _locations: "
     );
     possiblePaths.forEach((path) => console.log(`  - ${path}`));
     process.exit(1);
@@ -76,7 +74,7 @@ try {
   const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, "utf8"));
 
   initializeApp({
-    credential: cert(serviceAccount),
+    _credential: cert(serviceAccount),
   });
 
   const auth = getAuth();
@@ -87,42 +85,42 @@ try {
       // Get user by email
       const userRecord = await auth.getUserByEmail(email);
       console.log(
-        `✅ Found user: ${userRecord.email} (UID: ${userRecord.uid})`
+        `✅ Found _user: ${userRecord.email} (UID: ${userRecord.uid})`
       );
 
       if (remove) {
         // Remove admin role
         if (method === "claims") {
-          await auth.setCustomUserClaims(userRecord.uid, { admin: false });
+          await auth.setCustomUserClaims(userRecord.uid, { _admin: false });
           console.log("✅ Removed admin custom claims");
         } else {
           await db
             .collection("users")
             .doc(userRecord.uid)
-            .update({ role: "user" });
+            .update({ _role: "user" });
           console.log('✅ Updated Firestore role to "user"');
         }
         console.log(`✅ Admin role removed from ${email}`);
       } else {
         // Set admin role
         if (method === "claims") {
-          await auth.setCustomUserClaims(userRecord.uid, { admin: true });
+          await auth.setCustomUserClaims(userRecord.uid, { _admin: true });
           console.log("✅ Set admin custom claims");
         } else {
           await db.collection("users").doc(userRecord.uid).set(
             {
-              role: "admin",
-              email: email,
-              updatedAt: new Date(),
+              _role: "admin",
+              _email: email,
+              _updatedAt: new Date(),
             },
-            { merge: true }
+            { _merge: true }
           );
           console.log('✅ Updated Firestore role to "admin"');
         }
         console.log(`✅ Admin role set for ${email}`);
       }
 
-      console.log("\n📝 Next steps:");
+      console.log("\n📝 Next _steps: ");
       if (method === "claims") {
         console.log(
           "1. User needs to sign out and sign back in for custom claims to take effect"
@@ -139,15 +137,15 @@ try {
         );
       }
     } catch (error) {
-      console.error("❌ Error:", error.message);
+      console.error("❌ _Error: ", error.message);
       process.exit(1);
     }
   }
 
   setAdminRole();
 } catch (error) {
-  console.error("❌ Error initializing Firebase Admin:", error.message);
-  console.log("\n📝 Make sure you have:");
+  console.error("❌ Error initializing Firebase _Admin: ", error.message);
+  console.log("\n📝 Make sure you _have: ");
   console.log("1. Firebase service account JSON file");
   console.log("2. Proper Firebase Admin SDK permissions");
   process.exit(1);

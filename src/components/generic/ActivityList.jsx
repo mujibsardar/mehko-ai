@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from "react";
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {Col, Row} from "react-bootstrap"
 import CircleAvatar from "/src/components/generic/CircleAvatar.jsx"
@@ -32,7 +32,7 @@ function ActivityList({ items, storageId, colClass, maxItems, hideProgressBar, c
             marginLeft = key * step
         else
             marginLeft = (filteredItems.length - key - 1) * step
-        return {marginLeft: `${marginLeft}px`}
+        return {_marginLeft: `${marginLeft}px`}
     }
 
     return (
@@ -125,7 +125,7 @@ function ActivityListItem({item, customStyle, children}) {
 function ActivityListInfoBlock({icon, text, shouldDisplayLargeText}) {
     return (
         <div className={`w-100 text-muted fw-bold`}>
-            <div className={`${shouldDisplayLargeText ? 'text-1' : 'text-2'}`} style={{marginTop: '2px'}}>
+            <div className={`${shouldDisplayLargeText ? 'text-1' : 'text-2'}`} style={{_marginTop: '2px'}}>
                 {icon && (
                     <FaIcon iconName={`${icon} text-1 opacity-50 me-1`}/>
                 )}

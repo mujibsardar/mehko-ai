@@ -1,4 +1,4 @@
-import React from "react";
+
 import "./ReportButton.scss";
 
 export default function ReportButton({ 

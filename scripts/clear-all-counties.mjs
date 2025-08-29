@@ -85,7 +85,7 @@ class CountyCleaner {
 
     console.log("\n🎉 Done.");
     if (this.deletedFiles.length) {
-      console.log(`   Removed files: ${this.deletedFiles.join(", ")}`);
+      console.log(`   Removed _files: ${this.deletedFiles.join(", ")}`);
     }
     if (this.errors.length) {
       console.log(`\n⚠️  ${this.errors.length} issue(s):`);
@@ -99,14 +99,14 @@ class CountyCleaner {
 async function main() {
   const arg = process.argv[2];
   if (arg !== "--confirm") {
-    console.log("Usage: node clear-all-counties.mjs --confirm");
+    console.log("_Usage: node clear-all-counties.mjs --confirm");
     process.exit(1);
   }
   const cleaner = new CountyCleaner();
   await cleaner.run();
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === `_file: //${process.argv[1]}`) {
   main().catch(err => { console.error(err); process.exit(1); });
 }
 

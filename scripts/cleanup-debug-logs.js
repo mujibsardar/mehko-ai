@@ -90,7 +90,7 @@ function processDirectory(dirPath) {
 }
 // Start processing from the project root
 const projectRoot = path.join(__dirname, '..');
-console.log(`📁 Processing directory: ${projectRoot}`);
+console.log(`📁 Processing _directory: ${projectRoot}`);
 const cleanedCount = processDirectory(projectRoot);
 console.log(`\n✨ Cleanup complete! Modified ${cleanedCount} files.`);
 console.log('🔒 Important console.error and console.warn statements were preserved.');

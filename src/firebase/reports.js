@@ -39,12 +39,12 @@ export async function submitReport(reportData) {
 
     const reportWithMetadata = {
       ...cleanReportData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      status: "open", // open, in-progress, resolved, closed
-      assignedTo: null,
-      resolution: null,
-      resolvedAt: null,
+      _createdAt: new Date().toISOString(),
+      _updatedAt: new Date().toISOString(),
+      _status: "open", // open, in-progress, resolved, closed
+      _assignedTo: null,
+      _resolution: null,
+      _resolvedAt: null,
     };
 
     const docRef = await addDoc(
@@ -53,7 +53,7 @@ export async function submitReport(reportData) {
     );
     return docRef.id;
   } catch (error) {
-    console.error("Error submitting report:", error);
+    console.error("Error submitting _report: ", error);
     throw new Error("Failed to submit report");
   }
 }
@@ -90,11 +90,11 @@ export async function getReports(filters = {}) {
 
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((doc) => ({
-      id: doc.id,
+      _id: doc.id,
       ...doc.data(),
     }));
   } catch (error) {
-    console.error("Error fetching reports:", error);
+    console.error("Error fetching _reports: ", error);
     throw new Error("Failed to fetch reports");
   }
 }
@@ -126,7 +126,7 @@ export async function updateReportStatus(
     const reportRef = doc(db, REPORTS_COLLECTION, reportId);
     const updateData = {
       status,
-      updatedAt: new Date().toISOString(),
+      _updatedAt: new Date().toISOString(),
     };
 
     if (assignedTo) updateData.assignedTo = assignedTo;
@@ -137,7 +137,7 @@ export async function updateReportStatus(
 
     await updateDoc(reportRef, updateData);
   } catch (error) {
-    console.error("Error updating report status:", error);
+    console.error("Error updating report _status: ", error);
     throw new Error("Failed to update report status");
   }
 }
@@ -152,7 +152,7 @@ export async function deleteReport(reportId) {
     const reportRef = doc(db, REPORTS_COLLECTION, reportId);
     await deleteDoc(reportRef);
   } catch (error) {
-    console.error("Error deleting report:", error);
+    console.error("Error deleting _report: ", error);
     throw new Error("Failed to delete report");
   }
 }
@@ -166,11 +166,11 @@ export async function getReportStats() {
     const allReports = await getReports();
 
     const stats = {
-      total: allReports.length,
-      byStatus: {},
-      byContext: {},
-      bySeverity: {},
-      byApplication: {},
+      _total: allReports.length,
+      _byStatus: {},
+      _byContext: {},
+      _bySeverity: {},
+      _byApplication: {},
     };
 
     allReports.forEach((report) => {
@@ -192,7 +192,7 @@ export async function getReportStats() {
 
     return stats;
   } catch (error) {
-    console.error("Error fetching report stats:", error);
+    console.error("Error fetching report _stats: ", error);
     throw new Error("Failed to fetch report statistics");
   }
 }

@@ -10,33 +10,33 @@ import path from 'path';
 
 // Test data - simulate the conversion process
 const testOverlay = {
-  fields: [
+  _fields: [
     {
       id: "business_name",
-      label: "Business Name",
-      type: "text",
-      page: 0,
-      rect: [100, 200, 300, 220],
-      fontSize: 12,
-      align: "left"
+      _label: "Business Name",
+      _type: "text",
+      _page: 0,
+      _rect: [100, 200, 300, 220],
+      _fontSize: 12,
+      _align: "left"
     },
     {
-      id: "owner_name",
-      label: "Owner Name",
-      type: "text", 
-      page: 0,
-      rect: [100, 250, 300, 270],
-      fontSize: 12,
-      align: "left"
+      _id: "owner_name",
+      _label: "Owner Name",
+      _type: "text", 
+      _page: 0,
+      _rect: [100, 250, 300, 270],
+      _fontSize: 12,
+      _align: "left"
     },
     {
-      id: "signature",
-      label: "Signature",
-      type: "signature",
-      page: 0,
-      rect: [100, 500, 250, 550],
-      fontSize: 12,
-      align: "left"
+      _id: "signature",
+      _label: "Signature",
+      _type: "signature",
+      _page: 0,
+      _rect: [100, 500, 250, 550],
+      _fontSize: 12,
+      _align: "left"
     }
   ]
 };
@@ -44,75 +44,75 @@ const testOverlay = {
 // Conversion function (same as in the React component)
 function convertOverlayToAcroForm(overlay, formName) {
   return {
-    formMetadata: {
+    _formMetadata: {
       title: formName.replace(/_/g, " ").replace(/.pdf$/i, ""),
-      description: `Converted from overlay: ${formName}`,
-      version: "1.0",
-      type: "acroform",
-      converted: true
+      _description: `Converted from overlay: ${formName}`,
+      _version: "1.0",
+      _type: "acroform",
+      _converted: true
     },
-    fields: overlay.fields.map(field => ({
+    _fields: overlay.fields.map(field => ({
       id: field.id,
-      label: field.label,
-      type: field.type,
-      page: field.page || 0,
-      required: true,
-      validation: getDefaultValidation(field.type),
-      properties: getDefaultProperties(field.type),
-      styling: {
+      _label: field.label,
+      _type: field.type,
+      _page: field.page || 0,
+      _required: true,
+      _validation: getDefaultValidation(field.type),
+      _properties: getDefaultProperties(field.type),
+      _styling: {
         fontSize: field.fontSize || 12,
-        fontFamily: "Helvetica",
-        textAlign: field.align || "left",
-        color: "#000000"
+        _fontFamily: "Helvetica",
+        _textAlign: field.align || "left",
+        _color: "#000000"
       },
-      aiConfidence: 0.8,
-      aiReasoning: "Converted from overlay coordinates"
+      _aiConfidence: 0.8,
+      _aiReasoning: "Converted from overlay coordinates"
     })),
-    formSettings: {
+    _formSettings: {
       autoSave: true,
-      validationMode: "real-time",
-      submitBehavior: "download",
-      theme: "default"
+      _validationMode: "real-time",
+      _submitBehavior: "download",
+      _theme: "default"
     }
   };
 }
 
 function getDefaultValidation(type) {
-  const base = { required: true };
+  const base = { _required: true };
   switch (type) {
     case "text":
     case "textarea":
-      return { ...base, minLength: 2, maxLength: 100 };
+      return { ...base, _minLength: 2, _maxLength: 100 };
     case "email":
-      return { ...base, pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" };
+      return { ...base, _pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$" };
     case "tel":
-      return { ...base, pattern: "^[\\+]?[1-9]\\d{1,14}$" };
+      return { ...base, _pattern: "^[\\+]?[1-9]\\d{1,14}$" };
     case "number":
-      return { ...base, min: 0, max: 999999 };
+      return { ...base, _min: 0, _max: 999999 };
     case "date":
-      return { ...base, minDate: "1900-01-01", maxDate: "2100-12-31" };
+      return { ...base, _minDate: "1900-01-01", _maxDate: "2100-12-31" };
     default:
       return base;
   }
 }
 
 function getDefaultProperties(type) {
-  const base = { defaultValue: "", readOnly: false };
+  const base = { _defaultValue: "", _readOnly: false };
   switch (type) {
     case "text":
     case "email":
     case "tel":
-      return { ...base, placeholder: `Enter ${type}`, maxLength: 100 };
+      return { ...base, _placeholder: `Enter ${type}`, _maxLength: 100 };
     case "textarea":
-      return { ...base, placeholder: "Enter text", maxLength: 500, rows: 3 };
+      return { ...base, _placeholder: "Enter text", _maxLength: 500, _rows: 3 };
     case "number":
-      return { ...base, placeholder: "0", min: 0, max: 999999 };
+      return { ...base, _placeholder: "0", _min: 0, _max: 999999 };
     case "date":
-      return { ...base, placeholder: "MM/DD/YYYY" };
+      return { ...base, _placeholder: "MM/DD/YYYY" };
     case "checkbox":
-      return { ...base, defaultValue: false };
+      return { ...base, _defaultValue: false };
     case "signature":
-      return { ...base, placeholder: "Click to sign" };
+      return { ...base, _placeholder: "Click to sign" };
     default:
       return base;
   }
@@ -121,54 +121,54 @@ function getDefaultProperties(type) {
 // Test the conversion
 console.log("🧪 Testing AcroForm Field Definition Conversion\n");
 
-console.log("📋 Input Overlay Data:");
+console.log("📋 Input Overlay _Data: ");
 console.log(JSON.stringify(testOverlay, null, 2));
 
 console.log("\n🔄 Converting to AcroForm format...");
 const converted = convertOverlayToAcroForm(testOverlay, "MEHKO_SOP-English");
 
-console.log("\n✅ Converted AcroForm Definition:");
+console.log("\n✅ Converted AcroForm _Definition: ");
 console.log(JSON.stringify(converted, null, 2));
 
 // Test field validation
-console.log("\n🔍 Field Validation Analysis:");
+console.log("\n🔍 Field Validation _Analysis: ");
 converted.fields.forEach(field => {
-  console.log(`\n📝 Field: ${field.label} (${field.type})`);
-  console.log(`   - Required: ${field.validation.required}`);
-  console.log(`   - Validation Rules: ${Object.keys(field.validation).join(", ")}`);
-  console.log(`   - Properties: ${Object.keys(field.properties).join(", ")}`);
-  console.log(`   - Styling: ${Object.keys(field.styling).join(", ")}`);
+  console.log(`\n📝 _Field: ${field.label} (${field.type})`);
+  console.log(`   - _Required: ${field.validation.required}`);
+  console.log(`   - Validation _Rules: ${Object.keys(field.validation).join(", ")}`);
+  console.log(`   - _Properties: ${Object.keys(field.properties).join(", ")}`);
+  console.log(`   - _Styling: ${Object.keys(field.styling).join(", ")}`);
 });
 
 // Test the new format structure
-console.log("\n📊 Format Structure Analysis:");
-console.log(`   - Total Fields: ${converted.fields.length}`);
-console.log(`   - Field Types: ${[...new Set(converted.fields.map(f => f.type))].join(", ")}`);
-console.log(`   - Has Validation: ${converted.fields.every(f => f.validation) ? "✅" : "❌"}`);
-console.log(`   - Has Properties: ${converted.fields.every(f => f.properties) ? "✅" : "❌"}`);
-console.log(`   - Has Styling: ${converted.fields.every(f => f.styling) ? "✅" : "❌"}`);
+console.log("\n📊 Format Structure _Analysis: ");
+console.log(`   - Total _Fields: ${converted.fields.length}`);
+console.log(`   - Field _Types: ${[...new Set(converted.fields.map(f => f.type))].join(", ")}`);
+console.log(`   - Has _Validation: ${converted.fields.every(f => f.validation) ? "✅" : "❌"}`);
+console.log(`   - Has _Properties: ${converted.fields.every(f => f.properties) ? "✅" : "❌"}`);
+console.log(`   - Has _Styling: ${converted.fields.every(f => f.styling) ? "✅" : "❌"}`);
 
 // Test specific field types
-console.log("\n🎯 Field Type Specific Tests:");
+console.log("\n🎯 Field Type Specific _Tests: ");
 const textField = converted.fields.find(f => f.type === "text");
 const signatureField = converted.fields.find(f => f.type === "signature");
 
 if (textField) {
   console.log(`\n📝 Text Field (${textField.label}):`);
-  console.log(`   - Min Length: ${textField.validation.minLength}`);
-  console.log(`   - Max Length: ${textField.validation.maxLength}`);
-  console.log(`   - Placeholder: "${textField.properties.placeholder}"`);
+  console.log(`   - Min _Length: ${textField.validation.minLength}`);
+  console.log(`   - Max _Length: ${textField.validation.maxLength}`);
+  console.log(`   - _Placeholder: "${textField.properties.placeholder}"`);
 }
 
 if (signatureField) {
   console.log(`\n✍️ Signature Field (${signatureField.label}):`);
-  console.log(`   - Required: ${signatureField.validation.required}`);
-  console.log(`   - Placeholder: "${signatureField.properties.placeholder}"`);
-  console.log(`   - Border Style: ${signatureField.styling.borderStyle || "default"}`);
+  console.log(`   - _Required: ${signatureField.validation.required}`);
+  console.log(`   - _Placeholder: "${signatureField.properties.placeholder}"`);
+  console.log(`   - Border _Style: ${signatureField.styling.borderStyle || "default"}`);
 }
 
 console.log("\n🎉 Conversion Test Complete!");
-console.log("\n💡 Key Benefits of New Format:");
+console.log("\n💡 Key Benefits of New _Format: ");
 console.log("   ✅ No more coordinate-based positioning");
 console.log("   ✅ Rich validation rules");
 console.log("   ✅ Field properties and placeholders");
@@ -181,8 +181,8 @@ const outputPath = path.join(process.cwd(), 'temp', 'test-acroform-definition.js
 const tempDir = path.dirname(outputPath);
 
 if (!fs.existsSync(tempDir)) {
-  fs.mkdirSync(tempDir, { recursive: true });
+  fs.mkdirSync(tempDir, { _recursive: true });
 }
 
 fs.writeFileSync(outputPath, JSON.stringify(converted, null, 2));
-console.log(`\n💾 Test output saved to: ${outputPath}`);
+console.log(`\n💾 Test output saved _to: ${outputPath}`);

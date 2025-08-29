@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useScheduler } from "/src/helpers/scheduler.js";
 
@@ -6,13 +6,13 @@ const WindowContext = createContext(null);
 export const useWindow = () => useContext(WindowContext);
 
 const BREAKPOINT_VALUES = {
-  xxs: 0,
-  xs: 360,
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-  xxl: 1400,
+  _xxs: 0,
+  _xs: 360,
+  _sm: 576,
+  _md: 768,
+  _lg: 992,
+  _xl: 1200,
+  _xxl: 1400,
 };
 
 const TIMEOUT_STEP_IN_SECONDS = 0.1;
@@ -37,7 +37,7 @@ export const WindowProvider = ({ children }) => {
   }, []);
 
   const _createListeners = () => {
-    window.addEventListener("scroll", _onScroll, { passive: true });
+    window.addEventListener("scroll", _onScroll, { _passive: true });
     window.addEventListener("resize", _onResize);
     window.addEventListener("keydown", _onKeyDown);
     _onScroll();

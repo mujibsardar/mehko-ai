@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
@@ -6,22 +6,22 @@ import { vi } from 'vitest';
 // Mock Firebase modules
 export const mockFirebase = () => {
     vi.mock('../../../src/firebase/firebase', () => ({
-        auth: {
+        _auth: {
             onAuthStateChanged: vi.fn(),
-            signInWithEmailAndPassword: vi.fn(),
-            signOut: vi.fn(),
-            currentUser: null
+            _signInWithEmailAndPassword: vi.fn(),
+            _signOut: vi.fn(),
+            _currentUser: null
         },
-        db: {
+        _db: {
             doc: vi.fn(),
-            getDoc: vi.fn(),
-            setDoc: vi.fn(),
-            updateDoc: vi.fn(),
-            onSnapshot: vi.fn(),
-            collection: vi.fn(),
-            getDocs: vi.fn(),
-            addDoc: vi.fn(),
-            deleteDoc: vi.fn()
+            _getDoc: vi.fn(),
+            _setDoc: vi.fn(),
+            _updateDoc: vi.fn(),
+            _onSnapshot: vi.fn(),
+            _collection: vi.fn(),
+            _getDocs: vi.fn(),
+            _addDoc: vi.fn(),
+            _deleteDoc: vi.fn()
         }
     }));
 };
@@ -79,55 +79,55 @@ export const renderWithProviders = (ui, options = {}) => {
         </BrowserRouter>
     );
 
-    return render(ui, { wrapper: Wrapper, ...renderOptions });
+    return render(ui, { _wrapper: Wrapper, ...renderOptions });
 };
 
 // Mock user data
 export const createMockUser = (overrides = {}) => ({
-    uid: 'test-user-123',
-    email: 'test@example.com',
-    displayName: 'Test User',
-    photoURL: null,
-    isAdmin: false,
+    _uid: 'test-user-123',
+    _email: 'test@example.com',
+    _displayName: 'Test User',
+    _photoURL: null,
+    _isAdmin: false,
     ...overrides
 });
 
 // Mock application data
 export const createMockApplication = (overrides = {}) => ({
-    id: 'san_diego_county_mehko',
-    title: 'San Diego County MEHKO',
-    description: 'Home Kitchen Operations Permit for San Diego County',
-    rootDomain: 'sandiegocounty.gov',
-    supportTools: {
+    _id: 'san_diego_county_mehko',
+    _title: 'San Diego County MEHKO',
+    _description: 'Home Kitchen Operations Permit for San Diego County',
+    _rootDomain: 'sandiegocounty.gov',
+    _supportTools: {
         aiEnabled: true,
-        commentsEnabled: true
+        _commentsEnabled: true
     },
-    steps: [
+    _steps: [
         {
             id: 'planning_overview',
-            title: 'Planning Overview',
-            type: 'info',
-            action_required: false,
-            fill_pdf: false,
-            content: 'Start your MEHKO journey with planning resources and guides.'
+            _title: 'Planning Overview',
+            _type: 'info',
+            _action_required: false,
+            _fill_pdf: false,
+            _content: 'Start your MEHKO journey with planning resources and guides.'
         },
         {
-            id: 'approvals_training',
-            title: 'Approvals & Training',
-            type: 'info',
-            action_required: true,
-            fill_pdf: false,
-            content: 'Complete required training and obtain necessary approvals.'
+            _id: 'approvals_training',
+            _title: 'Approvals & Training',
+            _type: 'info',
+            _action_required: true,
+            _fill_pdf: false,
+            _content: 'Complete required training and obtain necessary approvals.'
         },
         {
-            id: 'sop_form',
-            title: 'Standard Operating Procedures',
-            type: 'pdf',
-            action_required: true,
-            fill_pdf: true,
-            content: 'Download and complete the SOP form.',
-            formId: 'SAN_DIEGO_SOP-English',
-            appId: 'san_diego_county_mehko'
+            _id: 'sop_form',
+            _title: 'Standard Operating Procedures',
+            _type: 'pdf',
+            _action_required: true,
+            _fill_pdf: true,
+            _content: 'Download and complete the SOP form.',
+            _formId: 'SAN_DIEGO_SOP-English',
+            _appId: 'san_diego_county_mehko'
         }
     ],
     ...overrides
@@ -135,56 +135,56 @@ export const createMockApplication = (overrides = {}) => ({
 
 // Mock step data
 export const createMockStep = (overrides = {}) => ({
-    id: 'test_step',
-    title: 'Test Step',
-    type: 'info',
-    action_required: false,
-    fill_pdf: false,
-    content: 'This is a test step for testing purposes.',
+    _id: 'test_step',
+    _title: 'Test Step',
+    _type: 'info',
+    _action_required: false,
+    _fill_pdf: false,
+    _content: 'This is a test step for testing purposes.',
     ...overrides
 });
 
 // Mock progress data
 export const createMockProgress = (overrides = {}) => ({
-    id: 'progress-123',
-    userId: 'test-user-123',
-    applicationId: 'san_diego_county_mehko',
-    completedSteps: ['planning_overview'],
-    lastUpdated: new Date().toISOString(),
+    _id: 'progress-123',
+    _userId: 'test-user-123',
+    _applicationId: 'san_diego_county_mehko',
+    _completedSteps: ['planning_overview'],
+    _lastUpdated: new Date().toISOString(),
     ...overrides
 });
 
 // Mock report data
 export const createMockReport = (overrides = {}) => ({
-    id: 'report-123',
-    userId: 'test-user-123',
-    applicationId: 'san_diego_county_mehko',
-    type: 'bug',
-    message: 'Test report message',
-    status: 'open',
-    createdAt: new Date().toISOString(),
+    _id: 'report-123',
+    _userId: 'test-user-123',
+    _applicationId: 'san_diego_county_mehko',
+    _type: 'bug',
+    _message: 'Test report message',
+    _status: 'open',
+    _createdAt: new Date().toISOString(),
     ...overrides
 });
 
 // Mock chat message data
 export const createMockChatMessage = (overrides = {}) => ({
-    id: 'message-123',
-    userId: 'test-user-123',
-    applicationId: 'san_diego_county_mehko',
-    role: 'user',
-    content: 'Test message content',
-    timestamp: new Date().toISOString(),
+    _id: 'message-123',
+    _userId: 'test-user-123',
+    _applicationId: 'san_diego_county_mehko',
+    _role: 'user',
+    _content: 'Test message content',
+    _timestamp: new Date().toISOString(),
     ...overrides
 });
 
 // Mock PDF field data
 export const createMockPdfField = (overrides = {}) => ({
-    name: 'test_field',
-    type: 'text',
-    coordinates: [100, 100, 300, 120],
-    label: 'Test Field',
-    required: false,
-    validation: null,
+    _name: 'test_field',
+    _type: 'text',
+    _coordinates: [100, 100, 300, 120],
+    _label: 'Test Field',
+    _required: false,
+    _validation: null,
     ...overrides
 });
 
@@ -192,39 +192,39 @@ export const createMockPdfField = (overrides = {}) => ({
 export const setupCommonMocks = () => {
     // Mock window.matchMedia
     Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: vi.fn().mockImplementation(query => ({
-            matches: false,
-            media: query,
-            onchange: null,
-            addListener: vi.fn(), // deprecated
-            removeListener: vi.fn(), // deprecated
-            addEventListener: vi.fn(),
-            removeEventListener: vi.fn(),
-            dispatchEvent: vi.fn(),
+        _writable: true,
+        _value: vi.fn().mockImplementation(query => ({
+            _matches: false,
+            _media: query,
+            _onchange: null,
+            _addListener: vi.fn(), // deprecated
+            _removeListener: vi.fn(), // deprecated
+            _addEventListener: vi.fn(),
+            _removeEventListener: vi.fn(),
+            _dispatchEvent: vi.fn(),
         })),
     });
 
     // Mock localStorage
     const localStorageMock = {
-        getItem: vi.fn(),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
+        _getItem: vi.fn(),
+        _setItem: vi.fn(),
+        _removeItem: vi.fn(),
+        _clear: vi.fn(),
     };
     Object.defineProperty(window, 'localStorage', {
-        value: localStorageMock
+        _value: localStorageMock
     });
 
     // Mock sessionStorage
     const sessionStorageMock = {
-        getItem: vi.fn(),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
+        _getItem: vi.fn(),
+        _setItem: vi.fn(),
+        _removeItem: vi.fn(),
+        _clear: vi.fn(),
     };
     Object.defineProperty(window, 'sessionStorage', {
-        value: sessionStorageMock
+        _value: sessionStorageMock
     });
 
     // Mock fetch
@@ -269,18 +269,18 @@ export const waitForElementToBeRemoved = async (element, options = {}) => {
 // Mock IntersectionObserver
 export const mockIntersectionObserver = () => {
     global.IntersectionObserver = vi.fn().mockImplementation(() => ({
-        observe: vi.fn(),
-        unobserve: vi.fn(),
-        disconnect: vi.fn(),
+        _observe: vi.fn(),
+        _unobserve: vi.fn(),
+        _disconnect: vi.fn(),
     }));
 };
 
 // Mock ResizeObserver
 export const mockResizeObserver = () => {
     global.ResizeObserver = vi.fn().mockImplementation(() => ({
-        observe: vi.fn(),
-        unobserve: vi.fn(),
-        disconnect: vi.fn(),
+        _observe: vi.fn(),
+        _unobserve: vi.fn(),
+        _disconnect: vi.fn(),
     }));
 };
 
@@ -298,6 +298,6 @@ export const createTestEnvironment = () => {
     mockRequestAnimationFrame();
 
     return {
-        cleanup: cleanupMocks
+        _cleanup: cleanupMocks
     };
 };

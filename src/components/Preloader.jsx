@@ -1,13 +1,13 @@
 import "./Preloader.scss";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useScheduler } from "/src/helpers/scheduler.js";
 
 const Status = {
-  ANIMATING: "animating",
-  SHOWN: "shown",
-  HIDING: "hiding",
-  HIDDEN: "hidden",
+  _ANIMATING: "animating",
+  _SHOWN: "shown",
+  _HIDING: "hiding",
+  _HIDDEN: "hidden",
 };
 
 const SCHEDULER_TAG = "fs-loader";

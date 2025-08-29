@@ -25,19 +25,19 @@ export default function useAllApplicationsProgress(userId, applicationIds = []) 
 
   // subscribe to progress for all applications
   useEffect(() => {
-    console.log('useAllApplicationsProgress: useEffect triggered', {
+    console.log('_useAllApplicationsProgress: useEffect triggered', {
       userId,
       memoizedAppIds,
-      memoizedAppIdsLength: memoizedAppIds.length
+      _memoizedAppIdsLength: memoizedAppIds.length
     });
     
     if (!userId || memoizedAppIds.length === 0) {
-      console.log('useAllApplicationsProgress: No userId or app IDs, resetting progress');
+      console.log('_useAllApplicationsProgress: No userId or app IDs, resetting progress');
       setAllProgress({});
       return;
     }
 
-    console.log('useAllApplicationsProgress: Setting up listeners for', memoizedAppIds.length, 'applications');
+    console.log('_useAllApplicationsProgress: Setting up listeners for', memoizedAppIds.length, 'applications');
     setLoading(true);
     const unsubs = [];
 
@@ -102,9 +102,9 @@ export default function useAllApplicationsProgress(userId, applicationIds = []) 
     const snap = await getDoc(ref);
     
     if (!snap.exists()) {
-      await setDoc(ref, { completedStepIds: [stepId] });
+      await setDoc(ref, { _completedStepIds: [stepId] });
     } else {
-      await updateDoc(ref, { completedStepIds: arrayUnion(stepId) });
+      await updateDoc(ref, { _completedStepIds: arrayUnion(stepId) });
     }
   }, [userId]);
 
@@ -116,7 +116,7 @@ export default function useAllApplicationsProgress(userId, applicationIds = []) 
     const snap = await getDoc(ref);
     
     if (snap.exists()) {
-      await updateDoc(ref, { completedStepIds: arrayRemove(stepId) });
+      await updateDoc(ref, { _completedStepIds: arrayRemove(stepId) });
     }
   }, [userId]);
 

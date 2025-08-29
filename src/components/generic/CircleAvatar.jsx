@@ -1,5 +1,5 @@
 import "./CircleAvatar.scss"
-import React from 'react'
+
 import ImageView from "/src/components/generic/ImageView.jsx"
 import FaIcon from "/src/components/generic/FaIcon.jsx"
 
@@ -10,8 +10,8 @@ function CircleAvatar({img, alt, size, dynamicSize, fallbackIcon, fallbackIconCo
     return (
         <div className={`circle-avatar ${className} ${sizeClass} ${dynamicSizeClass}`}
              style={{
-                 backgroundColor: fallbackIconColors ? fallbackIconColors.bg : null,
-                 color: fallbackIconColors ? fallbackIconColors.fill : 'inherit'
+                 _backgroundColor: fallbackIconColors ? fallbackIconColors.bg : null,
+                 _color: fallbackIconColors ? fallbackIconColors.fill : 'inherit'
              }}>
                 {img && (<ImageView src={img} alt={alt}/>)}
                 {!img && fallbackIcon && (<FaIcon iconName={fallbackIcon}/>)}

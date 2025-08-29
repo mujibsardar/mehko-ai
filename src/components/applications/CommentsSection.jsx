@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   fetchComments,
   addComment,
@@ -27,7 +27,7 @@ function CommentsSection({ application, context = null }) {
   // Handle context changes to pre-populate comment
   useEffect(() => {
     if (context && context.subStepText) {
-      const commentText = `Question/comment about this sub-step: "${context.subStepText}"\n\n`;
+      const commentText = `Question/comment about this sub-_step: "${context.subStepText}"\n\n`;
       setText(commentText);
     }
   }, [context]);
@@ -55,9 +55,9 @@ function CommentsSection({ application, context = null }) {
 
     await addComment(application.id, {
       text,
-      userId: user?.uid || "anon",
-      displayName: user?.displayName || user?.email || "Anonymous",
-      userEmail: user?.email || "anonymous@example.com",
+      _userId: user?.uid || "anon",
+      _displayName: user?.displayName || user?.email || "Anonymous",
+      _userEmail: user?.email || "anonymous@example.com",
     });
 
     setText("");
@@ -100,7 +100,7 @@ function CommentsSection({ application, context = null }) {
         <form className="comment-form" onSubmit={handleSubmit}>
           <div className="comment-form-header">
             <span className="comment-author-label">
-              Commenting as: <strong>{user.displayName || user.email}</strong>
+              Commenting _as: <strong>{user.displayName || user.email}</strong>
             </span>
           </div>
           <textarea

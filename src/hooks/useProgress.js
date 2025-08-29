@@ -42,7 +42,7 @@ export default function useProgress(userId, applicationId) {
     if (!userId || !applicationId) return null;
     const ref = doc(db, "users", userId, "applicationProgress", applicationId);
     const snap = await getDoc(ref);
-    if (!snap.exists()) await setDoc(ref, { completedStepIds: [] });
+    if (!snap.exists()) await setDoc(ref, { _completedStepIds: [] });
     return ref;
   }, [userId, applicationId]);
 
@@ -51,7 +51,7 @@ export default function useProgress(userId, applicationId) {
       if (!userId || !applicationId || !stepId) return;
       const ref = await ensureDoc();
       if (!ref) return;
-      await updateDoc(ref, { completedStepIds: arrayUnion(stepId) });
+      await updateDoc(ref, { _completedStepIds: arrayUnion(stepId) });
     },
     [userId, applicationId, ensureDoc]
   );
@@ -61,7 +61,7 @@ export default function useProgress(userId, applicationId) {
       if (!userId || !applicationId || !stepId) return;
       const ref = await ensureDoc();
       if (!ref) return;
-      await updateDoc(ref, { completedStepIds: arrayRemove(stepId) });
+      await updateDoc(ref, { _completedStepIds: arrayRemove(stepId) });
     },
     [userId, applicationId, ensureDoc]
   );

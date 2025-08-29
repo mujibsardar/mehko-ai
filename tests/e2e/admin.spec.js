@@ -21,9 +21,9 @@ test.describe('Admin Panel', () => {
     
     // Verify we're on the dashboard and can see content
     // The page snapshot shows these elements exist
-    await expect(page.locator('h1:has-text("MEHKO.ai")')).toBeVisible();
-    await expect(page.locator('h2:has-text("Select Your Application")')).toBeVisible();
-    await expect(page.locator('h3:has-text("Your Applications")')).toBeVisible();
+    await expect(page.locator('_h1: has-text("MEHKO.ai")')).toBeVisible();
+    await expect(page.locator('_h2: has-text("Select Your Application")')).toBeVisible();
+    await expect(page.locator('_h3: has-text("Your Applications")')).toBeVisible();
     
     // Check if there are application cards visible
     await expect(page.locator('text=Los Angeles County MEHKO')).toBeVisible();

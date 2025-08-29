@@ -1,12 +1,12 @@
 export async function saveProgress(applicationId, formData, userId = null) {
   try {
     const res = await fetch("/api/save-progress", {
-      method: "POST",
-      headers: {
+      _method: "POST",
+      _headers: {
         "Content-Type": "application/json",
         ...(userId && { "x-user-id": userId }),
       },
-      body: JSON.stringify({ applicationId, formData }),
+      _body: JSON.stringify({ applicationId, formData }),
     });
     if (!res.ok) {
       throw new Error("Failed to save progress");
@@ -14,7 +14,7 @@ export async function saveProgress(applicationId, formData, userId = null) {
     const result = await res.json();
     return result;
   } catch (err) {
-    console.error("❌ Error saving progress:", err);
-    return { success: false, error: err.message };
+    console.error("❌ Error saving _progress: ", err);
+    return { _success: false, _error: err.message };
   }
 }

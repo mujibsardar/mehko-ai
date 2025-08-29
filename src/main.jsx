@@ -1,6 +1,6 @@
-import React, { StrictMode } from "react";
+import { _StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { _BrowserRouter } from "react-router-dom";
 
 import { DataProvider } from "./providers/DataProvider";
 import { FeedbacksProvider } from "./providers/FeedbacksProvider";

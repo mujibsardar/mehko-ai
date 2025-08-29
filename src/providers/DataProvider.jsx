@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useUtils } from "/src/helpers/utils.js";
 import { useEmails } from "/src/helpers/emails.js";
 
@@ -6,8 +6,8 @@ const DataContext = createContext(null);
 export const useData = () => useContext(DataContext);
 
 const Status = {
-  NOT_LOADED: 0,
-  LOADED: 1,
+  _NOT_LOADED: 0,
+  _LOADED: 1,
 };
 
 export const DataProvider = ({ children }) => {
@@ -16,10 +16,10 @@ export const DataProvider = ({ children }) => {
 
   const [status, setStatus] = useState(Status.NOT_LOADED);
   const [jsonData, setJsonData] = useState({
-    settings: {},
-    strings: {},
-    sections: [],
-    categories: [],
+    _settings: {},
+    _strings: {},
+    _sections: [],
+    _categories: [],
   });
   const [dataValidated, setDataValidated] = useState(false);
 
@@ -67,10 +67,10 @@ export const DataProvider = ({ children }) => {
 
     setJsonData((prevState) => ({
       ...prevState,
-      settings: jSettings,
-      strings: jStrings,
-      categories: filteredCategories,
-      sections: jStructure["sections"],
+      _settings: jSettings,
+      _strings: jStrings,
+      _categories: filteredCategories,
+      _sections: jStructure["sections"],
     }));
 
     setStatus(Status.LOADED);

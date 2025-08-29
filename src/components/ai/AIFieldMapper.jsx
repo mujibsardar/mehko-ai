@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./AIFieldMapper.scss";
 import { ENDPOINTS } from "../../config/api";
 const AIFieldMapper = ({ app, form, onMappingComplete }) => {
@@ -8,7 +8,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
   const [selectedFields, setSelectedFields] = useState([]);
-  const [overlay, setOverlay] = useState({ fields: [] });
+  const [overlay, setOverlay] = useState({ _fields: [] });
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
   // Load existing overlay if available
@@ -34,36 +34,36 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
     setProgress(0);
     setError(null);
     try {
-      // Step 1: Upload PDF and get AI analysis
+      // Step _1: Upload PDF and get AI analysis
       setProgress(20);
       const formData = new FormData();
       formData.append("pdf", file);
       console.log(
-        "Sending request to:",
+        "Sending request _to: ",
         ENDPOINTS.AI_ANALYZE_PDF()
       ); // Debug log
       const uploadResponse = await fetch(
         ENDPOINTS.AI_ANALYZE_PDF(),
         {
-          method: "POST",
-          body: formData,
+          _method: "POST",
+          _body: formData,
         }
       );
       if (!uploadResponse.ok) {
         const errorText = await uploadResponse.text();
-        console.error("Upload failed with response:", errorText); // Debug log
+        console.error("Upload failed with _response: ", errorText); // Debug log
         throw new Error(
-          `Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`
+          `Failed to upload PDF for _analysis: ${uploadResponse.status} ${errorText}`
         );
       }
       const analysisData = await uploadResponse.json();
       setProgress(60);
-      // Step 2: Process AI suggestions
+      // Step _2: Process AI suggestions
       setCurrentStep("mapping");
       const suggestions = processAISuggestions(analysisData.fields);
       setAiSuggestions(suggestions);
       setProgress(80);
-      // Step 3: Auto-select high-confidence fields
+      // Step _3: Auto-select high-confidence fields
       setCurrentStep("reviewing");
       const highConfidenceFields = suggestions.filter(
         (f) => f.confidence > 0.8
@@ -71,7 +71,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       setSelectedFields(highConfidenceFields.map((f) => f.id));
       setProgress(100);
     } catch (err) {
-      console.error("Error in handleFileUpload:", err); // Debug log
+      console.error("Error in _handleFileUpload: ", err); // Debug log
       setError(err.message);
       setCurrentStep("idle");
     } finally {
@@ -80,21 +80,21 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   };
   const processAISuggestions = (aiFields) => {
     return aiFields.map((field, index) => ({
-      id: `ai_field_${index + 1}`,
-      label: field.label || `Field ${index + 1}`,
-      page: field.page || 0,
-      type: field.type || "text",
-      rect: field.rect || [0, 0, 100, 20],
-      fontSize: field.fontSize || 11,
-      align: field.align || "left",
-      shrink: field.shrink !== false,
-      confidence: field.confidence || 0.5,
-      aiReasoning: field.reasoning || "AI detected form field",
-      originalId: field.originalId,
+      _id: `ai_field_${index + 1}`,
+      _label: field.label || `Field ${index + 1}`,
+      _page: field.page || 0,
+      _type: field.type || "text",
+      _rect: field.rect || [0, 0, 100, 20],
+      _fontSize: field.fontSize || 11,
+      _align: field.align || "left",
+      _shrink: field.shrink !== false,
+      _confidence: field.confidence || 0.5,
+      _aiReasoning: field.reasoning || "AI detected form field",
+      _originalId: field.originalId,
       // Add metadata for better coordinate handling
-      originalRect: field.rect,
-      width: field.rect ? field.rect[2] - field.rect[0] : 100,
-      height: field.rect ? field.rect[3] - field.rect[1] : 20,
+      _originalRect: field.rect,
+      _width: field.rect ? field.rect[2] - field.rect[0] : 100,
+      _height: field.rect ? field.rect[3] - field.rect[1] : 20,
     }));
   };
   const handleFieldSelection = (fieldId, isSelected) => {
@@ -116,17 +116,17 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       // Convert to overlay format
       const newOverlay = {
         ...overlay,
-        fields: [
+        _fields: [
           ...overlay.fields,
           ...selectedFieldData.map((f) => ({
-            id: f.id,
-            label: f.label,
-            page: f.page,
-            type: f.type,
-            rect: f.rect,
-            fontSize: f.fontSize,
-            align: f.align,
-            shrink: f.shrink,
+            _id: f.id,
+            _label: f.label,
+            _page: f.page,
+            _type: f.type,
+            _rect: f.rect,
+            _fontSize: f.fontSize,
+            _align: f.align,
+            _shrink: f.shrink,
           })),
         ],
       };
@@ -134,8 +134,8 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       const formData = new FormData();
       formData.append("overlay_json", JSON.stringify(newOverlay));
       const response = await fetch(`/api/apps/${app}/forms/${form}/template`, {
-        method: "POST",
-        body: formData,
+        _method: "POST",
+        _body: formData,
       });
       if (!response.ok) {
         throw new Error("Failed to save field mapping");
@@ -153,7 +153,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   const renderProgressBar = () => (
     <div className="progress-container">
       <div className="progress-bar">
-        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+        <div className="progress-fill" style={{ _width: `${progress}%` }}></div>
       </div>
       <div className="progress-text">
         {currentStep === "analyzing" && "AI analyzing PDF structure..."}
@@ -190,7 +190,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
               </span>
             </div>
             <div className="field-details">
-              <div className="field-type">Type: {field.type}</div>
+              <div className="field-type">_Type: {field.type}</div>
               <div className="field-page">Page: {field.page + 1}</div>
               <div className="field-dimensions">
                 Size: {Math.round(field.width)}×{Math.round(field.height)} px
@@ -236,7 +236,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
             type="file"
             accept=".pdf"
             onChange={handleFileUpload}
-            style={{ display: "none" }}
+            style={{ _display: "none" }}
           />
         </div>
       )}

@@ -46,19 +46,19 @@ function InfoStep({
     if (!user) return;
 
     // Debug logging to help identify the issue
-    console.log("InfoStep Debug:", {
-      step: step,
-      application: application,
-      user: user,
-      stepId: stepId,
-      applicationId: applicationId,
+    console.log("InfoStep _Debug: ", {
+      _step: step,
+      _application: application,
+      _user: user,
+      _stepId: stepId,
+      _applicationId: applicationId,
     });
 
     setIsReportModalOpen(true);
   };
 
   const handleReportSubmitted = (reportData) => {
-    console.log("Step report submitted:", reportData);
+    console.log("Step report _submitted: ", reportData);
   };
 
   // Handle PDF download for PDF steps
@@ -81,7 +81,7 @@ function InfoStep({
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error("Error downloading PDF:", error);
+      console.error("Error downloading _PDF: ", error);
       alert("Failed to download PDF. Please try again.");
     }
   };
@@ -108,13 +108,13 @@ function InfoStep({
         if (currentSection) {
           sections.push({
             ...currentSection,
-            content: currentContent.join("\n").trim(),
+            _content: currentContent.join("\n").trim(),
           });
         }
 
         // Start new section
         const title = trimmedLine.replace(/\*\*/g, "");
-        currentSection = { title, type: "section" };
+        currentSection = { title, _type: "section" };
         currentContent = [];
       } else if (trimmedLine && !trimmedLine.startsWith("*Search:*")) {
         // Add content to current section (skip search terms)
@@ -126,7 +126,7 @@ function InfoStep({
     if (currentSection) {
       sections.push({
         ...currentSection,
-        content: currentContent.join("\n").trim(),
+        _content: currentContent.join("\n").trim(),
       });
     }
 
@@ -168,7 +168,7 @@ function InfoStep({
                     className="action-button website-button"
                     onClick={() => {
                       const domain = application?.rootDomain || "google.com";
-                      window.open(`https://${domain}`, "_blank");
+                      window.open(`_https: //${domain}`, "_blank");
                     }}
                     title="Visit county website"
                   >
@@ -224,7 +224,7 @@ function InfoStep({
 
                     const searchQuery = finalSearchText;
                     window.open(
-                      `https://www.google.com/search?q=${encodeURIComponent(
+                      `_https: //www.google.com/search?q=${encodeURIComponent(
                         searchQuery
                       )}`,
                       "_blank"

@@ -1,28 +1,28 @@
 import fetch from "node-fetch";
 
 async function testPdfDownloadAPI() {
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "_http: //localhost:3000";
   const testData = {
     url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-    appId: "test_county_mehko",
-    formId: "test_form",
+    _appId: "test_county_mehko",
+    _formId: "test_form",
   };
 
   console.log("Testing PDF download API endpoint...");
-  console.log("URL:", `${baseUrl}/api/download-pdf`);
-  console.log("Test data:", testData);
+  console.log("_URL: ", `${baseUrl}/api/download-pdf`);
+  console.log("Test _data: ", testData);
 
   try {
     const response = await fetch(`${baseUrl}/api/download-pdf`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(testData),
+      _method: "POST",
+      _headers: { "Content-Type": "application/json" },
+      _body: JSON.stringify(testData),
     });
 
     if (response.ok) {
       const result = await response.json();
       console.log("✅ PDF download API is working!");
-      console.log("Response:", result);
+      console.log("_Response: ", result);
 
       // Check if file was created
       const fs = await import("fs");
@@ -37,19 +37,19 @@ async function testPdfDownloadAPI() {
 
       if (fs.existsSync(filePath)) {
         const stats = fs.statSync(filePath);
-        console.log(`✅ PDF file created successfully at: ${filePath}`);
-        console.log(`File size: ${stats.size} bytes`);
+        console.log(`✅ PDF file created successfully _at: ${filePath}`);
+        console.log(`File _size: ${stats.size} bytes`);
       } else {
         console.log("⚠️  PDF file was not created");
       }
     } else {
       const error = await response.json().catch(() => ({}));
       console.log("❌ PDF download API failed");
-      console.log("Status:", response.status);
-      console.log("Error:", error);
+      console.log("_Status: ", response.status);
+      console.log("_Error: ", error);
     }
   } catch (error) {
-    console.log("❌ Error testing PDF download API:", error.message);
+    console.log("❌ Error testing PDF download _API: ", error.message);
   }
 }
 

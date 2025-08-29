@@ -7,21 +7,21 @@ vi.mock('../../../src/components/applications/ApplicationOverview.scss', () => (
 
 // Mock the useAuth hook
 vi.mock('../../../src/hooks/useAuth', () => ({
-    default: () => ({
-        user: { uid: 'test-user-123', email: 'test@example.com' }
+    _default: () => ({
+        _user: { uid: 'test-user-123', _email: 'test@example.com' }
     })
 }));
 
 describe('ApplicationOverview', () => {
     const mockApplication = {
-        id: 'san_diego_county_mehko',
-        title: 'San Diego County MEHKO',
-        description: 'Home Kitchen Operations Permit for San Diego County',
-        rootDomain: 'sandiegocounty.gov',
-        steps: [
-            { id: 'planning_overview', title: 'Planning Overview', type: 'info' },
-            { id: 'training', title: 'Training Requirements', type: 'info' },
-            { id: 'application', title: 'Application Form', type: 'pdf' }
+        _id: 'san_diego_county_mehko',
+        _title: 'San Diego County MEHKO',
+        _description: 'Home Kitchen Operations Permit for San Diego County',
+        _rootDomain: 'sandiegocounty.gov',
+        _steps: [
+            { id: 'planning_overview', _title: 'Planning Overview', _type: 'info' },
+            { _id: 'training', _title: 'Training Requirements', _type: 'info' },
+            { _id: 'application', _title: 'Application Form', _type: 'pdf' }
         ]
     };
 
@@ -66,7 +66,7 @@ describe('ApplicationOverview', () => {
     it('should handle applications without steps', () => {
         const applicationWithoutSteps = {
             ...mockApplication,
-            steps: undefined
+            _steps: undefined
         };
 
         render(<ApplicationOverview application={applicationWithoutSteps} />);
@@ -78,7 +78,7 @@ describe('ApplicationOverview', () => {
     it('should handle applications with empty steps array', () => {
         const applicationWithEmptySteps = {
             ...mockApplication,
-            steps: []
+            _steps: []
         };
 
         render(<ApplicationOverview application={applicationWithEmptySteps} />);
@@ -96,7 +96,7 @@ describe('ApplicationOverview', () => {
 
     it('should handle malformed application data', () => {
         const malformedApplication = {
-            id: 'malformed'
+            _id: 'malformed'
             // Missing title, description, steps
         };
 
@@ -116,12 +116,12 @@ describe('ApplicationOverview', () => {
     it('should handle step content rendering', () => {
         const applicationWithStepContent = {
             ...mockApplication,
-            steps: [
+            _steps: [
                 {
                     id: 'step1',
-                    title: 'Step 1',
-                    type: 'info',
-                    content: 'This is step content'
+                    _title: 'Step 1',
+                    _type: 'info',
+                    _content: 'This is step content'
                 }
             ]
         };
@@ -134,10 +134,10 @@ describe('ApplicationOverview', () => {
     it('should handle different step types', () => {
         const applicationWithDifferentStepTypes = {
             ...mockApplication,
-            steps: [
-                { id: 'info_step', title: 'Info Step', type: 'info' },
-                { id: 'pdf_step', title: 'PDF Step', type: 'pdf' },
-                { id: 'form_step', title: 'Form Step', type: 'form' }
+            _steps: [
+                { id: 'info_step', _title: 'Info Step', _type: 'info' },
+                { _id: 'pdf_step', _title: 'PDF Step', _type: 'pdf' },
+                { _id: 'form_step', _title: 'Form Step', _type: 'form' }
             ]
         };
 
@@ -150,8 +150,8 @@ describe('ApplicationOverview', () => {
 
     it('should handle application with missing properties', () => {
         const minimalApplication = {
-            id: 'minimal',
-            title: 'Minimal App'
+            _id: 'minimal',
+            _title: 'Minimal App'
             // Missing description and steps
         };
 

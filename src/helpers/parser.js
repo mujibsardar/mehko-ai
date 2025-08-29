@@ -17,11 +17,11 @@ export const useParser = () => {
         }
 
         return {
-            id: articleData.id,
-            title: getTranslation(articleData.locales, 'title', true),
-            items: articleData.items,
-            categories: articleData.categories,
-            config: articleData.config
+            _id: articleData.id,
+            _title: getTranslation(articleData.locales, 'title', true),
+            _items: articleData.items,
+            _categories: articleData.categories,
+            _config: articleData.config
         }
     }
 
@@ -86,9 +86,9 @@ export const useParser = () => {
 
             parsedItem.links = links ? links.map((link, key) => {
                 return {
-                    href: link.href,
-                    hrefLabel: getString(link.string || 'link'),
-                    faIcon: link.faIcon
+                    _href: link.href,
+                    _hrefLabel: getString(link.string || 'link'),
+                    _faIcon: link.faIcon
                 }
             }) : []
 
@@ -99,19 +99,19 @@ export const useParser = () => {
 
                 if(screenshots && screenshots.images?.length) {
                     parsedItem.mediaOptions.push({
-                        id: "gallery",
-                        target: screenshots,
-                        tooltip: getString('open_gallery'),
-                        faIcon: 'fa-solid fa-camera'
+                        _id: "gallery",
+                        _target: screenshots,
+                        _tooltip: getString('open_gallery'),
+                        _faIcon: 'fa-solid fa-camera'
                     })
                 }
 
                 if(youtubeVideo) {
                     parsedItem.mediaOptions.push({
-                        id: "youtube",
-                        target: youtubeVideo,
-                        tooltip: getString('watch_video'),
-                        faIcon: 'fa-brands fa-youtube'
+                        _id: "youtube",
+                        _target: youtubeVideo,
+                        _tooltip: getString('watch_video'),
+                        _faIcon: 'fa-brands fa-youtube'
                     })
                 }
             }

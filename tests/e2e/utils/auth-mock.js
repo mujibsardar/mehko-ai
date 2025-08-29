@@ -20,35 +20,35 @@ export const createAuthMock = () => {
             
             // This is the AuthContext - override it with our mock user
             const mockUser = {
-              uid: 'test-user-123',
-              email: 'test@example.com',
-              displayName: 'Test User',
-              getIdTokenResult: async () => ({ claims: { admin: false } })
+              _uid: 'test-user-123',
+              _email: 'test@example.com',
+              _displayName: 'Test User',
+              _getIdTokenResult: async () => ({ _claims: { admin: false } })
             };
             
             // Override the context value
             context._currentValue = {
-              user: mockUser,
-              loading: false,
-              isAdmin: false,
-              logout: async () => {}
+              _user: mockUser,
+              _loading: false,
+              _isAdmin: false,
+              _logout: async () => {}
             };
             
             // Also override the Provider's value prop
             const originalProvider = context.Provider;
             context.Provider = ({ value, children }) => {
               return originalProvider({ 
-                value: { 
+                _value: { 
                   user: mockUser, 
-                  loading: false, 
-                  isAdmin: false, 
-                  logout: async () => {} 
+                  _loading: false, 
+                  _isAdmin: false, 
+                  _logout: async () => {} 
                 }, 
                 children 
               });
             };
             
-            console.log('🔐 AuthContext mocked successfully with test user:', mockUser.email);
+            console.log('🔐 AuthContext mocked successfully with test _user: ', mockUser.email);
           }
           
           return context;
@@ -67,17 +67,17 @@ export const createAuthMock = () => {
     // Also mock Firebase auth methods as a fallback
     if (typeof window !== 'undefined') {
       window.mockAuth = {
-        currentUser: {
+        _currentUser: {
           uid: 'test-user-123',
-          email: 'test@example.com',
-          displayName: 'Test User',
-          getIdTokenResult: async () => ({ claims: { admin: false } })
+          _email: 'test@example.com',
+          _displayName: 'Test User',
+          _getIdTokenResult: async () => ({ _claims: { admin: false } })
         },
-        onAuthStateChanged: (callback) => {
+        _onAuthStateChanged: (callback) => {
           callback(window.mockAuth.currentUser);
           return () => {};
         },
-        signOut: async () => {}
+        _signOut: async () => {}
       };
       
       // Mock Firebase app and auth
@@ -96,28 +96,28 @@ export const createFirestoreMock = () => {
     // Mock Firestore responses
     if (typeof window !== 'undefined') {
       window.mockFirestore = {
-        applications: {
+        _applications: {
           'san_diego_county_mehko': {
             id: 'san_diego_county_mehko',
-            title: 'San Diego County MEHKO',
-            description: 'Home Kitchen Operations Permit for San Diego County',
-            steps: [
+            _title: 'San Diego County MEHKO',
+            _description: 'Home Kitchen Operations Permit for San Diego County',
+            _steps: [
               {
                 id: 'step1',
-                title: 'Submit Application',
-                type: 'info',
-                content: 'Complete and submit your application form'
+                _title: 'Submit Application',
+                _type: 'info',
+                _content: 'Complete and submit your application form'
               }
             ]
           }
         },
-        users: {
+        _users: {
           'test-user-123': {
             pinnedApplications: ['san_diego_county_mehko'],
-            applications: {
+            _applications: {
               'san_diego_county_mehko': {
                 chatMessages: [],
-                progress: { completedSteps: [] }
+                _progress: { completedSteps: [] }
               }
             }
           }

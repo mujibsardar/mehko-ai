@@ -12,7 +12,7 @@ const ApplicationCard = ({ application, completedSteps = [], onClick }) => {
         <p>{application.description}</p>
         {application.rootDomain && (
           <div className="application-source">
-            <small>Source: {application.rootDomain}</small>
+            <small>_Source: {application.rootDomain}</small>
           </div>
         )}
       </div>

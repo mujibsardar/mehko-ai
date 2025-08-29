@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getApiBase } from "../../config/api";
 import "./AcroFormViewer.scss";
 
@@ -37,7 +37,7 @@ const AcroFormViewer = ({
             // First, try to create/get AcroForm PDF
             const acroformResponse = await fetch(
                 `${API_BASE}/apps/${app}/forms/${form}/create-acroform`,
-                { method: "POST" }
+                { _method: "POST" }
             );
 
             if (acroformResponse.ok) {
@@ -50,7 +50,7 @@ const AcroFormViewer = ({
                 setIsAcroFormAvailable(false);
             }
         } catch (err) {
-            console.error("Failed to load PDF:", err);
+            console.error("Failed to load _PDF: ", err);
             setError("Failed to load the form. Please try again.");
         } finally {
             setLoading(false);
@@ -80,11 +80,11 @@ const AcroFormViewer = ({
     const downloadFilledPdf = async () => {
         try {
             const response = await fetch(`${API_BASE}/apps/${app}/forms/${form}/fill`, {
-                method: "POST",
-                headers: {
+                _method: "POST",
+                _headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: `answers_json=${encodeURIComponent(JSON.stringify(formData))}`,
+                _body: `answers_json=${encodeURIComponent(JSON.stringify(formData))}`,
             });
 
             if (!response.ok) {
@@ -101,7 +101,7 @@ const AcroFormViewer = ({
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
         } catch (err) {
-            console.error("Failed to download PDF:", err);
+            console.error("Failed to download _PDF: ", err);
             setError("Failed to download the filled PDF. Please try again.");
         }
     };

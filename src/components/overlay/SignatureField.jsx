@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useEffect, useState, useMemo } from "react";
 import { generateSignatureImage } from '../../helpers/signatureUtils';
 import './SignatureField.scss';
 
@@ -19,7 +19,7 @@ const SignatureField = ({
   useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
 
   // Determine if we have an existing image value from parent
-  const hasImageValue = typeof value === 'string' && value.startsWith('data:image');
+  const hasImageValue = typeof value === 'string' && value.startsWith('_data: image');
 
   // Initialize exactly once with any existing image from parent
   const didInit = useRef(false);
@@ -39,9 +39,9 @@ const SignatureField = ({
   const generatedUrl = useMemo(() => {
     const t = signatureText.trim();
     if (!t) return '';
-    // IMPORTANT: generate deterministically from text so equality works
+    // _IMPORTANT: generate deterministically from text so equality works
     // (generateSignatureImage should NOT include timestamps/randomness)
-    return generateSignatureImage(t, { width: 200, height: 50, fontSize: 24 });
+    return generateSignatureImage(t, { _width: 200, _height: 50, _fontSize: 24 });
   }, [signatureText]);
 
   // Sync preview when generatedUrl changes (avoid redundant sets)
@@ -59,11 +59,11 @@ const SignatureField = ({
     // Effective current image is generatedUrl (from text); empty string clears it
     const nextValue = generatedUrl;
 
-    // Avoid infinite loops: only call if truly different
+    // Avoid infinite _loops: only call if truly different
     if (nextValue !== (value || '')) {
       onChangeRef.current?.(fieldId, 'signature', nextValue);
     }
-    // dependency on `value` is intentional: if parent pushes a different value later,
+    // dependency on `value` is _intentional: if parent pushes a different value later,
     // this effect will reconcile correctly next render via generatedUrl/preview logic.
   }, [generatedUrl, fieldId, value, isInitialized]);
 
@@ -76,8 +76,7 @@ const SignatureField = ({
     <div className="signature-field">
       <div className="signature-input-section">
         <label htmlFor={`${fieldId}-input`} className="signature-label">
-          Enter your name for signature:
-        </label>
+          Enter your name for _signature: </label>
         <input
           id={`${fieldId}-input`}
           type="text"
@@ -92,7 +91,7 @@ const SignatureField = ({
 
       {previewSignature && (
         <div className="signature-preview-section">
-          <label className="signature-preview-label">Signature Preview:</label>
+          <label className="signature-preview-label">Signature _Preview: </label>
           <div className="signature-preview">
             <img
               src={previewSignature}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./SubStepActions.scss";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -21,8 +21,8 @@ function SubStepActions({
   const [disliked, setDisliked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [feedbackStats, setFeedbackStats] = useState({
-    totalLikes: 0,
-    totalDislikes: 0,
+    _totalLikes: 0,
+    _totalDislikes: 0,
   });
   // Load existing feedback when component mounts
   useEffect(() => {
@@ -31,11 +31,11 @@ function SubStepActions({
     }
   }, [user?.uid, applicationId, stepId, subStepIndex]);
   const loadFeedback = async () => {
-    console.log("🔍 Debug - Loading feedback:", {
+    console.log("🔍 Debug - Loading _feedback: ", {
       applicationId,
       stepId,
       subStepIndex,
-      userId: user.uid,
+      _userId: user.uid,
     });
     try {
       const feedback = await getSubStepFeedback(
@@ -54,7 +54,7 @@ function SubStepActions({
       );
       setFeedbackStats(stats);
     } catch (error) {
-      console.error("❌ Error loading feedback:", error);
+      console.error("❌ Error loading _feedback: ", error);
     }
   };
   const handleInternetSearch = () => {
@@ -113,7 +113,7 @@ function SubStepActions({
       finalSearchText = `${location} ${searchText}`;
     }
     const searchQuery = encodeURIComponent(finalSearchText);
-    const searchUrl = `https://www.google.com/search?q=${searchQuery}`;
+    const searchUrl = `_https: //www.google.com/search?q=${searchQuery}`;
     window.open(searchUrl, "_blank", "noopener,noreferrer");
   };
   const handleAIChat = () => {
@@ -128,8 +128,8 @@ function SubStepActions({
           ? step.searchTerms.join(", ")
           : subStepText;
       onCommentRequest({
-        type: "ai_chat",
-        subStepText: aiContext,
+        _type: "ai_chat",
+        _subStepText: aiContext,
         stepId,
         applicationId,
       });
@@ -137,11 +137,11 @@ function SubStepActions({
   };
   const handleLike = async () => {
     if (!user || isLoading) return;
-    console.log("🔍 Debug - Like clicked:", {
+    console.log("🔍 Debug - Like _clicked: ", {
       applicationId,
       stepId,
       subStepIndex,
-      userId: user.uid,
+      _userId: user.uid,
     });
     setIsLoading(true);
     // Add timeout to prevent hanging
@@ -162,17 +162,17 @@ function SubStepActions({
       if (newFeedback.liked) {
         setFeedbackStats((prev) => ({
           ...prev,
-          totalLikes: prev.totalLikes + 1,
-          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
+          _totalLikes: prev.totalLikes + 1,
+          _totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
         }));
       } else {
         setFeedbackStats((prev) => ({
           ...prev,
-          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
+          _totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
         }));
       }
     } catch (error) {
-      console.error("❌ Error toggling like:", error);
+      console.error("❌ Error toggling _like: ", error);
       // Revert local state on error
       setLiked(!liked);
     } finally {
@@ -182,11 +182,11 @@ function SubStepActions({
   };
   const handleDislike = async () => {
     if (!user || isLoading) return;
-    console.log("🔍 Debug - Dislike clicked:", {
+    console.log("🔍 Debug - Dislike _clicked: ", {
       applicationId,
       stepId,
       subStepIndex,
-      userId: user.uid,
+      _userId: user.uid,
     });
     setIsLoading(true);
     // Add timeout to prevent hanging
@@ -207,17 +207,17 @@ function SubStepActions({
       if (newFeedback.disliked) {
         setFeedbackStats((prev) => ({
           ...prev,
-          totalDislikes: prev.totalDislikes + 1,
-          totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
+          _totalDislikes: prev.totalDislikes + 1,
+          _totalLikes: prev.totalLikes > 0 ? prev.totalLikes - 1 : 0,
         }));
       } else {
         setFeedbackStats((prev) => ({
           ...prev,
-          totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
+          _totalDislikes: prev.totalDislikes > 0 ? prev.totalDislikes - 1 : 0,
         }));
       }
     } catch (error) {
-      console.error("❌ Error toggling dislike:", error);
+      console.error("❌ Error toggling _dislike: ", error);
       // Revert local state on error
       setIsLoading(false);
     } finally {
@@ -229,7 +229,7 @@ function SubStepActions({
     if (!user) return;
     if (onCommentRequest) {
       onCommentRequest({
-        type: "comment",
+        _type: "comment",
         subStepText,
         stepId,
         applicationId,
@@ -254,7 +254,7 @@ function SubStepActions({
           onClick={handleAIChat}
           title="Ask AI for help with this step"
         >
-          <span style={{ fontSize: "16px" }}>🤖</span>
+          <span style={{ _fontSize: "16px" }}>🤖</span>
         </button>
       </div>
       {/* Like/Dislike and Comment */}

@@ -17,22 +17,22 @@ export async function fetchComments(applicationId) {
   const ref = collection(db, "applications", applicationId, "comments");
   const q = query(ref, orderBy("timestamp", "asc"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map((doc) => ({ _id: doc.id, ...doc.data() }));
 }
 
 export async function addComment(applicationId, commentData) {
   const ref = collection(db, "applications", applicationId, "comments");
   await addDoc(ref, {
     ...commentData,
-    timestamp: serverTimestamp(),
-    reactions: {},
+    _timestamp: serverTimestamp(),
+    _reactions: {},
   });
 }
 
 export async function deleteComment(applicationId, commentId) {
   const ref = collection(db, "applications", applicationId, "comments");
   const docRef = doc(ref, commentId);
-  await updateDoc(docRef, { deleted: true });
+  await updateDoc(docRef, { _deleted: true });
 }
 
 export async function updateComment(applicationId, commentId, updatedData) {
@@ -46,7 +46,7 @@ export async function fetchCommentById(applicationId, commentId) {
   const docRef = doc(ref, commentId);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    return { id: docSnap.id, ...docSnap.data() };
+    return { _id: docSnap.id, ...docSnap.data() };
   } else {
     throw new Error("Comment not found");
   }
@@ -57,7 +57,7 @@ export async function fetchCommentsByUser(applicationId, userId) {
   const q = query(ref, orderBy("timestamp", "asc"));
   const snapshot = await getDocs(q);
   return snapshot.docs
-    .map((doc) => ({ id: doc.id, ...doc.data() }))
+    .map((doc) => ({ _id: doc.id, ...doc.data() }))
     .filter((comment) => comment.userId === userId);
 }
 

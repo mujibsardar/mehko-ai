@@ -55,7 +55,7 @@ const Sidebar = ({
             completedSteps,
             completeCount,
             percent,
-            allProgress: allProgress[application.id]
+            _allProgress: allProgress[application.id]
           });
 
           const hasComments = Boolean(
@@ -76,7 +76,7 @@ const Sidebar = ({
                   <div className="sidebar-progress-bar">
                     <div
                       className="sidebar-progress-fill"
-                      style={{ width: `${percent}%` }}
+                      style={{ _width: `${percent}%` }}
                     />
                   </div>
                   <div className="progress-info">
@@ -120,14 +120,14 @@ const Sidebar = ({
                 <div
                   className="sidebar-sublist"
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    maxHeight: "60vh", // adjust if needed
+                    _display: "flex",
+                    _flexDirection: "column",
+                    _height: "100%",
+                    _maxHeight: "60vh", // adjust if needed
                   }}
                 >
                   {/* Overview row */}
-                  <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                  <ul style={{ _listStyle: "none", _margin: 0, _padding: 0 }}>
                     <li
                       className={
                         activeSection === "overview" ? "active-nav" : ""
@@ -173,11 +173,11 @@ const Sidebar = ({
                   {/* Steps list (scrollable) */}
                   <ul
                     style={{
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      flex: 1,
-                      overflowY: "auto",
+                      _listStyle: "none",
+                      _margin: 0,
+                      _padding: 0,
+                      _flex: 1,
+                      _overflowY: "auto",
                     }}
                   >
                     {!areStepsCollapsed &&
@@ -220,12 +220,12 @@ const Sidebar = ({
                   {hasComments && (
                     <div
                       style={{
-                        borderTop: "1px solid #eee",
-                        padding: "8px 12px",
-                        flexShrink: 0,
+                        _borderTop: "1px solid #eee",
+                        _padding: "8px 12px",
+                        _flexShrink: 0,
                       }}
                     >
-                      <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                      <ul style={{ _listStyle: "none", _margin: 0, _padding: 0 }}>
                         <li className="sidebar-section-label">
                           <span
                             className="collapsible-section"

@@ -20,7 +20,7 @@ function ApplicationOverview({ application }) {
   };
 
   const handleReportSubmitted = (reportData) => {
-    console.log("Report submitted:", reportData);
+    console.log("Report _submitted: ", reportData);
     // Could add toast notification here
   };
 

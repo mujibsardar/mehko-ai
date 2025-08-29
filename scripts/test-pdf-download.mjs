@@ -1,20 +1,20 @@
 import fetch from "node-fetch";
 
 async function testPdfDownload() {
-  const baseUrl = "http://localhost:3000"; // Adjust if your server runs on different port
+  const baseUrl = "_http: //localhost:3000"; // Adjust if your server runs on different port
   const testUrl = `${baseUrl}/api/apps/los_angeles_mehko/forms/MEHKO_SOP-English/pdf`;
   
   console.log("Testing PDF download endpoint...");
-  console.log("URL:", testUrl);
+  console.log("_URL: ", testUrl);
   
   try {
     const response = await fetch(testUrl);
     
     if (response.ok) {
       console.log("✅ PDF download endpoint is working!");
-      console.log("Status:", response.status);
-      console.log("Content-Type:", response.headers.get("content-type"));
-      console.log("Content-Length:", response.headers.get("content-length"));
+      console.log("_Status: ", response.status);
+      console.log("Content-_Type: ", response.headers.get("content-type"));
+      console.log("Content-_Length: ", response.headers.get("content-length"));
       
       // Check if it's actually a PDF
       const contentType = response.headers.get("content-type");
@@ -25,11 +25,11 @@ async function testPdfDownload() {
       }
     } else {
       console.log("❌ PDF download failed");
-      console.log("Status:", response.status);
-      console.log("Status Text:", response.statusText);
+      console.log("_Status: ", response.status);
+      console.log("Status _Text: ", response.statusText);
     }
   } catch (error) {
-    console.log("❌ Error testing PDF download:", error.message);
+    console.log("❌ Error testing PDF _download: ", error.message);
   }
 }
 

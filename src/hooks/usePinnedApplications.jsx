@@ -23,7 +23,7 @@ export default function usePinnedApplications() {
 
       const apps = appDocs
         .filter((snap) => snap.exists())
-        .map((snap) => ({ id: snap.id, ...snap.data() }));
+        .map((snap) => ({ _id: snap.id, ...snap.data() }));
 
       setApplications(apps);
       setLoading(false);

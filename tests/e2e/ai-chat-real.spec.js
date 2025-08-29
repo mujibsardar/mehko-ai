@@ -11,7 +11,7 @@ test.describe('AI Chat with Real Authentication', () => {
     // This should trigger the login modal
     
     // Look for any button or link that would open AI chat
-    const aiChatButton = page.locator('button:has-text("AI Chat"), button:has-text("Ask AI"), .ai-chat-button, .chat-button');
+    const aiChatButton = page.locator('_button: has-text("AI Chat"), _button: has-text("Ask AI"), .ai-chat-button, .chat-button');
     
     if (await aiChatButton.isVisible()) {
       await aiChatButton.click();
@@ -26,7 +26,7 @@ test.describe('AI Chat with Real Authentication', () => {
 
   test('should display AI chat interface after login', async ({ page }) => {
     // Login first
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -37,7 +37,7 @@ test.describe('AI Chat with Real Authentication', () => {
       await emailInput.fill('test@test.com');
       await passwordInput.fill('Test123!');
       
-      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
       await submitButton.click();
       
       // Wait for authentication
@@ -48,7 +48,7 @@ test.describe('AI Chat with Real Authentication', () => {
     await expect(page.locator('.auth-modal, .login-modal, .modal')).not.toBeVisible();
     
     // Now try to access AI chat
-    const aiChatButton = page.locator('button:has-text("AI Chat"), button:has-text("Ask AI"), .ai-chat-button, .chat-button');
+    const aiChatButton = page.locator('_button: has-text("AI Chat"), _button: has-text("Ask AI"), .ai-chat-button, .chat-button');
     
     if (await aiChatButton.isVisible()) {
       await aiChatButton.click();
@@ -65,7 +65,7 @@ test.describe('AI Chat with Real Authentication', () => {
         
         // Look for common AI chat elements
         const chatInput = page.locator('.chat-input, .message-input, textarea, input[type="text"]');
-        const sendButton = page.locator('.send-button, .submit-button, button:has-text("Send"), button:has-text("Submit")');
+        const sendButton = page.locator('.send-button, .submit-button, _button: has-text("Send"), _button: has-text("Submit")');
         
         if (await chatInput.isVisible()) {
           await expect(chatInput).toBeVisible();
@@ -84,7 +84,7 @@ test.describe('AI Chat with Real Authentication', () => {
 
   test('should handle basic chat input and response', async ({ page }) => {
     // Login first
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -95,7 +95,7 @@ test.describe('AI Chat with Real Authentication', () => {
       await emailInput.fill('test@test.com');
       await passwordInput.fill('Test123!');
       
-      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
       await submitButton.click();
       
       // Wait for authentication
@@ -113,7 +113,7 @@ test.describe('AI Chat with Real Authentication', () => {
       await page.waitForTimeout(2000);
       
       // Look for AI chat interface in the application context
-      const aiChatButton = page.locator('button:has-text("AI Chat"), button:has-text("Ask AI"), .ai-chat-button, .chat-button');
+      const aiChatButton = page.locator('_button: has-text("AI Chat"), _button: has-text("Ask AI"), .ai-chat-button, .chat-button');
       
       if (await aiChatButton.isVisible()) {
         await aiChatButton.click();
@@ -129,7 +129,7 @@ test.describe('AI Chat with Real Authentication', () => {
           await chatInput.fill('Hello, how can you help me?');
           
           // Find and click send button
-          const sendButton = page.locator('.send-button, .submit-button, button:has-text("Send"), button:has-text("Submit")');
+          const sendButton = page.locator('.send-button, .submit-button, _button: has-text("Send"), _button: has-text("Submit")');
           
           if (await sendButton.isVisible()) {
             await sendButton.click();
@@ -138,7 +138,7 @@ test.describe('AI Chat with Real Authentication', () => {
             await page.waitForTimeout(3000);
             
             // Look for AI response
-            const aiResponse = page.locator('.ai-response, .chat-message:not(.user-message), .message:not(.user), .response');
+            const aiResponse = page.locator('.ai-response, .chat-_message: not(.user-message), ._message: not(.user), .response');
             
             if (await aiResponse.isVisible()) {
               await expect(aiResponse).toBeVisible();
@@ -156,7 +156,7 @@ test.describe('AI Chat with Real Authentication', () => {
 
   test('should show appropriate error messages for invalid inputs', async ({ page }) => {
     // Login first
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
+    const signInButton = page.locator('_button: has-text("Sign In"), .auth-button, .signin-button');
     
     if (await signInButton.isVisible()) {
       await signInButton.click();
@@ -167,7 +167,7 @@ test.describe('AI Chat with Real Authentication', () => {
       await emailInput.fill('test@test.com');
       await passwordInput.fill('Test123!');
       
-      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
+      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, _button: has-text("Sign In"):not(.auth-button)');
       await submitButton.click();
       
       // Wait for authentication
@@ -175,14 +175,14 @@ test.describe('AI Chat with Real Authentication', () => {
     }
     
     // Try to send empty message
-    const aiChatButton = page.locator('button:has-text("AI Chat"), button:has-text("Ask AI"), .ai-chat-button, .chat-button');
+    const aiChatButton = page.locator('_button: has-text("AI Chat"), _button: has-text("Ask AI"), .ai-chat-button, .chat-button');
     
     if (await aiChatButton.isVisible()) {
       await aiChatButton.click();
       
       await page.waitForTimeout(1000);
       
-      const sendButton = page.locator('.send-button, .submit-button, button:has-text("Send"), button:has-text("Submit")');
+      const sendButton = page.locator('.send-button, .submit-button, _button: has-text("Send"), _button: has-text("Submit")');
       
       if (await sendButton.isVisible()) {
         // Try to send without input

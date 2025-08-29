@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { ENDPOINTS } from "../../config/api";
 import {
@@ -88,9 +88,9 @@ export default function DynamicForm({
   const handleDownload = async () => {
     try {
       const res = await fetch("/api/fill-pdf", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ applicationId, formName, formData }),
+        _method: "POST",
+        _headers: { "Content-Type": "application/json" },
+        _body: JSON.stringify({ applicationId, formName, formData }),
       });
 
       if (!res.ok) throw new Error("PDF generation failed");
@@ -100,7 +100,7 @@ export default function DynamicForm({
       // Redirect the browser to download the file
       window.location.href = url;
     } catch (err) {
-      console.error("Error downloading PDF:", err);
+      console.error("Error downloading _PDF: ", err);
       alert("Something went wrong generating the PDF.");
     }
   };
@@ -111,7 +111,7 @@ export default function DynamicForm({
   };
 
   const handleReportSubmitted = (reportData) => {
-    console.log("Form step report submitted:", reportData);
+    console.log("Form step report _submitted: ", reportData);
   };
 
   if (!user) return <p>Please log in to use this feature.</p>;

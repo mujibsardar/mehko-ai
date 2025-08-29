@@ -7,14 +7,14 @@ vi.mock('../../../src/components/shared/ApplicationCard.scss', () => ({}));
 
 describe('ApplicationCard', () => {
     const mockApplication = {
-        id: 'san_diego_county_mehko',
-        title: 'San Diego County MEHKO',
-        description: 'Home Kitchen Operations Permit for San Diego County',
-        rootDomain: 'sandiegocounty.gov',
-        steps: [
-            { id: 'step1', title: 'Planning Overview' },
-            { id: 'step2', title: 'Training' },
-            { id: 'step3', title: 'Application' }
+        _id: 'san_diego_county_mehko',
+        _title: 'San Diego County MEHKO',
+        _description: 'Home Kitchen Operations Permit for San Diego County',
+        _rootDomain: 'sandiegocounty.gov',
+        _steps: [
+            { id: 'step1', _title: 'Planning Overview' },
+            { _id: 'step2', _title: 'Training' },
+            { _id: 'step3', _title: 'Application' }
         ]
     };
 
@@ -31,7 +31,7 @@ describe('ApplicationCard', () => {
 
         expect(screen.getByText('San Diego County MEHKO')).toBeInTheDocument();
         expect(screen.getByText('Home Kitchen Operations Permit for San Diego County')).toBeInTheDocument();
-        expect(screen.getByText('Source: sandiegocounty.gov')).toBeInTheDocument();
+        expect(screen.getByText('_Source: sandiegocounty.gov')).toBeInTheDocument();
     });
 
     it('should handle click events', () => {
@@ -54,7 +54,7 @@ describe('ApplicationCard', () => {
     it('should handle applications without steps', () => {
         const applicationWithoutSteps = {
             ...mockApplication,
-            steps: undefined
+            _steps: undefined
         };
 
         render(
@@ -73,7 +73,7 @@ describe('ApplicationCard', () => {
     it('should handle applications without rootDomain', () => {
         const applicationWithoutDomain = {
             ...mockApplication,
-            rootDomain: undefined
+            _rootDomain: undefined
         };
 
         render(
@@ -85,7 +85,7 @@ describe('ApplicationCard', () => {
         );
 
         // Should not show source information
-        expect(screen.queryByText(/Source:/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/_Source: /)).not.toBeInTheDocument();
     });
 
     it('should handle empty completed steps', () => {
@@ -105,7 +105,7 @@ describe('ApplicationCard', () => {
     it('should handle applications with empty steps array', () => {
         const applicationWithEmptySteps = {
             ...mockApplication,
-            steps: []
+            _steps: []
         };
 
         render(
@@ -151,10 +151,10 @@ describe('ApplicationCard', () => {
 
     it('should handle malformed application data gracefully', () => {
         const malformedApplication = {
-            id: 'malformed',
-            title: undefined,
-            description: undefined,
-            steps: undefined
+            _id: 'malformed',
+            _title: undefined,
+            _description: undefined,
+            _steps: undefined
         };
 
         render(
@@ -171,8 +171,8 @@ describe('ApplicationCard', () => {
 
     it('should handle applications with minimal data', () => {
         const minimalApplication = {
-            id: 'minimal',
-            title: 'Minimal App'
+            _id: 'minimal',
+            _title: 'Minimal App'
         };
 
         render(

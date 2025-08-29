@@ -1,6 +1,5 @@
 import "./Tooltip.scss"
-import React, {useEffect, useState} from 'react'
-
+import {useEffect, useState} from "react";
 function Tooltip({className, id, label}) {
     const [currentLabel, setCurrentLabel] = useState('')
 

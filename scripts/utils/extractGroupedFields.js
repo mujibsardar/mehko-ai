@@ -9,7 +9,7 @@ GlobalWorkerOptions.workerSrc = require.resolve(
 
 export async function extractGroupedFields(pdfPath) {
   const raw = new Uint8Array(fs.readFileSync(pdfPath));
-  const pdf = await getDocument({ data: raw }).promise;
+  const pdf = await getDocument({ _data: raw }).promise;
 
   const fieldGroups = [];
 
@@ -19,9 +19,9 @@ export async function extractGroupedFields(pdfPath) {
 
     const blocks = content.items
       .map((item) => ({
-        str: item.str.trim(),
-        x: item.transform[4],
-        y: item.transform[5],
+        _str: item.str.trim(),
+        _x: item.transform[4],
+        _y: item.transform[5],
       }))
       .filter((b) => b.str.length > 2);
 
@@ -37,7 +37,7 @@ export async function extractGroupedFields(pdfPath) {
       .sort((a, b) => b[0] - a[0])
       .map(([y, items]) => ({
         y,
-        text: items
+        _text: items
           .sort((a, b) => a.x - b.x)
           .map((b) => b.str)
           .join(" ")
@@ -70,14 +70,12 @@ export async function extractGroupedFields(pdfPath) {
         fieldGroups.push({
           name,
           type,
-          page: pageNum,
-          rawLine: text,
-          certifies:
-            type === "initials" || type === "signature" || type === "date"
+          _page: pageNum,
+          _rawLine: text,
+          _certifies: type === "initials" || type === "signature" || type === "date"
               ? mergeAboveLines(lines, index, 3)
               : undefined,
-          visibleTextNearby:
-            type !== "initials" && type !== "signature" && type !== "date"
+          _visibleTextNearby: type !== "initials" && type !== "signature" && type !== "date"
               ? getNearbyLines(lines, y)
               : undefined,
         });

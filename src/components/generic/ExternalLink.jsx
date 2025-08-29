@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from "react";
 import {useLanguage} from "/src/providers/LanguageProvider.jsx"
 import {useUtils} from "/src/helpers/utils.js"
 import {useFeedbacks} from "/src/providers/FeedbacksProvider.jsx"
@@ -9,7 +9,7 @@ function ExternalLink({href, className, children}) {
     const utils = useUtils()
 
     const handleClick = (e) => {
-        if(href.includes('mailto') || href.includes('tel:'))
+        if(href.includes('mailto') || href.includes('_tel: '))
             return
 
         e.preventDefault()

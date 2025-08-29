@@ -27,27 +27,27 @@ export const rectPxToPt = (rectPx = [0, 0, 0, 0]) => [
 
 // Convert screen coordinates to PDF coordinates using page metrics
 export const screenToPdfCoords = (screenX, screenY, pageMetrics) => {
-  if (!pageMetrics) return { x: screenX, y: screenY };
+  if (!pageMetrics) return { _x: screenX, _y: screenY };
   
   const scaleX = pageMetrics.pointsWidth / pageMetrics.pixelWidth;
   const scaleY = pageMetrics.pointsHeight / pageMetrics.pixelHeight;
   
   return {
     x: screenX * scaleX,
-    y: screenY * scaleY
+    _y: screenY * scaleY
   };
 };
 
 // Convert PDF coordinates to screen coordinates using page metrics
 export const pdfToScreenCoords = (pdfX, pdfY, pageMetrics) => {
-  if (!pageMetrics) return { x: pdfX, y: pdfY };
+  if (!pageMetrics) return { _x: pdfX, _y: pdfY };
   
   const scaleX = pageMetrics.pixelWidth / pageMetrics.pointsWidth;
   const scaleY = pageMetrics.pixelHeight / pageMetrics.pointsHeight;
   
   return {
     x: pdfX * scaleX,
-    y: pdfY * scaleY
+    _y: pdfY * scaleY
   };
 };
 
@@ -76,11 +76,11 @@ export const processAICoordinates = (aiRect) => {
 
 // Get canvas size in pixels (accounting for zoom)
 export const getCanvasSizePx = (canvasRef, zoom = 1) => {
-  if (!canvasRef?.current) return { w: 0, h: 0 };
+  if (!canvasRef?.current) return { _w: 0, _h: 0 };
   const box = canvasRef.current.getBoundingClientRect();
   return { 
-    w: box.width / zoom, 
-    h: box.height / zoom 
+    _w: box.width / zoom, 
+    _h: box.height / zoom 
   };
 };
 

@@ -1,5 +1,4 @@
 import "./CustomProgressBar.scss"
-import React from 'react'
 
 function CustomProgressBar({now, fillColor}) {
     return (
@@ -7,9 +6,9 @@ function CustomProgressBar({now, fillColor}) {
             <div className="progress-bar"
                  role="progressbar"
                  style={{
-                     width: `${now}%`,
-                     backgroundColor: fillColor || 'auto',
-                     opacity: 0.25 + (now/100)*0.75
+                     _width: `${now}%`,
+                     _backgroundColor: fillColor || 'auto',
+                     _opacity: 0.25 + (now/100)*0.75
                  }
             }/>
         </div>

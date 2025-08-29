@@ -1,8 +1,8 @@
 import emailjs from "@emailjs/browser";
 
 const _status = {
-    didInit: false,
-    config: null
+    _didInit: false,
+    _config: null
 }
 
 export const useEmails = () => {
@@ -34,10 +34,10 @@ export const useEmails = () => {
             return
 
         const params = {
-            from_name: fromName,
-            from_email: fromEmail,
-            custom_subject: customSubject,
-            message: message
+            _from_name: fromName,
+            _from_email: fromEmail,
+            _custom_subject: customSubject,
+            _message: message
         }
 
         try {

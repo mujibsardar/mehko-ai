@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { submitReport } from "../../firebase/reports";
 import useAuth from "../../hooks/useAuth";
 import "./ReportIssueModal.scss";
@@ -12,9 +12,9 @@ export default function ReportIssueModal({
 }) {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    issueType: "general",
-    description: "",
-    severity: "medium",
+    _issueType: "general",
+    _description: "",
+    _severity: "medium",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState("");
@@ -28,32 +28,32 @@ export default function ReportIssueModal({
 
     try {
       // Debug logging to help identify the issue
-      console.log("ReportModal Debug:", {
-        application: application,
-        step: step,
-        user: user,
-        applicationId: application?.id,
-        userId: user?.uid
+      console.log("ReportModal _Debug: ", {
+        _application: application,
+        _step: step,
+        _user: user,
+        _applicationId: application?.id,
+        _userId: user?.uid
       });
 
       // Create report data with user information
       const reportData = {
-        applicationId: application?.id,
-        applicationTitle: application?.title,
-        stepId: step?.id || step?._id || null, // Ensure stepId is never undefined
-        stepTitle: step?.title || null,
-        issueType: formData.issueType,
-        description: formData.description.trim(),
-        severity: formData.severity,
-        context: step ? "step" : "application",
-        userId: user?.uid,
-        userEmail: user?.email,
+        _applicationId: application?.id,
+        _applicationTitle: application?.title,
+        _stepId: step?.id || step?._id || null, // Ensure stepId is never undefined
+        _stepTitle: step?.title || null,
+        _issueType: formData.issueType,
+        _description: formData.description.trim(),
+        _severity: formData.severity,
+        _context: step ? "step" : "application",
+        _userId: user?.uid,
+        _userEmail: user?.email,
       };
 
       // Validate required fields before submission
       if (!reportData.applicationId || !reportData.userId) {
-        console.error("Validation failed:", reportData);
-        throw new Error("Missing required fields: applicationId or userId");
+        console.error("Validation _failed: ", reportData);
+        throw new Error("Missing required _fields: applicationId or userId");
       }
 
       // Additional validation to ensure application object is properly structured
@@ -76,10 +76,10 @@ export default function ReportIssueModal({
       setTimeout(() => {
         onClose();
         if (onReportSubmitted)
-          onReportSubmitted({ ...reportData, id: reportId });
+          onReportSubmitted({ ...reportData, _id: reportId });
       }, 1500);
     } catch (error) {
-      console.error("Failed to submit report:", error);
+      console.error("Failed to submit _report: ", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -89,9 +89,9 @@ export default function ReportIssueModal({
   const handleClose = () => {
     if (!isSubmitting) {
       setFormData({
-        issueType: "general",
-        description: "",
-        severity: "medium",
+        _issueType: "general",
+        _description: "",
+        _severity: "medium",
       });
       setSubmitStatus("");
       onClose();
@@ -100,7 +100,7 @@ export default function ReportIssueModal({
 
   const getContextText = () => {
     if (step) {
-      return `Report an issue with: ${step.title}`;
+      return `Report an issue _with: ${step.title}`;
     }
     return `Report an issue with: ${application?.title}`;
   };
@@ -138,7 +138,7 @@ export default function ReportIssueModal({
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    issueType: e.target.value,
+                    _issueType: e.target.value,
                   }))
                 }
                 disabled={isSubmitting}
@@ -158,7 +158,7 @@ export default function ReportIssueModal({
                 id="severity"
                 value={formData.severity}
                 onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, severity: e.target.value }))
+                  setFormData((prev) => ({ ...prev, _severity: e.target.value }))
                 }
                 disabled={isSubmitting}
               >
@@ -177,7 +177,7 @@ export default function ReportIssueModal({
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    description: e.target.value,
+                    _description: e.target.value,
                   }))
                 }
                 placeholder="Please describe the issue you encountered..."

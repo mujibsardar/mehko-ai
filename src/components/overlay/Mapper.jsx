@@ -1,6 +1,6 @@
 // PDF Field Mapper - Professional, modern implementation
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { useParams, _Link } from "react-router-dom";
 import Moveable from "react-moveable";
 import { DndContext, DragOverlay, useDraggable, useDroppable } from "@dnd-kit/core";
 import useAuth from "../../hooks/useAuth";
@@ -16,26 +16,26 @@ import {
 } from "../../utils/pdfCoords";
 import "./Mapper.scss";
 
-const API = getApiBase('python');
-const normalizeForFilesystem = (str) => str.replace(/\s+/g, "_");
+const _API = getApiBase('python');
+const _normalizeForFilesystem = (_str) => str.replace(/\s+/g, "_");
 
-const SAVE_STATUS = {
-  SAVED: 'saved',
-  SAVING: 'saving',
-  UNSAVED: 'unsaved',
-  ERROR: 'error'
+const _SAVE_STATUS = {
+  _SAVED: 'saved',
+  _SAVING: 'saving',
+  _UNSAVED: 'unsaved',
+  _ERROR: 'error'
 };
 
 export default function Mapper() {
   const { user, loading, isAdmin } = useAuth();
-  const params = useParams();
-  const app = params.app || params.appId;
-  const form = params.form || params.formId;
-  const normalizedApp = normalizeForFilesystem(app);
-  const normalizedForm = normalizeForFilesystem(form);
+  const _params = useParams();
+  const _app = params.app || params.appId;
+  const _form = params.form || params.formId;
+  const _normalizedApp = normalizeForFilesystem(app);
+  const _normalizedForm = normalizeForFilesystem(form);
 
   // Core state
-  const [overlay, setOverlay] = useState({ fields: [] });
+  const [overlay, setOverlay] = useState({ _fields: [] });
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(1);
   const [imgUrl, setImgUrl] = useState(null);
@@ -86,32 +86,32 @@ export default function Mapper() {
   }
 
   // AI Field Processing
-  const processAISuggestions = (aiFields) => {
-    return aiFields.map((field, index) => {
+  const _processAISuggestions = (_aiFields) => {
+    return aiFields.map(_(field, _index) => {
       const rect = processAICoordinates(field.rect);
-      const width = rect[2] - rect[0];
-      const height = rect[3] - rect[1];
+      const _width = rect[2] - rect[0];
+      const _height = rect[3] - rect[1];
 
       return {
-        id: `ai_field_${index + 1}`,
-        label: field.label || `Field ${index + 1}`,
-        page: field.page || 0,
-        type: field.type || "text",
-        rect: rect,
-        fontSize: field.fontSize || 11,
-        align: field.align || "left",
-        shrink: field.shrink !== false,
-        confidence: field.confidence || 0.5,
-        aiReasoning: field.reasoning || "AI detected form field",
-        originalRect: field.rect,
-        width: width,
-        height: height,
+        _id: `ai_field_${index + 1}`,
+        _label: field.label || `Field ${index + 1}`,
+        _page: field.page || 0,
+        _type: field.type || "text",
+        _rect: rect,
+        _fontSize: field.fontSize || 11,
+        _align: field.align || "left",
+        _shrink: field.shrink !== false,
+        _confidence: field.confidence || 0.5,
+        _aiReasoning: field.reasoning || "AI detected form field",
+        _originalRect: field.rect,
+        _width: width,
+        _height: height,
       };
     });
   };
 
   // AI PDF Upload Handler
-  const handleFileUpload = async (event) => {
+  const _handleFileUpload = async (_event) => {
     const file = event.target.files[0];
 
     if (!file || !file.type.includes("pdf")) {
@@ -126,30 +126,30 @@ export default function Mapper() {
 
     try {
       setProgress(20);
-      const formData = new FormData();
+      const _formData = new FormData();
       formData.append("pdf", file);
 
-      const uploadResponse = await fetch(ENDPOINTS.AI_ANALYZE_PDF(), {
-        method: "POST",
-        body: formData,
+      const _uploadResponse = await fetch(ENDPOINTS.AI_ANALYZE_PDF(), {
+        _method: "POST",
+        _body: formData,
       });
 
       if (!uploadResponse.ok) {
-        const errorText = await uploadResponse.text();
-        throw new Error(`Failed to upload PDF for analysis: ${uploadResponse.status} ${errorText}`);
+        const _errorText = await uploadResponse.text();
+        throw new Error(`Failed to upload PDF for _analysis: ${uploadResponse.status} ${errorText}`);
       }
 
-      const analysisData = await uploadResponse.json();
+      const _analysisData = await uploadResponse.json();
       setProgress(60);
 
       setCurrentStep("mapping");
-      const suggestions = processAISuggestions(analysisData.fields);
+      const _suggestions = processAISuggestions(analysisData.fields);
       setAiSuggestions(suggestions);
       setProgress(80);
 
       setCurrentStep("reviewing");
-      const highConfidenceFields = suggestions.filter((f) => f.confidence > 0.8);
-      setSelectedFields(highConfidenceFields.map((f) => f.id));
+      const _highConfidenceFields = suggestions.filter(_(f) => f.confidence > 0.8);
+      setSelectedFields(_highConfidenceFields.map((f) => f.id));
       setProgress(100);
     } catch (err) {
       setAiError(err.message);
@@ -160,16 +160,16 @@ export default function Mapper() {
   };
 
   // Field Selection
-  const handleFieldSelection = (fieldId, isSelected) => {
+  const _handleFieldSelection = (_fieldId, _isSelected) => {
     if (isSelected) {
-      setSelectedFields((prev) => [...prev, fieldId]);
+      setSelectedFields(_(prev) => [...prev, fieldId]);
     } else {
-      setSelectedFields((prev) => prev.filter((id) => id !== fieldId));
+      setSelectedFields(_(prev) => prev.filter(_(id) => id !== fieldId));
     }
   };
 
   // Prepare fields for dragging
-  const handleApplyMapping = () => {
+  const _handleApplyMapping = () => {
     if (selectedFields.length === 0) {
       setAiError("Please select at least one field to apply");
       return;
@@ -179,11 +179,11 @@ export default function Mapper() {
   };
 
   // Auto-save
-  const scheduleAutoSave = useCallback(() => {
+  const _scheduleAutoSave = useCallback_(() => {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
     setSaveStatus(SAVE_STATUS.UNSAVED);
 
-    const timeout = setTimeout(() => {
+    const _timeout = setTimeout_(() => {
       save();
     }, 2000);
 
@@ -196,23 +196,23 @@ export default function Mapper() {
     setSaveStatus(SAVE_STATUS.SAVING);
 
     try {
-      const overlayToSave = {
+      const _overlayToSave = {
         ...overlay,
-        fields: (overlay.fields || []).map((f) => ({
+        _fields: (overlay.fields || []).map(_(f) => ({
           ...f,
-          rect: rectPxToPt(f.rect),
+          _rect: rectPxToPt(f.rect),
         })),
       };
 
-      const fd = new FormData();
+      const _fd = new FormData();
       fd.append("overlay_json", JSON.stringify(overlayToSave));
 
-      const r = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`, {
-        method: "POST",
-        body: fd,
+      const _r = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`, {
+        _method: "POST",
+        _body: fd,
       });
 
-      if (!r.ok) throw new Error(`Save failed: ${r.status}`);
+      if (!r.ok) throw new Error(`Save _failed: ${r.status}`);
 
       setSaveStatus(SAVE_STATUS.SAVED);
       if (autoSaveTimeout) {
@@ -225,48 +225,48 @@ export default function Mapper() {
   }
 
   // DndKit Handlers
-  const handleDragStart = (event) => {
+  const _handleDragStart = (_event) => {
     setActiveDragId(event.active.id);
   };
 
-  const handleDragEnd = (event) => {
+  const _handleDragEnd = (_event) => {
     const { active, over } = event;
     setActiveDragId(null);
 
     if (over && over.id === 'pdf-canvas') {
-      const draggedFieldId = active.id;
-      const aiField = aiSuggestions.find(f => f.id === draggedFieldId);
+      const _draggedFieldId = active.id;
+      const _aiField = aiSuggestions.find(f => f.id === draggedFieldId);
 
       if (aiField && metrics) {
         // Calculate cursor center position
-        const cursorX = event.activatorEvent.clientX;
-        const cursorY = event.activatorEvent.clientY;
+        const _cursorX = event.activatorEvent.clientX;
+        const _cursorY = event.activatorEvent.clientY;
 
         // Convert cursor position to field rectangle
-        const fieldRect = cursorToFieldRect(cursorX, cursorY, pdfCanvasRef, zoom, [aiField.width, aiField.height]);
+        const _fieldRect = cursorToFieldRect(cursorX, cursorY, pdfCanvasRef, zoom, [aiField.width, aiField.height]);
 
         // Clamp to canvas boundaries and ensure minimum size
-        const clampedRect = clampRectPx(fieldRect, pdfCanvasRef, zoom);
-        const sizedRect = ensureMinSize(clampedRect, 24, 16);
+        const _clampedRect = clampRectPx(fieldRect, pdfCanvasRef, zoom);
+        const _sizedRect = ensureMinSize(clampedRect, 24, 16);
 
         // Convert to PDF coordinates and snap to grid
-        const pdfCoords = rectPxToPt(sizedRect).map(coord => snapToGrid(coord));
+        const _pdfCoords = rectPxToPt(sizedRect).map(coord => snapToGrid(coord));
 
         // Create new field with proper coordinates
-        const newField = {
-          id: `field_${Date.now()}`,
-          label: aiField.label,
-          page: page,
-          type: aiField.type,
-          rect: pdfCoords,
-          fontSize: aiField.fontSize || 11,
-          align: aiField.align || "left",
-          shrink: aiField.shrink !== false,
+        const _newField = {
+          _id: `field_${Date.now()}`,
+          _label: aiField.label,
+          _page: page,
+          _type: aiField.type,
+          _rect: pdfCoords,
+          _fontSize: aiField.fontSize || 11,
+          _align: aiField.align || "left",
+          _shrink: aiField.shrink !== false,
         };
 
         setOverlay(prev => ({
           ...prev,
-          fields: [...prev.fields, newField]
+          _fields: [...prev.fields, newField]
         }));
         setSelectedId(newField.id);
         scheduleAutoSave();
@@ -275,31 +275,31 @@ export default function Mapper() {
   };
 
   // Field update handler
-  const updateField = (updatedField) => {
+  const _updateField = (_updatedField) => {
     setOverlay(prev => ({
       ...prev,
-      fields: prev.fields.map(f => f.id === updatedField.id ? updatedField : f)
+      _fields: prev.fields.map(f => f.id === updatedField.id ? updatedField : f)
     }));
     scheduleAutoSave();
   };
 
   // Field delete handler
-  const deleteField = (fieldId) => {
+  const _deleteField = (_fieldId) => {
     setOverlay(prev => ({
       ...prev,
-      fields: prev.fields.filter(f => f.id !== fieldId)
+      _fields: prev.fields.filter(f => f.id !== fieldId)
     }));
     if (selectedId === fieldId) setSelectedId(null);
     scheduleAutoSave();
   };
 
   // Load template
-  useEffect(() => {
-    (async () => {
-      const res = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`);
-      const tpl = await res.json();
-      const fields = Array.isArray(tpl?.fields)
-        ? tpl.fields.map((f) => ({ ...f, rect: rectPtToPx(f.rect) }))
+  useEffect_(() => {
+    (_async () => {
+      const _res = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`);
+      const _tpl = await res.json();
+      const _fields = Array.isArray(tpl?.fields)
+        ? tpl.fields.map(_(f) => ({ ...f, _rect: rectPtToPx(f.rect) }))
         : [];
       setOverlay({ fields });
       setSaveStatus(SAVE_STATUS.SAVED);
@@ -307,24 +307,24 @@ export default function Mapper() {
   }, [normalizedApp, normalizedForm]);
 
   // Load metrics + preview
-  useEffect(() => {
-    const q = (obj) => new URLSearchParams(obj).toString();
+  useEffect_(() => {
+    const _q = (_obj) => new URLSearchParams(obj).toString();
     async function load() {
-      const m = await fetch(
+      const _m = await fetch(
         `${API}/${normalizedApp}/forms/${normalizedForm}/page-metrics?${q({
           page,
-          dpi: 144,
+          _dpi: 144,
         })}`
-      ).then((r) => r.json());
+      ).then(_(r) => r.json());
       setMetrics(m);
       setPages(m.pages || 1);
 
-      const blob = await fetch(
+      const _blob = await fetch(
         `${API}/${normalizedApp}/forms/${normalizedForm}/preview-page?${q({
           page,
-          dpi: 144,
+          _dpi: 144,
         })}`
-      ).then((r) => r.blob());
+      ).then(_(r) => r.blob());
       setImgUrl(URL.createObjectURL(blob));
     }
     load();
@@ -332,8 +332,8 @@ export default function Mapper() {
   }, [normalizedApp, normalizedForm, page]);
 
   // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (event) => {
+  useEffect_(() => {
+    const _handleKeyDown = (_event) => {
       // Ctrl/Cmd + S to save
       if ((event.ctrlKey || event.metaKey) && event.key === 's') {
         event.preventDefault();
@@ -360,16 +360,16 @@ export default function Mapper() {
   }, [selectedId]);
 
   // Draggable Field Tray Item
-  const DraggableFieldItem = ({ field }) => {
+  const _DraggableFieldItem = (_{ field }) => {
     const canDrag = currentStep === 'fields-ready' && selectedFields.includes(field.id);
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-      id: field.id,
-      disabled: !canDrag
+      _id: field.id,
+      _disabled: !canDrag
     });
 
-    const style = transform ? {
-      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      opacity: isDragging ? 0.5 : 1,
+    const _style = transform ? {
+      _transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      _opacity: isDragging ? 0.5 : 1,
     } : {};
 
     return (
@@ -384,7 +384,7 @@ export default function Mapper() {
           <input
             type="checkbox"
             checked={selectedFields.includes(field.id)}
-            onChange={(e) => handleFieldSelection(field.id, e.target.checked)}
+            onChange={(_e) => handleFieldSelection(field.id, e.target.checked)}
             className="field-checkbox"
           />
           <span className="field-name">{field.label}</span>
@@ -395,7 +395,7 @@ export default function Mapper() {
           </span>
         </div>
         <div className="field-details">
-          <div>Type: {field.type}</div>
+          <div>_Type: {field.type}</div>
           <div>Size: {Math.round(field.width)}×{Math.round(field.height)}px</div>
         </div>
       </div>
@@ -403,9 +403,9 @@ export default function Mapper() {
   };
 
   // Droppable PDF Canvas
-  const DroppablePDFCanvas = ({ children }) => {
+  const _DroppablePDFCanvas = (_{ children }) => {
     const { setNodeRef } = useDroppable({
-      id: 'pdf-canvas',
+      _id: 'pdf-canvas',
     });
 
     return (
@@ -416,13 +416,13 @@ export default function Mapper() {
   };
 
   // Moveable Field Box
-  const MoveableFieldBox = ({ field, isSelected, onUpdate, onSelect }) => {
+  const _MoveableFieldBox = (_{ field, _isSelected, _onUpdate, _onSelect }) => {
     const screenRect = rectPtToPx(field.rect);
     const [x, y, x2, y2] = screenRect;
-    const width = x2 - x;
-    const height = y2 - y;
+    const _width = x2 - x;
+    const _height = y2 - y;
 
-    const handleDrag = ({ target, transform }) => {
+    const _handleDrag = (_{ target, _transform }) => {
       const newRect = rectPxToPt([
         transform.x,
         transform.y,
@@ -431,13 +431,13 @@ export default function Mapper() {
       ]).map(coord => snapToGrid(coord));
 
       // Clamp to canvas boundaries
-      const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
-      const finalRect = rectPxToPt(clampedRect);
+      const _clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
+      const _finalRect = rectPxToPt(clampedRect);
 
-      onUpdate({ ...field, rect: finalRect });
+      onUpdate({ ...field, _rect: finalRect });
     };
 
-    const handleResize = ({ target, width: newWidth, height: newHeight, drag }) => {
+    const _handleResize = (_{ target, _width: newWidth, _height: newHeight, _drag }) => {
       const newRect = rectPxToPt([
         drag.x,
         drag.y,
@@ -446,25 +446,19 @@ export default function Mapper() {
       ]).map(coord => snapToGrid(coord));
 
       // Ensure minimum size and clamp to boundaries
-      const clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
-      const sizedRect = ensureMinSize(clampedRect, 24, 16);
-      const finalRect = rectPxToPt(sizedRect);
+      const _clampedRect = clampRectPx(rectPtToPx(newRect), pdfCanvasRef, zoom);
+      const _sizedRect = ensureMinSize(clampedRect, 24, 16);
+      const _finalRect = rectPxToPt(sizedRect);
 
-      onUpdate({ ...field, rect: finalRect });
+      onUpdate({ ...field, _rect: finalRect });
     };
 
-    return (
-      <>
+    return (_<>
         <div
           data-field-id={field.id}
           className={`field-box ${isSelected ? 'selected' : ''}`}
           style={{
-            position: 'absolute',
-            left: x,
-            top: y,
-            width,
-            height,
-            cursor: 'move'
+            _position: 'absolute', _left: x, _top: y, _width, _height, _cursor: 'move'
           }}
           onClick={() => onSelect(field.id)}
         >
@@ -490,10 +484,10 @@ export default function Mapper() {
             elementGuidelines={overlay.fields
               .filter(f => f.id !== field.id && f.page === page)
               .map(f => {
-                const rect = rectPtToPx(f.rect);
+                const _rect = rectPtToPx(f.rect);
                 return {
-                  element: document.querySelector(`[data-field-id="${f.id}"]`),
-                  rect: { left: rect[0], top: rect[1], width: rect[2] - rect[0], height: rect[3] - rect[1] }
+                  _element: document.querySelector(`[data-field-id="${f.id}"]`),
+                  _rect: { left: rect[0], _top: rect[1], _width: rect[2] - rect[0], _height: rect[3] - rect[1] }
                 };
               })}
           />
@@ -502,37 +496,37 @@ export default function Mapper() {
     );
   };
 
-  const selected = overlay.fields.find(f => f.id === selectedId);
+  const _selected = overlay.fields.find(f => f.id === selectedId);
 
   // Add new field manually
-  const addField = () => {
+  const _addField = () => {
     const newField = {
-      id: `field_${Date.now()}`,
-      label: "New Field",
-      page: page,
-      type: "text",
-      rect: rectPxToPt([50, 50, 200, 75]),
-      fontSize: 11,
-      align: "left",
-      shrink: true,
-      required: false,
-      placeholder: "",
-      validation: {
+      _id: `field_${Date.now()}`,
+      _label: "New Field",
+      _page: page,
+      _type: "text",
+      _rect: rectPxToPt([50, 50, 200, 75]),
+      _fontSize: 11,
+      _align: "left",
+      _shrink: true,
+      _required: false,
+      _placeholder: "",
+      _validation: {
         minLength: 0,
-        maxLength: 100,
-        pattern: "",
-        customMessage: ""
+        _maxLength: 100,
+        _pattern: "",
+        _customMessage: ""
       }
     };
-    setOverlay(prev => ({ ...prev, fields: [...prev.fields, newField] }));
+    setOverlay(prev => ({ ...prev, _fields: [...prev.fields, newField] }));
     setSelectedId(newField.id);
     scheduleAutoSave();
   };
 
   // Clear all fields
-  const clearAllFields = () => {
+  const _clearAllFields = () => {
     if (confirm("Delete all fields? This cannot be undone.")) {
-      setOverlay({ fields: [] });
+      setOverlay({ _fields: [] });
       setSelectedId(null);
       scheduleAutoSave();
     }
@@ -651,7 +645,7 @@ export default function Mapper() {
               <div
                 ref={pdfCanvasRef}
                 className="pdf-canvas"
-                style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
+                style={{ _transform: `scale(${zoom})`, _transformOrigin: 'top left' }}
               >
                 {imgUrl && (
                   <img
@@ -689,7 +683,7 @@ export default function Mapper() {
                   <input
                     type="text"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(_e) => setSearchTerm(e.target.value)}
                     className="form-input"
                     placeholder="Search field labels..."
                   />
@@ -698,7 +692,7 @@ export default function Mapper() {
                   <label className="form-label">Filter by Type</label>
                   <select
                     value={fieldFilter}
-                    onChange={(e) => setFieldFilter(e.target.value)}
+                    onChange={(_e) => setFieldFilter(e.target.value)}
                     className="form-select"
                   >
                     <option value="all">All Types</option>
@@ -715,7 +709,7 @@ export default function Mapper() {
               {isProcessing && (
                 <div className="ai-progress">
                   <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${progress}%` }} />
+                    <div className="progress-fill" style={{ _width: `${progress}%` }} />
                   </div>
                   <div className="progress-text">
                     {currentStep === "analyzing" && "🤖 AI analyzing PDF..."}
@@ -759,14 +753,13 @@ export default function Mapper() {
               )}
 
               {/* Field Editor */}
-              {selected && (
-                <div className="field-editor">
+              {selected && (_<div className="field-editor">
                   <h3 className="editor-title">Edit Field</h3>
                   <div className="form-group">
                     <label className="form-label">Label</label>
                     <input
                       value={selected.label || ""}
-                      onChange={(e) => updateField({ ...selected, label: e.target.value })}
+                      onChange={(e) => updateField({ ...selected, _label: e.target.value })}
                       className="form-input"
                     />
                   </div>
@@ -774,7 +767,7 @@ export default function Mapper() {
                     <label className="form-label">Type</label>
                     <select
                       value={selected.type || "text"}
-                      onChange={(e) => updateField({ ...selected, type: e.target.value })}
+                      onChange={(_e) => updateField({ ...selected, _type: e.target.value })}
                       className="form-select"
                     >
                       <option value="text">Text Input</option>
@@ -796,7 +789,7 @@ export default function Mapper() {
                       min="8"
                       max="72"
                       value={selected.fontSize || 11}
-                      onChange={(e) => updateField({ ...selected, fontSize: parseInt(e.target.value) || 11 })}
+                      onChange={(_e) => updateField({ ...selected, _fontSize: parseInt(e.target.value) || 11 })}
                       className="form-input"
                     />
                   </div>
@@ -804,7 +797,7 @@ export default function Mapper() {
                     <label className="form-label">Alignment</label>
                     <select
                       value={selected.align || "left"}
-                      onChange={(e) => updateField({ ...selected, align: e.target.value })}
+                      onChange={(_e) => updateField({ ...selected, _align: e.target.value })}
                       className="form-select"
                     >
                       <option value="left">Left</option>
@@ -817,7 +810,7 @@ export default function Mapper() {
                     <input
                       type="checkbox"
                       checked={selected.required || false}
-                      onChange={(e) => updateField({ ...selected, required: e.target.checked })}
+                      onChange={(_e) => updateField({ ...selected, _required: e.target.checked })}
                       className="form-checkbox"
                     />
                   </div>
@@ -826,7 +819,7 @@ export default function Mapper() {
                     <input
                       type="text"
                       value={selected.placeholder || ""}
-                      onChange={(e) => updateField({ ...selected, placeholder: e.target.value })}
+                      onChange={(_e) => updateField({ ...selected, _placeholder: e.target.value })}
                       className="form-input"
                       placeholder="Enter placeholder text..."
                     />
@@ -843,7 +836,7 @@ export default function Mapper() {
               {/* Quick Stats */}
               <div className="quick-stats">
                 <div className="stat-item">
-                  <span className="stat-label">Total Fields:</span>
+                  <span className="stat-label">Total _Fields: </span>
                   <span className="stat-value">{overlay.fields.length}</span>
                 </div>
                 <div className="stat-item">
@@ -851,7 +844,7 @@ export default function Mapper() {
                   <span className="stat-value">{overlay.fields.filter(f => f.page === page).length}</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-label">AI Detected:</span>
+                  <span className="stat-label">AI _Detected: </span>
                   <span className="stat-value">{aiSuggestions.length}</span>
                 </div>
               </div>

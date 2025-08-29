@@ -9,7 +9,7 @@ export const useScheduler = () => {
      */
     const schedule = (callback, timeInMilliseconds, tag) => {
         const timeoutId = setTimeout(callback, timeInMilliseconds)
-        timeouts.push({id: timeoutId, tag: tag})
+        timeouts.push({_id: timeoutId, _tag: tag})
     }
 
     /**
@@ -19,7 +19,7 @@ export const useScheduler = () => {
      */
     const interval = (callback, timeInMilliseconds, tag) => {
         const intervalId = setInterval(callback, timeInMilliseconds)
-        intervals.push({id: intervalId, tag: tag})
+        intervals.push({_id: intervalId, _tag: tag})
     }
 
     /**

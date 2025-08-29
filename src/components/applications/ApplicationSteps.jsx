@@ -1,4 +1,4 @@
-import React from "react";
+
 import "./ApplicationSteps.scss";
 
 function ApplicationSteps({ steps = [] }) {

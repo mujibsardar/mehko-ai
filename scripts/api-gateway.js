@@ -14,16 +14,16 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ _extended: true }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    backends: {
+    _status: 'healthy',
+    _timestamp: new Date().toISOString(),
+    _backends: {
       python: 'http://127.0.0.1:8000',
-      node: 'http://localhost:3000'
+      _node: 'http://localhost:3000'
     }
   });
 });
@@ -35,8 +35,8 @@ async function forwardRequest(targetUrl, req, res) {
     url.search = req.url.split('?')[1] || '';
     
     const options = {
-      method: req.method,
-      headers: {
+      _method: req.method,
+      _headers: {
         'Content-Type': req.headers['content-type'] || 'application/json',
         ...req.headers
       }
@@ -53,37 +53,37 @@ async function forwardRequest(targetUrl, req, res) {
   } catch (error) {
     console.error(`Error forwarding to ${targetUrl}:`, error.message);
     res.status(502).json({
-      error: 'Backend unavailable',
-      details: error.message
+      _error: 'Backend unavailable',
+      _details: error.message
     });
   }
 }
 
 // AI endpoints (Node.js backend)
 app.use('/api/ai-chat', async (req, res) => {
-  await forwardRequest('http://localhost:3000', req, res);
+  await forwardRequest('_http: //localhost:3000', req, res);
 });
 
 app.use('/api/ai-analyze-pdf', async (req, res) => {
-  await forwardRequest('http://localhost:3000', req, res);
+  await forwardRequest('_http: //localhost:3000', req, res);
 });
 
 app.use('/api/form-fields', async (req, res) => {
-  await forwardRequest('http://localhost:3000', req, res);
+  await forwardRequest('_http: //localhost:3000', req, res);
 });
 
 app.use('/api/fill-pdf', async (req, res) => {
-  await forwardRequest('http://localhost:3000', req, res);
+  await forwardRequest('_http: //localhost:3000', req, res);
 });
 
 // Application endpoints (Python backend)
 app.use('/api/apps', async (req, res) => {
-  await forwardRequest('http://127.0.0.1:8000', req, res);
+  await forwardRequest('_http: //127.0.0.1:8000', req, res);
 });
 
 // County processing (Python backend)
 app.use('/api/process-county', async (req, res) => {
-  await forwardRequest('http://127.0.0.1:8000', req, res);
+  await forwardRequest('_http: //127.0.0.1:8000', req, res);
 });
 
 // Serve static files from dist directory (for production)
@@ -96,21 +96,21 @@ app.get('*', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Gateway error:', err);
+  console.error('Gateway _error: ', err);
   res.status(500).json({ 
-    error: 'Internal gateway error', 
-    message: err.message 
+    _error: 'Internal gateway error', 
+    _message: err.message 
   });
 });
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 API Gateway running on http://localhost:${PORT}`);
-  console.log(`📡 Routing to:`);
-  console.log(`   Python (FastAPI): http://127.0.0.1:8000`);
-  console.log(`   Node.js: http://localhost:3000`);
-  console.log(`🌐 Frontend: http://localhost:${PORT}`);
-  console.log(`💡 Health check: http://localhost:${PORT}/health`);
+  console.log(`🚀 API Gateway running on _http: //localhost:${PORT}`);
+  console.log(`📡 Routing _to: `);
+  console.log(`   Python (FastAPI): _http: //127.0.0.1:8000`);
+  console.log(`   Node._js: http://localhost:3000`);
+  console.log(`🌐 _Frontend: http://localhost:${PORT}`);
+  console.log(`💡 Health _check: http://localhost:${PORT}/health`);
 });
 
 // Graceful shutdown

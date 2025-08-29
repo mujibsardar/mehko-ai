@@ -4,28 +4,28 @@ import useAuth, { AuthProvider } from '../../../src/hooks/useAuth';
 
 // Mock Firebase modules
 vi.mock('../../../src/firebase/firebase', () => ({
-    auth: {
+    _auth: {
         onAuthStateChanged: vi.fn(),
-        signInWithEmailAndPassword: vi.fn(),
-        signOut: vi.fn(),
+        _signInWithEmailAndPassword: vi.fn(),
+        _signOut: vi.fn(),
     },
-    db: {
+    _db: {
         doc: vi.fn(),
-        getDoc: vi.fn(),
+        _getDoc: vi.fn(),
     }
 }));
 
 // Mock Firebase auth functions
 vi.mock('firebase/auth', () => ({
-    onAuthStateChanged: vi.fn(),
-    signInWithEmailAndPassword: vi.fn(),
-    signOut: vi.fn(),
+    _onAuthStateChanged: vi.fn(),
+    _signInWithEmailAndPassword: vi.fn(),
+    _signOut: vi.fn(),
 }));
 
 // Mock Firebase firestore functions
 vi.mock('firebase/firestore', () => ({
-    doc: vi.fn(),
-    getDoc: vi.fn(),
+    _doc: vi.fn(),
+    _getDoc: vi.fn(),
 }));
 
 describe('useAuth Hook', () => {
