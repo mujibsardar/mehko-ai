@@ -2,7 +2,7 @@
 
 # Custom git command: git-merge-main.sh
 # Usage: ./scripts/git-merge-main.sh "Your commit message here"
-# This script will: stage, commit, push to current branch, then merge to main and push
+# This script will: stage, commit, push to current branch, then merge to main, push to main, and stay on main
 
 # Check if commit message is provided
 if [ -z "$1" ]; then
@@ -112,17 +112,10 @@ fi
 
 echo ""
 
-# Step 8: Switch back to the feature branch
-echo "🔄 Switching back to $CURRENT_BRANCH..."
-git checkout "$CURRENT_BRANCH"
-if [ $? -eq 0 ]; then
-    echo "✅ Switched back to $CURRENT_BRANCH successfully"
-else
-    echo "❌ Failed to switch back to $CURRENT_BRANCH"
-    exit 1
-fi
-
+# Step 8: Stay on main branch (don't switch back)
+echo "✅ Staying on main branch after successful merge"
 echo ""
+
 echo "🎉 Git MERGE MAIN completed successfully!"
 echo "📊 Summary:"
 echo "   • Staged: All changes"
@@ -130,7 +123,7 @@ echo "   • Committed: \"$COMMIT_MESSAGE\""
 echo "   • Pushed: origin/$CURRENT_BRANCH"
 echo "   • Merged: $CURRENT_BRANCH → main"
 echo "   • Pushed: origin/main"
-echo "   • Returned: to $CURRENT_BRANCH"
+echo "   • Current: on main branch"
 echo ""
 echo "💡 You can now delete the feature branch if desired:"
 echo "   git branch -d $CURRENT_BRANCH"
