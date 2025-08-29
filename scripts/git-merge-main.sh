@@ -39,14 +39,18 @@ fi
 
 echo ""
 
-# Step 2: Commit with provided message
+# Step 2: Commit with provided message (if there are staged changes)
 echo "💾 Committing changes..."
-git commit -m "$COMMIT_MESSAGE"
-if [ $? -eq 0 ]; then
-    echo "✅ Changes committed successfully"
+if git diff --cached --quiet; then
+    echo "ℹ️  No staged changes to commit, continuing with merge process..."
 else
-    echo "❌ Failed to commit changes"
-    exit 1
+    git commit -m "$COMMIT_MESSAGE"
+    if [ $? -eq 0 ]; then
+        echo "✅ Changes committed successfully"
+    else
+        echo "❌ Failed to commit changes"
+        exit 1
+    fi
 fi
 
 echo ""
@@ -119,7 +123,11 @@ echo ""
 echo "🎉 Git MERGE MAIN completed successfully!"
 echo "📊 Summary:"
 echo "   • Staged: All changes"
-echo "   • Committed: \"$COMMIT_MESSAGE\""
+if ! git diff --cached --quiet; then
+    echo "   • Committed: \"$COMMIT_MESSAGE\""
+else
+    echo "   • Committed: No changes to commit (already committed)"
+fi
 echo "   • Pushed: origin/$CURRENT_BRANCH"
 echo "   • Merged: $CURRENT_BRANCH → main"
 echo "   • Pushed: origin/main"
