@@ -1,6 +1,14 @@
 # Bulk Import Guide for County Applications
 
-This guide explains how to use the new **Bulk Import** feature in the Admin Dashboard to efficiently create multiple county MEHKO applications from JSON files.
+This guide explains how to use the **Bulk Import** feature in the Admin Dashboard to efficiently create multiple county MEHKO applications from JSON files.
+
+## 🏗️ **System Architecture**
+
+The Bulk Import feature works with our **dual-server architecture**:
+
+- **Node.js Server (Port 3000)**: Handles county data processing and Firebase sync
+- **Python Server (Port 8000)**: Handles PDF processing and storage
+- **Frontend**: Loads from Firebase, processes through Node.js server
 
 ## Overview
 
@@ -41,6 +49,7 @@ Each county JSON file must follow this **simplified structure** (see `data/count
       "content": "Step content with inline search terms",
       "formId": "FORM_ID_HERE", // Required for PDF steps
       "formName": "FORM_NAME_HERE", // Required for form steps
+      "pdfUrl": "https://county.gov/forms/form.pdf", // Required for PDF steps
       "appId": "county_name_mehko" // Should match the main ID
     }
   ]
@@ -57,7 +66,7 @@ Each county JSON file must follow this **simplified structure** (see `data/count
 
 1. **`info`**: Informational steps with content
 2. **`form`**: Form-based steps requiring `formName`
-3. **`pdf`**: PDF-based steps requiring `formId`
+3. **`pdf`**: PDF-based steps requiring `formId` and `pdfUrl`
 
 ### Content Structure
 
@@ -98,157 +107,176 @@ For any unclear or complex parts, add inline search suggestions using this forma
 
 ## Using the Bulk Import Feature
 
-### Step 1: Prepare JSON Files
+### Step 1: Prepare Your JSON Files
 
-1. Create JSON files for each county following the template structure
-2. Ensure each file has a unique `id` field
-3. Validate JSON syntax (use tools like JSONLint if needed)
-4. **Use the simplified structure** - no complex nesting or subSteps
+1. **Create county JSON files** following the structure above
+2. **Validate JSON syntax** using a JSON validator
+3. **Test with one file** before bulk processing
+4. **Ensure PDF URLs are accessible** and working
 
 ### Step 2: Upload Files
 
-**Option A: Drag and Drop**
-- Drag JSON files directly onto the upload area
-- Multiple files can be dropped simultaneously
-
-**Option B: File Selection**
-- Click "Select Files" button
-- Choose one or more JSON files from your file system
+1. **Drag & drop** JSON files into the upload zone
+2. **Or click** to select files from your computer
+3. **Review the file list** and remove any unwanted files
+4. **Verify file names** match your county IDs
 
 ### Step 3: Preview and Validate
 
-1. Click the **"Preview"** button to validate uploaded files
-2. Review the preview results:
-   - ✅ Green: Valid JSON structure
-   - ❌ Red: Invalid JSON or missing required fields
-3. Check the preview shows correct application details
+1. **Click "Preview Files"** to validate JSON structure
+2. **Review validation results** for each file
+3. **Fix any errors** before proceeding
+4. **Confirm file count** and processing order
 
-### Step 4: Process Applications
+### Step 4: Process Counties
 
-1. Click **"Import [X] Applications"** button
-2. Monitor progress in the status bar
-3. Wait for completion message
+1. **Click "Import All"** to start processing
+2. **Monitor progress** with real-time status updates
+3. **View results** for each county processed
+4. **Check for any errors** or warnings
 
-## Validation Rules
+## 🔄 **Processing Pipeline**
 
-The system validates each JSON file for:
+### What Happens During Import
 
-- Valid JSON syntax
-- Required fields: `id`, `title`, `steps`
-- `steps` must be an array
-- Each step must have `id`, `title`, and `type`
-- PDF steps must have `formId`
-- Form steps must have `formName`
-- **No complex nesting** - content should be in the main `content` field
+```
+1. File Upload → JSON validation and parsing
+2. County Creation → Directory structure and file storage
+3. PDF Download → Fetch PDFs from URLs in steps
+4. Firebase Sync → Create documents in Firestore
+5. Manifest Update → Update data/manifest.json
+6. Completion → All counties ready for use
+```
 
-## Processing Details
+### File Structure Created
 
-When processing applications, the system:
+For each county, the system creates:
 
-1. **Backend Setup**: Creates necessary folder structure via `/api/apps` endpoint
-2. **Firestore Storage**: Saves application data to Firestore database
-3. **Duplicate Handling**: Updates existing applications if ID matches
-4. **Error Handling**: Continues processing other files if one fails
-5. **Status Updates**: Shows real-time progress and results
+```
+data/
+├── applications/
+│   └── county_name_mehko/
+│       └── forms/
+│           ├── FORM_ID_1/
+│           │   ├── form.pdf          # Downloaded PDF
+│           │   └── meta.json         # Form metadata
+│           └── FORM_ID_2/
+│               ├── form.pdf          # Downloaded PDF
+│               └── meta.json         # Form metadata
+├── manifest.json                      # Updated with new counties
+└── county_name_mehko.json            # County data file
+```
 
-## Example Workflow
+## 🚨 **Error Handling**
 
-### Creating Multiple Counties
+### Common Validation Errors
 
-1. **Prepare Files**:
-   - `orange_county_mehko.json`
-   - `riverside_county_mehko.json`
-   - `san_bernardino_county_mehko.json`
+- **Missing required fields**: Clear indication of what's missing
+- **Invalid ID format**: Must match regex `/^[a-z0-9_]+$/`
+- **PDF step issues**: Missing `formId` or `pdfUrl`
+- **Content format**: Improper step content structure
 
-2. **Upload**: Drag all three files to the upload area
+### Processing Errors
 
-3. **Preview**: Click "Preview" to validate all files
+- **PDF download failures**: Individual PDF status reporting
+- **Firebase sync issues**: Clear error messages and retry options
+- **File system errors**: Directory creation and permission issues
 
-4. **Import**: Click "Import 3 Applications" to process
+### Recovery Options
 
-5. **Monitor**: Watch progress and see completion status
+- **Individual retry**: Retry failed counties one by one
+- **Batch retry**: Retry all failed counties at once
+- **Manual processing**: Process individual files if needed
 
-### Updating Existing Counties
+## 🧪 **Testing and Validation**
 
-1. **Modify JSON**: Update the JSON file with new content
-2. **Re-upload**: Upload the modified file
-3. **Process**: The system will update the existing application
+### Test County Data
 
-## Troubleshooting
+Use the provided test county data in `data/` directory:
+
+- `data/example-county.json` - Basic county structure
+- `data/county-template.json` - Template with all required fields
+
+### Validation Testing
+
+1. **Upload valid county JSON** - Should process successfully
+2. **Upload invalid JSON** - Should show clear error messages
+3. **Test PDF downloads** - Verify PDFs are accessible
+4. **Check Firebase sync** - Verify data appears in admin dashboard
+
+### Performance Testing
+
+- **Small batch** (1-5 counties): Test with minimal files first
+- **Medium batch** (5-20 counties): Test with moderate load
+- **Large batch** (20+ counties): Test with maximum expected load
+
+## 🔧 **Troubleshooting**
 
 ### Common Issues
 
-**"Invalid JSON structure"**
-- Check JSON syntax with a validator
-- Ensure all required fields are present
-- Verify `steps` is an array
-- **Remove any complex nesting** - use simple structure
+1. **PDF Download Failures**
+   - Check if PDF URLs are accessible
+   - Verify PDF URLs are direct links (not redirects)
+   - Ensure PDFs are publicly accessible
 
-**"Backend failed"**
-- Check server connectivity
-- Verify API endpoint is working
-- Check server logs for specific errors
+2. **Firebase Sync Issues**
+   - Check Firebase connection
+   - Verify admin permissions
+   - Check Firestore rules
 
-**"Duplicate ID"**
-- This is normal - existing applications will be updated
-- Ensure the ID matches exactly what you want to update
+3. **File System Errors**
+   - Ensure write permissions to data/ directory
+   - Check available disk space
+   - Verify directory structure exists
 
-### Best Practices
+### Debug Information
 
-1. **Test First**: Use the preview feature before processing
-2. **Backup**: Keep original JSON files as backups
-3. **Small Batches**: Process 5-10 counties at a time for better error handling
-4. **Validation**: Use the template structure as a starting point
-5. **Naming**: Use consistent naming conventions for IDs and formIds
-6. **Keep It Simple**: Avoid complex nested structures - use inline search terms
+The system provides detailed logging:
 
-## File Management
+- **Upload status**: File validation and parsing results
+- **Processing status**: Individual county processing steps
+- **Error details**: Specific error messages and recovery suggestions
+- **Completion summary**: Final results and statistics
 
-### Supported Formats
-- `.json` files
-- `application/json` MIME type
+## 🔮 **Future Enhancements**
 
-### File Size Limits
-- Individual files: No strict limit (reasonable JSON size)
-- Total batch: No strict limit (reasonable for browser memory)
+### Planned Features
 
-### File Cleanup
-- Files are automatically cleared after successful import
-- Manual cleanup available via "Clear All" button
-- Individual file removal via "Remove" buttons
+- **AI-powered validation** of county data
+- **Template-based county creation** for common patterns
+- **County comparison tools** for quality assurance
+- **Export functionality** for backup and sharing
+- **Processing history** and audit trails
 
-## Integration with Existing System
+### Integration Points
 
-The bulk import feature integrates seamlessly with:
+- **AI Field Mapper**: Automatic field detection for PDFs
+- **Form Builder**: Create custom forms for counties
+- **Analytics Dashboard**: Track county usage and performance
 
-- **Admin Dashboard**: Applications appear in the Applications tab
-- **Backend API**: Creates necessary folder structures
-- **Firestore**: Stores application data for frontend use
-- **Existing Workflows**: New applications work with all existing features
+## 💡 **Best Practices**
 
-## Security Considerations
+### File Preparation
 
-- Only accessible to admin users
-- File content is validated before processing
-- No file storage on server (processed in memory)
-- Input sanitization for all JSON data
+1. **Use consistent naming** for county IDs
+2. **Validate JSON syntax** before upload
+3. **Test PDF URLs** to ensure accessibility
+4. **Follow content templates** for consistency
 
-## Performance Notes
+### Processing Strategy
 
-- Processing is sequential to avoid conflicts
-- Large batches may take several minutes
-- Progress updates every application
-- Memory usage scales with file size and count
+1. **Start small** with 1-2 counties
+2. **Validate results** before bulk processing
+3. **Monitor progress** during large imports
+4. **Keep backups** of original JSON files
 
-## Support
+### Quality Assurance
 
-For issues or questions about the bulk import feature:
-
-1. Check the validation messages for specific errors
-2. Review the JSON structure against the template
-3. Check browser console for detailed error logs
-4. Verify server connectivity and API endpoints
+1. **Review processed counties** in admin dashboard
+2. **Test PDF accessibility** for all forms
+3. **Verify Firebase sync** completed successfully
+4. **Check manifest updates** include new counties
 
 ---
 
-**Note**: This feature is designed to streamline the process of adding new counties to the MEHKO system. **Always use the simplified JSON structure** with inline search terms instead of complex nested subSteps. Use the template in `data/county-template.json` as a starting point.
+**The Bulk Import feature provides an efficient, reliable way to add multiple counties to the MEHKO AI system while maintaining data quality and system integrity.**

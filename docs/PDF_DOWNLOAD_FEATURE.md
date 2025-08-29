@@ -9,6 +9,14 @@ The PDF download feature allows users to download the original PDF form template
 - Have a backup copy
 - Share forms with others
 
+## 🏗️ **System Architecture**
+
+The PDF download feature works with our **dual-server architecture**:
+
+- **Python Server (Port 8000)**: Serves PDF files and handles PDF processing
+- **Node.js Server (Port 3000)**: Handles Firebase sync and admin functions
+- **Frontend**: Loads from Firebase, fetches PDFs from Python server
+
 ## How It Works
 
 ### 1. Frontend Integration
@@ -19,13 +27,13 @@ The PDF download feature allows users to download the original PDF form template
 
 ### 2. API Endpoint
 
-- **Route**: `/api/apps/{applicationId}/forms/{formId}/pdf`
-- **Method**: GET
+- **Route**: `GET /apps/{applicationId}/forms/{formId}/pdf`
+- **Server**: Python FastAPI server (Port 8000)
 - **Response**: PDF file with proper headers for download
 
 ### 3. File Storage
 
-- **Location**: `applications/{appId}/forms/{formId}/form.pdf`
+- **Location**: `data/applications/{appId}/forms/{formId}/form.pdf`
 - **Format**: Standard PDF files
 - **Access**: Public read access for authenticated users
 
@@ -63,8 +71,9 @@ const handlePdfDownload = async () => {
   if (!step.formId || step.type !== "pdf") return;
 
   try {
+    // Use Python server endpoint
     const response = await fetch(
-      `/api/apps/${applicationId}/forms/${step.formId}/pdf`
+      `http://localhost:8000/apps/${applicationId}/forms/${step.formId}/pdf`
     );
     if (!response.ok) throw new Error("Failed to download PDF");
 
@@ -99,135 +108,184 @@ const handlePdfDownload = async () => {
     background: var(--accent-color);
     color: white;
     border: none;
-    border-radius: 6px;
     padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 500;
+    border-radius: 6px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    margin-bottom: 8px;
+    transition: background-color 0.2s;
 
     &:hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background: var(--accent-color-dark);
     }
+  }
+
+  .pdf-download-note {
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.4;
   }
 }
 ```
 
-## Usage
+## 🔧 **Backend Implementation**
 
-### For Users
+### Python Server Endpoint
 
-1. Navigate to any PDF step in a MEHKO application
-2. Click the "📄 Download PDF Template" button
-3. PDF will automatically download to your device
-4. You can still fill out the form in the application
+The PDF download is handled by the Python FastAPI server in `python/server/apps_routes.py`:
 
-### For Developers
-
-1. Ensure PDF steps have `type: "pdf"` and valid `formId`
-2. PDF files must be stored in `applications/{appId}/forms/{formId}/form.pdf`
-3. The download endpoint automatically serves the correct file
-
-## Testing
-
-### Test Script
-
-Run the test script to verify the PDF download endpoint works:
-
-```bash
-node scripts/test-pdf-download.mjs
+```python
+@router.get("/{app}/forms/{form}/pdf")
+def download_pdf(app: str, form: str, inline: bool = False):
+    p = form_dir(app, form) / "form.pdf"
+    if not p.exists():
+        raise HTTPException(404, f"missing PDF at {p}")
+    disposition = "inline" if inline else "attachment"
+    return FileResponse(
+        path=str(p),
+        media_type="application/pdf",
+        filename=f"{app}_{form}.pdf",
+        headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}.pdf"'},
+    )
 ```
+
+### File Path Resolution
+
+The system uses the `form_dir()` helper function to locate PDF files:
+
+```python
+def form_dir(app: str, form: str) -> Path:
+    return APPS / app / "forms" / form
+
+# Where APPS = ROOT / "data" / "applications"
+```
+
+## 📁 **File Structure**
+
+### PDF Storage Location
+
+```
+data/
+└── applications/
+    └── {app_id}/
+        └── forms/
+            └── {form_id}/
+                ├── form.pdf          # The actual PDF file
+                ├── meta.json         # Form metadata
+                ├── overlay.json      # Field definitions (if exists)
+                └── acroform-definition.json  # Modern field definitions (if exists)
+```
+
+### File Naming Convention
+
+- **PDF files**: `form.pdf` (standardized name)
+- **Download filename**: `{app_id}_{form_id}.pdf`
+- **Example**: `alameda_county_mehko_MEHKO_APP_SOP.pdf`
+
+## 🔄 **Data Flow**
+
+### Complete Download Process
+
+```
+1. User clicks PDF download button
+2. Frontend checks step.type === "pdf" and step.formId exists
+3. Frontend makes request to Python server: /apps/{app}/forms/{form}/pdf
+4. Python server locates PDF file in data/applications/{app}/forms/{form}/form.pdf
+5. Python server returns PDF with proper headers for download
+6. Browser downloads PDF with filename {app}_{form}.pdf
+```
+
+### Error Handling
+
+- **PDF not found**: 404 error with clear message
+- **Invalid app/form**: 400 error for malformed requests
+- **Server error**: 500 error with logging
+
+## 🧪 **Testing**
 
 ### Manual Testing
 
-1. Start your development server
-2. Navigate to a PDF step in any MEHKO application
-3. Click the download button
-4. Verify PDF downloads correctly
+```bash
+# Test PDF endpoint directly
+curl "http://localhost:8000/apps/alameda_county_mehko/forms/MEHKO_APP_SOP/pdf" \
+  -o test.pdf
 
-## Requirements
-
-### PDF Steps Must Have
-
-- `type: "pdf"`
-- `formId` field with valid form identifier
-- PDF file stored at correct path
-
-### File Structure
-
-```
-applications/
-  {appId}/
-    forms/
-      {formId}/
-        form.pdf          # The actual PDF file
-        overlay.json      # Form field mapping
-        meta.json         # Metadata
+# Test with inline parameter
+curl "http://localhost:8000/apps/alameda_county_mehko/forms/MEHKO_APP_SOP/pdf?inline=true"
 ```
 
-## Error Handling
+### Frontend Testing
 
-### Frontend Errors
+1. **Navigate to PDF step** in any MEHKO application
+2. **Click download button** - should trigger download
+3. **Verify filename** matches expected format
+4. **Check file integrity** - PDF should open correctly
 
-- Network errors show user-friendly alert
-- Invalid formId prevents download attempt
-- Console logging for debugging
+### Error Testing
 
-### Backend Errors
+1. **Invalid app ID** - should show 404 error
+2. **Invalid form ID** - should show 404 error
+3. **Missing PDF file** - should show clear error message
 
-- 404 if PDF file doesn't exist
-- Proper HTTP status codes
-- Content-Type headers for PDF files
+## 🚨 **Common Issues**
 
-## Future Enhancements
+### PDF Not Found
 
-### Potential Improvements
+- **Check file exists**: Verify `data/applications/{app}/forms/{form}/form.pdf`
+- **Check permissions**: Ensure Python server can read the file
+- **Check path resolution**: Verify `form_dir()` function works correctly
 
-- **Progress indicator** for large PDF downloads
-- **Preview functionality** before download
+### Download Fails
+
+- **Check network**: Ensure frontend can reach Python server
+- **Check CORS**: Verify Python server allows frontend origin
+- **Check headers**: Ensure proper Content-Disposition headers
+
+### File Corruption
+
+- **Check source PDF**: Verify original PDF is valid
+- **Check storage**: Ensure no corruption during file operations
+- **Check encoding**: Verify proper binary file handling
+
+## 🔮 **Future Enhancements**
+
+### Planned Features
+
+- **PDF preview** before download
+- **Multiple format support** (PDF, DOCX, etc.)
+- **Compression options** for large files
+- **Download progress** indicators
 - **Batch download** for multiple forms
-- **Download history** tracking
-- **File size display** before download
 
-### Integration Opportunities
+### Integration Points
 
-- **AI Chat**: Help users understand downloaded forms
-- **Form Filling**: Reference downloaded PDFs while filling
-- **Progress Tracking**: Track which PDFs have been downloaded
+- **AI Field Mapper**: Download PDFs for field detection
+- **Form Builder**: Download templates for customization
+- **Admin Interface**: Download forms for review and editing
 
-## Security Considerations
+## 💡 **Best Practices**
 
-### Access Control
+### File Management
 
-- PDFs are publicly accessible (no authentication required)
-- Consider adding authentication if forms contain sensitive information
-- Validate formId to prevent directory traversal attacks
+1. **Use consistent naming** for form IDs
+2. **Validate PDF files** before storing
+3. **Keep file sizes reasonable** for download performance
+4. **Maintain file organization** in applications directory
 
-### File Validation
+### User Experience
 
-- Ensure only PDF files are served
-- Validate file paths to prevent unauthorized access
-- Consider file size limits for very large PDFs
+1. **Clear download buttons** with descriptive text
+2. **Helpful error messages** when downloads fail
+3. **Progress indicators** for large files
+4. **File size information** before download
 
-## Troubleshooting
+### Security
 
-### Common Issues
+1. **Validate app/form IDs** to prevent path traversal
+2. **Check file permissions** before serving
+3. **Log download requests** for audit purposes
+4. **Rate limit downloads** to prevent abuse
 
-1. **PDF not downloading**: Check if file exists at correct path
-2. **Wrong file downloaded**: Verify formId matches file structure
-3. **Download button not showing**: Ensure step has `type: "pdf"` and `formId`
-4. **Network errors**: Check server status and API endpoint
+---
 
-### Debug Steps
-
-1. Check browser console for errors
-2. Verify PDF file exists in file system
-3. Test API endpoint directly
-4. Check network tab for failed requests
-
-## Conclusion
-
-The PDF download feature provides essential functionality for MEHKO applications, allowing users to access original form templates while maintaining the ability to fill them out digitally. This feature enhances user experience and provides flexibility in how users interact with application forms.
+**The PDF Download feature provides users with easy access to official form templates while maintaining security and performance through our dual-server architecture.**

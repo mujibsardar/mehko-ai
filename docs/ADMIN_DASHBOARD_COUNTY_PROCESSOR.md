@@ -2,7 +2,15 @@
 
 ## Overview
 
-The admin dashboard now includes a **County Processor** tab that allows administrators to upload and process county JSON files directly through the web interface. This eliminates the need for command-line operations and provides a user-friendly way to manage county applications.
+The admin dashboard includes a **County Processor** tab that allows administrators to upload and process county JSON files directly through the web interface. This eliminates the need for command-line operations and provides a user-friendly way to manage county applications.
+
+## 🏗️ **System Architecture**
+
+The county processor works with our **dual-server architecture**:
+
+- **Node.js Server (Port 3000)**: Handles county data processing and Firebase sync
+- **Python Server (Port 8000)**: Handles PDF processing and storage
+- **Frontend**: Loads from Firebase, processes through Node.js server
 
 ## ✨ **Features**
 
@@ -55,19 +63,18 @@ The admin dashboard now includes a **County Processor** tab that allows administ
 For each processed county, the system automatically creates:
 
 ```
-applications/
-└── county_name_mehko/
-    └── forms/
-        ├── FORM_ID_1/
-        │   ├── form.pdf          # Downloaded PDF
-        │   └── meta.json         # Form metadata
-        └── FORM_ID_2/
-            ├── form.pdf          # Downloaded PDF
-            └── meta.json         # Form metadata
-
 data/
-├── manifest.json                 # Updated with new county
-└── county_name_mehko.json       # County data file
+├── applications/
+│   └── county_name_mehko/
+│       └── forms/
+│           ├── FORM_ID_1/
+│           │   ├── form.pdf          # Downloaded PDF
+│           │   └── meta.json         # Form metadata
+│           └── FORM_ID_2/
+│               ├── form.pdf          # Downloaded PDF
+│               └── meta.json         # Form metadata
+├── manifest.json                      # Updated with new county
+└── county_name_mehko.json            # County data file
 ```
 
 ## 🔧 **Backend Integration**
@@ -77,6 +84,8 @@ data/
 ```
 POST /api/admin/process-county
 ```
+
+**Server**: Node.js server (Port 3000)
 
 ### **Request Format**
 
@@ -98,184 +107,119 @@ POST /api/admin/process-county
   "steps": 10,
   "pdfForms": 2,
   "downloadedForms": 2,
-  "files": {
-    "countyJson": "/path/to/county.json",
-    "manifest": "/path/to/manifest.json",
-    "applicationDir": "/path/to/applications/county_name_mehko"
-  }
+  "configSaved": "data/county_name_mehko.json",
+  "manifestUpdated": "data/manifest.json"
 }
 ```
 
-## ✅ **Validation & Error Handling**
+## 🔄 **Data Flow**
 
-### **Required Fields**
-
-- ✅ `id` - Unique county identifier
-- ✅ `title` - Human-readable county name
-- ✅ `description` - County description
-- ✅ `rootDomain` - County website domain
-- ✅ `supportTools` - AI and comments settings
-- ✅ `steps` - Array of application steps
-
-### **PDF Step Requirements**
-
-- ✅ `type: "pdf"`
-- ✅ `formId` - Unique form identifier
-- ✅ `pdfUrl` - Accessible PDF download URL
-
-### **Error Handling**
-
-- **Missing fields** → Clear error messages
-- **Invalid JSON** → Format validation
-- **PDF download failures** → Continues with other forms
-- **Network issues** → Graceful fallbacks
-
-## 🎨 **UI Components**
-
-### **CountyProcessor Component**
-
-- **File upload zone** with drag & drop
-- **File list management** with remove options
-- **Processing status** with real-time updates
-- **Results display** with success/error details
-- **Instructions** with step-by-step guidance
-
-### **Styling Features**
-
-- **Modern design** with gradients and shadows
-- **Responsive layout** for all screen sizes
-- **Interactive elements** with hover effects
-- **Color-coded results** (green for success, red for errors)
-- **Loading animations** and progress indicators
-
-## 🚀 **Benefits**
-
-### **For Administrators**
-
-- **No command-line knowledge** required
-- **Visual feedback** for all operations
-- **Batch processing** of multiple counties
-- **Error handling** with clear messages
-- **Immediate results** and status updates
-
-### **For Development**
-
-- **Faster deployment** of new counties
-- **Reduced manual work** and errors
-- **Consistent processing** across all counties
-- **Easy updates** and modifications
-- **Centralized management** through admin interface
-
-### **For Users**
-
-- **Faster availability** of new counties
-- **More counties** available in the system
-- **Better quality** with automated validation
-- **Consistent experience** across all applications
-
-## 🔄 **Workflow Comparison**
-
-### **Before (Command Line)**
-
-```bash
-# 1. Upload JSON to data/ directory
-# 2. Run command line script
-node scripts/upload-county.mjs county_name
-# 3. Check terminal output
-# 4. Verify files manually
-```
-
-### **After (Admin Dashboard)**
+### **Processing Pipeline**
 
 ```
-1. Go to Admin Dashboard
-2. Click "County Processor" tab
-3. Drag & drop JSON files
-4. Click "Process Counties"
-5. View results immediately
-6. Counties are ready to use
+1. Admin uploads county JSON → Node.js server
+2. Node.js validates JSON structure and content
+3. Node.js saves county data to data/ directory
+4. Node.js updates manifest.json
+5. Node.js creates application directory structure
+6. Node.js downloads PDFs from URLs in steps
+7. Node.js syncs data to Firebase (applications collection)
+8. Python server can now access PDFs for processing
 ```
 
-## 📱 **Mobile Support**
+### **Firebase Integration**
 
-The County Processor interface is fully responsive:
+The Node.js server automatically creates:
 
-- **Touch-friendly** upload zones
-- **Mobile-optimized** layouts
-- **Responsive grids** for instructions
-- **Accessible** on all device sizes
+- **Application document** in `applications/{countyId}` collection
+- **Steps subcollection** with individual step documents
+- **Metadata** including creation timestamps and source information
+
+## 📋 **County JSON Requirements**
+
+### **Required Structure**
+
+```json
+{
+  "id": "county_name_mehko",
+  "title": "County Name MEHKO",
+  "description": "Brief description with key limits and fees",
+  "rootDomain": "county.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "step_id",
+      "title": "Step Title",
+      "type": "info|pdf",
+      "action_required": true|false,
+      "fill_pdf": true|false,
+      "content": "Step content with markdown formatting",
+      "searchTerms": ["search phrase 1", "search phrase 2"],
+      "formId": "FORM_ID_HERE", // Required for PDF steps only
+      "pdfUrl": "https://county.gov/forms/form.pdf", // Required for PDF steps only
+      "appId": "county_name_mehko" // Must match the main ID
+    }
+  ]
+}
+```
+
+### **Validation Rules**
+
+- **ID format**: Must match regex `/^[a-z0-9_]+$/`
+- **PDF steps**: Must have `formId` and `pdfUrl`
+- **Step references**: Must use proper step reference format
+- **Content structure**: Must follow established content template
+
+## 🚨 **Error Handling**
+
+### **Common Validation Errors**
+
+- **Missing required fields**: Clear indication of what's missing
+- **Invalid ID format**: Explanation of proper naming conventions
+- **PDF step issues**: Validation of formId and pdfUrl
+- **Content format**: Guidance on proper content structure
+
+### **Processing Errors**
+
+- **PDF download failures**: Individual PDF status reporting
+- **Firebase sync issues**: Clear error messages and retry options
+- **File system errors**: Directory creation and permission issues
+
+## 🧪 **Testing**
+
+### **Test County Data**
+
+Use the provided test county data in `data/` directory:
+
+- `data/example-county.json` - Basic county structure
+- `data/county-template.json` - Template with all required fields
+
+### **Validation Testing**
+
+1. **Upload valid county JSON** - Should process successfully
+2. **Upload invalid JSON** - Should show clear error messages
+3. **Test PDF downloads** - Verify PDFs are accessible
+4. **Check Firebase sync** - Verify data appears in admin dashboard
 
 ## 🔮 **Future Enhancements**
 
 ### **Planned Features**
 
-- **Bulk county management** with search and filters
-- **County editing** through the interface
-- **PDF preview** before processing
-- **Processing history** and logs
-- **Integration** with AI county generation
+- **Batch processing** for multiple counties
+- **County data validation** with AI assistance
+- **PDF field detection** integration
+- **County comparison tools**
+- **Export/import functionality**
 
-### **Advanced Capabilities**
+### **Integration Points**
 
-- **Scheduled processing** for large batches
-- **Webhook notifications** for external systems
-- **Processing templates** for common county types
-- **Performance metrics** and analytics
-
-## 🧪 **Testing**
-
-### **Test County File**
-
-Use `data/test-county.json` to test the system:
-
-- Contains 3 steps (1 info, 2 PDF)
-- Uses real PDF URLs for testing
-- Follows all validation requirements
-- Perfect for demonstrating functionality
-
-### **Testing Steps**
-
-1. **Upload test county** through admin interface
-2. **Verify processing** completes successfully
-3. **Check file creation** in applications directory
-4. **Confirm manifest update** includes new county
-5. **Test PDF downloads** are accessible
-
-## 📊 **Performance**
-
-### **Processing Speed**
-
-- **Small counties** (5-10 steps): ~10-30 seconds
-- **Medium counties** (10-20 steps): ~30-60 seconds
-- **Large counties** (20+ steps): ~1-2 minutes
-
-### **Resource Usage**
-
-- **Memory efficient** with streaming downloads
-- **Network optimized** with concurrent PDF downloads
-- **Error resilient** with graceful fallbacks
-- **Scalable** for multiple simultaneous uploads
+- **AI Field Mapper**: Automatic field detection for PDFs
+- **Form Builder**: Create custom forms for counties
+- **Analytics Dashboard**: Track county usage and performance
 
 ---
 
-## 🎉 **Summary**
-
-The Admin Dashboard County Processor provides a **professional, user-friendly interface** for managing county applications without requiring command-line knowledge. It automates the entire process from JSON upload to PDF download, making county management accessible to all administrators.
-
-**Key Benefits:**
-
-- ✅ **Zero command-line knowledge required**
-- ✅ **Drag & drop file uploads**
-- ✅ **Automatic validation and processing**
-- ✅ **Real-time status updates**
-- ✅ **Professional, responsive interface**
-- ✅ **Immediate county availability**
-
-**Perfect for:**
-
-- **Administrators** managing county applications
-- **Content managers** updating county information
-- **Developers** testing new county structures
-- **Operations teams** deploying county updates
-
-The system is now **fully automated** - just upload a JSON file and everything else is handled automatically! 🚀
+**The County Processor provides a robust, user-friendly way to add new counties to the MEHKO AI system while maintaining data integrity and proper system integration.**
