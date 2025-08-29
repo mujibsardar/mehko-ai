@@ -14,6 +14,7 @@
 
 ## Committing Rules
 - **NEVER** use `git add .` immediately after making changes
+- **NEVER** commit changes on `main` branch
 - **ALWAYS** pause after making changes and ask: "Are you ready to commit these changes?"
 - **ALWAYS** wait for user confirmation before committing
 - **ALWAYS** commit frequently with meaningful messages

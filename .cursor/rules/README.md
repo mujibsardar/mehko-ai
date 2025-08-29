@@ -50,7 +50,8 @@ This directory contains comprehensive rules and guidelines that AI assistants mu
 3. **Use Existing Tools** - Leverage project scripts and established workflows
 4. **Organize Properly** - Never create files in project root
 5. **Follow Git Flow** - Use proper branching and commit practices
-6. **Remember Scripts** - Always use project server management scripts
+6. **Never Commit on Main** - Always work from feature branches
+7. **Remember Scripts** - Always use project server management scripts
 
 ## Quick Reference Commands
 ```bash

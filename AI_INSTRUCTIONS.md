@@ -15,6 +15,7 @@
 - ❌ Skip reading the rules
 - ❌ Proceed without explanation
 - ❌ Create files in project root
+- ❌ Commit changes on main branch
 
 ## 📋 Required Workflow
 
