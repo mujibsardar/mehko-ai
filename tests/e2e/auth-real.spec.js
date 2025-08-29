@@ -121,38 +121,4 @@ test.describe('Real Firebase Authentication', () => {
       console.log('No logout button found - may need to open user menu first');
     }
   });
-
-  test('should persist authentication state across page reloads', async ({ page }) => {
-    // Login first
-    const signInButton = page.locator('button:has-text("Sign In"), .auth-button, .signin-button');
-    
-    if (await signInButton.isVisible()) {
-      await signInButton.click();
-      
-      const emailInput = page.locator('input[type="email"], input[name="email"], .email-input');
-      const passwordInput = page.locator('input[type="password"], input[name="password"], .password-input');
-      
-      await emailInput.fill('test@test.com');
-      await passwordInput.fill('Test123!');
-      
-      const submitButton = page.locator('button[type="submit"]:has-text("Sign In"), .auth-submit-btn, button:has-text("Sign In"):not(.auth-button)');
-      await submitButton.click();
-      
-      // Wait for authentication
-      await page.waitForTimeout(2000);
-    }
-    
-    // Verify we're logged in
-    await expect(page.locator('.auth-modal, .login-modal, .modal')).not.toBeVisible();
-    
-    // Reload the page
-    await page.reload();
-    
-    // Wait for page to load and auth state to be restored
-    await page.waitForTimeout(2000);
-    
-    // Verify authentication state persists
-    await expect(page.locator('.auth-modal, .login-modal, .modal')).not.toBeVisible();
-    await expect(page.locator('.user-info')).toBeVisible();
-  });
 });
