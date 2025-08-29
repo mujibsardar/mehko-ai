@@ -107,6 +107,34 @@ async def process_county_application(request: Request):
         ensure_dir(app_dir(app_id))
         print(f"✅ Created application directory: {app_dir(app_id)}")
         
+        # Save county JSON to data directory
+        data_dir = ROOT / "data"
+        county_file = data_dir / f"{app_id}.json"
+        with open(county_file, "w") as f:
+            json.dump(data, f, indent=2)
+        print(f"✅ Saved county configuration: {county_file}")
+        
+        # Load and update manifest.json
+        manifest_file = data_dir / "manifest.json"
+        manifest = []
+        if manifest_file.exists():
+            with open(manifest_file, "r") as f:
+                manifest = json.load(f)
+        
+        # Check if county already exists
+        existing_index = next((i for i, c in enumerate(manifest) if c.get("id") == app_id), -1)
+        if existing_index != -1:
+            print(f"⚠️  County {app_id} already exists in manifest, updating...")
+            manifest[existing_index] = data
+        else:
+            print(f"➕ Adding {app_id} to manifest...")
+            manifest.append(data)
+        
+        # Save updated manifest
+        with open(manifest_file, "w") as f:
+            json.dump(manifest, f, indent=2)
+        print(f"✅ Updated manifest.json")
+        
         # Create Firestore document
         app_ref = db.collection("applications").document(app_id)
         app_ref.set({
@@ -172,7 +200,9 @@ async def process_county_application(request: Request):
             "app": app_id,
             "title": app_title,
             "pdfs_downloaded": downloaded_count,
-            "total_pdf_steps": len(pdf_steps)
+            "total_pdf_steps": len(pdf_steps),
+            "config_saved": str(county_file),
+            "manifest_updated": str(manifest_file)
         }
         
     except Exception as e:
