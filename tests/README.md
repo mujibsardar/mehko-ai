@@ -1,361 +1,153 @@
-# 🧪 MEHKO AI Testing Infrastructure
+# Testing Guide
 
-This directory contains comprehensive testing for the MEHKO AI application, including both **Playwright E2E tests** and **React Testing Library unit tests**.
+This directory contains all tests for the MEHKO application.
 
-## 📁 Directory Structure
+## Test Structure
 
 ```
 tests/
-├── e2e/                    # Playwright end-to-end tests
+├── e2e/                    # End-to-end tests (Playwright)
+│   ├── dashboard.spec.js   # Dashboard functionality tests
+│   ├── application-steps.spec.js # Application workflow tests
+│   ├── admin.spec.js       # Admin panel tests
+│   ├── auth-real.spec.js   # Real Firebase authentication tests
+│   ├── ai-chat-real.spec.js # AI chat with real auth tests
 │   ├── global-setup.js     # Global test setup
 │   ├── global-teardown.js  # Global test cleanup
-│   ├── auth.spec.js        # Authentication tests
-│   ├── dashboard.spec.js   # Dashboard functionality tests
-│   ├── application-steps.spec.js  # Application step tests
-│   ├── ai-chat.spec.js     # AI chat functionality tests
-│   ├── admin.spec.js       # Admin panel tests
-│   └── pdf-overlay.spec.js # PDF overlay and form tests
-├── unit/                   # React Testing Library unit tests
+│   └── README.md           # E2E testing guide
+├── unit/                   # Unit tests (Vitest)
 │   ├── components/         # Component tests
-│   │   ├── ApplicationCard.test.jsx
-│   │   └── ApplicationOverview.test.jsx
-│   └── hooks/             # Custom hook tests
-│       ├── useAuth.test.jsx
-│       └── useProgress.test.jsx
-├── fixtures/               # Test data and fixtures
-│   └── bulk-applications.json
-├── utils/                  # Test utilities and helpers
-│   └── test-utils.jsx
+│   ├── hooks/              # Hook tests
+│   └── utils/              # Utility function tests
+├── setup.js                # Test environment setup
 └── README.md               # This file
 ```
 
-## 🚀 Quick Start
+## Running Tests
 
-### Install Dependencies
-
+### Unit Tests (Vitest)
 ```bash
-npm install
+npm run test              # Run all unit tests
+npm run test:watch        # Run tests in watch mode
+npm run test:coverage     # Run tests with coverage
+npm run test:ui           # Run tests with UI
 ```
 
-### Run All Tests
-
+### E2E Tests (Playwright)
 ```bash
-# Run unit tests
-npm test
-
-# Run E2E tests
-npm run test:e2e
-
-# Run both unit and E2E tests
-npm run test:all
+npm run test:e2e          # Run all E2E tests
+npm run test:e2e:ui       # Run E2E tests with UI
+npm run test:e2e:debug    # Run E2E tests in debug mode
+npm run test:e2e:headed   # Run E2E tests in headed mode
 ```
 
-## 🧪 Unit Testing (React Testing Library + Vitest)
-
-### Running Unit Tests
-
+### All Tests
 ```bash
-# Run tests once
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-
-# Run tests with UI
-npm run test:ui
+npm run test:all          # Run both unit and E2E tests
 ```
 
-### What's Tested
+## Test Configuration
 
-#### Components
-- **ApplicationCard** - Application display and interaction
-- **ApplicationOverview** - Application overview and step display
-- **Admin Panel** - Admin functionality and access control
-- **PDF Overlay** - Form field mapping and PDF processing
+### Unit Tests
+- **Framework**: Vitest
+- **Environment**: jsdom
+- **Coverage**: Built-in coverage reporting
+- **Setup**: `tests/setup.js`
 
-#### Hooks
-- **useAuth** - Authentication state management
-- **useProgress** - Progress tracking and persistence
-- **usePinnedApplications** - Application pinning functionality
+### E2E Tests
+- **Framework**: Playwright
+- **Browsers**: Chrome, Firefox, Safari, Mobile Chrome, Mobile Safari
+- **Configuration**: `playwright.config.js`
+- **Setup**: `tests/e2e/global-setup.js`
 
-### Unit Test Features
+## Test Data
 
-- **Mocked Dependencies** - Firebase, external APIs, and browser APIs
-- **Test Utilities** - Common testing helpers and mock data generators
-- **Comprehensive Coverage** - Edge cases, error handling, and user interactions
-- **Fast Execution** - Optimized for quick feedback during development
+### Unit Tests
+- Mock data defined in individual test files
+- No external dependencies
 
-## 🌐 E2E Testing (Playwright)
+### E2E Tests
+- Mocked Firestore data
+- Test user accounts
+- Sample application data
 
-### Running E2E Tests
+## Writing Tests
 
-```bash
-# Run all E2E tests
-npm run test:e2e
-
-# Run tests with UI
-npm run test:e2e:ui
-
-# Run tests in debug mode
-npm run test:e2e:debug
-
-# Run tests in headed mode (visible browser)
-npm run test:e2e:headed
-```
-
-### What's Tested
-
-#### User Flows
-- **Authentication** - Login, logout, admin access control
-- **Dashboard Navigation** - Application selection and overview
-- **Application Steps** - Progress tracking and step completion
-- **AI Chat Integration** - AI assistance functionality
-- **PDF Processing** - Form filling and overlay functionality
-- **Admin Functions** - County management and bulk operations
-
-#### Cross-Browser Support
-- **Chromium** - Chrome/Edge compatibility
-- **Firefox** - Firefox browser testing
-- **WebKit** - Safari compatibility
-- **Mobile** - Mobile Chrome and Safari testing
-
-### E2E Test Features
-
-- **Real Browser Testing** - Actual browser automation
-- **Network Mocking** - Controlled API responses
-- **Visual Testing** - Screenshots and video capture
-- **Responsive Testing** - Multiple viewport sizes
-- **Parallel Execution** - Fast test execution
-
-## 🛠️ Test Configuration
-
-### Playwright Configuration (`playwright.config.js`)
-
+### Unit Tests
 ```javascript
-export default defineConfig({
-  testDir: './tests/e2e',
-  fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
-  projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-    { name: 'Mobile Chrome', use: { ...devices['Pixel 5'] } },
-    { name: 'Mobile Safari', use: { ...devices['iPhone 12'] } }
-  ]
+import { test, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import Component from './Component';
+
+test('should render correctly', () => {
+  render(<Component />);
+  expect(screen.getByText('Hello')).toBeInTheDocument();
 });
 ```
 
-### Vitest Configuration (`vitest.config.js`)
-
-```javascript
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    globals: true,
-    environment: "jsdom",
-  },
-});
-```
-
-## 📊 Test Coverage
-
-### Unit Test Coverage
-
-- **Components**: 95%+ coverage
-- **Hooks**: 100% coverage
-- **Utilities**: 90%+ coverage
-- **Edge Cases**: Comprehensive error handling
-
-### E2E Test Coverage
-
-- **User Journeys**: Complete application workflows
-- **Cross-Browser**: All major browsers and mobile
-- **Responsive Design**: Multiple screen sizes
-- **Error Scenarios**: Network failures, validation errors
-
-## 🔧 Test Utilities
-
-### Mock Data Generators
-
-```javascript
-import { createMockUser, createMockApplication } from './tests/utils/test-utils';
-
-const mockUser = createMockUser({ isAdmin: true });
-const mockApp = createMockApplication({ id: 'custom_app' });
-```
-
-### Custom Render Functions
-
-```javascript
-import { renderWithProviders } from './tests/utils/test-utils';
-
-const { getByText } = renderWithProviders(<MyComponent />, {
-  route: '/dashboard'
-});
-```
-
-### Firebase Mocking
-
-```javascript
-import { mockFirebase, mockAuthFunctions } from './tests/utils/test-utils';
-
-mockFirebase();
-const { mockOnAuthStateChanged } = mockAuthFunctions();
-```
-
-## 📝 Writing Tests
-
-### Unit Test Example
-
-```javascript
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import ApplicationCard from '../ApplicationCard';
-
-describe('ApplicationCard', () => {
-  it('should handle click events', () => {
-    const mockOnClick = vi.fn();
-    render(<ApplicationCard onClick={mockOnClick} />);
-    
-    fireEvent.click(screen.getByRole('button'));
-    expect(mockOnClick).toHaveBeenCalledTimes(1);
-  });
-});
-```
-
-### E2E Test Example
-
+### E2E Tests
 ```javascript
 import { test, expect } from '@playwright/test';
 
-test.describe('Dashboard', () => {
-  test('should display applications', async ({ page }) => {
-    await page.goto('/dashboard');
-    await expect(page.locator('[data-testid="application-card"]')).toBeVisible();
-  });
+test('should navigate to dashboard', async ({ page }) => {
+  await page.goto('/dashboard');
+  await expect(page.locator('h1')).toBeVisible();
 });
 ```
 
-## 🚨 Common Issues & Solutions
+## Best Practices
+
+1. **Test Isolation**: Each test should be independent
+2. **Descriptive Names**: Use clear test descriptions
+3. **Arrange-Act-Assert**: Structure tests logically
+4. **Mock External Dependencies**: Don't rely on external services
+5. **Use Test IDs**: For complex selectors in E2E tests
+
+## Troubleshooting
 
 ### Unit Tests
-
-**Problem**: Firebase import errors
-**Solution**: Use mock utilities from `test-utils.jsx`
-
-**Problem**: React Router context errors
-**Solution**: Use `renderWithProviders` utility
-
-**Problem**: Async hook testing issues
-**Solution**: Use `waitFor` and proper async/await patterns
+- Check `tests/setup.js` for environment setup
+- Verify imports and dependencies
+- Check console for errors
 
 ### E2E Tests
+- Ensure dev server is running
+- Check browser console for errors
+- Verify mock data is correct
+- Use debug mode for step-by-step debugging
 
-**Problem**: Tests failing in CI
-**Solution**: Check Playwright configuration and retry settings
+## Continuous Integration
 
-**Problem**: Network timeouts
-**Solution**: Increase timeout values in Playwright config
+Tests run automatically on:
+- Pull requests
+- Main branch pushes
+- Scheduled runs
 
-**Problem**: Browser compatibility issues
-**Solution**: Test specific browsers individually
+## Coverage Reports
 
-## 📈 Continuous Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Tests
-on: [push, pull_request]
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - run: npm ci
-      - run: npm run test:all
+Generate coverage reports with:
+```bash
+npm run test:coverage
 ```
 
-### Pre-commit Hooks
+Coverage reports are generated in the `coverage/` directory.
 
+## Debugging
+
+### Unit Tests
 ```bash
-# Install husky
-npm install --save-dev husky
-
-# Add pre-commit hook
-npx husky add .husky/pre-commit "npm run test"
+npm run test:ui
 ```
 
-## 🎯 Best Practices
-
-### Unit Testing
-- **Test Behavior, Not Implementation** - Focus on what users see
-- **Use Descriptive Test Names** - Clear test purpose
-- **Mock External Dependencies** - Isolate component logic
-- **Test Edge Cases** - Error handling and boundary conditions
-
-### E2E Testing
-- **Test Complete User Journeys** - End-to-end workflows
-- **Use Data Attributes** - Stable selectors for elements
-- **Mock Network Requests** - Controlled test environment
-- **Test Cross-Browser** - Ensure compatibility
-
-### Test Organization
-- **Group Related Tests** - Logical test suites
-- **Use Descriptive Fixtures** - Clear test data
-- **Maintain Test Utilities** - Reusable helper functions
-- **Keep Tests Fast** - Optimize for quick feedback
-
-## 🔍 Debugging Tests
-
-### Unit Test Debugging
-
+### E2E Tests
 ```bash
-# Run specific test file
-npm test -- ApplicationCard.test.jsx
-
-# Run tests in watch mode
-npm run test:watch
-
-# Debug with console output
-npm test -- --reporter=verbose
-```
-
-### E2E Test Debugging
-
-```bash
-# Run tests in debug mode
 npm run test:e2e:debug
-
-# Run tests in headed mode
 npm run test:e2e:headed
-
-# Run specific test
-npx playwright test auth.spec.js
 ```
 
-## 📚 Additional Resources
+## Test Maintenance
 
-- [React Testing Library Documentation](https://testing-library.com/docs/react-testing-library/intro/)
-- [Playwright Documentation](https://playwright.dev/)
-- [Vitest Documentation](https://vitest.dev/)
-- [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
-
-## 🤝 Contributing
-
-When adding new tests:
-
-1. **Follow Existing Patterns** - Use established test structure
-2. **Add Test Coverage** - Ensure new features are tested
-3. **Update Documentation** - Keep this README current
-4. **Run All Tests** - Verify no regressions
-5. **Add Test Utilities** - Create reusable helpers when needed
-
----
-
-**Happy Testing! 🧪✨**
+- Keep tests up to date with code changes
+- Remove obsolete tests
+- Update mock data when application changes
+- Review test coverage regularly

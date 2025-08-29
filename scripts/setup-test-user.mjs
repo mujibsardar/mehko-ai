@@ -37,6 +37,13 @@ async function setupTestUser() {
       // Sign out
       await auth.signOut();
       console.log('✅ Test user setup complete - user exists and can authenticate');
+      console.log('');
+      console.log('🧪 You can now run E2E tests that require authentication:');
+      console.log('   npm run test:e2e tests/e2e/auth-real.spec.js');
+      console.log('   npm run test:e2e tests/e2e/ai-chat-real.spec.js');
+      console.log('');
+      console.log('📚 For more testing options, see:');
+      console.log('   npm run test:e2e --help');
       return;
     } catch (signInError) {
       if (signInError.code === 'auth/user-not-found') {
@@ -91,8 +98,12 @@ async function setupTestUser() {
     await auth.signOut();
     console.log('✅ Test user setup complete!');
     console.log('');
-    console.log('🧪 You can now run the AI Chat tests with:');
-    console.log('   npm run test:e2e tests/e2e/ai-chat.spec.js');
+    console.log('🧪 You can now run E2E tests that require authentication:');
+    console.log('   npm run test:e2e tests/e2e/auth-real.spec.js');
+    console.log('   npm run test:e2e tests/e2e/ai-chat-real.spec.js');
+    console.log('');
+    console.log('📚 For more testing options, see:');
+    console.log('   npm run test:e2e --help');
 
   } catch (error) {
     console.error('❌ Error setting up test user:', error);

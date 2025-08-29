@@ -1,125 +1,122 @@
-# End-to-End Tests
+# E2E Testing Guide
 
-This directory contains Playwright end-to-end tests for the MEHKO AI application.
+This directory contains end-to-end tests for the MEHKO application using Playwright.
 
-## AI Chat Tests
+## Test Suites
 
-The AI Chat test suite (`ai-chat.spec.js`) tests the AI chat functionality when working on application steps.
+The Dashboard test suite (`dashboard.spec.js`) tests the main dashboard functionality and application selection.
 
-### Prerequisites
+The Application Steps test suite (`application-steps.spec.js`) tests the step-by-step application workflow.
 
-Before running the AI Chat tests, you need to:
+The Admin Panel test suite (`admin.spec.js`) tests admin functionality and access control.
 
-1. **Set up a test user account** with the credentials:
-   - Email: `test@test.com`
-   - Password: `Test123!`
+The Real Authentication test suite (`auth-real.spec.js`) tests Firebase authentication with real credentials.
 
-2. **Run the test user setup script**:
-   ```bash
-   npm run test:setup-user
-   ```
+The AI Chat Real test suite (`ai-chat-real.spec.js`) tests AI chat functionality with real authentication.
 
-   This script will:
-   - Check if the test user already exists
-   - Create a new test user if needed
-   - Verify the credentials work
-   - Set up the user in Firestore
+## Running Tests
 
-### Running the Tests
-
-#### Run all E2E tests:
+### Run all E2E tests
 ```bash
 npm run test:e2e
 ```
 
-#### Run only AI Chat tests:
+### Run specific test suite
 ```bash
-npm run test:e2e tests/e2e/ai-chat.spec.js
+npm run test:e2e tests/e2e/dashboard.spec.js
+npm run test:e2e tests/e2e/application-steps.spec.js
+npm run test:e2e tests/e2e/admin.spec.js
+npm run test:e2e tests/e2e/auth-real.spec.js
+npm run test:e2e tests/e2e/ai-chat-real.spec.js
 ```
 
-#### Run tests in headed mode (see browser):
+### Run tests with UI
 ```bash
-npm run test:e2e:headed
+npm run test:e2e:ui
 ```
 
-#### Run tests in debug mode:
+### Run tests in debug mode
 ```bash
 npm run test:e2e:debug
 ```
 
-### Test Structure
-
-The AI Chat test suite includes:
-
-1. **Authentication Setup** - Automatically signs in the test user
-2. **Application Navigation** - Selects the San Diego County MEHKO application
-3. **AI Chat Interface Tests** - Verifies the chat interface is displayed
-4. **Welcome Message Tests** - Checks for proper welcome text and context
-5. **General Tasks Tests** - Verifies quick action buttons are available
-6. **Input Handling Tests** - Tests the chat input functionality
-7. **Disclaimer Tests** - Ensures AI disclaimers are shown
-8. **Header Tests** - Verifies the AI assistant header
-
-### Troubleshooting
-
-#### Authentication Issues
-
-If you encounter authentication problems:
-
-1. **Check if the test user exists**:
-   ```bash
-   npm run test:setup-user
-   ```
-
-2. **Verify Firebase configuration**:
-   - Ensure environment variables are set
-   - Check Firebase project settings
-   - Verify authentication is enabled
-
-3. **Check browser console** for authentication errors
-
-#### Test Failures
-
-Common test failure reasons:
-
-1. **Missing test user** - Run the setup script
-2. **Incorrect credentials** - Ensure using `test@test.com` / `Test123!`
-3. **Firebase connection issues** - Check network and Firebase status
-4. **Application data missing** - Ensure test data is seeded
-
-#### Debug Mode
-
-For detailed debugging:
-
+### Run tests in headed mode
 ```bash
-npm run test:e2e:debug tests/e2e/ai-chat.spec.js
+npm run test:e2e:headed
 ```
 
-This will:
-- Open the browser in headed mode
-- Pause execution for manual inspection
-- Show detailed logs and errors
+## Test Configuration
 
-### Test Data
+Tests are configured in `playwright.config.js` and run against:
+- Desktop browsers (Chrome, Firefox, Safari)
+- Mobile browsers (Chrome Mobile, Safari Mobile)
 
-The tests use mocked Firestore data for:
-- San Diego County MEHKO application
-- User pinned applications
-- Chat messages
-- Application progress
+## Test Data
 
-### Environment Variables
+Tests use mocked Firestore data to ensure consistent test results. The mock data includes:
+- Sample applications (San Diego County, Los Angeles County)
+- Sample user data
+- Sample progress data
 
-Required environment variables:
-- `VITE_FIREBASE_API_KEY`
-- `VITE_FIREBASE_AUTH_DOMAIN`
-- `VITE_FIREBASE_PROJECT_ID`
+## Debugging Tests
 
-These should be set in your `.env` file or environment.
+### View test results
+```bash
+npx playwright show-report
+```
 
-### Notes
+### Debug specific test
+```bash
+npm run test:e2e:debug tests/e2e/dashboard.spec.js
+```
 
-- Tests automatically handle authentication
-- Firestore calls are mocked for consistent test data
-- AI chat API responses are mocked for predictable testing
-- Tests include comprehensive error handling and debugging output
+### Run with headed browser
+```bash
+npm run test:e2e:headed tests/e2e/dashboard.spec.js
+```
+
+## Test Structure
+
+Each test suite follows this pattern:
+1. **Setup**: Mock data and navigate to test page
+2. **Action**: Perform the test action (click, fill, etc.)
+3. **Assertion**: Verify expected behavior
+4. **Cleanup**: Reset state if needed
+
+## Common Test Patterns
+
+### Mocking Firestore
+```javascript
+await page.route('**/firestore/v1/projects/*/databases/*/documents/**', async route => {
+  // Return mock data
+});
+```
+
+### Waiting for elements
+```javascript
+await expect(page.locator('.selector')).toBeVisible();
+await page.waitForTimeout(1000); // For complex interactions
+```
+
+### Handling authentication
+```javascript
+// Tests automatically handle authentication
+// Mock user data is provided in test setup
+```
+
+## Troubleshooting
+
+### Tests failing on mobile
+- Some elements may be hidden on mobile devices
+- Use responsive design selectors
+- Check for mobile-specific behavior
+
+### Tests timing out
+- Increase timeout in playwright.config.js
+- Check if page is fully loaded before assertions
+- Use proper wait conditions
+
+### Mock data issues
+- Verify mock data structure matches real app
+- Check Firestore route patterns
+- Ensure mock data is returned for all requests
