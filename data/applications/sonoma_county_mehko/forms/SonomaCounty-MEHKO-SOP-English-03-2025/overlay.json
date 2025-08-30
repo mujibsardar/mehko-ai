@@ -1,0 +1,931 @@
+{
+  "id": "SonomaCounty-MEHKO-SOP-English-03-2025",
+  "title": "Standard Operating Procedures (SOP)",
+  "fields": [
+    {
+      "id": "Name of Operation",
+      "label": "Name of Operation:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Operators Phone Number",
+      "label": "Operator\u2019s Phone Number:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Operators Name",
+      "label": "Operator\u2019s Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Employees Name",
+      "label": "Food Employee\u2019s Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Operators Address",
+      "label": "Operator\u2019s Address:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City",
+      "label": "City:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State",
+      "label": "State:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP",
+      "label": "Zip Code",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "Email address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Website",
+      "label": "Website:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Website or social media mobile applications apps list sites or companies used",
+      "label": "How will the MEHKO be advertised? (NO postings, signage, or other outdoor displays advertising the MEHKO are allowed.): Website or social media mobile applications/ \u201capps\u201d (list sites or companies used",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Internet intermediary list sites or companies used",
+      "label": "Internet intermediary (list sites or companies used",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials",
+      "label": "Please read each statement carefully and initial to confirm your understanding. Contact EH with questions. Enter initials for \"I understand that I am required to obtain and display a valid Health Permit from EH.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_2",
+      "label": "Enter initials for \"I understand that all food must be stored, prepared and served from my permitted kitchen and cannot be prepared or sold in other areas of my property.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_3",
+      "label": "Enter initials for \"I understand the property owner is responsible for activity on their property.  If renting, I will fill out a Sonoma County Rental Notification form.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_4",
+      "label": "Enter initials for \"I understand that no more than one full-time employee, not including family members or household members, is allowed.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_5",
+      "label": "I understand that a MEHKO shall operate in accordance with the applicable city or county's general plan. ",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_6",
+      "label": "Enter initials for \"I understand that all food must be served, or delivered to the customer, on the same day as it is prepared or cooked.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_7",
+      "label": "Enter initials for \"I understand that complex food preparation that requires unique, special handling such as smoking to preserve, curing, reduced oxygen packaging, and sous vide are not allowed. Special and complex food processes that are required to reach Critical Control Points known as HACCP (Hazardous Analysis Critical Control Point) require further permitting and are not allowed under the MEHKO permit.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_8",
+      "label": "Enter initials for \"I understand that the production, manufacturing, processing, freezing, or packaging of milk or milk products such as cheese, ice cream, yogurt, sour cream, butter, and the service and sale of raw oysters and raw milk is prohibited.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_9",
+      "label": "Enter initials for \"I understand that animals must be kept outside of the kitchen and dining areas during food preparation and service.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_10",
+      "label": "Enter initials for \"I understand that food preparation cannot exceed 30 individual meals per day, 90 individual meals per week, or the equivalent of these totals (for meal components sold separately).\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_11",
+      "label": "Enter initials for \"I understand that the MEHKO may not have more than one hundred thousand dollars ($100,000) in gross annual sales. Note: MEHKOs are required to provide verification of annual gross sales documentation upon request.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_12",
+      "label": "Enter initials for \"I understand that food may only be sold directly to consumers and cannot be sold to other businesses or used for resale.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_13",
+      "label": "Enter initials for \"I understand that I cannot post signage or outdoor advertising displays and that I must comply with all nuisance ordinances such as noise and garbage.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_14",
+      "label": "Enter initials for \"I understand the areas used for my MEHKO must be clean, sanitary, in good repair, and free of vermin (i.e., cockroaches, rodents, flies) at all times.\"",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_15",
+      "label": "Enter initials for \"I understand my MEHKO is subject to inspection by EH if a complaint is received.\" ",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_16",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_17",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_18",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_19",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_20",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_21",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_22",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_23",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_24",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_25",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Note Ware washing methods will be covered indepth during your required food safety classes",
+      "label": "Note: Ware washing methods will be covered in-depth during your required food safety classes",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Describe your cleaning and sanitizing process NoteState law requires that kitchen utensils use the threestep cleaning process 1 wash with soapy water 2 rinse with just water 3 sanitize with a sanitizing agent such as bleach",
+      "label": "Describe your cleaning and sanitizing process. Note:State law requires that kitchen utensils use the three-step cleaning process: 1) wash with soapy water, 2) rinse with just water, 3) sanitize with a sanitizing agent such as bleach.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Will you be serving food in your home Yes No If yes please describe all areas where the food will be served in your residence",
+      "label": "1. Will you be serving food in your home? Yes No If yes, please describe all areas where the food will be served in your residence.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 Describe all areas where food and utensils used for the MEHKO will be stored",
+      "label": "2. Describe all areas where food and utensils used for the MEHKO will be stored.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 Describe how you will be disposing of any remaining unused or unsold food at the end of the day",
+      "label": "3. Describe how you will be disposing of any remaining unused or unsold food at the end of the day.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "6 How will food temperatures be maintained hotcold during transportation",
+      "label": "6. How will food temperatures be maintained hot/cold during transportation?",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "7 Will the food be delivered within 30 minutes of packaging Yes No If delivery exceeds 30 minutes please describe how food will be maintained hot and cold",
+      "label": "7. Will the food be delivered within 30 minutes of packaging? Yes No If delivery exceeds 30 minutes, please describe how food will be maintained hot and cold.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "8 Describe how food will be packaged for transportation for delivery to customers Food must be protected from contamination and be transported in tight leakproof takeout containers",
+      "label": "8. Describe how food will be packaged for transportation for delivery to customers. Food must be protected from contamination and be transported in tight, leakproof, takeout containers.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_26",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public or municipal water please list supplier",
+      "label": "Public or municipal water (please list supplier",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "All private wells must undergo water quality testing by a statecertified laboratory Attach a separate copy",
+      "label": "All private wells must undergo water quality testing by a state-certified laboratory. Attach a separate copy",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_27",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_28",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Where and how will garbage be discarded on your property Garbage must be be stored and discarded in tightly lidded leakfree containers to avoid vermin harborage",
+      "label": "1. Where and how will garbage be discarded on your property? Garbage must be be stored and discarded in tightly lidded, leak-free containers to avoid vermin harborage.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 How often is garbage picked up from your property Pick up is required every seven days",
+      "label": "2. How often is garbage picked up from your property? Pick up is required every seven days.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 Describe how kitchen grease and oil waste generated from cooking will be properly stored and recycled",
+      "label": "3. Describe how kitchen grease and oil waste generated from cooking will be properly stored and recycled.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Explain how gases odors steam heat grease vapors and smoke will escape from the kitchen eg ventilation hood above the stove open windows etc Good ventilation is necessary to prevent mold flying insects cockroaches and damage to walls carpeting and furniture",
+      "label": "1. Explain how gases, odors, steam, heat, grease, vapors, and smoke will escape from the kitchen (e.g., ventilation hood above the stove, open windows, etc.). Good ventilation is necessary to prevent mold, flying insects, cockroaches, and damage to walls, carpeting, and furniture.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 Identify the location of the fire extinguisher required near the kitchen",
+      "label": "2. Identify the location of the fire extinguisher (required near the kitchen):",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 Identify the location of the first aid kit required near the kitchen",
+      "label": "3. Identify the location of the first aid kit (required near the kitchen):",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Provide copies documenting the following certificationslicenses MEHKO owner Food Safety Manager Certification Food Handler Card Required for all persons other than the owner helping in the MEHKO",
+      "label": "Provide copies documenting the following certifications/licenses: MEHKO owner: Food Safety Manager Certification Food Handler Card (Required for all persons, other than the owner, helping in the MEHKO)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 List all cooking equipment such as ovens stoves etc and food equipment such as blenders food processors cutting boards etc used for the MEHKO Please note that food contact surfaces must be easily cleanable and non absorbent",
+      "label": "1. List all cooking equipment, such as ovens, stoves, etc. and food equipment, such as blenders, food processors, cutting boards, etc. used for the MEHKO. Please note that food contact surfaces must be easily cleanable and non- absorbent.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 What constitutes a meal for your MEHKO List all meals proposed Example 12 pizza  1 meal tamale plate combination  1 meal State law requires all menu items be reviewed by EH before being available for consumption to identify food safety risks and to work with the operator to prevent illness Any changes to current menu items or proposed new menu items require prior review by EH Please include all current and likely future menu items here",
+      "label": "2. What constitutes a meal for your MEHKO? List all \u201cmeals\u201d proposed. Example: 12\u201d pizza = 1 meal, tamale plate combination = 1 meal. State law requires all menu items be reviewed by EH before being available for consumption to identify food safety risks and to work with the operator to prevent illness. Any changes to current menu items or proposed new menu items require prior review by EH. Please include all current and likely future menu items here.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow1",
+      "label": "Menu Item_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow1",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow1",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow1",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow2",
+      "label": "Menu Item_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow2",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow2",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow2",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow3",
+      "label": "Menu Item_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow3",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow3",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow3",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow4",
+      "label": "Menu Item_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow4",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow4",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow4",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow5",
+      "label": "Menu Item_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow5",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow5",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow5",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow6",
+      "label": "Menu Item_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow6",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow6",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow6",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow7",
+      "label": "Menu Item_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow7",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow7",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow7",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow8",
+      "label": "Menu Item_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow8",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow8",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow8",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow9",
+      "label": "Menu Item_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow9",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow9",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow9",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Menu ItemRow10",
+      "label": "Menu Item_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate if this item is an Appetizer Entr\u00e9e Side Dessert or BeverageRow10",
+      "label": "Indicate if this item is an Appetizer Entr\u00e9e, Side, Dessert, or Beverage_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Ingredients please be aware of the 8 major food allergensRow10",
+      "label": "Ingredients (please be aware of the 8 major food allergens)_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or at room temperature Where will it be stored to maintain proper temperatureRow10",
+      "label": "Will the food or beverage be offered hot, cold, or at room temperature? Where will it be stored to maintain proper temperature?_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_29",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Signature",
+      "label": "Signature",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name",
+      "label": "Print Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Title",
+      "label": "Title",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Approved By",
+      "label": "Approved By",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name_2",
+      "label": "Print Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date_2",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box1",
+      "label": "Check Box1",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box2",
+      "label": "Check Box2",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "HowMuchBleach-per-gallon",
+      "label": "HowMuchBleach-per-gallon",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box4-Yes",
+      "label": "Check Box4-Yes",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box5-No",
+      "label": "Check Box5-No",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box6-Yes",
+      "label": "Check Box6-Yes",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box7-no",
+      "label": "Check Box7-no",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box8-Yes",
+      "label": "Check Box8-Yes",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box9-No",
+      "label": "Check Box9-No",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public Sewer Stytem Type",
+      "label": "Public Sewer Stytem Type",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "For Office Use Only-Comments",
+      "label": "For Office Use Only-Comments",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "sun-schedule",
+      "label": "Please describe a typical schedule for each day of the week of your operation including day(s)/time(s) when food is prepared and served. Sunday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "mon-schedule",
+      "label": "Enter information for Monday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "tues-schedule",
+      "label": "Enter information for Tuesday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "wed-schedule",
+      "label": "Enter information for Wednesday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "thurs-schedule",
+      "label": "Enter information for Thursday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "fri-schedule",
+      "label": "Enter information for Friday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "sat-schedule",
+      "label": "Enter information for Saturday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "sun-#-of-meals",
+      "label": "Estimated number of meals to be prepared each day. Enter information for Sunday.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "mon-#-of-meals",
+      "label": "Enter information for Monday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "tue-#-of-meals",
+      "label": "Enter information for Tuesday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "wed-#-of-meals",
+      "label": "Enter information for Wednesday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "thurs-#-of-meals",
+      "label": "Enter information for Thursday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "fri-#-of-meals",
+      "label": "Enter information for Friday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "sat-#-of-meals",
+      "label": "Enter information for Saturday",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

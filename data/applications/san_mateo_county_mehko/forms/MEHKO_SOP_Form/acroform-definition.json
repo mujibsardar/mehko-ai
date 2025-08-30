@@ -1,0 +1,18 @@
+{
+  "id": "MEHKO_SOP_Form",
+  "title": "Standard Operating Procedures (SOP)",
+  "type": "existing_acroform",
+  "appId": "san_mateo_county_mehko",
+  "stepId": "sop_form",
+  "fields": [
+    {
+      "id": "topmostSubform[0]",
+      "label": "topmostSubform[0]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

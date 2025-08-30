@@ -1,0 +1,616 @@
+{
+  "id": "EHS_16-1_FoodFacility_PlanCheck_PermitApplication",
+  "title": "Health Permit Application",
+  "fields": [
+    {
+      "id": "Existing permitted facility remodelequip change etc",
+      "label": "Existing permitted facility remodel/equip change, etc",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Adding another operation to an existing permitted facility eg adding Satellite Food Services or",
+      "label": "Adding another operation to an existing permitted facility (e.g., adding Satellite Food Services or",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "New owner of a food facility Name of Previous Facility if known",
+      "label": "New owner of a food facility. Name of Previous Facility (if known",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_3",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Facility NameDBA",
+      "label": "Facility Name/DBA",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Address",
+      "label": "Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Apt",
+      "label": "Apt",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Bldg",
+      "label": "Bldg",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Suite",
+      "label": "Suite",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Unit",
+      "label": "Unit",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "numberletter",
+      "label": "number/letter",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State",
+      "label": "State",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip",
+      "label": "Zip",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "First Name",
+      "label": "First Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Last Name",
+      "label": "Last Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Organization Name if applicable",
+      "label": "Organization Name (if applicable",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Address_2",
+      "label": "Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City_2",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State_2",
+      "label": "State",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip_2",
+      "label": "Zip",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "Email",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Phone",
+      "label": "Primary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Secondary Phone",
+      "label": "Secondary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Same as Applicant",
+      "label": "Same as Applicant",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "First Name_2",
+      "label": "First Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Last Name_2",
+      "label": "Last Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Address_3",
+      "label": "Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City_3",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State_3",
+      "label": "State",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip_3",
+      "label": "Zip",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email_2",
+      "label": "Email",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Phone_2",
+      "label": "Primary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Secondary Phone_2",
+      "label": "Secondary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Same as PLAN REVIEW Accounts Payable",
+      "label": "Same as PLAN REVIEW Accounts Payable",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "First Name_3",
+      "label": "First Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Last Name_3",
+      "label": "Last Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Address_4",
+      "label": "Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City_4",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State_4",
+      "label": "State",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip_4",
+      "label": "Zip",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email_3",
+      "label": "Email",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Phone_3",
+      "label": "Primary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Secondary Phone_3",
+      "label": "Secondary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Same as Applicant_2",
+      "label": "Same as Applicant",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "First Name_4",
+      "label": "First Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Last Name_4",
+      "label": "Last Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Address_5",
+      "label": "Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City_5",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State_5",
+      "label": "State",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip_5",
+      "label": "Zip",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email_4",
+      "label": "Email",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Phone_4",
+      "label": "Primary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Secondary Phone_4",
+      "label": "Secondary Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Corporation",
+      "label": "Corporation",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Limited Liability Company LLC",
+      "label": "Limited Liability Company (LLC",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sole Owner",
+      "label": "Sole Owner",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Partnership",
+      "label": "Partnership",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Government Entity",
+      "label": "Government Entity",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Name of Corporation or LLC",
+      "label": "Name of Corporation or LLC",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "or place or portion thereof maintained used or operated for the purpose of storing",
+      "label": "or place, or portion thereof, maintained, used, or operated for the purpose of storing",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Facility Size",
+      "label": "Food Facility -Size",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Low Risk Permanent Food Facility less than 3000 square feet",
+      "label": "Low Risk Permanent Food Facility (less than 3,000 square feet",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Microenterprise Home Kitchen Operation",
+      "label": "Microenterprise Home Kitchen Operation",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Host Facility",
+      "label": "Host Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Satellite Dining Facility",
+      "label": "Satellite Dining Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "School Dining Facility",
+      "label": "School Dining Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "If yes attach an Affidavit For A Veterans Fee Exemption For The Health Permit To Operate A",
+      "label": "If yes, attach an Affidavit For A Veteran\u2019s Fee Exemption For The Health Permit To Operate A",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Multiuse",
+      "label": "Multi-use",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Singleuse",
+      "label": "Single-use",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Both",
+      "label": "Both",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "NA",
+      "label": "N/A",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 Will Onsite Consumption be provided",
+      "label": "2. Will Onsite Consumption be provided",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 Will an Outdoor Dining Area be provided",
+      "label": "3. Will an Outdoor Dining Area be provided",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City Sewer System",
+      "label": "City Sewer System",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Onsite Wastewater Treatment septic",
+      "label": "Onsite Wastewater Treatment (septic",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Unknown",
+      "label": "Unknown",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public",
+      "label": "Public",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Private",
+      "label": "Private",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Unknown_2",
+      "label": "Unknown",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Facility Operates for only 3 Months of the Year",
+      "label": "Food Facility Operates for only 3 Months of the Year",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Facility Operates for only 6 Months of the Year",
+      "label": "Food Facility Operates for only 6 Months of the Year",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Facility Operates for only 9 Months of the Year",
+      "label": "Food Facility Operates for only 9 Months of the Year",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box1",
+      "label": "Check Box1",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box2",
+      "label": "Check Box2",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box3",
+      "label": "Check Box3",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box4",
+      "label": "Check Box4",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

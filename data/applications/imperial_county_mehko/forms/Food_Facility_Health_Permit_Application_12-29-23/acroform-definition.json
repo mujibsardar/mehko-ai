@@ -1,0 +1,655 @@
+{
+  "id": "Food_Facility_Health_Permit_Application_12-29-23",
+  "title": "Health Permit Application",
+  "type": "existing_acroform",
+  "appId": "imperial_county_mehko",
+  "stepId": "permit_application_form",
+  "fields": [
+    {
+      "id": "ST",
+      "label": "ST",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP",
+      "label": "ZIP",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email to receive notices invoices inspection reports etc",
+      "label": "E-mail (to receive notices, invoices, inspection reports, etc",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ST_2",
+      "label": "ST",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP_2",
+      "label": "ZIP",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ST_3",
+      "label": "ST",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP_3",
+      "label": "ZIP",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cell Phone",
+      "label": "Cell Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ST_4",
+      "label": "ST",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tax ID",
+      "label": "Tax ID",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "E-mail",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ST_5",
+      "label": "ST",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP_4",
+      "label": "ZIP",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date of ownership change",
+      "label": "Date of ownership change",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Previous OwnerOperator",
+      "label": "Previous Owner/Operator",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Anticipated date of operation",
+      "label": "Anticipated date of operation",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Amt",
+      "label": "Amt",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Pay Type",
+      "label": "Pay Type",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "FA",
+      "label": "FA",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Rcvd by",
+      "label": "Rcvd by",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Whats the square footage of your food facility",
+      "label": "What's the square footage of your food facility",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Season of Operation MMDDYY",
+      "label": "Season of Operation (MM/DD/YY",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "to",
+      "label": "to",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Hours of Operation please indicate AMPM",
+      "label": "Hours of Operation (please indicate AM/PM",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Applicants Name",
+      "label": "Applicant's Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Applicants Signature",
+      "label": "Applicant's Signature",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date_2",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Low Risk",
+      "label": "Low Risk",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Moderate Risk",
+      "label": "Moderate Risk",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "High Risk",
+      "label": "High Risk",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Approved By",
+      "label": "Approved By",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date_3",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Facility Name (DBA)",
+      "label": "Facility Name (DBA)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Facility address",
+      "label": "Facility address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "work phone",
+      "label": "work phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Fax",
+      "label": "Fax",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Manager or Person in Charge",
+      "label": "Manager or Person in Charge",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Phone",
+      "label": "Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner name",
+      "label": "Owner name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner address",
+      "label": "Owner address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "city",
+      "label": "city",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mailing Address",
+      "label": "Mailing Address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "owner phone",
+      "label": "owner phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "driver's license",
+      "label": "driver's license",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Acct holder name",
+      "label": "Acct holder name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mailing address",
+      "label": "Mailing address",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "attn",
+      "label": "attn",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "phone",
+      "label": "phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "fax",
+      "label": "fax",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box21",
+      "label": "Check Box21",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box22",
+      "label": "Check Box22",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box23",
+      "label": "Check Box23",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box24",
+      "label": "Check Box24",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box25",
+      "label": "Check Box25",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "if yes, explain new operation",
+      "label": "if yes, explain new operation",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box27",
+      "label": "Check Box27",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box28",
+      "label": "Check Box28",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "if yes, explain what will be remodeled",
+      "label": "if yes, explain what will be remodeled",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box30",
+      "label": "Check Box30",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box31",
+      "label": "Check Box31",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text32",
+      "label": "Text32",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box33",
+      "label": "Check Box33",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box34",
+      "label": "Check Box34",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box35",
+      "label": "Check Box35",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box36",
+      "label": "Check Box36",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box37",
+      "label": "Check Box37",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box38",
+      "label": "Check Box38",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box39",
+      "label": "Check Box39",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box40",
+      "label": "Check Box40",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box41",
+      "label": "Check Box41",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box42",
+      "label": "Check Box42",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box43",
+      "label": "Check Box43",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box44",
+      "label": "Check Box44",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box45",
+      "label": "Check Box45",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box46",
+      "label": "Check Box46",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box47",
+      "label": "Check Box47",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box48",
+      "label": "Check Box48",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box49",
+      "label": "Check Box49",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box50",
+      "label": "Check Box50",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box51",
+      "label": "Check Box51",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box52",
+      "label": "Check Box52",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box53",
+      "label": "Check Box53",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box54",
+      "label": "Check Box54",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box55",
+      "label": "Check Box55",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box56",
+      "label": "Check Box56",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box57",
+      "label": "Check Box57",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box58",
+      "label": "Check Box58",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box59",
+      "label": "Check Box59",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box60",
+      "label": "Check Box60",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text61",
+      "label": "Text61",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

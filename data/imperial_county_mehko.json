@@ -1,0 +1,156 @@
+{
+  "id": "imperial_county_mehko",
+  "title": "Imperial County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Same-day prep/cook/serve; delivery by operator/household allowed.",
+  "rootDomain": "icphd.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Confirm you can run a MEHKO at home and understand limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and compliant.\n\n**What you need:**\n- \u2610 Residence in Imperial County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review ICPHD\u2019s MEHKO page and guidelines.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes\n\n**Ready when:** You can state your volume within limits.",
+      "searchTerms": [
+        "Imperial County MEHKO limits",
+        "ICPHD MEHKO rules",
+        "Imperial County home kitchen operation"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get a Food Protection Manager certificate and food handler cards for helpers.\n\n**Why it matters:** Required by ICPHD for permitting.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP)\n- \u2610 Food handler certificates (any helpers)\n- \u2610 Landlord/HOA OK if applicable\n\n**Where/how:** Take ANSI-approved training; gather documents.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days\n\n**Ready when:** Certificates are ready to attach.",
+      "searchTerms": [
+        "Imperial County CFPM exam",
+        "Imperial County food handler card",
+        "Imperial County renter permission MEHKO"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Assemble all items for your packet.\n\n**Why it matters:** Incomplete packets delay inspection.\n\n**What you need:**\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Menu and ID (with MEHKO address)\n\n**Where/how:** Follow ICPHD\u2019s guidelines & FAQs.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed as PDFs.",
+      "searchTerms": [
+        "ICPHD MEHKO application packet",
+        "Imperial County MEHKO SOP requirements",
+        "Imperial County MEHKO forms"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "Imp_Co_MEHKO_SOP_2023-5-1-2",
+      "pdfUrl": "https://www.icphd.org/assets/Environmental-Health/Food/MEHKO/Imp_Co_MEHKO_SOP_2023-5-1-2.pdf",
+      "appId": "imperial_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the SOP form covering menu, prep, storage, sanitation, and service/delivery.\n\n**Why it matters:** Shows ICPHD how you will operate safely.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; thermometer\n\n**Where/how:** Fill this SOP and attach required items.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Imperial County MEHKO SOP form",
+        "ICPHD food safety SOP",
+        "MEHKO SOP Imperial"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "Food_Facility_Health_Permit_Application_12-29-23",
+      "pdfUrl": "https://www.icphd.org/assets/Environmental-Health/Food/Food-Applications/Food_Facility_Health_Permit_Application_12-29-23.pdf",
+      "appId": "imperial_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Fill the county Food Facility Health Permit Application (select MEHKO type).\n\n**Why it matters:** Official request for a MEHKO permit.\n\n**What you need:**\n- \u2610 Owner/site info; contact email\n- \u2610 Operation details (select MEHKO)\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete and sign this application.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+      "searchTerms": [
+        "Imperial County MEHKO permit application",
+        "ICPHD health permit application MEHKO",
+        "Imperial home kitchen application"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit your packet and pay fees.\n\n**Why it matters:** Processing and inspection scheduling start after payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Menu and ID copies\n- \u2610 Payment method\n\n**Where/how:** Imperial County Public Health Department, Environmental Health Division, 797 Main St, Suite B, El Centro, CA 92243 \u00b7 (442) 265-1888 \u00b7 www.icphd.org.\n\n**Cost & time:** Annual Health Permit $370 (MEHKO) \u00b7 other fees per schedule \u00b7 10\u201320 minutes to submit\n\n**Ready when:** ICPHD confirms receipt and payment.",
+      "searchTerms": [
+        "Imperial County MEHKO fee 2025",
+        "ICPHD Environmental Health fees",
+        "El Centro Environmental Health contact"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Coordinate your in-home inspection with ICPHD.\n\n**Why it matters:** Required prior to operation; annual routine thereafter.\n\n**What you need:**\n- \u2610 Kitchen ready per SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Equipment functional\n\n**Where/how:** ICPHD schedules after review/payment.\n\n**Cost & time:** Included in permit fee \u00b7 ~1\u20132 hours\n\n**Ready when:** You pass and resolve any corrections.",
+      "searchTerms": [
+        "ICPHD MEHKO inspection",
+        "Imperial County home kitchen inspection",
+        "Imperial Environmental Health inspection MEHKO"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain your MEHKO permit and keep it available.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by ICPHD after passing inspection.\n\n**Cost & time:** $0 after fees\n\n**Ready when:** Permit is issued and on hand.",
+      "searchTerms": [
+        "Imperial County MEHKO permit issued",
+        "ICPHD permit status",
+        "Imperial MEHKO approval"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP; keep within meal/sales limits; renew annually.\n\n**Why it matters:** Maintains permit and protects customers.\n\n**What you need:**\n- \u2610 Meal logs \u226430/day, \u226490/week\n- \u2610 Temperature/cleaning records\n- \u2610 Renewal reminder\n\n**Where/how:** Maintain simple records; consult ICPHD guidelines & FAQs.\n\n**Cost & time:** Annual $370 \u00b7 ongoing\n\n**Ready when:** Records maintained and renewal on time.",
+      "searchTerms": [
+        "ICPHD MEHKO renewal fee",
+        "Imperial County MEHKO compliance",
+        "Imperial County MEHKO records"
+      ],
+      "appId": "imperial_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use ICPHD contact for help.\n\n**Why it matters:** Staff can answer county-specific questions.\n\n**What you need:**\n- \u2610 Phone/email\n- \u2610 Office address and hours\n- \u2610 Website\n\n**Where/how:** ICPHD Environmental Health \u2014 797 Main St, Suite B, El Centro, CA 92243 \u00b7 Phone (442) 265-1888 \u00b7 Website icphd.org.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have what you need to proceed.",
+      "searchTerms": [
+        "ICPHD Environmental Health contact",
+        "Imperial County MEHKO phone",
+        "El Centro Environmental Health office"
+      ],
+      "appId": "imperial_county_mehko"
+    }
+  ]
+}

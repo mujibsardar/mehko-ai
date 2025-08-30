@@ -1,0 +1,156 @@
+{
+  "id": "sonoma_county_mehko",
+  "title": "Sonoma County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+  "rootDomain": "sonomacounty.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Sonoma County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review Sonoma County\u2019s MEHKO program page and Program Intro PDF.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+      "searchTerms": [
+        "Sonoma County MEHKO daily meal limits",
+        "Sonoma County MEHKO weekly restrictions",
+        "Sonoma County Home Kitchen Operations rules"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total (study + exam)\n\n**Ready when:** You have a CFPM certificate and any property/business approvals.",
+      "searchTerms": [
+        "ANSI-CFP Food Protection Manager Sonoma",
+        "Sonoma renter permission MEHKO",
+        "Sonoma business license home food operation"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and utility bill (for residency proof)\n- \u2610 Rental Notification form (if renting)\n\n**Where/how:** Collect all required documents before submitting.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "Sonoma MEHKO application documents",
+        "Sonoma County MEHKO checklist",
+        "Sonoma MEHKO required forms"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "SonomaCounty-MEHKO-SOP-English-03-2025",
+      "pdfUrl": "https://sonomacounty.gov/Main%20County%20Site/Health%20and%20Human%20Services/Health%20Services/Documents/Public%20Health/Sections/Environmental%20Health/Programs%20and%20Services/Food%20Safety%20Program/MEHKO/SonomaCounty-MEHKO-SOP-English-03-2025.pdf",
+      "appId": "sonoma_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Fill the MEHKO SOP form covering menu, prep, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Sonoma MEHKO SOP form",
+        "Sonoma County food safety SOP",
+        "MEHKO SOP Sonoma County"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "SonomaCounty-MEHKO-Program-Intro-Eng-02-2025",
+      "pdfUrl": "https://sonomacounty.gov/Main%20County%20Site/Health%20and%20Human%20Services/Health%20Services/Documents/Public%20Health/Sections/Environmental%20Health/Programs%20and%20Services/Food%20Safety%20Program/MEHKO/SonomaCounty-MEHKO-Program-Intro-Eng-02-2025.pdf",
+      "appId": "sonoma_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the Health Permit Application section in the MEHKO packet.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Rental Notification form if applicable\n\n**Where/how:** Complete the application as described in the Program Intro PDF.\n\n**Cost & time:** Initial permit $652 \u00b7 Renewal $326 \u00b7 15\u201330 minutes to fill\n\n**Ready when:** Application is complete and matches your SOP.",
+      "searchTerms": [
+        "Sonoma MEHKO permit application",
+        "Sonoma Health Permit Application form",
+        "Sonoma County Home Kitchen Operations application"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Rental Notification (if renting)\n- \u2610 Payment method\n\n**Where/how:** Submit by email to EHS-eh@sonoma-county.org, by mail to 625 5th Street, Santa Rosa, CA 95404, or in person at the Environmental Health office. Pay by check/money order or online if available.\n\n**Cost & time:** Initial $652 \u00b7 Renewal $326 \u00b7 10\u201320 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+      "searchTerms": [
+        "Sonoma MEHKO application fee 2025",
+        "Sonoma Environmental Health submission MEHKO",
+        "Sonoma MEHKO payment methods"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will contact you to schedule an inspection after your application is approved.\n\n**Cost & time:** Included in fee \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+      "searchTerms": [
+        "Sonoma MEHKO inspection checklist",
+        "Sonoma County Home Kitchen inspection",
+        "Sonoma Environmental Health inspection MEHKO"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after application fee)\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+      "searchTerms": [
+        "Sonoma MEHKO permit issuance",
+        "Sonoma permit processing timeline",
+        "Sonoma County Environmental Health permit status"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits (\u226430/day, \u226490/week)\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact Environmental Health if your menu or volume changes.\n\n**Cost & time:** Renewal $326 annually \u00b7 ongoing\n\n**Ready when:** You track meals, keep records, and renew on time.",
+      "searchTerms": [
+        "Sonoma MEHKO meal tracking",
+        "Sonoma MEHKO renewal process",
+        "Sonoma County Home Kitchen compliance"
+      ],
+      "appId": "sonoma_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone or email for questions\n- \u2610 Office address and hours\n- \u2610 Website for additional resources\n\n**Where/how:** Sonoma County Environmental Health \u2014 Phone: (707) 565-6565 \u00b7 Email: EHS-eh@sonoma-county.org \u00b7 Office: 625 5th Street, Santa Rosa, CA 95404. Hours: Mon\u2013Fri 8AM\u20135PM.\n\n**Cost & time:** $0 \u00b7 varies by question\n\n**Ready when:** You have the information you need to proceed.",
+      "searchTerms": [
+        "Sonoma Environmental Health contact",
+        "Sonoma MEHKO program phone",
+        "Sonoma County MEHKO office"
+      ],
+      "appId": "sonoma_county_mehko"
+    }
+  ]
+}

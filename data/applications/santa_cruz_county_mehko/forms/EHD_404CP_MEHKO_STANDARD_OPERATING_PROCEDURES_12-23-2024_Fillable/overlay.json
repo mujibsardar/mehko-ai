@@ -1,0 +1,658 @@
+{
+  "id": "EHD_404CP_MEHKO_STANDARD_OPERATING_PROCEDURES_12-23-2024_Fillable",
+  "title": "Standard Operating Procedures (SOP)",
+  "fields": [
+    {
+      "id": "NAME OF OPERATION Nombre de la Operaci\u00f3n",
+      "label": "NAME OF OPERATION (Nombre de la Operaci\u00f3n)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "NAME OF THE OPERATORPERSON IN CHARGE Nombre del OperadorPersona a Cargo",
+      "label": "NAME OF THE OPERATOR-PERSON IN CHARGE (Nombre del Operador-Persona a Cargo)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "MEHKO ADDRESS Direcci\u00f3n de la Operaci\u00f3n",
+      "label": "MEHKO ADDRESS (Direcci\u00f3n de la Operaci\u00f3n)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "EMAIL Correo Electr\u00f3nico",
+      "label": "E-MAIL (Correo Electr\u00f3nico)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PHONE Tel\u00e9fono",
+      "label": "PHONE (Tel\u00e9fono)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioSunday domingo",
+      "label": "Times/ (Horario)_Sunday (domingo)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioMonday lunes",
+      "label": "Times/ (Horario)_Monday (lunes)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioTuesday martes",
+      "label": "Times/ (Horario)_Tuesday (martes)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioWednesday mi\u00e9rcoles",
+      "label": "Times/ (Horario)_Wednesday (mi\u00e9rcoles)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioThursday jueves",
+      "label": "Times/ (Horario)_Thursday (jueves)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioFriday viernes",
+      "label": "Times/ (Horario)_Friday (viernes)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Times HorarioSaturday s\u00e1bado",
+      "label": "Times/ (Horario)_Saturday (s\u00e1bado)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_2",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_3",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "DineIn Comer en Sitio",
+      "label": "Dine-In (Comer en Sitio)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "CarryOut Para Llevar",
+      "label": "Carry-Out (Para Llevar)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Delivery Entregar",
+      "label": "Delivery (Entregar)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Escriba su men\u00fa debajo Incluya todas las comidas bebidas y postres 1",
+      "label": "Escriba su men\u00fa debajo. Incluya todas las comidas, bebidas, y postres [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Escriba su men\u00fa debajo Incluya todas las comidas bebidas y postres 2",
+      "label": "Escriba su men\u00fa debajo. Incluya todas las comidas, bebidas, y postres [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Escriba su men\u00fa debajo Incluya todas las comidas bebidas y postres 3",
+      "label": "Escriba su men\u00fa debajo. Incluya todas las comidas, bebidas, y postres [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Escriba su men\u00fa debajo Incluya todas las comidas bebidas y postres 4",
+      "label": "Escriba su men\u00fa debajo. Incluya todas las comidas, bebidas, y postres [4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Escriba su men\u00fa debajo Incluya todas las comidas bebidas y postres 5",
+      "label": "Escriba su men\u00fa debajo. Incluya todas las comidas, bebidas, y postres [5]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1",
+      "label": "[1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2",
+      "label": "[2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3",
+      "label": "[3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "4",
+      "label": "[4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "5",
+      "label": "[5]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "6",
+      "label": "[6]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "7",
+      "label": "[7]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "8",
+      "label": "[8]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "9",
+      "label": "[9]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1_2",
+      "label": "[1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2_2",
+      "label": "[2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3_2",
+      "label": "[3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "4_2",
+      "label": "[4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "5_2",
+      "label": "[5]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "6_2",
+      "label": "[6]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "7_2",
+      "label": "[7]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "8_2",
+      "label": "[8]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "9_2",
+      "label": "[9]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "10",
+      "label": "[10]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "11",
+      "label": "[11]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1_3",
+      "label": "[1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2_3",
+      "label": "[2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3_3",
+      "label": "[3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Nombre de la persona que revisar\u00e1 el estado de salud de los individuos antes de comenzar la preparaci\u00f3n de alimentos 1",
+      "label": "Nombre de la persona que revisar\u00e1 el estado de salud de los individuos antes de comenzar la preparaci\u00f3n de alimentos [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Nombre de la persona que revisar\u00e1 el estado de salud de los individuos antes de comenzar la preparaci\u00f3n de alimentos 2",
+      "label": "Nombre de la persona que revisar\u00e1 el estado de salud de los individuos antes de comenzar la preparaci\u00f3n de alimentos [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador de alimentos o residentes del hogar se enferman 1",
+      "label": "Cu\u00e1l es su proceso si un preparador de alimentos o residente(s) del hogar se enferma(n [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador de alimentos o residentes del hogar se enferman 2",
+      "label": "Cu\u00e1l es su proceso si un preparador de alimentos o residente(s) del hogar se enferma(n [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador de alimentos o residentes del hogar se enferman 3",
+      "label": "Cu\u00e1l es su proceso si un preparador de alimentos o residente(s) del hogar se enferma(n [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador de alimentos o residentes del hogar se enferman 4",
+      "label": "Cu\u00e1l es su proceso si un preparador de alimentos o residente(s) del hogar se enferma(n [4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador se corta la mano 1",
+      "label": "Cu\u00e1l es su proceso si un preparador se corta la mano [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador se corta la mano 2",
+      "label": "Cu\u00e1l es su proceso si un preparador se corta la mano [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cu\u00e1l es su proceso si un preparador se corta la mano 3",
+      "label": "Cu\u00e1l es su proceso si un preparador se corta la mano [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41 F 5 C o menos Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos 1",
+      "label": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41\u00b0 F (5\u00b0 C) o menos? Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41 F 5 C o menos Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos 2",
+      "label": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41\u00b0 F (5\u00b0 C) o menos? Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41 F 5 C o menos Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos 3",
+      "label": "C\u00f3mo mantendr\u00e1 sus alimentos fr\u00edos a 41\u00b0 F (5\u00b0 C) o menos? Describa el m\u00e9todo y anote el equipo para mantener los alimentos fr\u00edos [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135 F 572 C o m\u00e1s 1",
+      "label": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135\u00b0 F (57.2\u00b0 C) o m\u00e1s [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135 F 572 C o m\u00e1s 2",
+      "label": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135\u00b0 F (57.2\u00b0 C) o m\u00e1s [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135 F 572 C o m\u00e1s 3",
+      "label": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135\u00b0 F (57.2\u00b0 C) o m\u00e1s [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135 F 572 C o m\u00e1s 4",
+      "label": "C\u00f3mo mantendr\u00e1 los alimentos calientes a 135\u00b0 F (57.2\u00b0 C) o m\u00e1s [4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 What meats will you be cooking Qu\u00e9 carnes va a cocinar 1",
+      "label": "1. What meats will you be cooking? (\u00bfQu\u00e9 carnes va a cocinar [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 What meats will you be cooking Qu\u00e9 carnes va a cocinar 2",
+      "label": "1. What meats will you be cooking? (\u00bfQu\u00e9 carnes va a cocinar [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 How will you verify cooking temperatures for your food C\u00f3mo verificar\u00e1 las temperaturas de cocci\u00f3n de sus alimentos 1",
+      "label": "2. How will you verify cooking temperatures for your food? (\u00bfC\u00f3mo verificar\u00e1 las temperaturas de cocci\u00f3n de sus alimentos [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 How will you verify cooking temperatures for your food C\u00f3mo verificar\u00e1 las temperaturas de cocci\u00f3n de sus alimentos 2",
+      "label": "2. How will you verify cooking temperatures for your food? (\u00bfC\u00f3mo verificar\u00e1 las temperaturas de cocci\u00f3n de sus alimentos [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "D\u00f3nde lavar\u00e1 y desinfectar\u00e1 sus utensilios y equipos",
+      "label": "D\u00f3nde lavar\u00e1 y desinfectar\u00e1 sus utensilios y equipos",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo lavar\u00e1 desinfectar\u00e1 y secar\u00e1 al aire su equipo Describa los pasos y el equipo en su cocina 1",
+      "label": "C\u00f3mo lavar\u00e1, desinfectar\u00e1 y secar\u00e1 al aire su equipo? Describa los pasos y el equipo en su cocina [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo lavar\u00e1 desinfectar\u00e1 y secar\u00e1 al aire su equipo Describa los pasos y el equipo en su cocina 2",
+      "label": "C\u00f3mo lavar\u00e1, desinfectar\u00e1 y secar\u00e1 al aire su equipo? Describa los pasos y el equipo en su cocina [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo lavar\u00e1 desinfectar\u00e1 y secar\u00e1 al aire su equipo Describa los pasos y el equipo en su cocina 3",
+      "label": "C\u00f3mo lavar\u00e1, desinfectar\u00e1 y secar\u00e1 al aire su equipo? Describa los pasos y el equipo en su cocina [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo lavar\u00e1 desinfectar\u00e1 y secar\u00e1 al aire su equipo Describa los pasos y el equipo en su cocina 4",
+      "label": "C\u00f3mo lavar\u00e1, desinfectar\u00e1 y secar\u00e1 al aire su equipo? Describa los pasos y el equipo en su cocina [4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "lavar\u00e1 y desinfectar\u00e1 su equipo 1",
+      "label": "lavar\u00e1 y desinfectar\u00e1 su equipo [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "lavar\u00e1 y desinfectar\u00e1 su equipo 2",
+      "label": "lavar\u00e1 y desinfectar\u00e1 su equipo [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "lavar\u00e1 y desinfectar\u00e1 su equipo 3",
+      "label": "lavar\u00e1 y desinfectar\u00e1 su equipo [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda 1",
+      "label": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda 2",
+      "label": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda 3",
+      "label": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda 4",
+      "label": "C\u00f3mo evitar\u00e1 contaminar los alimentos que no se cocinar\u00e1n si est\u00e1 manejando carne cruda [4]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 tocar los alimentos listos para comer directamente con sus manos alimentos ya cocinados frutas y verduras 1",
+      "label": "C\u00f3mo evitar\u00e1 tocar los alimentos listos para comer directamente con sus manos (alimentos ya cocinados, frutas y verduras [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "C\u00f3mo evitar\u00e1 tocar los alimentos listos para comer directamente con sus manos alimentos ya cocinados frutas y verduras 2",
+      "label": "C\u00f3mo evitar\u00e1 tocar los alimentos listos para comer directamente con sus manos (alimentos ya cocinados, frutas y verduras [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_4",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Nombre del encargado que debe obtener una certificaci\u00f3n de Gerente de Seguridad Alimentaria",
+      "label": "Nombre del encargado que debe obtener una certificaci\u00f3n de Gerente de Seguridad Alimentaria",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos 1",
+      "label": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos 2",
+      "label": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos 3",
+      "label": "Liste los nombres del dem\u00e1s personal manejando alimentos que debe obtener una tarjeta de manipulaci\u00f3n de alimentos [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Signature Firma",
+      "label": "Signature/ Firma",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date Fecha",
+      "label": "Date/ Fecha",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name Escriba su nombre",
+      "label": "Print Name/ Escriba su nombre",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Title t\u00edtulo",
+      "label": "Title/ t\u00edtulo",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "OPERATIONAL PROCEDURES REVIEWED BY",
+      "label": "OPERATIONAL PROCEDURES REVIEWED BY",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "DATE APPROVED",
+      "label": "DATE APPROVED",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "CLEAR",
+      "label": "CLEAR",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PRINT",
+      "label": "PRINT",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

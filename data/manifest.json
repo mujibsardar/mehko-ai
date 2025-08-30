@@ -1,1 +1,1922 @@
-[]
+[
+  {
+    "id": "alameda_county_mehko",
+    "title": "Alameda County MEHKO",
+    "description": "Home-based kitchen permit: prepare and serve up to 30 meals/day, 90/week; max $100,000 gross annual sales. Requires SOP, Health Permit, Food Safety Manager, and Food Handler cards; $696 permit fee.",
+    "rootDomain": "deh.acgov.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review MEHKO rules, limits, and permit process.\n\n**Why it matters:** Understanding key requirements (meals, sales, personnel, safety) up front avoids delays.\n\n**What you need:**\n- \u2610 Meal limits: 30/day, 90/week; gross annual sales \u2264 $100,000\n- \u2610 Same-day preparation and service only\n- \u2610 No signage or outdoor advertising\n- \u2610 Understand prohibited processes and foods (e.g., HACCP, raw milk, raw oysters)\n\n**Where/how:** Visit Alameda County DEH's Home-Based Food Business page and review the MEHKO SOP and flyer.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You understand the main rules and your operation plan fits them.",
+        "searchTerms": [
+          "Alameda County MEHKO limits 30 meals 90 week",
+          "Alameda County MEHKO $100000 sales limit",
+          "Alameda County MEHKO prohibited foods HACCP"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Download & Fill MEHKO Application/SOP",
+        "type": "pdf",
+        "action_required": true,
+        "fill_pdf": true,
+        "formId": "MEHKO_APP_SOP",
+        "pdfUrl": "https://deh.acgov.org/operations-assets/docs/cottagefood/MEHKO_APP_SOP.pdf",
+        "appId": "alameda_county_mehko",
+        "content": "**What to do:** Download and complete the MEHKO Application / Standard Operating Procedures form.\n\n**Why it matters:** This combined form documents how your operation complies with MEHKO regulations.\n\n**What you need:**\n- \u2610 Menu and schedule (meals/day, week)\n- \u2610 Advertising plan (no signage; list IFSI or website)\n- \u2610 Safety plan (water, refuse, grease, ventilation, hygiene, animals)\n- \u2610 Certifications: Food Safety Manager, Food Handler cards\n\n**Where/how:** Download the form from this step and fill it out.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP form is fully filled and your operational details and safety plan are documented.",
+        "searchTerms": [
+          "Alameda County MEHKO Application SOP PDF",
+          "MEHKO_APP_SOP Alameda County",
+          "Alameda MEHKO DEH form"
+        ]
+      },
+      {
+        "id": "obtain_certifications",
+        "title": "Get Certifications",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain required food safety certificates.\n\n**Why it matters:** DEH requires credentials for you and anyone involved in food handling.\n\n**What you need:**\n- \u2610 Food Safety Manager certification (approved/accredited)\n- \u2610 Food handler card for any employees (excluding household members)\n\n**Where/how:** Take DEH-approved courses for the manager certificate; get Food Handler cards via a recognized provider.\n\n**Cost & time:** ~$60\u2013$150 \u00b7 1\u20132 days total\n\n**Ready when:** You have valid certificates for all relevant individuals.",
+        "searchTerms": [
+          "Alameda County food safety manager certification",
+          "Alameda County food handler card MEHKO",
+          "Alameda DEH certification requirements"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Pay",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your completed SOP/Application and pay the permit fee.\n\n**Why it matters:** Payment triggers DEH to begin review and inspection.\n\n**What you need:**\n- \u2610 Completed MEHKO Application/SOP\n- \u2610 Certification copies\n- \u2610 Payment for permit: $696.00\n\n**Where/how:** Submit in person or by mail to Alameda County DEH at 1131 Harbor Bay Parkway, Alameda, CA 94502.\n\n**Cost & time:** $696.00 \u00b7 proceed upon submission\n\n**Ready when:** DEH acknowledges receipt and begins processing.",
+        "searchTerms": [
+          "Alameda County MEHKO permit fee",
+          "Alameda County MEHKO submission address",
+          "ACDEH MEHKO payment"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Initial Kitchen Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Prepare for and complete the in-person inspection at your home.\n\n**Why it matters:** This verifies your setup meets safety and zoning requirements.\n\n**What you need:**\n- \u2610 Kitchen, storage, restrooms, refuse area in clean, working order\n- \u2610 SOP/Application available for review\n- \u2610 Hygiene facilities and waste/grease disposal plan ready\n\n**Where/how:** DEH will schedule an inspection after application review.\n\n**Cost & time:** Included in application fee \u00b7 about 1\u20132 hrs on inspection day\n\n**Ready when:** Inspector approves your setup and allows permit issuance.",
+        "searchTerms": [
+          "Alameda County MEHKO inspection process",
+          "MEHKO home inspection Alameda County",
+          "ACDEH MEHKO kitchen inspection"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain and keep your MEHKO operating permit.\n\n**Why it matters:** You must have this permit before legally operating your MEHKO.\n\n**What you need:**\n- \u2610 Permit document issued by DEH\n- \u2610 Keep SOP and certificates handy for reference and compliance\n\n**Where/how:** DEH will issue the permit after a successful inspection.\n\n**Cost & time:** Included in fee; valid per county regulations\n\n**Ready when:** Permit is issued and you\u2019re officially approved to operate.",
+        "searchTerms": [
+          "Alameda MEHKO permit issuance",
+          "MEHKO permit Alameda County DEH",
+          "ACDEH MEHKO approval"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Comply",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Operate your MEHKO following rules and maintain records.\n\n**Why it matters:** Staying compliant avoids enforcement actions.\n\n**What you need:**\n- \u2610 Track meals (\u2264 30/day, 90/week) and gross sales (\u2264 $100,000/year)\n- \u2610 Follow same-day prep/serve rule\n- \u2610 No signage; use approved IFSIs or online ads only\n- \u2610 Renew permit per DEH schedule\n\n**Where/how:** Keep logs, SOP manual, and proof of compliance accessible.\n\n**Cost & time:** Ongoing; minimal weekly tracking\n\n**Ready when:** You're consistently operating legally and ready for any follow-up checks.",
+        "searchTerms": [
+          "Alameda County MEHKO operating limits",
+          "Alameda MEHKO record keeping",
+          "ACDEH MEHKO compliance"
+        ],
+        "appId": "alameda_county_mehko"
+      },
+      {
+        "id": "contact_info",
+        "title": "Contact Information",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Save DEH contact info for questions or assistance.\n\n**Why it matters:** Quick support helps avoid missteps and delays.\n\n**What you need:**\n- \u2610 Address & office: 1131 Harbor Bay Parkway, Alameda, CA 94502\n- \u2610 Phone: (510) 567-6700\n- \u2610 Website: deh.acgov.org\n\n**Where/how:** Use this info for submissions, follow-up, or general support.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have DEH\u2019s contact info clearly logged.",
+        "searchTerms": [
+          "Alameda County DEH contact",
+          "ACDEH phone number",
+          "Alameda MEHKO office address"
+        ],
+        "appId": "alameda_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "imperial_county_mehko",
+    "title": "Imperial County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Same-day prep/cook/serve; delivery by operator/household allowed.",
+    "rootDomain": "icphd.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and compliant.\n\n**What you need:**\n- \u2610 Residence in Imperial County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review ICPHD\u2019s MEHKO page and guidelines.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes\n\n**Ready when:** You can state your volume within limits.",
+        "searchTerms": [
+          "Imperial County MEHKO limits",
+          "ICPHD MEHKO rules",
+          "Imperial County home kitchen operation"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get a Food Protection Manager certificate and food handler cards for helpers.\n\n**Why it matters:** Required by ICPHD for permitting.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP)\n- \u2610 Food handler certificates (any helpers)\n- \u2610 Landlord/HOA OK if applicable\n\n**Where/how:** Take ANSI-approved training; gather documents.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days\n\n**Ready when:** Certificates are ready to attach.",
+        "searchTerms": [
+          "Imperial County CFPM exam",
+          "Imperial County food handler card",
+          "Imperial County renter permission MEHKO"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Assemble all items for your packet.\n\n**Why it matters:** Incomplete packets delay inspection.\n\n**What you need:**\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Menu and ID (with MEHKO address)\n\n**Where/how:** Follow ICPHD\u2019s guidelines & FAQs.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed as PDFs.",
+        "searchTerms": [
+          "ICPHD MEHKO application packet",
+          "Imperial County MEHKO SOP requirements",
+          "Imperial County MEHKO forms"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "Imp_Co_MEHKO_SOP_2023-5-1-2",
+        "pdfUrl": "https://www.icphd.org/assets/Environmental-Health/Food/MEHKO/Imp_Co_MEHKO_SOP_2023-5-1-2.pdf",
+        "appId": "imperial_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the SOP form covering menu, prep, storage, sanitation, and service/delivery.\n\n**Why it matters:** Shows ICPHD how you will operate safely.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; thermometer\n\n**Where/how:** Fill this SOP and attach required items.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Imperial County MEHKO SOP form",
+          "ICPHD food safety SOP",
+          "MEHKO SOP Imperial"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "Food_Facility_Health_Permit_Application_12-29-23",
+        "pdfUrl": "https://www.icphd.org/assets/Environmental-Health/Food/Food-Applications/Food_Facility_Health_Permit_Application_12-29-23.pdf",
+        "appId": "imperial_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the county Food Facility Health Permit Application (select MEHKO type).\n\n**Why it matters:** Official request for a MEHKO permit.\n\n**What you need:**\n- \u2610 Owner/site info; contact email\n- \u2610 Operation details (select MEHKO)\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete and sign this application.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Imperial County MEHKO permit application",
+          "ICPHD health permit application MEHKO",
+          "Imperial home kitchen application"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your packet and pay fees.\n\n**Why it matters:** Processing and inspection scheduling start after payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Menu and ID copies\n- \u2610 Payment method\n\n**Where/how:** Imperial County Public Health Department, Environmental Health Division, 797 Main St, Suite B, El Centro, CA 92243 \u00b7 (442) 265-1888 \u00b7 www.icphd.org.\n\n**Cost & time:** Annual Health Permit $370 (MEHKO) \u00b7 other fees per schedule \u00b7 10\u201320 minutes to submit\n\n**Ready when:** ICPHD confirms receipt and payment.",
+        "searchTerms": [
+          "Imperial County MEHKO fee 2025",
+          "ICPHD Environmental Health fees",
+          "El Centro Environmental Health contact"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate your in-home inspection with ICPHD.\n\n**Why it matters:** Required prior to operation; annual routine thereafter.\n\n**What you need:**\n- \u2610 Kitchen ready per SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Equipment functional\n\n**Where/how:** ICPHD schedules after review/payment.\n\n**Cost & time:** Included in permit fee \u00b7 ~1\u20132 hours\n\n**Ready when:** You pass and resolve any corrections.",
+        "searchTerms": [
+          "ICPHD MEHKO inspection",
+          "Imperial County home kitchen inspection",
+          "Imperial Environmental Health inspection MEHKO"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain your MEHKO permit and keep it available.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by ICPHD after passing inspection.\n\n**Cost & time:** $0 after fees\n\n**Ready when:** Permit is issued and on hand.",
+        "searchTerms": [
+          "Imperial County MEHKO permit issued",
+          "ICPHD permit status",
+          "Imperial MEHKO approval"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP; keep within meal/sales limits; renew annually.\n\n**Why it matters:** Maintains permit and protects customers.\n\n**What you need:**\n- \u2610 Meal logs \u226430/day, \u226490/week\n- \u2610 Temperature/cleaning records\n- \u2610 Renewal reminder\n\n**Where/how:** Maintain simple records; consult ICPHD guidelines & FAQs.\n\n**Cost & time:** Annual $370 \u00b7 ongoing\n\n**Ready when:** Records maintained and renewal on time.",
+        "searchTerms": [
+          "ICPHD MEHKO renewal fee",
+          "Imperial County MEHKO compliance",
+          "Imperial County MEHKO records"
+        ],
+        "appId": "imperial_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use ICPHD contact for help.\n\n**Why it matters:** Staff can answer county-specific questions.\n\n**What you need:**\n- \u2610 Phone/email\n- \u2610 Office address and hours\n- \u2610 Website\n\n**Where/how:** ICPHD Environmental Health \u2014 797 Main St, Suite B, El Centro, CA 92243 \u00b7 Phone (442) 265-1888 \u00b7 Website icphd.org.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have what you need to proceed.",
+        "searchTerms": [
+          "ICPHD Environmental Health contact",
+          "Imperial County MEHKO phone",
+          "El Centro Environmental Health office"
+        ],
+        "appId": "imperial_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "lake_county_mehko",
+    "title": "Lake County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 60 meals/week (per local packet), max $50,000 annual sales (per local packet). No outdoor advertising; same-day prep/cook/serve rules.",
+    "rootDomain": "lakecountyca.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review Lake County\u2019s MEHKO rules and confirm you qualify.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Lake County\n- \u2610 Menu + production plan (\u226430/day, \u226460/week per county packet)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Read the county MEHKO page and Ordinance 3099; see Related Documents.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes\n\n**Ready when:** You can state your daily/weekly meal volume within limits.",
+        "searchTerms": [
+          "Lake County MEHKO limits",
+          "Lake County Ordinance 3099 MEHKO",
+          "Lake County home kitchen rules"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get a Certified Food Protection Manager credential and any needed property approvals.\n\n**Why it matters:** Certification and property permissions are required.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Property owner acknowledgment if renting\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved course; obtain owner/landlord acknowledgment if renting.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days\n\n**Ready when:** You have the certificate and approvals.",
+        "searchTerms": [
+          "Lake County CFPM exam",
+          "Lake County rental owner acknowledgment MEHKO",
+          "Lake County business license home kitchen"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather all documents before you apply.\n\n**Why it matters:** Incomplete submissions delay approval.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Plan Check Application (initial) \n- \u2610 Property Owner Acknowledgement (if renting)\n- \u2610 CFPM certificate; ID & proof of residence\n\n**Where/how:** Use the county forms listed on the MEHKO page.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are completed and saved as PDFs.",
+        "searchTerms": [
+          "Lake County MEHKO application packet",
+          "Lake County MEHKO SOP form",
+          "Lake County MEHKO plan check"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO-Standard-Operating-Procedures-PDF",
+        "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1124/MEHKO-Standard-Operating-Procedures-PDF",
+        "appId": "lake_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the SOP form covering menu, prep, storage, sanitation, delivery, water/sewage, waste, and safety.\n\n**Why it matters:** Shows how you\u2019ll operate safely at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Cooking/cooling/holding methods; thermometer\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Fill this SOP form and attach required items.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Lake County MEHKO SOP",
+          "Lake County food safety SOP",
+          "MEHKO SOP Lake County"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "Permit-Application-PDF",
+        "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1125/Permit-Application-PDF",
+        "appId": "lake_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the Health Permit Application for a MEHKO.\n\n**Why it matters:** This is the official request to operate.\n\n**What you need:**\n- \u2610 Owner/site information\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Plan Check approval (if required)\n\n**Where/how:** Fill out and sign this application.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Lake County MEHKO permit application",
+          "Lake County health permit MEHKO",
+          "Lake County MEHKO forms"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed forms and pay fees.\n\n**Why it matters:** Processing starts after complete submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Plan Check Application (initial)\n- \u2610 Payment method\n\n**Where/how:** Submit to Lake County Environmental Health, 922 Bevins Court, Lakeport, CA 95453. Phone (707) 263-1164.\n\n**Cost & time:** Plan Check $135/hr (min 1 hr) \u00b7 Annual Permit $269 \u00b7 10\u201320 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Lake County MEHKO fees",
+          "Lake County Environmental Health address",
+          "Lake County MEHKO submit packet"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate an in-home inspection.\n\n**Why it matters:** Required before a permit is issued.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Equipment functional\n\n**Where/how:** County will schedule after application review.\n\n**Cost & time:** Included in fees \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You pass and any corrections are resolved.",
+        "searchTerms": [
+          "Lake County MEHKO inspection",
+          "Lake County home kitchen inspection checklist",
+          "Lake County Environmental Health MEHKO"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain your MEHKO permit and keep it available.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued after inspection approval.\n\n**Cost & time:** $0 after fees\n\n**Ready when:** Permit is issued and posted/available.",
+        "searchTerms": [
+          "Lake County MEHKO permit issuance",
+          "Lake County permit timeline",
+          "Lake County permit status Environmental Health"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and county limits; renew annually.\n\n**Why it matters:** Protects customers and your permit.\n\n**What you need:**\n- \u2610 Meal logs within limits\n- \u2610 Temp & cleaning records\n- \u2610 Renewal reminder\n\n**Where/how:** Maintain records; update SOP if menu/volume changes.\n\n**Cost & time:** Annual $269 \u00b7 ongoing\n\n**Ready when:** Records are kept and renewal is on time.",
+        "searchTerms": [
+          "Lake County MEHKO renewal",
+          "Lake County meal limits enforcement",
+          "Lake County MEHKO compliance"
+        ],
+        "appId": "lake_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information for help.\n\n**Why it matters:** Staff can answer county-specific questions.\n\n**What you need:**\n- \u2610 Phone/email\n- \u2610 Office address and hours\n- \u2610 Website\n\n**Where/how:** Lake County Environmental Health \u2014 922 Bevins Court, Lakeport, CA 95453 \u00b7 Phone (707) 263-1164 \u00b7 Website: lakecountyca.gov/366/Microenterprise-Home-Kitchen-Operations-\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have what you need to proceed.",
+        "searchTerms": [
+          "Lake County Environmental Health contact",
+          "Lakeport Environmental Health phone",
+          "Lake County MEHKO office hours"
+        ],
+        "appId": "lake_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "los_angeles_county_mehko",
+    "title": "Los Angeles County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Covers all of LA County except Pasadena, Long Beach, and Vernon. Fees: $597 application review (one-time; currently subsidized for first 1,000 through 6/30/2026) + $347 annual health permit.",
+    "rootDomain": "publichealth.lacounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits (30/day, 90/week, $100,000/year).\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Los Angeles County (not Pasadena, Long Beach, Vernon)\n- \u2610 Menu and daily/weekly production plan\n- \u2610 Basic kitchen setup meeting food safety practices\n\n**Where/how:** Review LA County\u2019s MEHKO overview and FAQs.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "LA County MEHKO limits 30 90 100000",
+          "Los Angeles County MEHKO overview",
+          "LA County MEHKO FAQs"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Food Handler Cards for helpers\n- \u2610 Landlord/HOA OK and city business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total\n\n**Ready when:** You have your CFPM certificate and any property/business approvals.",
+        "searchTerms": [
+          "LA County CFPM certificate",
+          "Los Angeles Food Handler Card",
+          "LA city business license home kitchen"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO_SOP-English",
+        "pdfUrl": "https://publichealth.lacounty.gov/eh/docs/business/MEHKO_SOP-English.pdf",
+        "appId": "los_angeles_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "LA County MEHKO SOP template",
+          "Los Angeles food safety SOP requirements",
+          "MEHKO SOP Los Angeles County"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "MEHKO_PublicHealthPermitApplication-ENG",
+        "pdfUrl": "https://publichealth.lacounty.gov/eh/docs/business/MEHKO_PublicHealthPermitApplication-ENG.pdf",
+        "appId": "los_angeles_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "LA County MEHKO permit application",
+          "Los Angeles MEHKO application PDF",
+          "MEHKO Public Health Permit LA County"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Pay Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your SOP and Permit Application and pay fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 4: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate and any Food Handler Cards\n- \u2610 Payment method for fees ($597 application review; $347 annual)\n\n**Where/how:** Visit LA County\u2019s MEHKO page for submission options (online/email/in person) and current payment instructions.\n\n**Cost & time:** $597 application review (one-time; currently subsidized for many) + $347 annual \u00b7 10\u201320 minutes\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "LA County MEHKO submission email",
+          "LA County MEHKO where to submit",
+          "LA County MEHKO payment instructions"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department provides scheduling details after application review.\n\n**Cost & time:** Included in permit fees \u00b7 1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "LA County MEHKO inspection checklist",
+          "Los Angeles home kitchen inspection MEHKO",
+          "DPH Environmental Health inspection MEHKO"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after fees paid) \u00b7 typically within 1\u20132 weeks of passing inspection\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "LA County MEHKO permit issuance timeline",
+          "Los Angeles DPH permit status",
+          "MEHKO approval timeline LA County"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew annually.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Renewal reminder ($347 annual)\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** $347/year \u00b7 ongoing\n\n**Ready when:** You track meals, keep records, and renew on time.",
+        "searchTerms": [
+          "LA County MEHKO renewal fee 347",
+          "Los Angeles MEHKO compliance rules",
+          "MEHKO recordkeeping LA County"
+        ],
+        "appId": "los_angeles_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contacts below for questions and assistance.\n\n**Why it matters:** County staff can help with specific application questions.\n\n**What you need:**\n- \u2610 Phone number or email for questions\n- \u2610 Office hours and location\n- \u2610 Website for additional resources\n\n**Where/how:** LA County DPH Environmental Health (Customer Call Center): (888) 700-9995, Mon\u2013Fri 8am\u20135pm. Home-Based Food Operations Program: (626) 430-9855 \u00b7 homebasedfoods@ph.lacounty.gov. Main office: 5050 Commerce Dr, Baldwin Park, CA 91706.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "LA County Environmental Health phone",
+          "Home-Based Food Operations Program LA County",
+          "LA County MEHKO contact information"
+        ],
+        "appId": "los_angeles_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "riverside_county_mehko",
+    "title": "Riverside County MEHKO",
+    "description": "Home-based food operation permit: prepare and serve up to 30 meals/day, 90 meals/week; annual gross sales up to $50,000. Requires SOP, Food Safety Manager Certificate, County Food Handler Card, Food Facility Application; permit fee ~$651\u2013$658/year.",
+    "rootDomain": "rivcoeh.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Understand MEHKO limits, same-day service requirement, and permitted operations.\n\n**Why it matters:** Knowing these helps you design an operation that meets Riverside County rules.\n\n**What you need:**\n- \u2610 Meal limits: \u2264 30/day, \u2264 90/week\n- \u2610 Annual gross sales limit: \u2264 $50,000\n- \u2610 Same-day prep, cooking, and serving requirement\n- \u2610 No raw milk/oyster service; prohibited HACCP processes\n\n**Where/how:** Visit Riverside County\u2019s MHKO page for details and informational bulletins.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You\u2019ve confirmed your plan fits county requirements.",
+        "searchTerms": [
+          "Riverside County MHKO 30 meals 90 week",
+          "Riverside MEHKO permit fee 651",
+          "Riverside County MHKO same-day service"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MHKO_SOP_Riverside",
+        "pdfUrl": "https://rivcoeh.org/sites/g/files/aldnop361/files/migrated/Portals-0-PDF-Foods-MHKO-MHKO-SOP-8-28-19-Eng.pdf",
+        "appId": "riverside_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete and submit the Riverside County MHKO SOP form and menu.\n\n**Why it matters:** This documents how your operation meets safety and procedural standards.\n\n**What you need:**\n- \u2610 Signed SOP form with menu attached\n- \u2610 Understanding of limits, no signage, no raw milk/oysters, one FTE max, animals outside prep area\n\n**Where/how:** Download and complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP and menu are complete and submitted.",
+        "searchTerms": [
+          "Riverside County MHKO SOP PDF",
+          "Riverside MHKO SOP form",
+          "Riverside County Home Kitchen SOP"
+        ]
+      },
+      {
+        "id": "certifications",
+        "title": "Obtain Certifications",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get required food safety credentials.\n\n**Why it matters:** A Food Safety Manager and Handler Certifications are mandatory.\n\n**What you need:**\n- \u2610 Food Safety Manager Certification (owner/operator)\n- \u2610 Riverside County Food Handler Certification (all other involved individuals)\n\n**Where/how:** Use accredited training providers as required by Riverside County.\n\n**Cost & time:** ~$70\u2013$200 \u00b7 1\u20132 days\n\n**Ready when:** All certifications are obtained and copies are ready.",
+        "searchTerms": [
+          "Riverside County food safety manager certificate",
+          "Riverside County food handler card",
+          "Riverside MEHKO certification requirements"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "apply_and_pay",
+        "title": "Submit Application & Pay Fee",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit application along with certifications, and pay permit fee.\n\n**Why it matters:** This begins the county\u2019s review and inspection process.\n\n**What you need:**\n- \u2610 Completed SOP and Menu\n- \u2610 Food Safety and Handler certifications\n- \u2610 Permit application/registration form\n- \u2610 Payment (~$651\u2013$658)\n\n**Where/how:** Submit these to your local Riverside DEH office (check county site for address)\n\n**Cost & time:** ~$651\u2013$658 \u00b7 submission triggers review\n\n**Ready when:** You receive confirmation that your application is accepted.",
+        "searchTerms": [
+          "Riverside County MHKO permit fee",
+          "Riverside MHKO application process",
+          "Riverside food facility registration MHKO"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule and Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Prepare for and complete your home kitchen inspection.\n\n**Why it matters:** This inspection verifies compliance with food safety and MHKO rules.\n\n**What you need:**\n- \u2610 Clean kitchen, storage, restroom, refuse area\n- \u2610 SOP, menu, and certification documents available\n- \u2610 No pets/animals in prep/dining areas; safe food handling setup\n\n**Where/how:** DEH schedules inspection post-application; coordinate with local office.\n\n**Cost & time:** Included in permit fee \u00b7 typically 1\u20132 hrs\n\n**Ready when:** Inspector approves your operation.",
+        "searchTerms": [
+          "Riverside MHKO inspection",
+          "Riverside County home kitchen inspection",
+          "Riverside DEH MHKO inspection"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Receive and retain your MHKO permit.\n\n**Why it matters:** This document authorizes your home kitchen business.\n\n**What you need:**\n- \u2610 Official Riverside County MHKO permit\n- \u2610 SOP, certifications, and permit ready for review if needed\n\n**Where/how:** Issued after inspection clears; keep it accessible during operations.\n\n**Cost & time:** Included in fee; valid for 1 year\n\n**Ready when:** Permit is issued and in your possession.",
+        "searchTerms": [
+          "Riverside MHKO permit issuance",
+          "Riverside County DEH MHKO permit",
+          "Riverside home kitchen permit"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Comply",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Operate your MEHKO within all limits and maintain records.\n\n**Why it matters:** Ensures compliance and avoids permit issues.\n\n**What you need:**\n- \u2610 Track meals served (\u2264 30/day, \u2264 90/week) and gross sales (\u2264 $50k/year)\n- \u2610 Same-day prep/serve only, no raw milk/oysters, no outdoor signage\n- \u2610 Renew annually; allow inspections for complaints\n\n**Where/how:** Monitor your operation and document as needed.\n\n**Cost & time:** Ongoing tracking; minimal weekly effort\n\n**Ready when:** You consistently meet rules and are ready for any audit.",
+        "searchTerms": [
+          "Riverside County MHKO daily tracking",
+          "Riverside MHKO renewal",
+          "Riverside County MHKO compliance"
+        ],
+        "appId": "riverside_county_mehko"
+      },
+      {
+        "id": "contact_info",
+        "title": "Contact Information",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Save Riverside County DEH contact details for support.\n\n**Why it matters:** Useful for asking questions or following up on your permit.\n\n**What you need:**\n- \u2610 Riverside County DEH website: rivcoeh.org\n- \u2610 Local area office phone (see county site)\n\n**Where/how:** Use online directory or communications from DEH.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have the correct contact information at hand.",
+        "searchTerms": [
+          "Riverside County DEH contact",
+          "Riverside MHKO office phone",
+          "Riverside DEH home kitchen"
+        ],
+        "appId": "riverside_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "san_diego_county_mehko",
+    "title": "San Diego County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales (adjusted). No signage; food must be prepared, cooked, and served/delivered the same day.",
+    "rootDomain": "sandiegocounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in San Diego County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Basic kitchen setup meeting food safety practices\n\n**Where/how:** Review San Diego County\u2019s MEHKO overview and Quick Facts.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "San Diego MEHKO daily meal limits",
+          "San Diego MEHKO weekly meal restrictions",
+          "San Diego Home Kitchen Operations rules"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required in your jurisdiction\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total (study + exam)\n\n**Ready when:** You have a CFPM certificate PDF and any property/business approvals.",
+        "searchTerms": [
+          "ANSI-CFP Food Protection Manager San Diego",
+          "San Diego renter permission MEHKO",
+          "San Diego business license home food operation"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+        "searchTerms": [
+          "San Diego MEHKO SOP requirements",
+          "San Diego MEHKO application documents",
+          "San Diego Home Kitchen Operations forms"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "mehkosop.pdf",
+        "pdfUrl": "https://www.sandiegocounty.gov/content/dam/sdc/deh/fhd/food/mehko/mehkosop.pdf",
+        "appId": "san_diego_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the MEHKO SOP form covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "San Diego MEHKO SOP template",
+          "San Diego food safety SOP requirements",
+          "MEHKO Standard Operating Procedures San Diego"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "publications_permitapp152.pdf",
+        "pdfUrl": "https://www.sandiegocounty.gov/content/dam/sdc/deh/fhd/food/pdf/publications_permitapp152.pdf",
+        "appId": "san_diego_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "San Diego MEHKO permit application",
+          "San Diego Health Permit Application form",
+          "San Diego Home Kitchen Operations application"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Payment method for fees\n\n**Where/how:** Email forms to FHDMEHKO@sdcounty.ca.gov or submit in person at 5500 Overland Ave., 1st Floor, San Diego, CA 92123. Pay online after invoicing at dehqpay.com, by mail to P.O. Box 129261, San Diego, CA 92112-9261, or in person.\n\n**Cost & time:** Initial permit $646 \u00b7 Annual renewal $322 \u00b7 10\u201320 minutes to submit (processing varies)\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "San Diego MEHKO application fee 2025",
+          "DEHQ pay online MEHKO",
+          "San Diego Environmental Health submission MEHKO"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating; the permit is delivered at the initial inspection.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will provide scheduling details after application approval and payment.\n\n**Cost & time:** Included in application fee \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "San Diego MEHKO inspection checklist",
+          "San Diego Home Kitchen inspection preparation",
+          "San Diego Environmental Health inspection MEHKO"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health at the initial inspection after approval.\n\n**Cost & time:** $0 (after application fee)\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "San Diego MEHKO permit issuance",
+          "San Diego permit processing timeline",
+          "San Diego Environmental Health permit status"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits (\u226430/day, \u226490/week)\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** Renewal $322 annually \u00b7 ongoing\n\n**Ready when:** You track meals, keep records, and schedule renewal on time.",
+        "searchTerms": [
+          "San Diego MEHKO meal tracking requirements",
+          "San Diego MEHKO renewal process",
+          "San Diego Home Kitchen Operations compliance"
+        ],
+        "appId": "san_diego_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone or email for questions\n- \u2610 Office address for in-person help\n- \u2610 Website for additional resources\n\n**Where/how:** Environmental Health & Quality \u2014 Phone: (858) 505-6900 \u00b7 Email: FHDMEHKO@sdcounty.ca.gov \u00b7 Office: 5500 Overland Ave., 1st Floor, San Diego, CA 92123.\n\n**Cost & time:** $0 \u00b7 varies by question complexity\n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "San Diego Environmental Health contact",
+          "San Diego MEHKO program phone",
+          "San Diego Home Kitchen Operations office"
+        ],
+        "appId": "san_diego_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "san_mateo_county_mehko",
+    "title": "San Mateo County MEHKO",
+    "description": "Home-based food operation permit under AB 626 pilot: up to 30 meals/day, 60 meals/week, $50 k annual sales cap; no outdoor signage; fees waived until 2023.",
+    "rootDomain": "smchealth.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review MEHKO limits, requirements, and process.\n\n**Why it matters:** Ensuring early understanding of rules avoids delays.\n\n**What you need:**\n- \u2610 Meal and revenue limits (30/day, 60/week, $50k/year)\n- \u2610 Understand same-day prep/serve and no signage rules\n- \u2610 Confirm if renting\u2014landlord form may be needed\n\n**Where/how:** Visit San Mateo County\u2019s MEHKO page for guidelines, FAQs, and webinar resources.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You know MEHKO limits and whether you need the rental form.",
+        "searchTerms": [
+          "San Mateo County MEHKO guidelines",
+          "San Mateo MEHKO meal limits",
+          "San Mateo MEHKO requirements"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get required food safety manager certification and food handler cards.\n\n**Why it matters:** These certifications are mandatory for safe operations.\n\n**What you need:**\n- \u2610 Accredited food safety manager certificate\n- \u2610 Food handler card(s) for any helpers\n\n**Where/how:** Use state-accredited providers for training and cards.\n\n**Cost & time:** ~$60\u2013$150 \u00b7 1\u20132 days total\n\n**Ready when:** You have the necessary certificates.",
+        "searchTerms": [
+          "San Mateo MEHKO food safety manager certificate",
+          "California food handler card MEHKO",
+          "San Mateo MEHKO training requirements"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather and prepare all necessary forms.\n\n**Why it matters:** Complete packets are processed faster.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Rental Notification Form (if renting) \u2014 go to Step 6: Rental Notification Form\n- \u2610 Certifications from Step 2 (approvals)\n\n**Where/how:** Download and fill each form from the county\u2019s MEHKO page.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All forms are completed and ready to submit.",
+        "searchTerms": [
+          "San Mateo MEHKO forms",
+          "San Mateo MEHKO SOP form",
+          "San Mateo MEHKO application packet"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO_SOP_Form",
+        "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210820_sop_form_final.pdf?1629498752=",
+        "appId": "san_mateo_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the MEHKO SOP form with details on menu, schedule, meals, advertising, and operations.\n\n**Why it matters:** The SOP outlines how you'll operate safely under MEHKO rules.\n\n**What you need:**\n- \u2610 Daily/weekly meal schedule and counts\n- \u2610 Advertising method (no signage)\u2014list IFSI or online only\n- \u2610 Operational plan including employee details (max one), prep, serving details\n\n**Where/how:** Fill the SOP form downloaded in this step.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP is complete and reflects your planned operation.",
+        "searchTerms": [
+          "San Mateo MEHKO SOP form",
+          "San Mateo microkitchen SOP PDF",
+          "San Mateo County MEHKO standard operating procedures"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "MEHKO_Permit_Application",
+        "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210720_mehko_infographic_-_english_final.pdf?1627060073=",
+        "appId": "san_mateo_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the MEHKO Permit Application form to request a permit.\n\n**Why it matters:** This initiates the official application and review process.\n\n**What you need:**\n- \u2610 Operator contact information and site address\n- \u2610 Certifications details (food safety manager + handler)\n- \u2610 SOP form (from Step 4)\n\n**Where/how:** Use the Application form from the county\u2019s MEHKO page.\n\n**Cost & time:** $0 to fill \u00b7 20\u201330 minutes\n\n**Ready when:** Application is complete and consistent with SOP.",
+        "searchTerms": [
+          "San Mateo MEHKO permit application",
+          "San Mateo MEHKO application PDF",
+          "San Mateo County MEHKO forms"
+        ]
+      },
+      {
+        "id": "rental_notification_form",
+        "title": "Rental Notification Form",
+        "type": "pdf",
+        "formId": "MEHKO_Rental_Notification",
+        "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210819_rev_rental_authorization_form_final.pdf?1629414516=",
+        "appId": "san_mateo_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** If you're renting, complete this Rental Notification Form with your landlord/property management.\n\n**Why it matters:** Ensures your lease allows MEHKO activity.\n\n**What you need:**\n- \u2610 Landlord\u2019s name and contact\n- \u2610 Property management signature and acknowledgement\n- \u2610 Your operation details and address\n\n**Where/how:** Download and complete the rental form in this step.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** Landlord has signed and returned the form.",
+        "searchTerms": [
+          "San Mateo MEHKO rental notification form",
+          "San Mateo renting MEHKO landlord form",
+          "San Mateo MEHKO landlord notification"
+        ]
+      },
+      {
+        "id": "submit_pay",
+        "title": "Submit Application",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your completed packet to EHS for review\u2014fees waived until 2023.\n\n**Why it matters:** Formal submission starts review and inspection scheduling.\n\n**What you need:**\n- \u2610 SOP (Step 4), Application (Step 5), and if renting, Rental Form (Step 6)\n- \u2610 Certifications (Step 2)\n\n**Where/how:** Submit via mail or in person to Environmental Health Services: 2000 Alameda de las Pulgas, Suite 100, San Mateo, CA 94403, or contact via envhealth@smcgov.org / (650) 372-6200.\n\n**Cost & time:** Fees waived until 2023; review typically starts within ~5 business days.\n\n**Ready when:** You receive acknowledgment of receipt with next steps.",
+        "searchTerms": [
+          "San Mateo MEHKO submission address",
+          "San Mateo MEHKO fee waiver",
+          "San Mateo MEHKO review timeline"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Prepare for and complete the home inspection scheduled by EHS.\n\n**Why it matters:** Passing inspection is required for permit issuance.\n\n**What you need:**\n- \u2610 Clean kitchen and preparation area\n- \u2610 SOP documentation and permit application on hand\n- \u2610 Be ready to review procedures and secure pets, etc.\n\n**Where/how:** EHS contacts you to schedule\u2014follow their instructions and inspection checklist materials.\n\n**Cost & time:** Included in pilot; inspection within ~20 working days\n\n**Ready when:** Inspector approves your setup.",
+        "searchTerms": [
+          "San Mateo MEHKO inspection process",
+          "San Mateo MEHKO site inspection",
+          "SMC MEHKO inspection checklist"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Receive your MEHKO permit and display it during operations.\n\n**Why it matters:** This authorizes you to legally operate your home kitchen.\n\n**What you need:**\n- \u2610 Permit document\n- \u2610 Keep SOP and ideally posting onsite\n\n**Where/how:** Permit issued post-inspection by EHS.\n\n**Cost & time:** No fee until 2023; permit valid as long as pilot continues.\n\n**Ready when:** Permit is received and posted.",
+        "searchTerms": [
+          "San Mateo MEHKO permit issuance",
+          "San Mateo MEHKO post-inspection permit",
+          "SMC MEHKO pilot permit receive"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Comply",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Run your MEHKO within defined limits and keep records.\n\n**Why it matters:** Staying compliant avoids violations and protects health.\n\n**What you need:**\n- \u2610 Track meals served and make sure stays within 30/day, 60/week\n- \u2610 Annual gross under $50 k\n- \u2610 No signage; prepare and serve same day; no raw milk/raw oysters\n- \u2610 Keep food safety certificates, inspection report, and receipts onsite\n\n**Where/how:** Follow your SOP and EHS guidance. Keep paperwork organized and accessible.\n\n**Cost & time:** Ongoing checklist; minimal time per week.\n\n**Ready when:** You maintain compliance continuously and pass any follow-up inspections.",
+        "searchTerms": [
+          "San Mateo MEHKO operating limits",
+          "San Mateo MEHKO prohibited foods",
+          "San Mateo MEHKO recordkeeping"
+        ],
+        "appId": "san_mateo_county_mehko"
+      },
+      {
+        "id": "contact_info",
+        "title": "Contact Information",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Keep EHS contact details handy for questions or updates.\n\n**Why it matters:** Easy access to support helps smooth permit process.\n\n**What you need:**\n- \u2610 Phone: (650) 372-6200\n- \u2610 Email: envhealth@smcgov.org\n- \u2610 Address: 2000 Alameda de las Pulgas, Suite 100, San Mateo, CA 94403\n\n**Where/how:** Use website or communications from EHS for full contact info.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have correct contact info accessible.\n\n**Note:** Additional city-level requirements may apply\u2014check with your local city planning office.",
+        "searchTerms": [
+          "San Mateo EHS contact",
+          "San Mateo MEHKO envhealth phone",
+          "San Mateo MEHKO email"
+        ],
+        "appId": "san_mateo_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "santa_barbara_county_mehko",
+    "title": "Santa Barbara County MEHKO",
+    "description": "Operate from your home kitchen with limits of up to 30 meals/day and 90/week; max $100,000 gross sales/year. Annual MEHKO permit fee ~$391; plan check application $255 + $161/hr review (see steps for details).",
+    "rootDomain": "countyofsb.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "What to do: Review MEHKO rules, meal/revenue limits, and basic requirements.\n\nWhy it matters: Knowing the limits and rules up front prevents rework and delays.\n\nWhat you need:\n- \u2610 Understand meal limits (30/day, 90/week) and $100k annual gross cap\n- \u2610 Confirm same-day prep/cook/serve flow works for your menu\n- \u2610 Check home setup (water, restroom access if on-site dining, waste/grease handling)\n\nWhere/how: Visit Santa Barbara County\u2019s Home Kitchen Operations and FAQ pages for program details.\n\nCost & time: $0 \u00b7 20\u201330 minutes\n\nReady when: You\u2019re confident your concept fits MEHKO rules.",
+        "searchTerms": [
+          "Santa Barbara MEHKO rules",
+          "Santa Barbara MEHKO meal limits",
+          "Santa Barbara MEHKO same day requirement"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Get your Certified Food Protection Manager (CFPM) and plan food handler cards for helpers.\n\nWhy it matters: These are required by the county for safe food operations.\n\nWhat you need:\n- \u2610 CFPM certificate (ANSI-approved)\n- \u2610 Food handler cards for any helpers\n- \u2610 Landlord/HOA okay if applicable\n\nWhere/how: Take an ANSI-approved CFPM course; obtain food handler cards; keep certificates ready to submit.\n\nCost & time: ~$60\u2013$150 \u00b7 1\u20132 days total\n\nReady when: You have your CFPM certificate and any helper cards.",
+        "searchTerms": [
+          "Santa Barbara CFPM course",
+          "Santa Barbara food handler card",
+          "Santa Barbara MEHKO training requirements"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Gather all documents for your packet.\n\nWhy it matters: Complete packets avoid processing delays.\n\nWhat you need:\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit / Plan Check Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and basic business info\n\nWhere/how: Fill PDFs in Steps 4\u20135 and assemble as a single packet (digital or printed).\n\nCost & time: $0 \u00b7 30\u201360 minutes\n\nReady when: All forms are filled/signed and supporting docs are attached.",
+        "searchTerms": [
+          "Santa Barbara MEHKO documents list",
+          "Santa Barbara MEHKO application packet",
+          "Santa Barbara MEHKO forms"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "EHS_16-16a_MEHKO_SOP-English",
+        "pdfUrl": "https://content.civicplus.com/api/assets/5dc1d380-3194-435e-a79d-486e93b9ce48",
+        "appId": "santa_barbara_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "What to do: Complete the MEHKO SOP form covering menu, prep, storage, delivery, cleaning, and safety.\n\nWhy it matters: Shows how you\u2019ll keep food safe and operate within MEHKO limits.\n\nWhat you need:\n- \u2610 Menu and ingredients list\n- \u2610 Same-day prep/cook/serve workflow\n- \u2610 Cleaning/sanitizing and handwashing plan\n\nWhere/how: Complete the SOP form in this step.\n\nCost & time: $0 \u00b7 30\u201360 minutes\n\nReady when: SOP is complete and consistent with your menu and workflow.",
+        "searchTerms": [
+          "Santa Barbara MEHKO SOP PDF",
+          "Santa Barbara MEHKO standard operating procedures",
+          "EHS 16-16a SOP Santa Barbara"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "EHS_16-1_FoodFacility_PlanCheck_PermitApplication",
+        "pdfUrl": "https://content.civicplus.com/api/assets/e5b02a17-92d1-4949-8597-35c19195c84c",
+        "appId": "santa_barbara_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "What to do: Fill the Food Facility Plan Check / Permit Application used for MEHKOs.\n\nWhy it matters: This is the official application for your MEHKO health permit.\n\nWhat you need:\n- \u2610 Owner/site details and contact info\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\nWhere/how: Complete the application in this step.\n\nCost & time: $0 to fill \u00b7 15\u201330 minutes\n\nReady when: Application is complete, signed, and consistent with your SOP.",
+        "searchTerms": [
+          "Santa Barbara MEHKO permit application pdf",
+          "EHS 16-1 plan check permit application",
+          "Santa Barbara health permit application MEHKO"
+        ]
+      },
+      {
+        "id": "submit_pay",
+        "title": "Submit & Pay",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Submit your packet and pay required fees.\n\nWhy it matters: Payment starts formal review and inspection scheduling.\n\nWhat you need:\n- \u2610 Completed SOP (from Step 4) and Application (from Step 5)\n- \u2610 CFPM certificate and any helper cards\n- \u2610 Payment method for fees\n\nWhere/how: Submit by mail or in person to Environmental Health Services (EHS) at either office: 225 Camino del Remedio, Santa Barbara, CA 93110 \u2022 (805) 681-4900; or 2125 Centerpointe Pkwy, Room 333, Santa Maria, CA 93455 \u2022 (805) 346-8460. For questions: phdehsweb@sbcphd.org. Check the EHS fee schedule for current amounts.\n\nCost & time: Application fee $255 + plan review $161/hr; Annual MEHKO permit ~$391. Processing typically 2\u20133 weeks after a complete submittal.\n\nReady when: You receive confirmation that your application is accepted for review.",
+        "searchTerms": [
+          "Santa Barbara MEHKO fee schedule",
+          "Santa Barbara EHS office address",
+          "Where to submit MEHKO application Santa Barbara"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Prepare your kitchen for inspection after plan review.\n\nWhy it matters: Passing inspection is required before operating.\n\nWhat you need:\n- \u2610 Clean/sanitary kitchen; handwashing and sanitizer ready\n- \u2610 Waste/grease disposal plan; restroom available if on-site dining\n- \u2610 Thermometers and food safety tools\n\nWhere/how: EHS will contact you to schedule; be ready to demonstrate same-day prep/cook/serve.\n\nCost & time: Included in plan review billing \u00b7 1\u20132 hours visit\n\nReady when: EHS clears you to receive the permit.",
+        "searchTerms": [
+          "Santa Barbara MEHKO inspection",
+          "MEHKO inspection checklist Santa Barbara",
+          "EHS inspection requirements MEHKO"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Obtain your MEHKO health permit and post/keep it available.\n\nWhy it matters: You must have a valid permit before operating.\n\nWhat you need:\n- \u2610 Final approval notice\n- \u2610 Permit document on hand during operations\n\nWhere/how: Permit is issued by EHS after successful review and inspection.\n\nCost & time: Annual fee ~$391; renew annually\n\nReady when: Permit is issued and in your records.",
+        "searchTerms": [
+          "Santa Barbara MEHKO permit issuance",
+          "Santa Barbara EHS permit pickup",
+          "MEHKO annual permit renewal Santa Barbara"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Comply",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "What to do: Run your MEHKO within limits and keep records.\n\nWhy it matters: Staying compliant avoids fines and complaints.\n\nWhat you need:\n- \u2610 Track meals/day (\u226430) and week (\u226490) and gross sales (\u2264$100k)\n- \u2610 Same-day service; no next-day leftovers; no raw milk or raw oysters\n- \u2610 Keep CFPM/handler cards current; maintain sanitation\n\nWhere/how: Follow EHS guidance and your approved SOP.\n\nCost & time: Ongoing \u00b7 minimal admin weekly\n\nReady when: You\u2019re serving within limits and passing annual inspection.",
+        "searchTerms": [
+          "Santa Barbara MEHKO operating limits",
+          "Santa Barbara MEHKO prohibited foods",
+          "MEHKO recordkeeping Santa Barbara"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      },
+      {
+        "id": "contact_info",
+        "title": "Contact Information",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "What to do: Reach out to Environmental Health Services (EHS) as needed.\n\nWhy it matters: Direct answers speed up approvals and compliance.\n\nWhat you need:\n- \u2610 Santa Barbara Office: 225 Camino del Remedio, Santa Barbara, CA 93110 \u00b7 (805) 681-4900\n- \u2610 Santa Maria Office: 2125 Centerpointe Pkwy, Room 333, Santa Maria, CA 93455 \u00b7 (805) 346-8460\n- \u2610 Email: phdehsweb@sbcphd.org\n\nWhere/how: Call or email EHS; visit the county Environmental Health website.\n\nCost & time: $0 \u00b7 As needed\n\nReady when: You have the right contact info on file.",
+        "searchTerms": [
+          "Santa Barbara Environmental Health phone",
+          "Santa Maria EHS contact",
+          "Santa Barbara MEHKO email"
+        ],
+        "appId": "santa_barbara_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "santa_cruz_county_mehko",
+    "title": "Santa Cruz County MEHKO",
+    "description": "Santa Cruz County MEHKO (applications accepted since Jan 1, 2025). Limits: up to 30 meals/day, 90 meals/week, and $100,000/year gross sales. Fees: $489 Home Evaluation; $551 Annual Health Permit. Submit fees/docs to Environmental Health, 701 Ocean St, Room 312, Santa Cruz, CA 95060. Phone: (831) 454-2022; EnvironmentalHealth@santacruzcountyca.gov.",
+    "rootDomain": "scceh.org",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review Santa Cruz County\u2019s MEHKO overview, limits, fees, and process.\n\n**Why it matters:** Knowing the rules upfront avoids rework and delays.\n\n**What you need:**\n- \u2610 Understand meal/sales limits (30/day, 90/week, $100k/year)\n- \u2610 Decide service model (dine-in, pickup, same-day delivery)\n- \u2610 Kitchen readiness against the checklist\n\n**Where/how:** Visit Santa Cruz County\u2019s MEHKO webpage for current process, fees, and forms.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You understand the process and know your next steps.",
+        "searchTerms": [
+          "Santa Cruz County MEHKO overview",
+          "Santa Cruz MEHKO limits and fees",
+          "Santa Cruz Environmental Health MEHKO"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Complete food safety training and line up any property/city approvals.\n\n**Why it matters:** Certification and permissions are commonly required and speed up approval.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if renting\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check your city\u2019s home-business rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total\n\n**Ready when:** You have your CFPM certificate and needed approvals.",
+        "searchTerms": [
+          "CFPM course Santa Cruz County",
+          "Santa Cruz business license home kitchen",
+          "ANSI Food Protection Manager Santa Cruz"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "home_evaluation",
+        "title": "Home Evaluation (Step 1)",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Prepare your kitchen and request a home evaluation.\n\n**Why it matters:** You must pass evaluation before applying for the health permit.\n\n**What you need:**\n- \u2610 Home Evaluation Checklist items met\n- \u2610 Home Evaluation Request Form filled\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Use the county\u2019s Home Evaluation Checklist. Complete and submit the Home Evaluation Request Form with your SOP to Environmental Health.\n\n**Cost & time:** $489 fee \u00b7 1\u20132 weeks to schedule\n\n**Ready when:** Your evaluation is completed and approved by an inspector.",
+        "searchTerms": [
+          "Santa Cruz MEHKO Home Evaluation fee",
+          "Santa Cruz MEHKO Home Evaluation Request Form",
+          "Santa Cruz MEHKO checklist"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "EHD_404CP_MEHKO_STANDARD_OPERATING_PROCEDURES_12-23-2024_Fillable",
+        "pdfUrl": "https://www.scceh.org/Portals/6/Env_Health/consumer_protection/food/EHD%20404CP%20-%20MEHKO%20STANDARD%20OPERATING%20PROCEDURES%2012-23-2024-Fillable.pdf?ver=97NfAaJ7lsUYrAK0XMcdqg%3D%3D",
+        "appId": "santa_cruz_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the MEHKO SOP covering menu, prep, storage, sanitation, and service.\n\n**Why it matters:** Shows how you\u2019ll keep food safe in your home kitchen.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Fill this SOP form in this step. Ensure details match your kitchen and menu.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Santa Cruz MEHKO SOP form",
+          "Santa Cruz MEHKO standard operating procedures"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application (Step 2)",
+        "type": "pdf",
+        "formId": "EHD_405CP_MEHKO_HEALTH_PERMIT_APPLICATION_12-23-2024_Fillable",
+        "pdfUrl": "https://www.scceh.org/Portals/6/Env_Health/consumer_protection/food/EHD%20405CP%20-%20MEHKO%20HEALTH%20PERMIT%20APPLICATION%2012-23-2024-Fillable.pdf?ver=O7LRIe84VIxg9jfPOu2stQ%3D%3D",
+        "appId": "santa_cruz_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Apply for your annual MEHKO Health Permit after passing the home evaluation.\n\n**Why it matters:** Required to legally operate and will trigger inspection during your permit cycle.\n\n**What you need:**\n- \u2610 Owner contact/site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete this application and submit with the $551 permit fee to Environmental Health.\n\n**Cost & time:** $551 fee \u00b7 2\u20133 weeks processing\n\n**Ready when:** Your permit is issued and you\u2019re scheduled/inspected as required.",
+        "searchTerms": [
+          "Santa Cruz MEHKO health permit application",
+          "Santa Cruz MEHKO permit fee 2025"
+        ]
+      },
+      {
+        "id": "submit_pay",
+        "title": "Submit & Pay",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your forms and pay fees.\n\n**Why it matters:** The county won\u2019t process your application without full payment and documents.\n\n**What you need:**\n- \u2610 Home Evaluation Request Form and SOP (from Step 3 and Step 4)\n- \u2610 Health Permit Application (from Step 5)\n- \u2610 Checks payable to County of Santa Cruz\n\n**Where/how:** Mail or deliver to Environmental Health, 701 Ocean St, Room 312, Santa Cruz, CA 95060. Lobby hours: Mon\u2013Thu 8am\u201312pm walk-in; appointments Mon\u2013Thu 1\u20135pm; Fri 8am\u201312pm & 1\u20135pm. Phone (831) 454-2022; EnvironmentalHealth@santacruzcountyca.gov.\n\n**Cost & time:** $489 + $551 \u00b7 Same day to submit\n\n**Ready when:** County confirms receipt of forms and payments.",
+        "searchTerms": [
+          "Santa Cruz Environmental Health address hours",
+          "Santa Cruz MEHKO pay fees online"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Be ready for the inspector to review your operation while preparing food.\n\n**Why it matters:** Verification that you follow your SOP and food safety rules.\n\n**What you need:**\n- \u2610 Clean, pest-free kitchen\n- \u2610 Hot/cold water, sanitizer, thermometers\n- \u2610 Records available (SOP, CFPM, latest inspection)\n\n**Where/how:** Inspector schedules a visit during your permit cycle; fix any noted issues promptly.\n\n**Cost & time:** Included in permit \u00b7 1\u20132 hours\n\n**Ready when:** You pass inspection or correct any violations.",
+        "searchTerms": [
+          "Santa Cruz MEHKO inspection requirements",
+          "Santa Cruz MEHKO what inspector checks"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit & Operate",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Display your permit and operate within limits.\n\n**Why it matters:** Staying compliant avoids penalties or suspension.\n\n**What you need:**\n- \u2610 Permit posted during operation\n- \u2610 Ad rules followed (include agency name, permit #, \u201cMade in a Home Kitchen\u201d)\n- \u2610 Stay within 30/day, 90/week, $100k/year\n\n**Where/how:** Follow county rules; renew annually before expiration.\n\n**Cost & time:** Renewal fee (check current rate) \u00b7 Annual\n\n**Ready when:** Permit is posted and you comply with limits and renewal timelines.",
+        "searchTerms": [
+          "Santa Cruz MEHKO renewal",
+          "Santa Cruz MEHKO advertising rules"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      },
+      {
+        "id": "contact_info",
+        "title": "Contact Information",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Reach Environmental Health for questions or submissions.\n\n**Why it matters:** Direct contact speeds up resolutions and scheduling.\n\n**What you need:**\n- \u2610 Phone: (831) 454-2022\n- \u2610 Email: EnvironmentalHealth@santacruzcountyca.gov\n- \u2610 Address: 701 Ocean St, Room 312, Santa Cruz, CA 95060\n\n**Where/how:** Call, email, or visit during lobby hours (walk-ins Mon\u2013Thu 8am\u201312pm; appointments Mon\u2013Thu 1\u20135pm; Fri 8am\u201312pm & 1\u20135pm).\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You can reach staff and have clear next steps.",
+        "searchTerms": [
+          "Santa Cruz Environmental Health contact",
+          "Santa Cruz MEHKO office hours"
+        ],
+        "appId": "santa_cruz_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "sierra_county_mehko",
+    "title": "Sierra County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+    "rootDomain": "sierracounty.ca.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Review Sierra County\u2019s MEHKO rules and confirm you qualify.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Sierra County\n- \u2610 Menu and production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Check Sierra County Environmental Health or the Board resolution (2021-154 & 2024 approval).\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "Sierra County MEHKO daily meal limits",
+          "Sierra County MEHKO rules",
+          "Sierra County Home Kitchen Operations"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any required property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days\n\n**Ready when:** You have a CFPM certificate and property/business approvals.",
+        "searchTerms": [
+          "Sierra County CFPM Food Manager",
+          "Sierra County renter approval MEHKO",
+          "Sierra County business license MEHKO"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "SIERRA_MEHKO_SOP-English",
+        "pdfUrl": "https://sierracounty.ca.gov/forms/mehko-sop.pdf",
+        "appId": "sierra_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the SOP form covering menu, prep, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan\n\n**Where/how:** Complete the SOP form when released.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and matches your operation.",
+        "searchTerms": [
+          "Sierra County MEHKO SOP form",
+          "Sierra County food safety SOP",
+          "Sierra MEHKO Standard Operating Procedures"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "SIERRA_MEHKO_PermitApplication",
+        "pdfUrl": "https://sierracounty.ca.gov/forms/mehko-permit.pdf",
+        "appId": "sierra_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the Health Permit Application once available.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n\n**Where/how:** Submit the form to Sierra County Environmental Health once published.\n\n**Cost & time:** TBD (per fee schedule) \u00b7 15\u201330 minutes to fill\n\n**Ready when:** Application is complete and consistent with your SOP.",
+        "searchTerms": [
+          "Sierra County MEHKO permit application",
+          "Sierra County Health Permit form",
+          "Sierra County MEHKO application"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit your completed forms and pay the required fees.\n\n**Why it matters:** The county processes your permit only after submission and payment.\n\n**What you need:**\n- \u2610 Completed Permit Application \u2014 go to Step 4: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Payment method\n\n**Where/how:** Submit to Sierra County Environmental Health Department in Downieville or Loyalton (details pending publication).\n\n**Cost & time:** Fees to be set by county \u00b7 10\u201320 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Sierra County MEHKO application fee",
+          "Sierra County MEHKO submission",
+          "Sierra County Environmental Health permit payment"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Schedule and pass an in-home kitchen inspection.\n\n**Why it matters:** Inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Equipment functional\n\n**Where/how:** Sierra County Environmental Health will contact you to arrange inspection.\n\n**Cost & time:** Included in permit fee \u00b7 1\u20132 hours on site\n\n**Ready when:** You pass inspection and resolve corrections.",
+        "searchTerms": [
+          "Sierra County MEHKO inspection",
+          "Sierra County home kitchen inspection",
+          "Sierra County Environmental Health inspection MEHKO"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain your MEHKO permit after passing inspection.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Sierra County Environmental Health after approval.\n\n**Cost & time:** $0 (after fees) \u00b7 timeline depends on county\n\n**Ready when:** You have the permit document in hand.",
+        "searchTerms": [
+          "Sierra County MEHKO permit issuance",
+          "Sierra County permit approval",
+          "Sierra County Environmental Health MEHKO permit"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and county limits; renew as required.\n\n**Why it matters:** Compliance protects your customers and your permit.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Renewal reminders\n\n**Where/how:** Maintain logs; contact Sierra County if your operation changes.\n\n**Cost & time:** Renewal fees TBD \u00b7 ongoing\n\n**Ready when:** Records are maintained and renewal is on time.",
+        "searchTerms": [
+          "Sierra County MEHKO compliance",
+          "Sierra County MEHKO renewal",
+          "Sierra County MEHKO food safety"
+        ],
+        "appId": "sierra_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for help.\n\n**Why it matters:** County staff can help with specific application or inspection questions.\n\n**What you need:**\n- \u2610 Phone number\n- \u2610 Office location\n- \u2610 Website\n\n**Where/how:** Sierra County Environmental Health Department, 855-257-6136 (main line). Offices in Downieville and Loyalton.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "Sierra County Environmental Health contact",
+          "Sierra County MEHKO office",
+          "Sierra County MEHKO phone number"
+        ],
+        "appId": "sierra_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "solano_county_mehko",
+    "title": "Solano County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+    "rootDomain": "solanocounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand county limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Solano County\n- \u2610 Menu and production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety standards\n\n**Where/how:** Review Solano County\u2019s MEHKO information page.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume within limits.",
+        "searchTerms": [
+          "Solano County MEHKO daily meal limits",
+          "Solano County MEHKO weekly restrictions",
+          "Solano County Home Kitchen Operations rules"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Obtain a Certified Food Protection Manager (CFPM) credential and any needed approvals.\n\n**Why it matters:** Certification and permissions are required for approval.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Property owner/landlord approval if renting\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; confirm any property or business license requirements.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total\n\n**Ready when:** You have your CFPM certificate and necessary approvals.",
+        "searchTerms": [
+          "CFPM Solano County MEHKO",
+          "Solano County renter approval MEHKO",
+          "Solano County business license home kitchen"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you\u2019ll submit with your application.\n\n**Why it matters:** Incomplete submissions delay review and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Proof of residency (ID and utility bill)\n\n**Where/how:** Collect all documents as PDFs or hard copies.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled, signed, and stored.",
+        "searchTerms": [
+          "Solano County MEHKO application documents",
+          "Solano County MEHKO checklist",
+          "Solano County Home Kitchen forms"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "MEHKO_Standard_Operating_Procedures_fill",
+        "pdfUrl": "https://content.solanocounty.gov/sites/default/files/2025-05/MEHKO_Standard_Operating_Procedures_fill.pdf",
+        "appId": "solano_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the SOP form covering menu, prep, storage, sanitation, and operations.\n\n**Why it matters:** Shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form linked in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Solano County MEHKO SOP form",
+          "Solano MEHKO food safety SOP",
+          "MEHKO Standard Operating Procedures Solano"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "MEHKO_Facility_Application",
+        "pdfUrl": "https://www.solanocounty.gov/archival-document?document=https://content.solanocounty.gov/sites/default/files/2025-05/MEHKO%20Facility%20Application.pdf&title=Archival%20document:%20MEHKO%20Facility%20Application.pdf",
+        "appId": "solano_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the MEHKO Facility Application for a Health Permit.\n\n**Why it matters:** This is the official request to operate.\n\n**What you need:**\n- \u2610 Owner and site details\n- \u2610 CFPM certificate info\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Fill out and sign the application; submit with SOP.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and consistent with your SOP.",
+        "searchTerms": [
+          "Solano County MEHKO permit application",
+          "Solano MEHKO facility application",
+          "Solano County Home Kitchen application form"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Proof of residence\n- \u2610 Payment method\n\n**Where/how:** Submit to Solano County Environmental Health, 675 Texas Street, Suite 5500, Fairfield, CA 94533. Phone (707) 784-6765.\n\n**Cost & time:** Initial Permit $650 \u00b7 Annual Renewal $325 (per fee schedule) \u00b7 10\u201320 minutes\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Solano County MEHKO fees 2025",
+          "Solano Environmental Health submission MEHKO",
+          "Solano County MEHKO payment methods"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Schedule a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Required equipment functional\n\n**Where/how:** The department will provide scheduling details after application approval.\n\n**Cost & time:** Included in permit fee \u00b7 1\u20132 hours\n\n**Ready when:** You receive a pass and resolve corrections.",
+        "searchTerms": [
+          "Solano MEHKO inspection checklist",
+          "Solano County home kitchen inspection",
+          "Solano Environmental Health MEHKO inspection"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Solano County Environmental Health after inspection.\n\n**Cost & time:** $0 (after fees)\n\n**Ready when:** You have the permit in hand.",
+        "searchTerms": [
+          "Solano MEHKO permit issuance",
+          "Solano County permit status MEHKO",
+          "Solano Environmental Health approval"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP, stay within limits, and renew annually.\n\n**Why it matters:** Protects your customers and keeps your permit valid.\n\n**What you need:**\n- \u2610 Meal logs \u226430/day and \u226490/week\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Maintain records; update SOP if menu/volume changes.\n\n**Cost & time:** Renewal $325 annually \u00b7 ongoing\n\n**Ready when:** Records are current and renewal submitted.",
+        "searchTerms": [
+          "Solano County MEHKO renewal process",
+          "Solano County MEHKO compliance requirements",
+          "Solano MEHKO tracking logs"
+        ],
+        "appId": "solano_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can guide you through the process.\n\n**What you need:**\n- \u2610 Phone/email\n- \u2610 Office location\n- \u2610 Website\n\n**Where/how:** Solano County Environmental Health \u2014 675 Texas Street, Suite 5500, Fairfield, CA 94533 \u00b7 Phone: (707) 784-6765 \u00b7 Email: EH@SolanoCounty.com.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have the information needed to proceed.",
+        "searchTerms": [
+          "Solano County Environmental Health contact",
+          "Solano MEHKO program phone",
+          "Solano County MEHKO office"
+        ],
+        "appId": "solano_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "sonoma_county_mehko",
+    "title": "Sonoma County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+    "rootDomain": "sonomacounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Sonoma County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review Sonoma County\u2019s MEHKO program page and Program Intro PDF.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "Sonoma County MEHKO daily meal limits",
+          "Sonoma County MEHKO weekly restrictions",
+          "Sonoma County Home Kitchen Operations rules"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total (study + exam)\n\n**Ready when:** You have a CFPM certificate and any property/business approvals.",
+        "searchTerms": [
+          "ANSI-CFP Food Protection Manager Sonoma",
+          "Sonoma renter permission MEHKO",
+          "Sonoma business license home food operation"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and utility bill (for residency proof)\n- \u2610 Rental Notification form (if renting)\n\n**Where/how:** Collect all required documents before submitting.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+        "searchTerms": [
+          "Sonoma MEHKO application documents",
+          "Sonoma County MEHKO checklist",
+          "Sonoma MEHKO required forms"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "sop_form",
+        "title": "Standard Operating Procedures (SOP)",
+        "type": "pdf",
+        "formId": "SonomaCounty-MEHKO-SOP-English-03-2025",
+        "pdfUrl": "https://sonomacounty.gov/Main%20County%20Site/Health%20and%20Human%20Services/Health%20Services/Documents/Public%20Health/Sections/Environmental%20Health/Programs%20and%20Services/Food%20Safety%20Program/MEHKO/SonomaCounty-MEHKO-SOP-English-03-2025.pdf",
+        "appId": "sonoma_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Fill the MEHKO SOP form covering menu, prep, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "searchTerms": [
+          "Sonoma MEHKO SOP form",
+          "Sonoma County food safety SOP",
+          "MEHKO SOP Sonoma County"
+        ]
+      },
+      {
+        "id": "permit_application_form",
+        "title": "Health Permit Application",
+        "type": "pdf",
+        "formId": "SonomaCounty-MEHKO-Program-Intro-Eng-02-2025",
+        "pdfUrl": "https://sonomacounty.gov/Main%20County%20Site/Health%20and%20Human%20Services/Health%20Services/Documents/Public%20Health/Sections/Environmental%20Health/Programs%20and%20Services/Food%20Safety%20Program/MEHKO/SonomaCounty-MEHKO-Program-Intro-Eng-02-2025.pdf",
+        "appId": "sonoma_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Complete the Health Permit Application section in the MEHKO packet.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Rental Notification form if applicable\n\n**Where/how:** Complete the application as described in the Program Intro PDF.\n\n**Cost & time:** Initial permit $652 \u00b7 Renewal $326 \u00b7 15\u201330 minutes to fill\n\n**Ready when:** Application is complete and matches your SOP.",
+        "searchTerms": [
+          "Sonoma MEHKO permit application",
+          "Sonoma Health Permit Application form",
+          "Sonoma County Home Kitchen Operations application"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Rental Notification (if renting)\n- \u2610 Payment method\n\n**Where/how:** Submit by email to EHS-eh@sonoma-county.org, by mail to 625 5th Street, Santa Rosa, CA 95404, or in person at the Environmental Health office. Pay by check/money order or online if available.\n\n**Cost & time:** Initial $652 \u00b7 Renewal $326 \u00b7 10\u201320 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Sonoma MEHKO application fee 2025",
+          "Sonoma Environmental Health submission MEHKO",
+          "Sonoma MEHKO payment methods"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will contact you to schedule an inspection after your application is approved.\n\n**Cost & time:** Included in fee \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "Sonoma MEHKO inspection checklist",
+          "Sonoma County Home Kitchen inspection",
+          "Sonoma Environmental Health inspection MEHKO"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after application fee)\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "Sonoma MEHKO permit issuance",
+          "Sonoma permit processing timeline",
+          "Sonoma County Environmental Health permit status"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits (\u226430/day, \u226490/week)\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact Environmental Health if your menu or volume changes.\n\n**Cost & time:** Renewal $326 annually \u00b7 ongoing\n\n**Ready when:** You track meals, keep records, and renew on time.",
+        "searchTerms": [
+          "Sonoma MEHKO meal tracking",
+          "Sonoma MEHKO renewal process",
+          "Sonoma County Home Kitchen compliance"
+        ],
+        "appId": "sonoma_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone or email for questions\n- \u2610 Office address and hours\n- \u2610 Website for additional resources\n\n**Where/how:** Sonoma County Environmental Health \u2014 Phone: (707) 565-6565 \u00b7 Email: EHS-eh@sonoma-county.org \u00b7 Office: 625 5th Street, Santa Rosa, CA 95404. Hours: Mon\u2013Fri 8AM\u20135PM.\n\n**Cost & time:** $0 \u00b7 varies by question\n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "Sonoma Environmental Health contact",
+          "Sonoma MEHKO program phone",
+          "Sonoma County MEHKO office"
+        ],
+        "appId": "sonoma_county_mehko"
+      }
+    ]
+  },
+  {
+    "id": "santa_clara_county_mehko",
+    "title": "Santa Clara County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+    "rootDomain": "santaclaracounty.gov",
+    "supportTools": {
+      "aiEnabled": true,
+      "commentsEnabled": true
+    },
+    "steps": [
+      {
+        "id": "planning_overview",
+        "title": "Plan Your MEHKO",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Santa Clara County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review Santa Clara County\u2019s MEHKO overview page and FAQ.\n\n**Time estimate:** \n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+        "searchTerms": [
+          "Santa Clara MEHKO daily meal limits",
+          "Santa Clara MEHKO weekly restrictions",
+          "Santa Clara Home Kitchen Operations rules"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "approvals_training",
+        "title": "Approvals & Training",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Time estimate:** ~\n\n**Ready when:** You have a CFPM certificate and any property/business approvals.",
+        "searchTerms": [
+          "ANSI-CFP Food Protection Manager Santa Clara",
+          "Santa Clara renter permission MEHKO",
+          "Santa Clara business license home food operation"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "prepare_docs",
+        "title": "Prepare Required Documents",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 Health Permit Application \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and utility bill (for residency proof)\n- \u2610 Floor plan of kitchen and food prep area\n\n**Where/how:** Collect all required documents before submitting.\n\n**Time estimate:** \n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+        "searchTerms": [
+          "Santa Clara MEHKO required documents",
+          "Santa Clara MEHKO application checklist",
+          "Santa Clara Home Kitchen Operations forms"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "application_packet",
+        "title": "MEHKO Application Packet (includes SOP + Permit Application)",
+        "type": "pdf",
+        "formId": "MEHKO_Application_Packet",
+        "pdfUrl": "https://files.santaclaracounty.gov/migrated/MEHKO%20Application%20Packet%20Rev%201.31.2024.pdf",
+        "appId": "santa_clara_county_mehko",
+        "action_required": true,
+        "fill_pdf": true,
+        "content": "**What to do:** Download and complete the single MEHKO Application Packet. It includes the **Permit Application**, **Self\u2011Certification Checklist**, and **SOP**.\n\n**Why it matters:** Santa Clara uses one combined packet; no separate SOP/permit PDFs needed.\n\n**What you need:**\n- \u2610 Owner/site details & contact info\n- \u2610 Menu + food safety/SOP details\n- \u2610 Proof of water & sewage (see packet)\n- \u2610 CFPM certificate (or submit within 60 days as allowed)\n\n**Where/how:** Fill all packet sections, save as a single PDF.\n\n**Ready when:** Entire packet is complete and internally consistent.",
+        "searchTerms": [
+          "Santa Clara MEHKO application packet",
+          "Santa Clara MEHKO SOP and permit combined PDF",
+          "deh.santaclaracounty.gov MEHKO packet"
+        ]
+      },
+      {
+        "id": "submit_application",
+        "title": "Submit Application & Fees",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 Completed SOP \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 CFPM certificate\n- \u2610 Proof of residence\n- \u2610 Payment method\n\n**Where/how:** Submit by email to dehweb@deh.sccgov.org, by mail to 1555 Berger Drive, Suite 300, San Jose, CA 95112, or in person at the DEH office. Pay online or by check/money order as directed.\n\n**Time estimate:** Initial permit \n\n**Ready when:** County confirms receipt and payment.",
+        "searchTerms": [
+          "Santa Clara MEHKO application fee 2025",
+          "Santa Clara Environmental Health submission MEHKO",
+          "Santa Clara MEHKO payment methods"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "inspection",
+        "title": "Schedule & Pass Inspection",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will contact you to schedule an inspection after your application is approved.\n\n**Time estimate:** Included in permit fee \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+        "searchTerms": [
+          "Santa Clara MEHKO inspection checklist",
+          "Santa Clara Home Kitchen inspection preparation",
+          "Santa Clara Environmental Health inspection MEHKO"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "receive_permit",
+        "title": "Receive Permit",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Time estimate:** \n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+        "searchTerms": [
+          "Santa Clara MEHKO permit issuance",
+          "Santa Clara permit processing timeline",
+          "Santa Clara Environmental Health permit status"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "operate_comply",
+        "title": "Operate & Stay Compliant",
+        "type": "info",
+        "action_required": true,
+        "fill_pdf": false,
+        "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact DEH if your menu or volume changes.\n\n**Time estimate:** Renewal \n\n**Ready when:** You track meals, keep records, and renew on time.",
+        "searchTerms": [
+          "Santa Clara MEHKO meal tracking requirements",
+          "Santa Clara MEHKO renewal process",
+          "Santa Clara Home Kitchen Operations compliance"
+        ],
+        "appId": "santa_clara_county_mehko"
+      },
+      {
+        "id": "contact",
+        "title": "Contact Info",
+        "type": "info",
+        "action_required": false,
+        "fill_pdf": false,
+        "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone or email for questions\n- \u2610 Office address and hours\n- \u2610 Website for additional resources\n\n**Where/how:** Department of Environmental Health (DEH) \u2014 Phone: (408) 918-3400 \u00b7 Email: dehweb@deh.sccgov.org \u00b7 Office: 1555 Berger Drive, Suite 300, San Jose, CA 95112. Hours: Mon\u2013Fri 8AM\u20135PM.\n\n**Time estimate:** \n\n**Ready when:** You have the information you need to proceed.",
+        "searchTerms": [
+          "Santa Clara Environmental Health contact",
+          "Santa Clara MEHKO program phone",
+          "Santa Clara Home Kitchen Operations office"
+        ],
+        "appId": "santa_clara_county_mehko"
+      }
+    ]
+  }
+]

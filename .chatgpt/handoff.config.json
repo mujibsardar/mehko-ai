@@ -1,71 +1,113 @@
 {
-    "issue": "County cleanup script failed - data still exists in multiple locations",
-    "problem": "clear-all-counties.mjs script only deleted local JSON files but left data in data/applications/ directories and Firestore",
-    "ask": "Complete the county cleanup by removing ALL county data from: 1) data/applications/ directories, 2) Firestore applications collection, 3) Firestore user collections related to county data",
+    "issue": "Need script to identify non-fillable PDF forms in data/applications directory",
+    "problem": "No automated way to detect which form.pdf files are not AcroForm type (fillable) vs static PDFs",
+    "ask": "Create a script that scans data/applications/{countyid}/{formname}/ directories and identifies which form.pdf files are NOT fillable (non-AcroForm type)",
     "include": [
         {
             "path": "data/applications/",
-            "max_lines": 200
-        },
-        {
-            "path": "scripts/clear-all-counties.mjs",
             "max_lines": 100
         },
         {
-            "path": "src/firebase/firebase.js",
+            "path": "python/overlay/acroform_handler.py",
+            "max_lines": 100
+        },
+        {
+            "path": "scripts/",
             "max_lines": 50
         },
         {
-            "path": "src/components/admin/Admin.jsx",
-            "max_lines": 100
+            "path": "src/components/forms/AcroFormViewer.jsx",
+            "max_lines": 50
         }
     ],
     "extra": [
-        "find data/applications -type d -name '*county*'",
-        "ls -la data/applications/",
-        "firebase firestore:collections list",
-        "grep -r 'applications' src/ --include='*.js' --include='*.jsx'"
+        "find data/applications -name 'form.pdf' -type f",
+        "ls -la data/applications/*/forms/*/",
+        "python -c \"import PyPDF2; print('PyPDF2 available')\"",
+        "pip list | grep -i pdf"
     ],
     "context": {
-        "current_state": "County data exists in multiple locations despite running clear-all-counties.mjs",
-        "target_state": "Complete removal of all county-related data from local files and Firestore",
-        "locations_to_clean": [
-            "data/applications/*county* directories",
-            "Firestore 'applications' collection",
-            "Firestore user collections with county data",
-            "Any remaining county JSON files"
-        ],
-        "script_limitation": "clear-all-counties.mjs only handles local JSON files, not directories or Firestore"
-    },
-    "workflow": [
-        "1. Identify all county data locations (local + Firestore)",
-        "2. Remove data/applications/*county* directories completely",
-        "3. Clear Firestore 'applications' collection",
-        "4. Check user collections for county-related data",
-        "5. Verify complete cleanup",
-        "6. Update clear-all-counties.mjs to handle all locations"
-    ],
-    "firebase_operations": {
-        "collections_to_clear": [
-            "applications",
-            "users (check for county references)",
-            "formData (check for county references)"
-        ],
-        "queries_needed": [
-            "Delete all documents in 'applications' collection",
-            "Find users with county-related form data",
-            "Remove county-related user data"
+        "current_state": "PDF forms stored in data/applications/{countyid}/{formname}/ directories, but no way to identify which are fillable",
+        "target_state": "Script that can detect and report non-fillable PDF forms",
+        "directory_structure": "data/applications/{countyid}/{formname}/form.pdf",
+        "pdf_types": [
+            "AcroForm (fillable with form fields)",
+            "Static PDF (non-fillable, just content)",
+            "Mixed (some fields but not full AcroForm)"
         ]
     },
-    "local_cleanup": {
-        "directories": "Remove entire data/applications/*county* folders",
-        "files": "Remove any remaining county JSON files",
-        "manifest": "Reset data/manifest.json if needed"
+    "script_requirements": {
+        "name": "detect-non-fillable-forms.mjs or detect-non-fillable-forms.py",
+        "functionality": [
+            "Scan data/applications directory recursively",
+            "Find all form.pdf files",
+            "Analyze each PDF to determine if it's AcroForm type",
+            "Report which forms are NOT fillable",
+            "Provide summary statistics"
+        ],
+        "output_format": [
+            "List of non-fillable forms with paths",
+            "Count of fillable vs non-fillable",
+            "Summary by county/application",
+            "JSON output option for programmatic use"
+        ]
     },
+    "technical_approach": {
+        "pdf_analysis": [
+            "Use PyPDF2 to check for AcroForm fields",
+            "Look for /AcroForm dictionary in PDF",
+            "Check for /Fields array with form elements",
+            "Detect interactive form capabilities"
+        ],
+        "script_language": "Python (better PDF libraries) or Node.js (if PyPDF2 available)",
+        "dependencies": "PyPDF2, pathlib, json, argparse"
+    },
+    "detection_criteria": {
+        "fillable_indicators": [
+            "PDF has /AcroForm dictionary",
+            "PDF has /Fields array with form elements",
+            "PDF has interactive form annotations",
+            "PDF responds to form field interactions"
+        ],
+        "non_fillable_indicators": [
+            "No /AcroForm dictionary",
+            "No /Fields array",
+            "Static content only",
+            "No interactive elements"
+        ]
+    },
+    "workflow": [
+        "1. Create script file (detect-non-fillable-forms.py)",
+        "2. Implement PDF scanning logic using PyPDF2",
+        "3. Add command line arguments for output format",
+        "4. Test with existing PDF files",
+        "5. Add error handling for corrupted PDFs",
+        "6. Generate comprehensive report"
+    ],
+    "script_features": {
+        "scanning": "Recursive directory traversal",
+        "analysis": "PDF structure examination",
+        "reporting": "Detailed and summary reports",
+        "output": "Console, JSON, or CSV formats",
+        "filtering": "By county, by application, by fillable status"
+    },
+    "expected_output": {
+        "console": "Human-readable summary with counts and lists",
+        "json": "Structured data for programmatic processing",
+        "csv": "Spreadsheet-friendly format for analysis",
+        "detailed": "Full analysis of each PDF with reasons"
+    },
+    "usage_examples": [
+        "./scripts/detect-non-fillable-forms.py --summary",
+        "./scripts/detect-non-fillable-forms.py --json > report.json",
+        "./scripts/detect-non-fillable-forms.py --county san_diego_county_mehko",
+        "./scripts/detect-non-fillable-forms.py --verbose"
+    ],
     "verification": [
-        "data/applications/ should be empty or contain no county data",
-        "Firestore 'applications' collection should be empty",
-        "No county references in user collections",
-        "clear-all-counties.mjs should work completely"
+        "Script runs without errors",
+        "Correctly identifies known AcroForm PDFs",
+        "Correctly identifies known static PDFs",
+        "Provides accurate counts and summaries",
+        "Handles edge cases (corrupted PDFs, missing files)"
     ]
 }

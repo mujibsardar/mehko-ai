@@ -1,0 +1,172 @@
+{
+  "id": "san_mateo_county_mehko",
+  "title": "San Mateo County MEHKO",
+  "description": "Home-based food operation permit under AB 626 pilot: up to 30 meals/day, 60 meals/week, $50 k annual sales cap; no outdoor signage; fees waived until 2023.",
+  "rootDomain": "smchealth.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Review MEHKO limits, requirements, and process.\n\n**Why it matters:** Ensuring early understanding of rules avoids delays.\n\n**What you need:**\n- \u2610 Meal and revenue limits (30/day, 60/week, $50k/year)\n- \u2610 Understand same-day prep/serve and no signage rules\n- \u2610 Confirm if renting\u2014landlord form may be needed\n\n**Where/how:** Visit San Mateo County\u2019s MEHKO page for guidelines, FAQs, and webinar resources.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You know MEHKO limits and whether you need the rental form.",
+      "searchTerms": [
+        "San Mateo County MEHKO guidelines",
+        "San Mateo MEHKO meal limits",
+        "San Mateo MEHKO requirements"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get required food safety manager certification and food handler cards.\n\n**Why it matters:** These certifications are mandatory for safe operations.\n\n**What you need:**\n- \u2610 Accredited food safety manager certificate\n- \u2610 Food handler card(s) for any helpers\n\n**Where/how:** Use state-accredited providers for training and cards.\n\n**Cost & time:** ~$60\u2013$150 \u00b7 1\u20132 days total\n\n**Ready when:** You have the necessary certificates.",
+      "searchTerms": [
+        "San Mateo MEHKO food safety manager certificate",
+        "California food handler card MEHKO",
+        "San Mateo MEHKO training requirements"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather and prepare all necessary forms.\n\n**Why it matters:** Complete packets are processed faster.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Rental Notification Form (if renting) \u2014 go to Step 6: Rental Notification Form\n- \u2610 Certifications from Step 2 (approvals)\n\n**Where/how:** Download and fill each form from the county\u2019s MEHKO page.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All forms are completed and ready to submit.",
+      "searchTerms": [
+        "San Mateo MEHKO forms",
+        "San Mateo MEHKO SOP form",
+        "San Mateo MEHKO application packet"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "MEHKO_SOP_Form",
+      "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210820_sop_form_final.pdf?1629498752=",
+      "appId": "san_mateo_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the MEHKO SOP form with details on menu, schedule, meals, advertising, and operations.\n\n**Why it matters:** The SOP outlines how you'll operate safely under MEHKO rules.\n\n**What you need:**\n- \u2610 Daily/weekly meal schedule and counts\n- \u2610 Advertising method (no signage)\u2014list IFSI or online only\n- \u2610 Operational plan including employee details (max one), prep, serving details\n\n**Where/how:** Fill the SOP form downloaded in this step.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP is complete and reflects your planned operation.",
+      "searchTerms": [
+        "San Mateo MEHKO SOP form",
+        "San Mateo microkitchen SOP PDF",
+        "San Mateo County MEHKO standard operating procedures"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "MEHKO_Permit_Application",
+      "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210720_mehko_infographic_-_english_final.pdf?1627060073=",
+      "appId": "san_mateo_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the MEHKO Permit Application form to request a permit.\n\n**Why it matters:** This initiates the official application and review process.\n\n**What you need:**\n- \u2610 Operator contact information and site address\n- \u2610 Certifications details (food safety manager + handler)\n- \u2610 SOP form (from Step 4)\n\n**Where/how:** Use the Application form from the county\u2019s MEHKO page.\n\n**Cost & time:** $0 to fill \u00b7 20\u201330 minutes\n\n**Ready when:** Application is complete and consistent with SOP.",
+      "searchTerms": [
+        "San Mateo MEHKO permit application",
+        "San Mateo MEHKO application PDF",
+        "San Mateo County MEHKO forms"
+      ]
+    },
+    {
+      "id": "rental_notification_form",
+      "title": "Rental Notification Form",
+      "type": "pdf",
+      "formId": "MEHKO_Rental_Notification",
+      "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210819_rev_rental_authorization_form_final.pdf?1629414516=",
+      "appId": "san_mateo_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** If you're renting, complete this Rental Notification Form with your landlord/property management.\n\n**Why it matters:** Ensures your lease allows MEHKO activity.\n\n**What you need:**\n- \u2610 Landlord\u2019s name and contact\n- \u2610 Property management signature and acknowledgement\n- \u2610 Your operation details and address\n\n**Where/how:** Download and complete the rental form in this step.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** Landlord has signed and returned the form.",
+      "searchTerms": [
+        "San Mateo MEHKO rental notification form",
+        "San Mateo renting MEHKO landlord form",
+        "San Mateo MEHKO landlord notification"
+      ]
+    },
+    {
+      "id": "submit_pay",
+      "title": "Submit Application",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit your completed packet to EHS for review\u2014fees waived until 2023.\n\n**Why it matters:** Formal submission starts review and inspection scheduling.\n\n**What you need:**\n- \u2610 SOP (Step 4), Application (Step 5), and if renting, Rental Form (Step 6)\n- \u2610 Certifications (Step 2)\n\n**Where/how:** Submit via mail or in person to Environmental Health Services: 2000 Alameda de las Pulgas, Suite 100, San Mateo, CA 94403, or contact via envhealth@smcgov.org / (650) 372-6200.\n\n**Cost & time:** Fees waived until 2023; review typically starts within ~5 business days.\n\n**Ready when:** You receive acknowledgment of receipt with next steps.",
+      "searchTerms": [
+        "San Mateo MEHKO submission address",
+        "San Mateo MEHKO fee waiver",
+        "San Mateo MEHKO review timeline"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Prepare for and complete the home inspection scheduled by EHS.\n\n**Why it matters:** Passing inspection is required for permit issuance.\n\n**What you need:**\n- \u2610 Clean kitchen and preparation area\n- \u2610 SOP documentation and permit application on hand\n- \u2610 Be ready to review procedures and secure pets, etc.\n\n**Where/how:** EHS contacts you to schedule\u2014follow their instructions and inspection checklist materials.\n\n**Cost & time:** Included in pilot; inspection within ~20 working days\n\n**Ready when:** Inspector approves your setup.",
+      "searchTerms": [
+        "San Mateo MEHKO inspection process",
+        "San Mateo MEHKO site inspection",
+        "SMC MEHKO inspection checklist"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Receive your MEHKO permit and display it during operations.\n\n**Why it matters:** This authorizes you to legally operate your home kitchen.\n\n**What you need:**\n- \u2610 Permit document\n- \u2610 Keep SOP and ideally posting onsite\n\n**Where/how:** Permit issued post-inspection by EHS.\n\n**Cost & time:** No fee until 2023; permit valid as long as pilot continues.\n\n**Ready when:** Permit is received and posted.",
+      "searchTerms": [
+        "San Mateo MEHKO permit issuance",
+        "San Mateo MEHKO post-inspection permit",
+        "SMC MEHKO pilot permit receive"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Comply",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Run your MEHKO within defined limits and keep records.\n\n**Why it matters:** Staying compliant avoids violations and protects health.\n\n**What you need:**\n- \u2610 Track meals served and make sure stays within 30/day, 60/week\n- \u2610 Annual gross under $50 k\n- \u2610 No signage; prepare and serve same day; no raw milk/raw oysters\n- \u2610 Keep food safety certificates, inspection report, and receipts onsite\n\n**Where/how:** Follow your SOP and EHS guidance. Keep paperwork organized and accessible.\n\n**Cost & time:** Ongoing checklist; minimal time per week.\n\n**Ready when:** You maintain compliance continuously and pass any follow-up inspections.",
+      "searchTerms": [
+        "San Mateo MEHKO operating limits",
+        "San Mateo MEHKO prohibited foods",
+        "San Mateo MEHKO recordkeeping"
+      ],
+      "appId": "san_mateo_county_mehko"
+    },
+    {
+      "id": "contact_info",
+      "title": "Contact Information",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Keep EHS contact details handy for questions or updates.\n\n**Why it matters:** Easy access to support helps smooth permit process.\n\n**What you need:**\n- \u2610 Phone: (650) 372-6200\n- \u2610 Email: envhealth@smcgov.org\n- \u2610 Address: 2000 Alameda de las Pulgas, Suite 100, San Mateo, CA 94403\n\n**Where/how:** Use website or communications from EHS for full contact info.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have correct contact info accessible.\n\n**Note:** Additional city-level requirements may apply\u2014check with your local city planning office.",
+      "searchTerms": [
+        "San Mateo EHS contact",
+        "San Mateo MEHKO envhealth phone",
+        "San Mateo MEHKO email"
+      ],
+      "appId": "san_mateo_county_mehko"
+    }
+  ]
+}

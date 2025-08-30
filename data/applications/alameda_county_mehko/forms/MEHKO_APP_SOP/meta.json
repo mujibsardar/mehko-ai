@@ -1,0 +1,9 @@
+{
+  "id": "MEHKO_APP_SOP",
+  "title": "Download & Fill MEHKO Application/SOP",
+  "type": "pdf",
+  "appId": "alameda_county_mehko",
+  "stepId": "prepare_docs",
+  "pdfUrl": "https://deh.acgov.org/operations-assets/docs/cottagefood/MEHKO_APP_SOP.pdf",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

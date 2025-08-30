@@ -1,0 +1,9 @@
+{
+  "id": "EHS_16-1_FoodFacility_PlanCheck_PermitApplication",
+  "title": "Health Permit Application",
+  "type": "pdf",
+  "appId": "santa_barbara_county_mehko",
+  "stepId": "permit_application_form",
+  "pdfUrl": "https://content.civicplus.com/api/assets/e5b02a17-92d1-4949-8597-35c19195c84c",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

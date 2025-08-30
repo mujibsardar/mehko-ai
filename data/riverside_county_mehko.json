@@ -1,0 +1,126 @@
+{
+  "id": "riverside_county_mehko",
+  "title": "Riverside County MEHKO",
+  "description": "Home-based food operation permit: prepare and serve up to 30 meals/day, 90 meals/week; annual gross sales up to $50,000. Requires SOP, Food Safety Manager Certificate, County Food Handler Card, Food Facility Application; permit fee ~$651\u2013$658/year.",
+  "rootDomain": "rivcoeh.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Understand MEHKO limits, same-day service requirement, and permitted operations.\n\n**Why it matters:** Knowing these helps you design an operation that meets Riverside County rules.\n\n**What you need:**\n- \u2610 Meal limits: \u2264 30/day, \u2264 90/week\n- \u2610 Annual gross sales limit: \u2264 $50,000\n- \u2610 Same-day prep, cooking, and serving requirement\n- \u2610 No raw milk/oyster service; prohibited HACCP processes\n\n**Where/how:** Visit Riverside County\u2019s MHKO page for details and informational bulletins.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You\u2019ve confirmed your plan fits county requirements.",
+      "searchTerms": [
+        "Riverside County MHKO 30 meals 90 week",
+        "Riverside MEHKO permit fee 651",
+        "Riverside County MHKO same-day service"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "MHKO_SOP_Riverside",
+      "pdfUrl": "https://rivcoeh.org/sites/g/files/aldnop361/files/migrated/Portals-0-PDF-Foods-MHKO-MHKO-SOP-8-28-19-Eng.pdf",
+      "appId": "riverside_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete and submit the Riverside County MHKO SOP form and menu.\n\n**Why it matters:** This documents how your operation meets safety and procedural standards.\n\n**What you need:**\n- \u2610 Signed SOP form with menu attached\n- \u2610 Understanding of limits, no signage, no raw milk/oysters, one FTE max, animals outside prep area\n\n**Where/how:** Download and complete the SOP form in this step.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP and menu are complete and submitted.",
+      "searchTerms": [
+        "Riverside County MHKO SOP PDF",
+        "Riverside MHKO SOP form",
+        "Riverside County Home Kitchen SOP"
+      ]
+    },
+    {
+      "id": "certifications",
+      "title": "Obtain Certifications",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get required food safety credentials.\n\n**Why it matters:** A Food Safety Manager and Handler Certifications are mandatory.\n\n**What you need:**\n- \u2610 Food Safety Manager Certification (owner/operator)\n- \u2610 Riverside County Food Handler Certification (all other involved individuals)\n\n**Where/how:** Use accredited training providers as required by Riverside County.\n\n**Cost & time:** ~$70\u2013$200 \u00b7 1\u20132 days\n\n**Ready when:** All certifications are obtained and copies are ready.",
+      "searchTerms": [
+        "Riverside County food safety manager certificate",
+        "Riverside County food handler card",
+        "Riverside MEHKO certification requirements"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "apply_and_pay",
+      "title": "Submit Application & Pay Fee",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit application along with certifications, and pay permit fee.\n\n**Why it matters:** This begins the county\u2019s review and inspection process.\n\n**What you need:**\n- \u2610 Completed SOP and Menu\n- \u2610 Food Safety and Handler certifications\n- \u2610 Permit application/registration form\n- \u2610 Payment (~$651\u2013$658)\n\n**Where/how:** Submit these to your local Riverside DEH office (check county site for address)\n\n**Cost & time:** ~$651\u2013$658 \u00b7 submission triggers review\n\n**Ready when:** You receive confirmation that your application is accepted.",
+      "searchTerms": [
+        "Riverside County MHKO permit fee",
+        "Riverside MHKO application process",
+        "Riverside food facility registration MHKO"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule and Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Prepare for and complete your home kitchen inspection.\n\n**Why it matters:** This inspection verifies compliance with food safety and MHKO rules.\n\n**What you need:**\n- \u2610 Clean kitchen, storage, restroom, refuse area\n- \u2610 SOP, menu, and certification documents available\n- \u2610 No pets/animals in prep/dining areas; safe food handling setup\n\n**Where/how:** DEH schedules inspection post-application; coordinate with local office.\n\n**Cost & time:** Included in permit fee \u00b7 typically 1\u20132 hrs\n\n**Ready when:** Inspector approves your operation.",
+      "searchTerms": [
+        "Riverside MHKO inspection",
+        "Riverside County home kitchen inspection",
+        "Riverside DEH MHKO inspection"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Receive and retain your MHKO permit.\n\n**Why it matters:** This document authorizes your home kitchen business.\n\n**What you need:**\n- \u2610 Official Riverside County MHKO permit\n- \u2610 SOP, certifications, and permit ready for review if needed\n\n**Where/how:** Issued after inspection clears; keep it accessible during operations.\n\n**Cost & time:** Included in fee; valid for 1 year\n\n**Ready when:** Permit is issued and in your possession.",
+      "searchTerms": [
+        "Riverside MHKO permit issuance",
+        "Riverside County DEH MHKO permit",
+        "Riverside home kitchen permit"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Comply",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Operate your MEHKO within all limits and maintain records.\n\n**Why it matters:** Ensures compliance and avoids permit issues.\n\n**What you need:**\n- \u2610 Track meals served (\u2264 30/day, \u2264 90/week) and gross sales (\u2264 $50k/year)\n- \u2610 Same-day prep/serve only, no raw milk/oysters, no outdoor signage\n- \u2610 Renew annually; allow inspections for complaints\n\n**Where/how:** Monitor your operation and document as needed.\n\n**Cost & time:** Ongoing tracking; minimal weekly effort\n\n**Ready when:** You consistently meet rules and are ready for any audit.",
+      "searchTerms": [
+        "Riverside County MHKO daily tracking",
+        "Riverside MHKO renewal",
+        "Riverside County MHKO compliance"
+      ],
+      "appId": "riverside_county_mehko"
+    },
+    {
+      "id": "contact_info",
+      "title": "Contact Information",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Save Riverside County DEH contact details for support.\n\n**Why it matters:** Useful for asking questions or following up on your permit.\n\n**What you need:**\n- \u2610 Riverside County DEH website: rivcoeh.org\n- \u2610 Local area office phone (see county site)\n\n**Where/how:** Use online directory or communications from DEH.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have the correct contact information at hand.",
+      "searchTerms": [
+        "Riverside County DEH contact",
+        "Riverside MHKO office phone",
+        "Riverside DEH home kitchen"
+      ],
+      "appId": "riverside_county_mehko"
+    }
+  ]
+}

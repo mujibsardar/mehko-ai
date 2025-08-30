@@ -1,0 +1,928 @@
+{
+  "id": "MHKO_SOP_Riverside",
+  "title": "Standard Operating Procedures (SOP)",
+  "type": "existing_acroform",
+  "appId": "riverside_county_mehko",
+  "stepId": "sop_form",
+  "fields": [
+    {
+      "id": "Name of Business DBA",
+      "label": "Name of Business (DBA):",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Phone Number",
+      "label": "Phone Number:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owners Name",
+      "label": "Owner\u2019s Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Employees Name",
+      "label": "Food Employee\u2019s Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owners Address",
+      "label": "Owner\u2019s Address:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City",
+      "label": "City:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State",
+      "label": "State:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP",
+      "label": "ZIP:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "Email:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Website",
+      "label": "Website:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sun",
+      "label": "Sun",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mon",
+      "label": "Mon",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tue",
+      "label": "Tue",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wed",
+      "label": "Wed",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thurs",
+      "label": "Thurs",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Fri",
+      "label": "Fri",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sat",
+      "label": "Sat",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sun_2",
+      "label": "Sun",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mon_2",
+      "label": "Mon",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tue_2",
+      "label": "Tue",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wed_2",
+      "label": "Wed",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thurs_2",
+      "label": "Thurs",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Fri_2",
+      "label": "Fri",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sat_2",
+      "label": "Sat",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Internet List websiteapplications used",
+      "label": "Internet List website/applications used",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Intermediary List companies used",
+      "label": "Intermediary List companies used",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_2",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Other",
+      "label": "Other",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_3",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_2",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_3",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_4",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_5",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_6",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_7",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_4",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_8",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_9",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_10",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_11",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_12",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_13",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_14",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_15",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_16",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_17",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_18",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_19",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_20",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_21",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_22",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "I understand that all food must be obtained from an approved source",
+      "label": "I understand that all food must be obtained from an approved source.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_23",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Utensil washing sink",
+      "label": "Utensil washing sink",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Dishwasher",
+      "label": "Dishwasher",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cleaninplace protocols",
+      "label": "Clean-in-place protocols",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Chlorine 100 ppm",
+      "label": "Chlorine (100 ppm",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Quaternary ammonium 200 ppm",
+      "label": "Quaternary ammonium (200 ppm",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Iodine 25 ppm",
+      "label": "Iodine (25 ppm",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Other_2",
+      "label": "Other",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_5",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3   How will the sanitizer concentration be tested",
+      "label": "3.   How will the sanitizer concentration be tested",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Describe cleaning and sanitizing process",
+      "label": "Describe cleaning and sanitizing process:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 List all locations where the food will be served at your home ie dining room kitchen table backyard patio etc",
+      "label": "1. List all locations where the food will be served at your home (i.e., dining room, kitchen table, backyard, patio, etc.).",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 List all locations where food or utensils used for the MHKO will be stored",
+      "label": "2. List all locations where food or utensils used for the MHKO will be stored.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 What will be done with any remaining food after the food service hours of operation",
+      "label": "3. What will be done with any remaining food after the food service hours of operation?",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "4 Will food products be available for customer pickup Yes No",
+      "label": "4. Will food products be available for customer pick-up? Yes No",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_6",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_7",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will food products be available for delivery to customers",
+      "label": "Will food products be available for delivery to customers",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "a If yes who will deliver the food",
+      "label": "a. If yes, who will deliver the food",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "6 How will food be held hotcold during transportation",
+      "label": "6. How will food be held hot/cold during transportation?",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Distance",
+      "label": "Distance",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Time",
+      "label": "Time",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "8 Describe how food will be packaged for transport",
+      "label": "8. Describe how food will be packaged for transport:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_24",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_8",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public water system or community services department",
+      "label": "Public water system or community services department",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Private water supply",
+      "label": "Private water supply",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "All private water supplies must have water quality testing by a State Certified Laboratory Attach a copy of the",
+      "label": "All private water supplies must have water quality testing by a State Certified Laboratory. Attach a copy of the",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_25",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public sewer system",
+      "label": "Public sewer system",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Private septic system",
+      "label": "Private septic system",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of persons residing in the home 1",
+      "label": "Number of persons residing in the home [1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of persons residing in the home 2",
+      "label": "Number of persons residing in the home [2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of persons residing in the home 3",
+      "label": "Number of persons residing in the home [3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_26",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Where and how will refuse be stored on your property Additional waste bins may be required to ensure proper disposal",
+      "label": "1. Where and how will refuse be stored on your property? Additional waste bins may be required to ensure proper disposal.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 How often will refuse be picked up from property",
+      "label": "2. How often will refuse be picked up from property?",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Identify types of ventilation that will be used to remove gases odors steam heat vapors and smoke from the food preparation area",
+      "label": "1. Identify types of ventilation that will be used to remove gases, odors, steam, heat, vapors, and smoke from the food preparation area:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 Identify the location of fire extinguisher",
+      "label": "2. Identify the location of fire extinguisher:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3 Identify the location of the first aid kit",
+      "label": "3. Identify the location of the first aid kit:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Attach the following certificationslicenses Food Safety Manager Certification Riverside County Food Handler Certifications For all persons involved in the MHKO except the Food Safety Manger",
+      "label": "Attach the following certifications/licenses: Food Safety Manager Certification Riverside County Food Handler Certification(s) For all persons involved in the MHKO, except the Food Safety Manger",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Safety Manager Certification",
+      "label": "Food Safety Manager Certification",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Riverside County Food Handler Certifications",
+      "label": "Riverside County Food Handler Certification(s",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 List all cooking equipment and food equipment used for the MHKO",
+      "label": "1. List all cooking equipment and food equipment used for the MHKO.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 What constitutes a meal  List all meals proposed",
+      "label": "2. What constitutes a meal?  List all \u201cmeals\u201d proposed.",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow1",
+      "label": "Food or Beverage_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow1",
+      "label": "Ingredients_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow1",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow2",
+      "label": "Food or Beverage_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow2",
+      "label": "Ingredients_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow2",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow3",
+      "label": "Food or Beverage_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow3",
+      "label": "Ingredients_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow3",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow4",
+      "label": "Food or Beverage_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow4",
+      "label": "Ingredients_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow4",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow5",
+      "label": "Food or Beverage_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow5",
+      "label": "Ingredients_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow5",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow6",
+      "label": "Food or Beverage_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow6",
+      "label": "Ingredients_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow6",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow7",
+      "label": "Food or Beverage_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow7",
+      "label": "Ingredients_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow7",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food or BeverageRow8",
+      "label": "Food or Beverage_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow8",
+      "label": "Ingredients_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will the food or beverage be offered hot cold or room temperature  Where will it be stored to maintain proper temperatureRow8",
+      "label": "Will the food or beverage be offered hot, cold, or room temperature?  Where will it be stored to maintain proper temperature?_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Initials_27",
+      "label": "Initials",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_9",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_10",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name",
+      "label": "Print Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Title",
+      "label": "Title",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Approved By",
+      "label": "Approved By",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date_2",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

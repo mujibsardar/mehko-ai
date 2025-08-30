@@ -1,0 +1,9 @@
+{
+  "id": "Permit-Application-PDF",
+  "title": "Health Permit Application",
+  "type": "pdf",
+  "appId": "lake_county_mehko",
+  "stepId": "permit_application_form",
+  "pdfUrl": "https://www.lakecountyca.gov/DocumentCenter/View/1125/Permit-Application-PDF",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

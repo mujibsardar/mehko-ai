@@ -1,0 +1,1075 @@
+{
+  "id": "MEHKO_Standard_Operating_Procedures_fill",
+  "title": "Standard Operating Procedures (SOP)",
+  "type": "existing_acroform",
+  "appId": "solano_county_mehko",
+  "stepId": "sop_form",
+  "fields": [
+    {
+      "id": "HOME KITCHEN OPERATOR INFORMATION",
+      "label": "HOME KITCHEN OPERATOR INFORMATION",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Name of Business DBA",
+      "label": "Name of Business (DBA):",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owners Name",
+      "label": "Owner\u2019s Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Phone Number",
+      "label": "Phone Number:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owners Address",
+      "label": "Owner\u2019s Address:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City",
+      "label": "City:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "State",
+      "label": "State:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP",
+      "label": "ZIP:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Employees Name",
+      "label": "Food Employee(s) Name:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of hours per week",
+      "label": "Number of hours per week:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Additional Food Employee Name if applicable",
+      "label": "Additional Food Employee Name (if applicable)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of hours per week_2",
+      "label": "Number of hours per week:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "Email:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Website",
+      "label": "Website:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Name of Internet Food Service Intermediary If applicable",
+      "label": "Name of Internet Food Service Intermediary (If applicable):",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Contact number for Internet Food Service Intermediary",
+      "label": "Contact number for Internet Food Service Intermediary:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "food production may occur",
+      "label": "food production may occur",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sun",
+      "label": "Sun",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sun_2",
+      "label": "Sun",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mon",
+      "label": "Mon",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tues",
+      "label": "Tues",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wed",
+      "label": "Wed",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thurs",
+      "label": "Thurs",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Fri",
+      "label": "Fri",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sat",
+      "label": "Sat",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1",
+      "label": "[1]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2",
+      "label": "[2]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "3",
+      "label": "[3]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mon_2",
+      "label": "Mon",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tues_2",
+      "label": "Tues",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wed_2",
+      "label": "Wed",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thurs_2",
+      "label": "Thurs",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_2",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Fri_2",
+      "label": "Fri",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_3",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sat_2",
+      "label": "Sat",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sunday",
+      "label": "Sunday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Monday",
+      "label": "Monday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tuesday",
+      "label": "Tuesday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wednesday",
+      "label": "Wednesday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thursday",
+      "label": "Thursday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Friday",
+      "label": "Friday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Saturday",
+      "label": "Saturday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sunday_2",
+      "label": "Sunday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Monday_2",
+      "label": "Monday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tuesday_2",
+      "label": "Tuesday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Wednesday_2",
+      "label": "Wednesday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Thursday_2",
+      "label": "Thursday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Friday_2",
+      "label": "Friday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Saturday_2",
+      "label": "Saturday",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Other",
+      "label": "Other",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "FOOD EMPLOYEE HYGIENEHEALTH",
+      "label": "FOOD EMPLOYEE HYGIENE/HEALTH",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow1",
+      "label": "Food and Beverages to be Prepared_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow1",
+      "label": "Ingredients_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow1",
+      "label": "Equipment to be used_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow2",
+      "label": "Food and Beverages to be Prepared_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow2",
+      "label": "Ingredients_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow2",
+      "label": "Equipment to be used_Row_2",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow3",
+      "label": "Food and Beverages to be Prepared_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow3",
+      "label": "Ingredients_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow3",
+      "label": "Equipment to be used_Row_3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow4",
+      "label": "Food and Beverages to be Prepared_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow4",
+      "label": "Ingredients_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow4",
+      "label": "Equipment to be used_Row_4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow5",
+      "label": "Food and Beverages to be Prepared_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow5",
+      "label": "Ingredients_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow5",
+      "label": "Equipment to be used_Row_5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow6",
+      "label": "Food and Beverages to be Prepared_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow6",
+      "label": "Ingredients_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow6",
+      "label": "Equipment to be used_Row_6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow7",
+      "label": "Food and Beverages to be Prepared_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow7",
+      "label": "Ingredients_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow7",
+      "label": "Equipment to be used_Row_7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow8",
+      "label": "Food and Beverages to be Prepared_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow8",
+      "label": "Ingredients_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow8",
+      "label": "Equipment to be used_Row_8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow9",
+      "label": "Food and Beverages to be Prepared_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow9",
+      "label": "Ingredients_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow9",
+      "label": "Equipment to be used_Row_9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow10",
+      "label": "Food and Beverages to be Prepared_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow10",
+      "label": "Ingredients_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow10",
+      "label": "Equipment to be used_Row_10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food and Beverages to be PreparedRow11",
+      "label": "Food and Beverages to be Prepared_Row_11",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "IngredientsRow11",
+      "label": "Ingredients_Row_11",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Equipment to be usedRow11",
+      "label": "Equipment to be used_Row_11",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Cooling",
+      "label": "Cooling",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Packaging",
+      "label": "Packaging",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Refrigerated",
+      "label": "Refrigerated",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Hot Held",
+      "label": "Hot Held",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Room Temperature",
+      "label": "Room Temperature",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "4 How will cooking cooling and reheating temperature requirements be verified",
+      "label": "4. How will cooking, cooling and reheating temperature requirements be verified",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_4",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Openair Barbecue",
+      "label": "Open-air Barbecue",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Outdoor Woodburning Oven",
+      "label": "Outdoor Wood-burning Oven",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Not Applicable",
+      "label": "Not Applicable",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "WAREWASHING",
+      "label": "WAREWASHING",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "2 Type of sanitizer that will be used Test strips are to be provided to verify sanitizer concentration",
+      "label": "2. Type of sanitizer* that will be used (*Test strips are to be provided to verify sanitizer concentration",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Other_2",
+      "label": "Other",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_5",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_6",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "FOOD UTENSIL STORAGE",
+      "label": "FOOD /UTENSIL STORAGE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "1 Are you storing food ingredients or finished product in any place other than within the kitchen Yes No If yes please indicate where",
+      "label": "1. Are you storing food (ingredients or finished product) in any place other than within the kitchen? Yes No If yes, please indicate where:",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_7",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_8",
+      "label": "undefined",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_9",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "FOOD SERVICEDELIVERY",
+      "label": "FOOD SERVICE/DELIVERY",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will food products be available for customer pickup",
+      "label": "Will food products be available for customer pick-up",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Will food products be available for delivery to customers",
+      "label": "Will food products be available for delivery to customers",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Daily",
+      "label": "Daily",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Weekly",
+      "label": "Weekly",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Other_3",
+      "label": "Other",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Yes_3",
+      "label": "Yes",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "No If No where and how often will garbage be disposed",
+      "label": "No If No, where and how often will garbage be disposed",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public Water System",
+      "label": "Public Water System",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Private Well",
+      "label": "Private Well",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public Sewer System",
+      "label": "Public Sewer System",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Private Onsite Wastewater System",
+      "label": "Private Onsite Wastewater System",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PERMITTEE RESPONSIBILITIES",
+      "label": "PERMITTEE RESPONSIBILITIES",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ACKNOWLEDGMENT",
+      "label": "ACKNOWLEDGMENT",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Signature",
+      "label": "Signature",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date",
+      "label": "Date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_10",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_11",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name",
+      "label": "Print Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Title",
+      "label": "Title",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_12",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "REVIEWER OF OPERATIONAL PROCEDURES",
+      "label": "REVIEWER OF OPERATIONAL PROCEDURES",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_13",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_14",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PERMIT NUMBER",
+      "label": "PERMIT NUMBER",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "undefined_15",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "DATE APPROVED",
+      "label": "DATE APPROVED",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box2",
+      "label": "Check Box2",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box3",
+      "label": "Check Box3",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box4",
+      "label": "Check Box4",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box5",
+      "label": "Check Box5",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box6",
+      "label": "Check Box6",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box7",
+      "label": "Check Box7",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box8",
+      "label": "Check Box8",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box9",
+      "label": "Check Box9",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box10",
+      "label": "Check Box10",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box11",
+      "label": "Check Box11",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text12",
+      "label": "Text12",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text13",
+      "label": "Text13",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text14",
+      "label": "Text14",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text15",
+      "label": "Text15",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text16",
+      "label": "Text16",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text17",
+      "label": "Text17",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text18",
+      "label": "Text18",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text19",
+      "label": "Text19",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text20",
+      "label": "Text20",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

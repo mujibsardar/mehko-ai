@@ -1,0 +1,142 @@
+{
+  "id": "sierra_county_mehko",
+  "title": "Sierra County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+  "rootDomain": "sierracounty.ca.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Review Sierra County\u2019s MEHKO rules and confirm you qualify.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Sierra County\n- \u2610 Menu and production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Check Sierra County Environmental Health or the Board resolution (2021-154 & 2024 approval).\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+      "searchTerms": [
+        "Sierra County MEHKO daily meal limits",
+        "Sierra County MEHKO rules",
+        "Sierra County Home Kitchen Operations"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any required property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days\n\n**Ready when:** You have a CFPM certificate and property/business approvals.",
+      "searchTerms": [
+        "Sierra County CFPM Food Manager",
+        "Sierra County renter approval MEHKO",
+        "Sierra County business license MEHKO"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "SIERRA_MEHKO_SOP-English",
+      "pdfUrl": "https://sierracounty.ca.gov/forms/mehko-sop.pdf",
+      "appId": "sierra_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Fill the SOP form covering menu, prep, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan\n\n**Where/how:** Complete the SOP form when released.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and matches your operation.",
+      "searchTerms": [
+        "Sierra County MEHKO SOP form",
+        "Sierra County food safety SOP",
+        "Sierra MEHKO Standard Operating Procedures"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "SIERRA_MEHKO_PermitApplication",
+      "pdfUrl": "https://sierracounty.ca.gov/forms/mehko-permit.pdf",
+      "appId": "sierra_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the Health Permit Application once available.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n\n**Where/how:** Submit the form to Sierra County Environmental Health once published.\n\n**Cost & time:** TBD (per fee schedule) \u00b7 15\u201330 minutes to fill\n\n**Ready when:** Application is complete and consistent with your SOP.",
+      "searchTerms": [
+        "Sierra County MEHKO permit application",
+        "Sierra County Health Permit form",
+        "Sierra County MEHKO application"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit your completed forms and pay the required fees.\n\n**Why it matters:** The county processes your permit only after submission and payment.\n\n**What you need:**\n- \u2610 Completed Permit Application \u2014 go to Step 4: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 3: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Payment method\n\n**Where/how:** Submit to Sierra County Environmental Health Department in Downieville or Loyalton (details pending publication).\n\n**Cost & time:** Fees to be set by county \u00b7 10\u201320 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+      "searchTerms": [
+        "Sierra County MEHKO application fee",
+        "Sierra County MEHKO submission",
+        "Sierra County Environmental Health permit payment"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Schedule and pass an in-home kitchen inspection.\n\n**Why it matters:** Inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Equipment functional\n\n**Where/how:** Sierra County Environmental Health will contact you to arrange inspection.\n\n**Cost & time:** Included in permit fee \u00b7 1\u20132 hours on site\n\n**Ready when:** You pass inspection and resolve corrections.",
+      "searchTerms": [
+        "Sierra County MEHKO inspection",
+        "Sierra County home kitchen inspection",
+        "Sierra County Environmental Health inspection MEHKO"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain your MEHKO permit after passing inspection.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Sierra County Environmental Health after approval.\n\n**Cost & time:** $0 (after fees) \u00b7 timeline depends on county\n\n**Ready when:** You have the permit document in hand.",
+      "searchTerms": [
+        "Sierra County MEHKO permit issuance",
+        "Sierra County permit approval",
+        "Sierra County Environmental Health MEHKO permit"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP and county limits; renew as required.\n\n**Why it matters:** Compliance protects your customers and your permit.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Renewal reminders\n\n**Where/how:** Maintain logs; contact Sierra County if your operation changes.\n\n**Cost & time:** Renewal fees TBD \u00b7 ongoing\n\n**Ready when:** Records are maintained and renewal is on time.",
+      "searchTerms": [
+        "Sierra County MEHKO compliance",
+        "Sierra County MEHKO renewal",
+        "Sierra County MEHKO food safety"
+      ],
+      "appId": "sierra_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for help.\n\n**Why it matters:** County staff can help with specific application or inspection questions.\n\n**What you need:**\n- \u2610 Phone number\n- \u2610 Office location\n- \u2610 Website\n\n**Where/how:** Sierra County Environmental Health Department, 855-257-6136 (main line). Offices in Downieville and Loyalton.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have the information you need to proceed.",
+      "searchTerms": [
+        "Sierra County Environmental Health contact",
+        "Sierra County MEHKO office",
+        "Sierra County MEHKO phone number"
+      ],
+      "appId": "sierra_county_mehko"
+    }
+  ]
+}

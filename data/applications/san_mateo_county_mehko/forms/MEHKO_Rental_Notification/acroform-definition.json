@@ -1,0 +1,18 @@
+{
+  "id": "MEHKO_Rental_Notification",
+  "title": "Rental Notification Form",
+  "type": "existing_acroform",
+  "appId": "san_mateo_county_mehko",
+  "stepId": "rental_notification_form",
+  "fields": [
+    {
+      "id": "form1[0]",
+      "label": "form1[0]",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

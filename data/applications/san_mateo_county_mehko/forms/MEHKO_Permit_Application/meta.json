@@ -1,0 +1,9 @@
+{
+  "id": "MEHKO_Permit_Application",
+  "title": "Health Permit Application",
+  "type": "pdf",
+  "appId": "san_mateo_county_mehko",
+  "stepId": "permit_application_form",
+  "pdfUrl": "https://www.smchealth.org/sites/main/files/file-attachments/20210720_mehko_infographic_-_english_final.pdf?1627060073=",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

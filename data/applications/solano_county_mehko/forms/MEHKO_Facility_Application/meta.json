@@ -1,0 +1,9 @@
+{
+  "id": "MEHKO_Facility_Application",
+  "title": "Health Permit Application",
+  "type": "pdf",
+  "appId": "solano_county_mehko",
+  "stepId": "permit_application_form",
+  "pdfUrl": "https://www.solanocounty.gov/archival-document?document=https://content.solanocounty.gov/sites/default/files/2025-05/MEHKO%20Facility%20Application.pdf&title=Archival%20document:%20MEHKO%20Facility%20Application.pdf",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

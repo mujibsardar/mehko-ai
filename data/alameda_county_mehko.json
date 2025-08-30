@@ -1,0 +1,126 @@
+{
+  "id": "alameda_county_mehko",
+  "title": "Alameda County MEHKO",
+  "description": "Home-based kitchen permit: prepare and serve up to 30 meals/day, 90/week; max $100,000 gross annual sales. Requires SOP, Health Permit, Food Safety Manager, and Food Handler cards; $696 permit fee.",
+  "rootDomain": "deh.acgov.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Review MEHKO rules, limits, and permit process.\n\n**Why it matters:** Understanding key requirements (meals, sales, personnel, safety) up front avoids delays.\n\n**What you need:**\n- \u2610 Meal limits: 30/day, 90/week; gross annual sales \u2264 $100,000\n- \u2610 Same-day preparation and service only\n- \u2610 No signage or outdoor advertising\n- \u2610 Understand prohibited processes and foods (e.g., HACCP, raw milk, raw oysters)\n\n**Where/how:** Visit Alameda County DEH's Home-Based Food Business page and review the MEHKO SOP and flyer.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You understand the main rules and your operation plan fits them.",
+      "searchTerms": [
+        "Alameda County MEHKO limits 30 meals 90 week",
+        "Alameda County MEHKO $100000 sales limit",
+        "Alameda County MEHKO prohibited foods HACCP"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Download & Fill MEHKO Application/SOP",
+      "type": "pdf",
+      "action_required": true,
+      "fill_pdf": true,
+      "formId": "MEHKO_APP_SOP",
+      "pdfUrl": "https://deh.acgov.org/operations-assets/docs/cottagefood/MEHKO_APP_SOP.pdf",
+      "appId": "alameda_county_mehko",
+      "content": "**What to do:** Download and complete the MEHKO Application / Standard Operating Procedures form.\n\n**Why it matters:** This combined form documents how your operation complies with MEHKO regulations.\n\n**What you need:**\n- \u2610 Menu and schedule (meals/day, week)\n- \u2610 Advertising plan (no signage; list IFSI or website)\n- \u2610 Safety plan (water, refuse, grease, ventilation, hygiene, animals)\n- \u2610 Certifications: Food Safety Manager, Food Handler cards\n\n**Where/how:** Download the form from this step and fill it out.\n\n**Cost & time:** $0 \u00b7 45\u201360 minutes\n\n**Ready when:** SOP form is fully filled and your operational details and safety plan are documented.",
+      "searchTerms": [
+        "Alameda County MEHKO Application SOP PDF",
+        "MEHKO_APP_SOP Alameda County",
+        "Alameda MEHKO DEH form"
+      ]
+    },
+    {
+      "id": "obtain_certifications",
+      "title": "Get Certifications",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain required food safety certificates.\n\n**Why it matters:** DEH requires credentials for you and anyone involved in food handling.\n\n**What you need:**\n- \u2610 Food Safety Manager certification (approved/accredited)\n- \u2610 Food handler card for any employees (excluding household members)\n\n**Where/how:** Take DEH-approved courses for the manager certificate; get Food Handler cards via a recognized provider.\n\n**Cost & time:** ~$60\u2013$150 \u00b7 1\u20132 days total\n\n**Ready when:** You have valid certificates for all relevant individuals.",
+      "searchTerms": [
+        "Alameda County food safety manager certification",
+        "Alameda County food handler card MEHKO",
+        "Alameda DEH certification requirements"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Pay",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit your completed SOP/Application and pay the permit fee.\n\n**Why it matters:** Payment triggers DEH to begin review and inspection.\n\n**What you need:**\n- \u2610 Completed MEHKO Application/SOP\n- \u2610 Certification copies\n- \u2610 Payment for permit: $696.00\n\n**Where/how:** Submit in person or by mail to Alameda County DEH at 1131 Harbor Bay Parkway, Alameda, CA 94502.\n\n**Cost & time:** $696.00 \u00b7 proceed upon submission\n\n**Ready when:** DEH acknowledges receipt and begins processing.",
+      "searchTerms": [
+        "Alameda County MEHKO permit fee",
+        "Alameda County MEHKO submission address",
+        "ACDEH MEHKO payment"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Initial Kitchen Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Prepare for and complete the in-person inspection at your home.\n\n**Why it matters:** This verifies your setup meets safety and zoning requirements.\n\n**What you need:**\n- \u2610 Kitchen, storage, restrooms, refuse area in clean, working order\n- \u2610 SOP/Application available for review\n- \u2610 Hygiene facilities and waste/grease disposal plan ready\n\n**Where/how:** DEH will schedule an inspection after application review.\n\n**Cost & time:** Included in application fee \u00b7 about 1\u20132 hrs on inspection day\n\n**Ready when:** Inspector approves your setup and allows permit issuance.",
+      "searchTerms": [
+        "Alameda County MEHKO inspection process",
+        "MEHKO home inspection Alameda County",
+        "ACDEH MEHKO kitchen inspection"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain and keep your MEHKO operating permit.\n\n**Why it matters:** You must have this permit before legally operating your MEHKO.\n\n**What you need:**\n- \u2610 Permit document issued by DEH\n- \u2610 Keep SOP and certificates handy for reference and compliance\n\n**Where/how:** DEH will issue the permit after a successful inspection.\n\n**Cost & time:** Included in fee; valid per county regulations\n\n**Ready when:** Permit is issued and you\u2019re officially approved to operate.",
+      "searchTerms": [
+        "Alameda MEHKO permit issuance",
+        "MEHKO permit Alameda County DEH",
+        "ACDEH MEHKO approval"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Comply",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Operate your MEHKO following rules and maintain records.\n\n**Why it matters:** Staying compliant avoids enforcement actions.\n\n**What you need:**\n- \u2610 Track meals (\u2264 30/day, 90/week) and gross sales (\u2264 $100,000/year)\n- \u2610 Follow same-day prep/serve rule\n- \u2610 No signage; use approved IFSIs or online ads only\n- \u2610 Renew permit per DEH schedule\n\n**Where/how:** Keep logs, SOP manual, and proof of compliance accessible.\n\n**Cost & time:** Ongoing; minimal weekly tracking\n\n**Ready when:** You're consistently operating legally and ready for any follow-up checks.",
+      "searchTerms": [
+        "Alameda County MEHKO operating limits",
+        "Alameda MEHKO record keeping",
+        "ACDEH MEHKO compliance"
+      ],
+      "appId": "alameda_county_mehko"
+    },
+    {
+      "id": "contact_info",
+      "title": "Contact Information",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Save DEH contact info for questions or assistance.\n\n**Why it matters:** Quick support helps avoid missteps and delays.\n\n**What you need:**\n- \u2610 Address & office: 1131 Harbor Bay Parkway, Alameda, CA 94502\n- \u2610 Phone: (510) 567-6700\n- \u2610 Website: deh.acgov.org\n\n**Where/how:** Use this info for submissions, follow-up, or general support.\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You have DEH\u2019s contact info clearly logged.",
+      "searchTerms": [
+        "Alameda County DEH contact",
+        "ACDEH phone number",
+        "Alameda MEHKO office address"
+      ],
+      "appId": "alameda_county_mehko"
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "id": "santa_cruz_county_mehko",
+  "title": "Santa Cruz County MEHKO",
+  "description": "Santa Cruz County MEHKO (applications accepted since Jan 1, 2025). Limits: up to 30 meals/day, 90 meals/week, and $100,000/year gross sales. Fees: $489 Home Evaluation; $551 Annual Health Permit. Submit fees/docs to Environmental Health, 701 Ocean St, Room 312, Santa Cruz, CA 95060. Phone: (831) 454-2022; EnvironmentalHealth@santacruzcountyca.gov.",
+  "rootDomain": "scceh.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Review Santa Cruz County\u2019s MEHKO overview, limits, fees, and process.\n\n**Why it matters:** Knowing the rules upfront avoids rework and delays.\n\n**What you need:**\n- \u2610 Understand meal/sales limits (30/day, 90/week, $100k/year)\n- \u2610 Decide service model (dine-in, pickup, same-day delivery)\n- \u2610 Kitchen readiness against the checklist\n\n**Where/how:** Visit Santa Cruz County\u2019s MEHKO webpage for current process, fees, and forms.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You understand the process and know your next steps.",
+      "searchTerms": [
+        "Santa Cruz County MEHKO overview",
+        "Santa Cruz MEHKO limits and fees",
+        "Santa Cruz Environmental Health MEHKO"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Complete food safety training and line up any property/city approvals.\n\n**Why it matters:** Certification and permissions are commonly required and speed up approval.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if renting\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check your city\u2019s home-business rules.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total\n\n**Ready when:** You have your CFPM certificate and needed approvals.",
+      "searchTerms": [
+        "CFPM course Santa Cruz County",
+        "Santa Cruz business license home kitchen",
+        "ANSI Food Protection Manager Santa Cruz"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "home_evaluation",
+      "title": "Home Evaluation (Step 1)",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Prepare your kitchen and request a home evaluation.\n\n**Why it matters:** You must pass evaluation before applying for the health permit.\n\n**What you need:**\n- \u2610 Home Evaluation Checklist items met\n- \u2610 Home Evaluation Request Form filled\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Use the county\u2019s Home Evaluation Checklist. Complete and submit the Home Evaluation Request Form with your SOP to Environmental Health.\n\n**Cost & time:** $489 fee \u00b7 1\u20132 weeks to schedule\n\n**Ready when:** Your evaluation is completed and approved by an inspector.",
+      "searchTerms": [
+        "Santa Cruz MEHKO Home Evaluation fee",
+        "Santa Cruz MEHKO Home Evaluation Request Form",
+        "Santa Cruz MEHKO checklist"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "EHD_404CP_MEHKO_STANDARD_OPERATING_PROCEDURES_12-23-2024_Fillable",
+      "pdfUrl": "https://www.scceh.org/Portals/6/Env_Health/consumer_protection/food/EHD%20404CP%20-%20MEHKO%20STANDARD%20OPERATING%20PROCEDURES%2012-23-2024-Fillable.pdf?ver=97NfAaJ7lsUYrAK0XMcdqg%3D%3D",
+      "appId": "santa_cruz_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the MEHKO SOP covering menu, prep, storage, sanitation, and service.\n\n**Why it matters:** Shows how you\u2019ll keep food safe in your home kitchen.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Fill this SOP form in this step. Ensure details match your kitchen and menu.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Santa Cruz MEHKO SOP form",
+        "Santa Cruz MEHKO standard operating procedures"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application (Step 2)",
+      "type": "pdf",
+      "formId": "EHD_405CP_MEHKO_HEALTH_PERMIT_APPLICATION_12-23-2024_Fillable",
+      "pdfUrl": "https://www.scceh.org/Portals/6/Env_Health/consumer_protection/food/EHD%20405CP%20-%20MEHKO%20HEALTH%20PERMIT%20APPLICATION%2012-23-2024-Fillable.pdf?ver=O7LRIe84VIxg9jfPOu2stQ%3D%3D",
+      "appId": "santa_cruz_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Apply for your annual MEHKO Health Permit after passing the home evaluation.\n\n**Why it matters:** Required to legally operate and will trigger inspection during your permit cycle.\n\n**What you need:**\n- \u2610 Owner contact/site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete this application and submit with the $551 permit fee to Environmental Health.\n\n**Cost & time:** $551 fee \u00b7 2\u20133 weeks processing\n\n**Ready when:** Your permit is issued and you\u2019re scheduled/inspected as required.",
+      "searchTerms": [
+        "Santa Cruz MEHKO health permit application",
+        "Santa Cruz MEHKO permit fee 2025"
+      ]
+    },
+    {
+      "id": "submit_pay",
+      "title": "Submit & Pay",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit your forms and pay fees.\n\n**Why it matters:** The county won\u2019t process your application without full payment and documents.\n\n**What you need:**\n- \u2610 Home Evaluation Request Form and SOP (from Step 3 and Step 4)\n- \u2610 Health Permit Application (from Step 5)\n- \u2610 Checks payable to County of Santa Cruz\n\n**Where/how:** Mail or deliver to Environmental Health, 701 Ocean St, Room 312, Santa Cruz, CA 95060. Lobby hours: Mon\u2013Thu 8am\u201312pm walk-in; appointments Mon\u2013Thu 1\u20135pm; Fri 8am\u201312pm & 1\u20135pm. Phone (831) 454-2022; EnvironmentalHealth@santacruzcountyca.gov.\n\n**Cost & time:** $489 + $551 \u00b7 Same day to submit\n\n**Ready when:** County confirms receipt of forms and payments.",
+      "searchTerms": [
+        "Santa Cruz Environmental Health address hours",
+        "Santa Cruz MEHKO pay fees online"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Be ready for the inspector to review your operation while preparing food.\n\n**Why it matters:** Verification that you follow your SOP and food safety rules.\n\n**What you need:**\n- \u2610 Clean, pest-free kitchen\n- \u2610 Hot/cold water, sanitizer, thermometers\n- \u2610 Records available (SOP, CFPM, latest inspection)\n\n**Where/how:** Inspector schedules a visit during your permit cycle; fix any noted issues promptly.\n\n**Cost & time:** Included in permit \u00b7 1\u20132 hours\n\n**Ready when:** You pass inspection or correct any violations.",
+      "searchTerms": [
+        "Santa Cruz MEHKO inspection requirements",
+        "Santa Cruz MEHKO what inspector checks"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit & Operate",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Display your permit and operate within limits.\n\n**Why it matters:** Staying compliant avoids penalties or suspension.\n\n**What you need:**\n- \u2610 Permit posted during operation\n- \u2610 Ad rules followed (include agency name, permit #, \u201cMade in a Home Kitchen\u201d)\n- \u2610 Stay within 30/day, 90/week, $100k/year\n\n**Where/how:** Follow county rules; renew annually before expiration.\n\n**Cost & time:** Renewal fee (check current rate) \u00b7 Annual\n\n**Ready when:** Permit is posted and you comply with limits and renewal timelines.",
+      "searchTerms": [
+        "Santa Cruz MEHKO renewal",
+        "Santa Cruz MEHKO advertising rules"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    },
+    {
+      "id": "contact_info",
+      "title": "Contact Information",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Reach Environmental Health for questions or submissions.\n\n**Why it matters:** Direct contact speeds up resolutions and scheduling.\n\n**What you need:**\n- \u2610 Phone: (831) 454-2022\n- \u2610 Email: EnvironmentalHealth@santacruzcountyca.gov\n- \u2610 Address: 701 Ocean St, Room 312, Santa Cruz, CA 95060\n\n**Where/how:** Call, email, or visit during lobby hours (walk-ins Mon\u2013Thu 8am\u201312pm; appointments Mon\u2013Thu 1\u20135pm; Fri 8am\u201312pm & 1\u20135pm).\n\n**Cost & time:** $0 \u00b7 As needed\n\n**Ready when:** You can reach staff and have clear next steps.",
+      "searchTerms": [
+        "Santa Cruz Environmental Health contact",
+        "Santa Cruz MEHKO office hours"
+      ],
+      "appId": "santa_cruz_county_mehko"
+    }
+  ]
+}

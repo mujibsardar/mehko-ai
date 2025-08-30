@@ -1,0 +1,156 @@
+{
+  "id": "santa_barbara_county_mehko",
+  "title": "Santa Barbara County MEHKO",
+  "description": "Operate from your home kitchen with limits of up to 30 meals/day and 90/week; max $100,000 gross sales/year. Annual MEHKO permit fee ~$391; plan check application $255 + $161/hr review (see steps for details).",
+  "rootDomain": "countyofsb.org",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "What to do: Review MEHKO rules, meal/revenue limits, and basic requirements.\n\nWhy it matters: Knowing the limits and rules up front prevents rework and delays.\n\nWhat you need:\n- \u2610 Understand meal limits (30/day, 90/week) and $100k annual gross cap\n- \u2610 Confirm same-day prep/cook/serve flow works for your menu\n- \u2610 Check home setup (water, restroom access if on-site dining, waste/grease handling)\n\nWhere/how: Visit Santa Barbara County\u2019s Home Kitchen Operations and FAQ pages for program details.\n\nCost & time: $0 \u00b7 20\u201330 minutes\n\nReady when: You\u2019re confident your concept fits MEHKO rules.",
+      "searchTerms": [
+        "Santa Barbara MEHKO rules",
+        "Santa Barbara MEHKO meal limits",
+        "Santa Barbara MEHKO same day requirement"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Get your Certified Food Protection Manager (CFPM) and plan food handler cards for helpers.\n\nWhy it matters: These are required by the county for safe food operations.\n\nWhat you need:\n- \u2610 CFPM certificate (ANSI-approved)\n- \u2610 Food handler cards for any helpers\n- \u2610 Landlord/HOA okay if applicable\n\nWhere/how: Take an ANSI-approved CFPM course; obtain food handler cards; keep certificates ready to submit.\n\nCost & time: ~$60\u2013$150 \u00b7 1\u20132 days total\n\nReady when: You have your CFPM certificate and any helper cards.",
+      "searchTerms": [
+        "Santa Barbara CFPM course",
+        "Santa Barbara food handler card",
+        "Santa Barbara MEHKO training requirements"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Gather all documents for your packet.\n\nWhy it matters: Complete packets avoid processing delays.\n\nWhat you need:\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit / Plan Check Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and basic business info\n\nWhere/how: Fill PDFs in Steps 4\u20135 and assemble as a single packet (digital or printed).\n\nCost & time: $0 \u00b7 30\u201360 minutes\n\nReady when: All forms are filled/signed and supporting docs are attached.",
+      "searchTerms": [
+        "Santa Barbara MEHKO documents list",
+        "Santa Barbara MEHKO application packet",
+        "Santa Barbara MEHKO forms"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "EHS_16-16a_MEHKO_SOP-English",
+      "pdfUrl": "https://content.civicplus.com/api/assets/5dc1d380-3194-435e-a79d-486e93b9ce48",
+      "appId": "santa_barbara_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "What to do: Complete the MEHKO SOP form covering menu, prep, storage, delivery, cleaning, and safety.\n\nWhy it matters: Shows how you\u2019ll keep food safe and operate within MEHKO limits.\n\nWhat you need:\n- \u2610 Menu and ingredients list\n- \u2610 Same-day prep/cook/serve workflow\n- \u2610 Cleaning/sanitizing and handwashing plan\n\nWhere/how: Complete the SOP form in this step.\n\nCost & time: $0 \u00b7 30\u201360 minutes\n\nReady when: SOP is complete and consistent with your menu and workflow.",
+      "searchTerms": [
+        "Santa Barbara MEHKO SOP PDF",
+        "Santa Barbara MEHKO standard operating procedures",
+        "EHS 16-16a SOP Santa Barbara"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "EHS_16-1_FoodFacility_PlanCheck_PermitApplication",
+      "pdfUrl": "https://content.civicplus.com/api/assets/e5b02a17-92d1-4949-8597-35c19195c84c",
+      "appId": "santa_barbara_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "What to do: Fill the Food Facility Plan Check / Permit Application used for MEHKOs.\n\nWhy it matters: This is the official application for your MEHKO health permit.\n\nWhat you need:\n- \u2610 Owner/site details and contact info\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\nWhere/how: Complete the application in this step.\n\nCost & time: $0 to fill \u00b7 15\u201330 minutes\n\nReady when: Application is complete, signed, and consistent with your SOP.",
+      "searchTerms": [
+        "Santa Barbara MEHKO permit application pdf",
+        "EHS 16-1 plan check permit application",
+        "Santa Barbara health permit application MEHKO"
+      ]
+    },
+    {
+      "id": "submit_pay",
+      "title": "Submit & Pay",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Submit your packet and pay required fees.\n\nWhy it matters: Payment starts formal review and inspection scheduling.\n\nWhat you need:\n- \u2610 Completed SOP (from Step 4) and Application (from Step 5)\n- \u2610 CFPM certificate and any helper cards\n- \u2610 Payment method for fees\n\nWhere/how: Submit by mail or in person to Environmental Health Services (EHS) at either office: 225 Camino del Remedio, Santa Barbara, CA 93110 \u2022 (805) 681-4900; or 2125 Centerpointe Pkwy, Room 333, Santa Maria, CA 93455 \u2022 (805) 346-8460. For questions: phdehsweb@sbcphd.org. Check the EHS fee schedule for current amounts.\n\nCost & time: Application fee $255 + plan review $161/hr; Annual MEHKO permit ~$391. Processing typically 2\u20133 weeks after a complete submittal.\n\nReady when: You receive confirmation that your application is accepted for review.",
+      "searchTerms": [
+        "Santa Barbara MEHKO fee schedule",
+        "Santa Barbara EHS office address",
+        "Where to submit MEHKO application Santa Barbara"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Prepare your kitchen for inspection after plan review.\n\nWhy it matters: Passing inspection is required before operating.\n\nWhat you need:\n- \u2610 Clean/sanitary kitchen; handwashing and sanitizer ready\n- \u2610 Waste/grease disposal plan; restroom available if on-site dining\n- \u2610 Thermometers and food safety tools\n\nWhere/how: EHS will contact you to schedule; be ready to demonstrate same-day prep/cook/serve.\n\nCost & time: Included in plan review billing \u00b7 1\u20132 hours visit\n\nReady when: EHS clears you to receive the permit.",
+      "searchTerms": [
+        "Santa Barbara MEHKO inspection",
+        "MEHKO inspection checklist Santa Barbara",
+        "EHS inspection requirements MEHKO"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Obtain your MEHKO health permit and post/keep it available.\n\nWhy it matters: You must have a valid permit before operating.\n\nWhat you need:\n- \u2610 Final approval notice\n- \u2610 Permit document on hand during operations\n\nWhere/how: Permit is issued by EHS after successful review and inspection.\n\nCost & time: Annual fee ~$391; renew annually\n\nReady when: Permit is issued and in your records.",
+      "searchTerms": [
+        "Santa Barbara MEHKO permit issuance",
+        "Santa Barbara EHS permit pickup",
+        "MEHKO annual permit renewal Santa Barbara"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Comply",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "What to do: Run your MEHKO within limits and keep records.\n\nWhy it matters: Staying compliant avoids fines and complaints.\n\nWhat you need:\n- \u2610 Track meals/day (\u226430) and week (\u226490) and gross sales (\u2264$100k)\n- \u2610 Same-day service; no next-day leftovers; no raw milk or raw oysters\n- \u2610 Keep CFPM/handler cards current; maintain sanitation\n\nWhere/how: Follow EHS guidance and your approved SOP.\n\nCost & time: Ongoing \u00b7 minimal admin weekly\n\nReady when: You\u2019re serving within limits and passing annual inspection.",
+      "searchTerms": [
+        "Santa Barbara MEHKO operating limits",
+        "Santa Barbara MEHKO prohibited foods",
+        "MEHKO recordkeeping Santa Barbara"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    },
+    {
+      "id": "contact_info",
+      "title": "Contact Information",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "What to do: Reach out to Environmental Health Services (EHS) as needed.\n\nWhy it matters: Direct answers speed up approvals and compliance.\n\nWhat you need:\n- \u2610 Santa Barbara Office: 225 Camino del Remedio, Santa Barbara, CA 93110 \u00b7 (805) 681-4900\n- \u2610 Santa Maria Office: 2125 Centerpointe Pkwy, Room 333, Santa Maria, CA 93455 \u00b7 (805) 346-8460\n- \u2610 Email: phdehsweb@sbcphd.org\n\nWhere/how: Call or email EHS; visit the county Environmental Health website.\n\nCost & time: $0 \u00b7 As needed\n\nReady when: You have the right contact info on file.",
+      "searchTerms": [
+        "Santa Barbara Environmental Health phone",
+        "Santa Maria EHS contact",
+        "Santa Barbara MEHKO email"
+      ],
+      "appId": "santa_barbara_county_mehko"
+    }
+  ]
+}

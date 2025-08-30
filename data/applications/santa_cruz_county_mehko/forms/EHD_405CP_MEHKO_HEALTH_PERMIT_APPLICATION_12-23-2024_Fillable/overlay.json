@@ -1,0 +1,147 @@
+{
+  "id": "EHD_405CP_MEHKO_HEALTH_PERMIT_APPLICATION_12-23-2024_Fillable",
+  "title": "Health Permit Application (Step 2)",
+  "fields": [
+    {
+      "id": "NAME OF OPERATION Nombre de la Operaci\u00f3n",
+      "label": "NAME OF OPERATION (Nombre de la Operaci\u00f3n)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "MEHKO ADDRESS Direcci\u00f3n de la Operaci\u00f3n",
+      "label": "MEHKO ADDRESS (Direcci\u00f3n de la Operaci\u00f3n)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "REC DATE",
+      "label": "REC DATE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PE 1672",
+      "label": "PE 1672",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "AMT",
+      "label": "AMT",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "TENANT APPLICANT Nombre del inquilinosolicitante",
+      "label": "TENANT/ APPLICANT (Nombre del inquilino/solicitante)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "CHK",
+      "label": "CHK",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "RECORD ID",
+      "label": "RECORD ID",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "WEBSITE Sitio de internet",
+      "label": "WEBSITE (Sitio de internet)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "SIGNATURE OF TENANTAPLICANT",
+      "label": "SIGNATURE OF TENANT/APLICANT",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "DATE",
+      "label": "DATE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "EHS SIGNATURE",
+      "label": "EHS SIGNATURE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ZIP CODE",
+      "label": "ZIP CODE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "STATE",
+      "label": "STATE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "CITY",
+      "label": "CITY",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PHONE",
+      "label": "PHONE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "EMAIL Correo Electr\u00f3nico",
+      "label": "PHONE (Tel\u00e9fono) E-MAIL (Correo Electr\u00f3nico)",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "CLEAR",
+      "label": "CLEAR",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PRINT",
+      "label": "PRINT",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "EHS DATE",
+      "label": "EHS DATE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

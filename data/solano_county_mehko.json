@@ -1,0 +1,156 @@
+{
+  "id": "solano_county_mehko",
+  "title": "Solano County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+  "rootDomain": "solanocounty.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Confirm you can run a MEHKO at home and understand county limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Solano County\n- \u2610 Menu and production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety standards\n\n**Where/how:** Review Solano County\u2019s MEHKO information page.\n\n**Cost & time:** $0 \u00b7 10\u201330 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume within limits.",
+      "searchTerms": [
+        "Solano County MEHKO daily meal limits",
+        "Solano County MEHKO weekly restrictions",
+        "Solano County Home Kitchen Operations rules"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain a Certified Food Protection Manager (CFPM) credential and any needed approvals.\n\n**Why it matters:** Certification and permissions are required for approval.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Property owner/landlord approval if renting\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; confirm any property or business license requirements.\n\n**Cost & time:** ~$60\u2013$90 \u00b7 1\u20132 days total\n\n**Ready when:** You have your CFPM certificate and necessary approvals.",
+      "searchTerms": [
+        "CFPM Solano County MEHKO",
+        "Solano County renter approval MEHKO",
+        "Solano County business license home kitchen"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather the documents you\u2019ll submit with your application.\n\n**Why it matters:** Incomplete submissions delay review and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Proof of residency (ID and utility bill)\n\n**Where/how:** Collect all documents as PDFs or hard copies.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled, signed, and stored.",
+      "searchTerms": [
+        "Solano County MEHKO application documents",
+        "Solano County MEHKO checklist",
+        "Solano County Home Kitchen forms"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "MEHKO_Standard_Operating_Procedures_fill",
+      "pdfUrl": "https://content.solanocounty.gov/sites/default/files/2025-05/MEHKO_Standard_Operating_Procedures_fill.pdf",
+      "appId": "solano_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Fill the SOP form covering menu, prep, storage, sanitation, and operations.\n\n**Why it matters:** Shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form linked in this step.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Solano County MEHKO SOP form",
+        "Solano MEHKO food safety SOP",
+        "MEHKO Standard Operating Procedures Solano"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "MEHKO_Facility_Application",
+      "pdfUrl": "https://www.solanocounty.gov/archival-document?document=https://content.solanocounty.gov/sites/default/files/2025-05/MEHKO%20Facility%20Application.pdf&title=Archival%20document:%20MEHKO%20Facility%20Application.pdf",
+      "appId": "solano_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the MEHKO Facility Application for a Health Permit.\n\n**Why it matters:** This is the official request to operate.\n\n**What you need:**\n- \u2610 Owner and site details\n- \u2610 CFPM certificate info\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Fill out and sign the application; submit with SOP.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and consistent with your SOP.",
+      "searchTerms": [
+        "Solano County MEHKO permit application",
+        "Solano MEHKO facility application",
+        "Solano County Home Kitchen application form"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Proof of residence\n- \u2610 Payment method\n\n**Where/how:** Submit to Solano County Environmental Health, 675 Texas Street, Suite 5500, Fairfield, CA 94533. Phone (707) 784-6765.\n\n**Cost & time:** Initial Permit $650 \u00b7 Annual Renewal $325 (per fee schedule) \u00b7 10\u201320 minutes\n\n**Ready when:** County confirms receipt and payment.",
+      "searchTerms": [
+        "Solano County MEHKO fees 2025",
+        "Solano Environmental Health submission MEHKO",
+        "Solano County MEHKO payment methods"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Schedule a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 Required equipment functional\n\n**Where/how:** The department will provide scheduling details after application approval.\n\n**Cost & time:** Included in permit fee \u00b7 1\u20132 hours\n\n**Ready when:** You receive a pass and resolve corrections.",
+      "searchTerms": [
+        "Solano MEHKO inspection checklist",
+        "Solano County home kitchen inspection",
+        "Solano Environmental Health MEHKO inspection"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your MEHKO permit after passing inspection.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Solano County Environmental Health after inspection.\n\n**Cost & time:** $0 (after fees)\n\n**Ready when:** You have the permit in hand.",
+      "searchTerms": [
+        "Solano MEHKO permit issuance",
+        "Solano County permit status MEHKO",
+        "Solano Environmental Health approval"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP, stay within limits, and renew annually.\n\n**Why it matters:** Protects your customers and keeps your permit valid.\n\n**What you need:**\n- \u2610 Meal logs \u226430/day and \u226490/week\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Maintain records; update SOP if menu/volume changes.\n\n**Cost & time:** Renewal $325 annually \u00b7 ongoing\n\n**Ready when:** Records are current and renewal submitted.",
+      "searchTerms": [
+        "Solano County MEHKO renewal process",
+        "Solano County MEHKO compliance requirements",
+        "Solano MEHKO tracking logs"
+      ],
+      "appId": "solano_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can guide you through the process.\n\n**What you need:**\n- \u2610 Phone/email\n- \u2610 Office location\n- \u2610 Website\n\n**Where/how:** Solano County Environmental Health \u2014 675 Texas Street, Suite 5500, Fairfield, CA 94533 \u00b7 Phone: (707) 784-6765 \u00b7 Email: EH@SolanoCounty.com.\n\n**Cost & time:** $0 \u00b7 varies\n\n**Ready when:** You have the information needed to proceed.",
+      "searchTerms": [
+        "Solano County Environmental Health contact",
+        "Solano MEHKO program phone",
+        "Solano County MEHKO office"
+      ],
+      "appId": "solano_county_mehko"
+    }
+  ]
+}

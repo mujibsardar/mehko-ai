@@ -1,0 +1,140 @@
+{
+  "id": "santa_clara_county_mehko",
+  "title": "Santa Clara County MEHKO",
+  "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. No signage; food must be prepared, cooked, and served/delivered the same day.",
+  "rootDomain": "santaclaracounty.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Confirm you can run a MEHKO at home and understand core limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- \u2610 Residence in Santa Clara County\n- \u2610 Menu and daily/weekly production plan (\u226430/day, \u226490/week)\n- \u2610 Kitchen setup meeting food safety practices\n\n**Where/how:** Review Santa Clara County\u2019s MEHKO overview page and FAQ.\n\n**Time estimate:** \n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits.",
+      "searchTerms": [
+        "Santa Clara MEHKO daily meal limits",
+        "Santa Clara MEHKO weekly restrictions",
+        "Santa Clara Home Kitchen Operations rules"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential and any needed property approvals.\n\n**Why it matters:** Food safety certification is required and property rules may apply.\n\n**What you need:**\n- \u2610 CFPM certificate (ANSI-CFP recognized)\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check local business license rules.\n\n**Time estimate:** ~\n\n**Ready when:** You have a CFPM certificate and any property/business approvals.",
+      "searchTerms": [
+        "ANSI-CFP Food Protection Manager Santa Clara",
+        "Santa Clara renter permission MEHKO",
+        "Santa Clara business license home food operation"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 Health Permit Application \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and utility bill (for residency proof)\n- \u2610 Floor plan of kitchen and food prep area\n\n**Where/how:** Collect all required documents before submitting.\n\n**Time estimate:** \n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "Santa Clara MEHKO required documents",
+        "Santa Clara MEHKO application checklist",
+        "Santa Clara Home Kitchen Operations forms"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "application_packet",
+      "title": "MEHKO Application Packet (includes SOP + Permit Application)",
+      "type": "pdf",
+      "formId": "MEHKO_Application_Packet",
+      "pdfUrl": "https://files.santaclaracounty.gov/migrated/MEHKO%20Application%20Packet%20Rev%201.31.2024.pdf",
+      "appId": "santa_clara_county_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Download and complete the single MEHKO Application Packet. It includes the **Permit Application**, **Self\u2011Certification Checklist**, and **SOP**.\n\n**Why it matters:** Santa Clara uses one combined packet; no separate SOP/permit PDFs needed.\n\n**What you need:**\n- \u2610 Owner/site details & contact info\n- \u2610 Menu + food safety/SOP details\n- \u2610 Proof of water & sewage (see packet)\n- \u2610 CFPM certificate (or submit within 60 days as allowed)\n\n**Where/how:** Fill all packet sections, save as a single PDF.\n\n**Ready when:** Entire packet is complete and internally consistent.",
+      "searchTerms": [
+        "Santa Clara MEHKO application packet",
+        "Santa Clara MEHKO SOP and permit combined PDF",
+        "deh.santaclaracounty.gov MEHKO packet"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit the completed packet and pay required fees.\n\n**Why it matters:** The county processes your permit after submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 Completed SOP \u2014 go to Step 4: MEHKO Application Packet\n- \u2610 CFPM certificate\n- \u2610 Proof of residence\n- \u2610 Payment method\n\n**Where/how:** Submit by email to dehweb@deh.sccgov.org, by mail to 1555 Berger Drive, Suite 300, San Jose, CA 95112, or in person at the DEH office. Pay online or by check/money order as directed.\n\n**Time estimate:** Initial permit \n\n**Ready when:** County confirms receipt and payment.",
+      "searchTerms": [
+        "Santa Clara MEHKO application fee 2025",
+        "Santa Clara Environmental Health submission MEHKO",
+        "Santa Clara MEHKO payment methods"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will contact you to schedule an inspection after your application is approved.\n\n**Time estimate:** Included in permit fee \u00b7 ~1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+      "searchTerms": [
+        "Santa Clara MEHKO inspection checklist",
+        "Santa Clara Home Kitchen inspection preparation",
+        "Santa Clara Environmental Health inspection MEHKO"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Time estimate:** \n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+      "searchTerms": [
+        "Santa Clara MEHKO permit issuance",
+        "Santa Clara permit processing timeline",
+        "Santa Clara Environmental Health permit status"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact DEH if your menu or volume changes.\n\n**Time estimate:** Renewal \n\n**Ready when:** You track meals, keep records, and renew on time.",
+      "searchTerms": [
+        "Santa Clara MEHKO meal tracking requirements",
+        "Santa Clara MEHKO renewal process",
+        "Santa Clara Home Kitchen Operations compliance"
+      ],
+      "appId": "santa_clara_county_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone or email for questions\n- \u2610 Office address and hours\n- \u2610 Website for additional resources\n\n**Where/how:** Department of Environmental Health (DEH) \u2014 Phone: (408) 918-3400 \u00b7 Email: dehweb@deh.sccgov.org \u00b7 Office: 1555 Berger Drive, Suite 300, San Jose, CA 95112. Hours: Mon\u2013Fri 8AM\u20135PM.\n\n**Time estimate:** \n\n**Ready when:** You have the information you need to proceed.",
+      "searchTerms": [
+        "Santa Clara Environmental Health contact",
+        "Santa Clara MEHKO program phone",
+        "Santa Clara Home Kitchen Operations office"
+      ],
+      "appId": "santa_clara_county_mehko"
+    }
+  ]
+}
