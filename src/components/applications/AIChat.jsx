@@ -186,6 +186,7 @@ export default function AIChat({
           };
         }
       }
+
       setPdfText(textMap);
       setPdfLinks(linkMap);
     })();
@@ -304,7 +305,10 @@ Ask me anything or pick a quick task above!`,
             formData: formDataMap,
             pdfText, // full extracted text
             pdfLinks, // {formId: {title,url,previewBase}}
-            selectedForm: formContext, // Add selected form context
+            selectedForm: formContext ? {
+              ...formContext,
+              pdfContent: pdfText[formContext.formId] || null
+            } : null,
             // IMPORTANT: Application workflow instructions
             workflow: {
               description: "This is a MEHKO application tracking system. Users fill out PDF forms directly in the dashboard for most steps, then download completed forms to print and sign if needed. The app provides interactive form completion and tracks progress.",

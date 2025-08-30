@@ -331,7 +331,15 @@ ${(context.steps || [])
           - User's Progress: ${
             Object.keys(context.formData?.[context.selectedForm.formId] || {})
               .length
-          } fields filled`;
+          } fields filled
+          - PDF Content Available: ${context.selectedForm.pdfContent ? 'YES - Use this content to answer form-specific questions' : 'NO'}
+          
+          IMPORTANT: When the user asks about form fields, structure, or content, use the PDF content from context.selectedForm.pdfContent to provide specific, accurate answers. This includes:
+          - Number of fields on the form
+          - Field names and labels
+          - Form structure and sections
+          - Specific form requirements
+          - Any text content visible in the form`;
       }
     }
     systemPrompt += `
@@ -355,7 +363,18 @@ ${(context.steps || [])
       - Provide practical examples when helpful
       - Direct users to relevant application steps
       - Be encouraging and supportive
-      Remember: You're helping someone navigate a government permit application. Some forms are filled out in the app and downloaded, others may need to be downloaded from external sources. Be clear, accurate, and helpful.`.trim();
+      Remember: You're helping someone navigate a government permit application. Some forms are filled out in the app and downloaded, others may need to be downloaded from external sources. Be clear, accurate, and helpful.
+      
+      CRITICAL: When a form is selected (context.selectedForm exists), you have access to the actual PDF content in context.selectedForm.pdfContent. Use this content to answer specific questions about form fields, structure, and requirements. Do not say you don't have this information if the PDF content is available.`.trim();
+    // Debug logging for form context
+    if (context.selectedForm) {
+      console.log("🔍 Form Context Debug:");
+      console.log("- Form ID:", context.selectedForm.formId);
+      console.log("- Form Title:", context.selectedForm.title);
+      console.log("- PDF Content Available:", !!context.selectedForm.pdfContent);
+      console.log("- PDF Content Length:", context.selectedForm.pdfContent?.length || 0);
+    }
+    
     const response = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "system", content: systemPrompt }, ...messages],
