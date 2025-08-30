@@ -1,0 +1,35 @@
+# 🔒 Generic key/value (JSON, .env, YAML, code)
+(?i)\b(api[_-]?key|access[_-]?key|secret|client[_-]?secret|app[_-]?secret|token|refresh[_-]?token|session[_-]?secret|jwt[_-]?secret|cookie[_-]?secret|private[_-]?key)\b\s*[:=]\s*["']?[^"'\r\n]+
+(?i)\b(password|pwd|pass)\b\s*[:=]\s*["']?[^"'\r\n]+
+
+# 🔑 Service account & config files
+serviceAccountKey\.json
+google-service\.json
+GoogleService-Info\.plist
+
+# 🟡 Firebase common fields
+(?i)\b(apiKey|appId|measurementId|messagingSenderId|projectId)\b\s*[:=]\s*["']?[^"'\r\n]+
+
+# ☁️ Cloud & providers
+(?i)\b(OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_MAPS_API_KEY|GOOGLE_CLIENT_SECRET|GOOGLE_CLIENT_ID|SENTRY_DSN|SENDGRID_API_KEY|STRIPE_SECRET_KEY|STRIPE_PUBLISHABLE_KEY|TWILIO_AUTH_TOKEN|TWILIO_ACCOUNT_SID)\b\s*[:=]\s*["']?[^"'\r\n]+
+(?i)\b(AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN)\b\s*[:=]\s*["']?[^"'\r\n]+
+(?i)\b(DATABASE_URL|MONGODB_URI|POSTGRES_URL|MYSQL_URL|REDIS_URL)\b\s*[:=]\s*[^ \t\r\n]+
+
+# 💳 Stripe-style key patterns
+(?i)\b(sk_live|sk_test|rk_live|rk_test|pk_live|pk_test)_[A-Za-z0-9]{10,}
+
+# 🧾 OAuth/Bearer tokens
+(?i)Bearer\s+[A-Za-z0-9\._\-]+
+(?i)\b(access[_-]?token|id[_-]?token)\b\s*[:=]\s*["']?[^"'\r\n]+
+
+# 🔐 AWS key formats
+(?i)\bAKIA[0-9A-Z]{16}\b
+(?i)\bASIA[0-9A-Z]{16}\b
+
+# 📜 PEM/SSH key markers (single-line redaction)
+-{5}BEGIN [^-]+ PRIVATE KEY-{5}.*$
+-{5}BEGIN [^-]+ PUBLIC KEY-{5}.*$
+-{5}BEGIN CERTIFICATE-{5}.*$
+
+# 🧁 Misc secrets
+(?i)\b(salt|pepper)\b\s*[:=]\s*["']?[^"'\r\n]+

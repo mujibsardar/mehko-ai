@@ -371,6 +371,10 @@ async def create_acroform_pdf(app: str, form: str):
         acroform_path = form_dir(app, form) / "form_acroform.pdf"
         acroform_path.write_bytes(acroform_pdf)
         
+        # Save the AcroForm definition file
+        acroform_def_path = form_dir(app, form) / "acroform-definition.json"
+        acroform_def_path.write_text(json.dumps(overlay, indent=2))
+        
         return StreamingResponse(
             io.BytesIO(acroform_pdf),
             media_type="application/pdf",

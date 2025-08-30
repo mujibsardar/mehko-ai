@@ -853,3 +853,29 @@
     }
   }
 }
+
+// PDF Conversion section
+.pdf-conversion-section {
+  .no-app-selected {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin: 20px 0;
+
+    h3 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+}

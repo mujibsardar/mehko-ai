@@ -10,11 +10,12 @@ import {
   collection,
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
+import PDFConversionTool from "./PDFConversionTool";
 import "./Admin.scss";
 const API = "/api/apps";
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import"
+  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import" | "pdf-conversion"
   // Check if user is authenticated and is admin
   if (loading) {
     return (
@@ -407,6 +408,12 @@ export default function Admin() {
         >
           Issue Reports
         </button>
+        <button
+          className={`nav-tab ${activeTab === "pdf-conversion" ? "active" : ""}`}
+          onClick={() => setActiveTab("pdf-conversion")}
+        >
+          PDF Conversion
+        </button>
       </nav>
       {/* Status Banner */}
       {status && (
@@ -725,6 +732,22 @@ export default function Admin() {
         )}
         {activeTab === "reports" && (
           <ReportsViewer />
+        )}
+
+        {activeTab === "pdf-conversion" && (
+          <div className="pdf-conversion-section">
+            {selectedApp ? (
+              <PDFConversionTool
+                selectedApp={selectedApp}
+                onClose={() => setSelectedAppId("")}
+              />
+            ) : (
+              <div className="no-app-selected">
+                <h3>Select an Application</h3>
+                <p>Please select an application from the sidebar to access PDF conversion tools.</p>
+              </div>
+            )}
+          </div>
         )}
       </main>
     </div>

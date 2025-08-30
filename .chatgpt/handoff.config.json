@@ -1,0 +1,87 @@
+{
+    "issue": "San Diego mehkosop.pdf shows 'No Form Fields Available' - need to add form fields and convert to AcroForm type using admin dashboard",
+    "ask": "Find root cause and provide complete solution: 1) Use admin dashboard to add form fields, 2) Convert form to AcroForm type, 3) Ensure proper field mapping and validation",
+    "include": [
+        {
+            "path": "data/applications/san_diego_county_mehko/forms/mehkosop.pdf/*",
+            "max_lines": 400
+        },
+        {
+            "path": "data/applications/san_diego_county_mehko/forms/publications_permitapp152.pdf/*",
+            "max_lines": 120
+        },
+        {
+            "path": "src/components/overlay/Interview.jsx",
+            "max_lines": 260
+        },
+        {
+            "path": "src/components/overlay/Mapper.jsx",
+            "max_lines": 260
+        },
+        {
+            "path": "src/components/ai/AIFieldMapper.jsx",
+            "max_lines": 260
+        },
+        {
+            "path": "src/components/admin/Admin.jsx",
+            "max_lines": 300
+        },
+        {
+            "path": "src/components/forms/AcroFormViewer.jsx",
+            "max_lines": 200
+        },
+        {
+            "path": "src/components/forms/DynamicForm.jsx",
+            "max_lines": 200
+        },
+        {
+            "path": "scripts/generate-form-labels.js",
+            "max_lines": 260
+        },
+        {
+            "path": "python/server/**/*.py",
+            "max_lines": 200
+        },
+        {
+            "path": "python/overlay/fill_overlay.py",
+            "max_lines": 150
+        },
+        {
+            "path": "package.json",
+            "max_lines": 120
+        },
+        {
+            "path": "docs/ADMIN_DASHBOARD_COUNTY_PROCESSOR.md",
+            "max_lines": 200
+        },
+        {
+            "path": "docs/ADMIN_ROLE_SYSTEM.md",
+            "max_lines": 150
+        }
+    ],
+    "extra": [
+        "git rev-parse --short HEAD",
+        "wc -l data/applications/san_diego_county_mehko/forms/*/acroform-definition.json",
+        "jq '.fields|length' data/applications/san_diego_county_mehko/forms/mehkosop.pdf/overlay.json 2>/dev/null || echo 0",
+        "ls -la data/applications/san_diego_county_mehko/forms/mehkosop.pdf/",
+        "jq '.type' data/applications/san_diego_county_mehko/forms/mehkosop.pdf/acroform-definition.json 2>/dev/null || echo 'no_type'",
+        "find src/components -name '*Admin*' -o -name '*Mapper*' -o -name '*Form*' | head -10"
+    ],
+    "context": {
+        "current_state": "mehkosop.pdf has empty fields array in overlay.json and acroform-definition.json",
+        "target_state": "Form should have proper form fields and be converted to AcroForm type",
+        "admin_tools_available": [
+            "Admin Dashboard (Admin.jsx)",
+            "Field Mapper (Mapper.jsx)",
+            "AI Field Mapper (AIFieldMapper.jsx)",
+            "AcroForm Viewer (AcroFormViewer.jsx)"
+        ],
+        "workflow": [
+            "1. Access admin dashboard",
+            "2. Use Field Mapper to add form fields to mehkosop.pdf",
+            "3. Convert form type from 'template' to 'acroform'",
+            "4. Validate field mapping and coordinates",
+            "5. Test form functionality"
+        ]
+    }
+}
