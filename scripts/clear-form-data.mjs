@@ -3,7 +3,6 @@
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import fs from 'fs';
-import path from 'path';
 
 // Initialize Firebase Admin
 const serviceAccount = JSON.parse(

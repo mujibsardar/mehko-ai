@@ -49,16 +49,16 @@ export async function extractGroupedFields(pdfPath) {
       let type = null;
       let name = null;
 
-      if (/initials?:\s*[_\u2500\-]{3,}/i.test(text)) {
+      if (/initials?:\s*[_\u2500-]{3,}/i.test(text)) {
         type = "initials";
         name = `Initials_${pageNum}_${index}`;
-      } else if (/signature[:\s]*[_\u2500\-]{3,}/i.test(text)) {
+      } else if (/signature[:\s]*[_\u2500-]{3,}/i.test(text)) {
         type = "signature";
         name = `Signature_${pageNum}_${index}`;
-      } else if (/date[:\s]*[_\u2500\-]{3,}/i.test(text)) {
+      } else if (/date[:\s]*[_\u2500-]{3,}/i.test(text)) {
         type = "date";
         name = `Date_${pageNum}_${index}`;
-      } else if (/^\s*.+:\s*[_\u2500\-]{4,}/.test(text)) {
+      } else if (/^\s*.+:\s*[_\u2500-]{4,}/.test(text)) {
         type = "text_field";
         name = text.split(":")[0].trim().replace(/\s+/g, "_");
       } else if (/\[\s?\]|\( ?\)/.test(text) || /☐|☑/.test(text)) {

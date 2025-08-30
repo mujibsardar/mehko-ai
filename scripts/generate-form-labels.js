@@ -6,7 +6,7 @@ import { createRequire } from "module";
 import OpenAI from "openai";
 import admin from "firebase-admin";
 dotenv.config();
-const require = createRequire(import.meta.url);
+const _require = createRequire(import.meta.url);
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 // 🔥 Firebase Admin Init
 const serviceAccount = JSON.parse(
@@ -15,7 +15,7 @@ const serviceAccount = JSON.parse(
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 // Assistant ID from .env or hardcoded fallback
-const ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
+const _ASSISTANT_ID = process.env.OPENAI_ASSISTANT_ID;
 async function extractFieldsFromPDF(pdfPath) {
   // 1️⃣ Upload PDF
   const uploadedFile = await openai.files.create({

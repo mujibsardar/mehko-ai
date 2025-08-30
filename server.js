@@ -52,7 +52,7 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
   try {
     // Handle FormData - parse the multipart form data
     const countyData = req.body.countyData;
-    const filename = req.body.filename;
+    const _filename = req.body.filename;
     if (!countyData) {
       return res.status(400).json({ error: "No county data provided" });
     }
@@ -60,7 +60,7 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
     let county;
     try {
       county = JSON.parse(countyData);
-    } catch (error) {
+    } catch (_error) {
       return res.status(400).json({ error: "Invalid JSON format" });
     }
     // Validate required fields
@@ -224,7 +224,7 @@ app.post("/api/admin/process-county", upload.none(), async (req, res) => {
     });
   }
 });
-const CACHE_PATH = path.resolve("form-label-cache.json");
+const _CACHE_PATH = path.resolve("form-label-cache.json");
 // Load cache from file
 // function loadFieldCache() {
 //   if (fs.existsSync(CACHE_PATH)) {
@@ -250,7 +250,7 @@ const CACHE_PATH = path.resolve("form-label-cache.json");
 //   return match ? match[1] : content;
 // }
 app.post("/api/ai-chat", async (req, res) => {
-  const { messages = [], applicationId = "unknown", context = {} } = req.body;
+  const { messages = [], applicationId: _applicationId = "unknown", context = {} } = req.body;
   if (!Array.isArray(messages)) {
     return res.status(400).json({ error: "Invalid messages format" });
   }
@@ -705,7 +705,7 @@ async function analyzePageWithAI(base64Image, pageIndex) {
           } else if (Array.isArray(parsed)) {
             fields = parsed;
           }
-        } catch (blockError) {
+        } catch (_blockError) {
           console.log("JSON block parse failed");
         }
       }
@@ -718,7 +718,7 @@ async function analyzePageWithAI(base64Image, pageIndex) {
             if (Array.isArray(parsed)) {
               fields = parsed;
             }
-          } catch (arrayError) {
+          } catch (_arrayError) {
             console.log("Array substring parse failed");
           }
         }
@@ -814,7 +814,8 @@ function normalizeRectangle(rect) {
   let [x1, y1, x2, y2] = rect.map((coord) => Number(coord) || 0);
   // Ensure proper order (x1 < x2, y1 < y2)
   if (x1 > x2) [x1, x2] = [x2, x1];
-  if (y1 > y2) [y1, y2] = [y1, y2];
+  // eslint-disable-next-line no-self-assign
+  if (y1 > y2) [y1, y2] = [y2, y1];
   // Apply minimum size constraints for better usability
   const minWidth = 50;
   const minHeight = 20;

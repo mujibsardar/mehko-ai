@@ -59,7 +59,7 @@ try {
         serviceAccountPath = path;
         break;
       }
-    } catch (e) {
+    } catch (_e) {
       // Continue to next path
     }
   }

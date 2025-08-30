@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./AIFieldMapper.scss";
 import { ENDPOINTS } from "../../config/api";
 const AIFieldMapper = ({ app, form, onMappingComplete }) => {
@@ -10,7 +10,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   const [selectedFields, setSelectedFields] = useState([]);
   const [overlay, setOverlay] = useState({ fields: [] });
   const fileInputRef = useRef(null);
-  const canvasRef = useRef(null);
+  const _canvasRef = useRef(null);
   // Load existing overlay if available
   useEffect(() => {
     loadExistingOverlay();
@@ -20,7 +20,8 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       const response = await fetch(`/api/apps/${app}/forms/${form}/template`);
       const data = await response.json();
       setOverlay(data);
-    } catch (err) {
+    } catch (_err) {
+      // Ignore errors when loading existing overlay
     }
   };
   const handleFileUpload = async (event) => {

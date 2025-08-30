@@ -5,7 +5,7 @@
  */
 
 import {
-  readFileSync, existsSync, unlinkSync, rmdirSync,
+  existsSync, unlinkSync, rmdirSync,
   readdirSync, writeFileSync, lstatSync
 } from "fs";
 import { join, dirname } from "path";

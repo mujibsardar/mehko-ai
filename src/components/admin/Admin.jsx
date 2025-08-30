@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
@@ -6,7 +6,6 @@ import {
   doc,
   setDoc,
   updateDoc,
-  getDoc,
   getDocs,
   collection,
 } from "firebase/firestore";
@@ -48,6 +47,7 @@ export default function Admin() {
   // App list + selection
   const [apps, setApps] = useState([]);
   const [selectedAppId, setSelectedAppId] = useState("");
+  const [showNewAppForm, setShowNewAppForm] = useState(false);
   const selectedApp = apps.find((a) => a.id === selectedAppId) || null;
   // App form (prefilled when selecting)
   const [appId, setAppId] = useState("");
@@ -88,6 +88,7 @@ export default function Admin() {
   // Prefill app form when selecting from sidebar
   function selectApp(id) {
     setSelectedAppId(id);
+    setShowNewAppForm(false);
     const a = apps.find((x) => x.id === id);
     if (a) {
       setAppId(a.id);
@@ -101,6 +102,7 @@ export default function Admin() {
   // New app form (clear)
   function newApp() {
     setSelectedAppId("");
+    setShowNewAppForm(true);
     setAppId("");
     setAppTitle("");
     setRootDomain("");
@@ -219,7 +221,7 @@ export default function Admin() {
           console.error('Error response:', errorText);
           errorCount++;
         }
-      } catch (error) {
+      } catch (_error) {
         errorCount++;
       }
     }
@@ -348,7 +350,8 @@ export default function Admin() {
       await setDoc(doc(db, "applications", appId.trim()), appData);
       pushStatus("Application saved successfully");
       loadApps();
-      newApp();
+      setShowNewAppForm(false);
+      setSelectedAppId(appId.trim());
     } catch (error) {
       pushStatus(`Error saving application: ${error.message}`);
     }
@@ -450,9 +453,9 @@ export default function Admin() {
               </div>
             </section>
             {/* Application Form */}
-            {selectedAppId && (
+            {(selectedAppId || showNewAppForm) && (
               <section className="app-form-section">
-                <h3>Edit Application: {selectedApp.title}</h3>
+                <h3>{selectedAppId ? `Edit Application: ${selectedApp?.title}` : 'New Application'}</h3>
                 <div className="form-grid">
                   <div>
                     <label>Application ID</label>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getReports, updateReportStatus, deleteReport, getReportStats } from "../../firebase/reports";
 import "./ReportsViewer.scss";
 
