@@ -334,12 +334,15 @@ ${(context.steps || [])
           } fields filled
           - PDF Content Available: ${context.selectedForm.pdfContent ? 'YES - Use this content to answer form-specific questions' : 'NO'}
           
-          IMPORTANT: When the user asks about form fields, structure, or content, use the PDF content from context.selectedForm.pdfContent to provide specific, accurate answers. This includes:
-          - Number of fields on the form
-          - Field names and labels
-          - Form structure and sections
-          - Specific form requirements
-          - Any text content visible in the form`;
+          CRITICAL INSTRUCTIONS - YOU MUST FOLLOW THESE:
+          - When asked about form fields, structure, or content, you MUST analyze context.selectedForm.pdfContent
+          - You MUST count the exact number of fields and provide the actual number, not placeholder text like [X]
+          - You MUST list specific field names and labels from the PDF content
+          - You MUST describe the actual form structure and sections you see
+          - You MUST provide concrete, specific answers based on the PDF content
+          - DO NOT say "Let me pull up the PDF content" - you already have it
+          - DO NOT use placeholder text like [X number of fields] - give the actual count
+          - If the user asks "How many fields are on this form?" you MUST count them in the PDF content and give the exact number`;
       }
     }
     systemPrompt += `
@@ -365,7 +368,15 @@ ${(context.steps || [])
       - Be encouraging and supportive
       Remember: You're helping someone navigate a government permit application. Some forms are filled out in the app and downloaded, others may need to be downloaded from external sources. Be clear, accurate, and helpful.
       
-      CRITICAL: When a form is selected (context.selectedForm exists), you have access to the actual PDF content in context.selectedForm.pdfContent. Use this content to answer specific questions about form fields, structure, and requirements. Do not say you don't have this information if the PDF content is available.`.trim();
+      CRITICAL: When a form is selected (context.selectedForm exists), you have access to the actual PDF content in context.selectedForm.pdfContent. 
+      
+      YOU MUST:
+      - Analyze the PDF content immediately when form questions are asked
+      - Provide concrete, specific answers with actual numbers and field names
+      - Count fields, list field names, describe structure - be specific
+      - Never use placeholder text like [X] or [number] - give real answers
+      
+      DO NOT say you don't have this information if the PDF content is available.`.trim();
     // Debug logging for form context
     if (context.selectedForm) {
       console.log("🔍 Form Context Debug:");
