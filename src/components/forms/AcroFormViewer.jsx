@@ -34,21 +34,10 @@ const AcroFormViewer = ({
         setError(null);
 
         try {
-            // First, try to create/get AcroForm PDF
-            const acroformResponse = await fetch(
-                `${API_BASE}/apps/${app}/forms/${form}/create-acroform`,
-                { method: "POST" }
-            );
-
-            if (acroformResponse.ok) {
-                // AcroForm available - get the inline version
-                setPdfUrl(`${API_BASE}/apps/${app}/forms/${form}/acroform-pdf?inline=true`);
-                setIsAcroFormAvailable(true);
-            } else {
-                // Fall back to regular PDF with overlay fields
-                setPdfUrl(`${API_BASE}/apps/${app}/forms/${form}/pdf?inline=true`);
-                setIsAcroFormAvailable(false);
-            }
+            // Simplified: Just show the regular PDF directly
+            setPdfUrl(`${API_BASE}/apps/${app}/forms/${form}/pdf?inline=true`);
+            setIsAcroFormAvailable(false);
+            console.log("PDF Viewer: Showing form.pdf directly");
         } catch (err) {
             console.error("Failed to load PDF:", err);
             setError("Failed to load the form. Please try again.");

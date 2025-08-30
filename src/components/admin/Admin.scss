@@ -492,70 +492,7 @@
   }
 }
 
-// Conversion Status
-.conversion-status {
-  background: white;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-left: 4px solid;
 
-  &.success {
-    border-left-color: #10b981;
-    background: #f0fdf4;
-
-    h4 {
-      color: #065f46;
-    }
-
-    p {
-      color: #047857;
-    }
-  }
-
-  &.error {
-    border-left-color: #ef4444;
-    background: #fef2f2;
-
-    h4 {
-      color: #991b1b;
-    }
-
-    p {
-      color: #dc2626;
-    }
-  }
-
-  h4 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1rem;
-  }
-
-  p {
-    margin: 0 0 0.5rem 0;
-  }
-
-  details {
-    summary {
-      cursor: pointer;
-      color: #6b7280;
-      font-size: 0.9rem;
-
-      &:hover {
-        color: #374151;
-      }
-    }
-
-    pre {
-      background: #f3f4f6;
-      padding: 0.75rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      overflow-x: auto;
-      margin-top: 0.5rem;
-    }
-  }
-}
 
 // Import Section
 .import-section {
@@ -754,25 +691,7 @@
   }
 }
 
-.btn-convert {
-  background: #10b981;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
 
-  &:hover:not(:disabled) {
-    background: #059669;
-  }
-
-  &:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-  }
-}
 
 .btn-remove {
   background: #ef4444;
@@ -854,28 +773,3 @@
   }
 }
 
-// PDF Conversion section
-.pdf-conversion-section {
-  .no-app-selected {
-    text-align: center;
-    padding: 60px 20px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    margin: 20px 0;
-
-    h3 {
-      margin: 0 0 16px 0;
-      font-size: 20px;
-      font-weight: 600;
-      color: #1f2937;
-    }
-
-    p {
-      margin: 0;
-      color: #6b7280;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-  }
-}

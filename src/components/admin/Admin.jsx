@@ -10,12 +10,12 @@ import {
   collection,
 } from "firebase/firestore";
 import ReportsViewer from "./ReportsViewer";
-import PDFConversionTool from "./PDFConversionTool";
+
 import "./Admin.scss";
 const API = "/api/apps";
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
-  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import" | "pdf-conversion"
+  const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import"
   // Check if user is authenticated and is admin
   if (loading) {
     return (
@@ -71,9 +71,7 @@ export default function Admin() {
   const [bulkStatus, setBulkStatus] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  // AcroForm conversion state
-  const [isConverting, setIsConverting] = useState(false);
-  const [conversionStatus, setConversionStatus] = useState(null);
+
   // UI feedback
   const [status, setStatus] = useState("");
   // ----------- Helpers -----------
@@ -292,47 +290,7 @@ export default function Admin() {
       pushStatus(`Error saving steps: ${error.message}`);
     }
   };
-  // ----------- AcroForm Conversion Functions -----------
-  const convertToAcroForm = async (step) => {
-    if (step.type !== "pdf") return;
-    setIsConverting(true);
-    setConversionStatus("Converting to AcroForm...");
-    try {
-      // Convert the PDF step to AcroForm
-      const response = await fetch(`${API}/apps/${selectedApp.id}/forms/${step.formId}/convert-to-acroform`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stepId: step.id }),
-      });
-      if (response.ok) {
-        const result = await response.json();
-        setConversionStatus({
-          type: "success",
-          message: `Successfully converted ${step.formId} to AcroForm`,
-          details: result
-        });
-        // Update the step type
-        const updatedSteps = steps.map(s =>
-          s.id === step.id ? { ...s, type: "acroform" } : s
-        );
-        setSteps(updatedSteps);
-        // Update in database
-        const appRef = doc(db, "applications", selectedApp.id);
-        await updateDoc(appRef, { steps: updatedSteps });
-        loadApps();
-      } else {
-        throw new Error("Conversion failed");
-      }
-    } catch (error) {
-      setConversionStatus({
-        type: "error",
-        message: "Failed to convert to AcroForm",
-        details: error.message
-      });
-    } finally {
-      setIsConverting(false);
-    }
-  };
+
   const saveApp = async () => {
     if (!appId.trim() || !appTitle.trim()) {
       pushStatus("Please fill in required fields");
@@ -408,12 +366,7 @@ export default function Admin() {
         >
           Issue Reports
         </button>
-        <button
-          className={`nav-tab ${activeTab === "pdf-conversion" ? "active" : ""}`}
-          onClick={() => setActiveTab("pdf-conversion")}
-        >
-          PDF Conversion
-        </button>
+
       </nav>
       {/* Status Banner */}
       {status && (
@@ -514,15 +467,7 @@ export default function Admin() {
                       <span className="step-number">{index + 1}</span>
                       <span className="step-title">{step.title}</span>
                       <span className="step-type">{step.type}</span>
-                      {step.type === "pdf" && (
-                        <button
-                          onClick={() => convertToAcroForm(step)}
-                          disabled={isConverting}
-                          className="btn-convert"
-                        >
-                          {isConverting ? "Converting..." : "Convert to AcroForm"}
-                        </button>
-                      )}
+
                     </div>
                   ))}
                 </div>
@@ -626,19 +571,7 @@ export default function Admin() {
                 </div>
               </section>
             )}
-            {/* Conversion Status */}
-            {conversionStatus && (
-              <div className={`conversion-status ${conversionStatus.type}`}>
-                <h4>{conversionStatus.type === "success" ? "✅ Success" : "❌ Error"}</h4>
-                <p>{conversionStatus.message}</p>
-                {conversionStatus.details && (
-                  <details>
-                    <summary>Details</summary>
-                    <pre>{JSON.stringify(conversionStatus.details, null, 2)}</pre>
-                  </details>
-                )}
-              </div>
-            )}
+
           </>
         )}
         {activeTab === "import" && (
@@ -734,21 +667,7 @@ export default function Admin() {
           <ReportsViewer />
         )}
 
-        {activeTab === "pdf-conversion" && (
-          <div className="pdf-conversion-section">
-            {selectedApp ? (
-              <PDFConversionTool
-                selectedApp={selectedApp}
-                onClose={() => setSelectedAppId("")}
-              />
-            ) : (
-              <div className="no-app-selected">
-                <h3>Select an Application</h3>
-                <p>Please select an application from the sidebar to access PDF conversion tools.</p>
-              </div>
-            )}
-          </div>
-        )}
+
       </main>
     </div>
   );
