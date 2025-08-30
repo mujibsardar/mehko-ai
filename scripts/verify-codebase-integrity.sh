@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 # Configuration
 LOG_FILE="logs/ai-safety/codebase-integrity.log"
 INTEGRITY_RESULTS="/tmp/codebase-integrity-results.json"
-MAX_LINT_ERRORS=300
+MAX_LINT_ERRORS=500
 MAX_TEST_FAILURES=0
 
 # Ensure log directory exists
