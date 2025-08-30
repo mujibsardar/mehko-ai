@@ -203,9 +203,9 @@ export default function AIChat({
             text: `Welcome! I'm here to help with ${application.title}. 
 
 IMPORTANT: This app tracks your MEHKO application progress and provides guidance. You'll need to:
-• Download PDF forms for each step
-• Complete forms offline 
-• Return to mark steps complete
+• Fill out PDF forms directly in the dashboard for most steps
+• Download completed forms to print and sign if needed
+• Mark steps complete once forms are finished
 
 Ask me anything or pick a quick task above!`,
             timestamp: new Date(),
@@ -307,9 +307,9 @@ Ask me anything or pick a quick task above!`,
             selectedForm: formContext, // Add selected form context
             // IMPORTANT: Application workflow instructions
             workflow: {
-              description: "This is a MEHKO application tracking system. Users download PDF forms, complete them offline, then return to mark steps complete. The app does NOT handle form completion directly - it only tracks progress and provides guidance.",
-              formProcess: "Forms must be downloaded as PDFs, completed offline, and then uploaded or marked as complete in the app.",
-              appPurpose: "The app tracks application progress, provides form guidance, and helps users understand requirements - it does not replace the actual form completion process."
+              description: "This is a MEHKO application tracking system. Users fill out PDF forms directly in the dashboard for most steps, then download completed forms to print and sign if needed. The app provides interactive form completion and tracks progress.",
+              formProcess: "Forms are filled out directly in the dashboard using interactive PDF viewers. Completed forms can be downloaded for printing and signing.",
+              appPurpose: "The app tracks application progress, provides interactive form completion, and helps users understand requirements - it handles most of the form completion process directly."
             }
           },
         }),
@@ -559,8 +559,8 @@ Ask me anything or pick a quick task above!`,
           {selectedForm && (
             <div className="ai-chat__form-guidance">
               <strong>📝 Form Guidance:</strong> You're working on the{" "}
-              <strong>{selectedForm.title}</strong>. Fill out this form in the
-              application, then download the completed PDF when finished.
+              <strong>{selectedForm.title}</strong>. Fill out this form directly in the
+              dashboard, then download the completed PDF to print and sign if needed.
             </div>
           )}
           <div className="ai-chat__input-container">
