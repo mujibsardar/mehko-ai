@@ -6,8 +6,8 @@ Deploy MEHKO AI with minimal cost + simple scaling.
 - Backend (Node API Gateway + Node AI Server + Python FastAPI) → 1 VPS (Hetzner CX22)
 - Reverse proxy + HTTPS → Caddy
 - DB → Firebase Firestore (existing)
-- Cache/Queue → Upstash Redis free tier
-- File storage → S3 bucket (`back-channel-media` us-west-1)
+- Cache/Queue → Not needed (no Redis usage)
+- File storage → Local filesystem (included in Git)
 
 ## 📂 Key Repo Paths
 - React Frontend: `/src/` → build `/dist/`
@@ -35,7 +35,7 @@ Deploy MEHKO AI with minimal cost + simple scaling.
 - [ ] Create production environment files
 - [ ] Deploy React build to Cloudflare Pages
 - [ ] Configure domain (Spaceship → Cloudflare → VPS + Pages)
-- [ ] Connect to Firebase Firestore + Upstash Redis
+- [ ] Connect to Firebase Firestore (no Redis needed)
 - [ ] Test PDF jobs (10 concurrent) on VPS
 - [ ] Add monitoring/logging (Sentry, health checks)
 
@@ -75,7 +75,7 @@ FIREBASE_CLIENT_EMAIL=xxx
 # Python FastAPI
 PYTHONPATH=/app
 # Firebase Firestore - uses existing Firebase project
-REDIS_URL=redis://xxx
+# REDIS_URL=redis://xxx  # NOT NEEDED
 
 # Caddy
 DOMAIN=api.mehko.ai
@@ -91,7 +91,7 @@ DOMAIN=api.mehko.ai
 1. **Phase 1**: Deploy to VPS with Docker Compose
 2. **Phase 2**: Configure Cloudflare Pages for frontend
 3. **Phase 3**: Set up domain and SSL
-4. **Phase 4**: Connect external services (Firebase, Upstash, S3)
+4. **Phase 4**: Connect external services (Firebase only)
 5. **Phase 5**: Monitoring and optimization
 
 ## 🔒 Security Considerations

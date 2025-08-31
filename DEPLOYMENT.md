@@ -6,8 +6,8 @@ This guide walks you through deploying MEHKO AI to production using:
 - **Frontend**: Cloudflare Pages (mehko.ai)
 - **Backend**: Hetzner VPS with Docker Compose (api.mehko.ai)
 - **Database**: Firebase Firestore (existing)
-- **Cache**: Upstash Redis (free tier)
-- **Storage**: AWS S3 (back-channel-media bucket)
+- **Cache**: Not needed (no Redis usage)
+- **Storage**: Local filesystem (included in Git)
 
 ## 🏗️ Architecture
 
@@ -23,6 +23,10 @@ This guide walks you through deploying MEHKO AI to production using:
 │  │ CDN: Cloudflare        │ │ │ ├─ Python FastAPI (8000)   │ │
 │  │                        │ │ │ └─ API Gateway (3001)      │ │
 │  └─────────────────────────┘ │ └─────────────────────────────┘ │
+│                              │                                 │
+│  Database: Firebase Firestore (existing)                      │
+│  Storage: Local filesystem (included in Git)                  │
+│  External APIs: OpenAI only                                   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -37,10 +41,9 @@ This guide walks you through deploying MEHKO AI to production using:
 
 ### 2. External Services
 - **Firebase Firestore**: Uses existing Firebase project
-- **Upstash Redis**: Create Redis instance and get connection string
-- **AWS S3**: Ensure back-channel-media bucket exists
-- **Firebase**: Service account key configured
 - **OpenAI**: API key for AI functionality
+- **No Redis needed**: Application doesn't use Redis
+- **No external storage needed**: Uses local filesystem
 
 ### 3. Server Requirements
 - **VPS**: Hetzner CX22 (2 vCPU, 4GB RAM, 40GB SSD)
@@ -156,14 +159,14 @@ FIREBASE_CLIENT_EMAIL=your_firebase_service_account_email@your_project.iam.gserv
 # Database Configuration (Firebase Firestore)
 # Uses existing Firebase project - no additional configuration needed
 
-# Redis Configuration (Upstash)
-REDIS_URL=redis://username:password@host:port
+# Redis Configuration (NOT NEEDED)
+# REDIS_URL=redis://username:password@host:port
 
-# S3 Configuration (for file storage)
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_REGION=us-west-1
-S3_BUCKET=back-channel-media
+# S3 Configuration (NOT NEEDED - uses local filesystem)
+# AWS_ACCESS_KEY_ID=your_aws_access_key
+# AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+# AWS_REGION=us-west-1
+# S3_BUCKET=back-channel-media
 ```
 
 ### Docker Compose (docker-compose.yml)
@@ -255,6 +258,15 @@ cp .env.production backup-env-$(date +%Y%m%d)
    docker-compose exec fastapi-worker python -c "from firebase_admin import firestore; print('Firebase OK')"
    ```
 
+4. **File system issues**:
+   ```bash
+   # Check if data directory exists
+   docker-compose exec fastapi-worker ls -la /app/data/
+   
+   # Check if PDFs are accessible
+   docker-compose exec fastapi-worker find /app/data/applications -name "*.pdf" | head -5
+   ```
+
 ### Performance Optimization
 
 1. **Resource monitoring**:
@@ -285,6 +297,25 @@ cp .env.production backup-env-$(date +%Y%m%d)
 - Kubernetes cluster
 - Auto-scaling based on demand
 - Multi-region deployment
+
+## 💰 **Cost Breakdown (Corrected)**
+
+### **Monthly Costs:**
+- **Hetzner CX22 VPS**: ~$6/month
+- **Firebase Firestore**: Free tier (existing)
+- **Cloudflare Pages**: Free tier
+- **OpenAI API**: Pay-per-use (depends on usage)
+- **Total**: ~$6/month + OpenAI usage
+
+### **What's NOT Needed:**
+- ❌ **Redis/Upstash**: $0 (not used by application)
+- ❌ **AWS S3**: $0 (uses local filesystem)
+- ❌ **Neon Postgres**: $0 (uses Firebase Firestore)
+
+### **Storage Strategy:**
+- **Local filesystem**: All county data and PDFs included in Git
+- **No external storage**: Everything bundled with application
+- **Simple deployment**: No data setup required
 
 ## 📞 Support
 
