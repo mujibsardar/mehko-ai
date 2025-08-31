@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # Reverse Proxy - Caddy
+  caddy:
+    image: caddy:2-alpine
+    container_name: mehko-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - DOMAIN=${DOMAIN:-api.mehko.ai}
+    networks:
+      - mehko-network
+    depends_on:
+      - api-gateway
+      - ai-server
+      - fastapi-worker
+
+  # API Gateway (Node.js)
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.api-gateway
+    container_name: mehko-api-gateway
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - FASTAPI_URL=http://fastapi-worker:8000
+      - AI_SERVER_URL=http://ai-server:3000
+    networks:
+      - mehko-network
+    depends_on:
+      - fastapi-worker
+      - ai-server
+    volumes:
+      - ./dist:/app/dist:ro
+
+  # AI Server (Node.js)
+  ai-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.ai-server
+    container_name: mehko-ai-server
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+    networks:
+      - mehko-network
+    volumes:
+      - ./data:/app/data:ro
+      - ./config:/app/config:ro
+
+  # FastAPI Worker (Python)
+  fastapi-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    container_name: mehko-fastapi-worker
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+    networks:
+      - mehko-network
+    volumes:
+      - ./data:/app/data:ro
+      - ./config:/app/config:ro
+      - pdf_cache:/app/temp
+
+volumes:
+  caddy_data:
+  caddy_config:
+  pdf_cache:
+
+networks:
+  mehko-network:
+    driver: bridge
