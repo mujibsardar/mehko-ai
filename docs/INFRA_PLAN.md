@@ -26,13 +26,13 @@ Deploy MEHKO AI with minimal cost + simple scaling.
 ## 📝 Progress Log
 - [x] Agreed on baseline infra (VPS + Docker Compose + Cloudflare Pages)
 - [x] Analyzed current service architecture
-- [ ] Create `docker-compose.yml` (baseline written by ChatGPT)
-- [ ] Add Dockerfiles for:
-  - [ ] API Gateway
-  - [ ] AI Server  
-  - [ ] FastAPI Worker
-- [ ] Add `Caddyfile` for reverse proxy + SSL
-- [ ] Create production environment files
+- [x] Create `docker-compose.yml` (baseline written by ChatGPT)
+- [x] Add Dockerfiles for:
+  - [x] API Gateway
+  - [x] AI Server  
+  - [x] FastAPI Worker
+- [x] Add `Caddyfile` for reverse proxy + SSL
+- [x] Create production environment files
 - [ ] Deploy React build to Cloudflare Pages
 - [ ] Configure domain (Spaceship → Cloudflare → VPS + Pages)
 - [ ] Connect to Firebase Firestore (no Redis needed)
@@ -67,15 +67,22 @@ Deploy MEHKO AI with minimal cost + simple scaling.
 # Node.js Services
 NODE_ENV=production
 PORT=3001
+
+# OpenAI Configuration
 OPENAI_API_KEY=xxx
+OPENAI_ASSISTANT_ID=xxx
+
+# Firebase Configuration (Frontend)
+VITE_FIREBASE_API_KEY=xxx
+VITE_FIREBASE_AUTH_DOMAIN=xxx
+VITE_FIREBASE_PROJECT_ID=xxx
+
+# Firebase Configuration (Backend)
 FIREBASE_PROJECT_ID=xxx
-FIREBASE_PRIVATE_KEY=xxx
-FIREBASE_CLIENT_EMAIL=xxx
+FIREBASE_SERVICE_ACCOUNT_PATH=config/serviceAccountKey.json
 
 # Python FastAPI
 PYTHONPATH=/app
-# Firebase Firestore - uses existing Firebase project
-# REDIS_URL=redis://xxx  # NOT NEEDED
 
 # Caddy
 DOMAIN=api.mehko.ai
@@ -106,6 +113,18 @@ DOMAIN=api.mehko.ai
 - **Next**: Separate services to different VPS instances
 - **Future**: Kubernetes cluster or cloud-native deployment
 
+## 💰 Cost Breakdown
+- **Hetzner CX22 VPS**: ~$6/month
+- **Firebase Firestore**: Free tier (existing)
+- **Cloudflare Pages**: Free tier
+- **OpenAI API**: Pay-per-use
+- **Total**: ~$6/month + OpenAI usage
+
+## 📁 Storage Strategy
+- **Current**: Local filesystem (11MB, 24 PDFs) - included in Git
+- **Future**: Consider Firebase Storage or S3 when PDF count exceeds 100+
+- **Monitoring**: Track repository size, migrate when approaching 100MB
+
 ---
 
 **Notes:**
@@ -113,3 +132,5 @@ DOMAIN=api.mehko.ai
 - Keep log incremental (`- [x]` checkboxes when done).
 - All infra config lives in root (`docker-compose.yml`, `Caddyfile`, `INFRA_PLAN.md`).
 - Monitor resource usage and upgrade VPS if needed.
+- **Status**: Infrastructure complete, ready for deployment
+- **Next**: Deploy to VPS following DEPLOYMENT.md

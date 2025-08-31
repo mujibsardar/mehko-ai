@@ -317,6 +317,12 @@ cp .env.production backup-env-$(date +%Y%m%d)
 - **No external storage**: Everything bundled with application
 - **Simple deployment**: No data setup required
 
+### **Future Storage Considerations:**
+- **Current**: 11MB, 24 PDFs (manageable for Git)
+- **Risk**: PDFs may grow significantly over time
+- **Migration path**: Consider Firebase Storage or S3 when PDF count exceeds 100+
+- **Monitoring**: Track repository size and consider migration when approaching 100MB
+
 ## 📞 Support
 
 For deployment issues or questions:
