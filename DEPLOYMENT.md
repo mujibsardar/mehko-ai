@@ -5,7 +5,7 @@
 This guide walks you through deploying MEHKO AI to production using:
 - **Frontend**: Cloudflare Pages (mehko.ai)
 - **Backend**: Hetzner VPS with Docker Compose (api.mehko.ai)
-- **Database**: Neon Postgres (free tier)
+- **Database**: Firebase Firestore (existing)
 - **Cache**: Upstash Redis (free tier)
 - **Storage**: AWS S3 (back-channel-media bucket)
 
@@ -36,7 +36,7 @@ This guide walks you through deploying MEHKO AI to production using:
   - api.mehko.ai → VPS IP address
 
 ### 2. External Services
-- **Neon Postgres**: Create database and get connection string
+- **Firebase Firestore**: Uses existing Firebase project
 - **Upstash Redis**: Create Redis instance and get connection string
 - **AWS S3**: Ensure back-channel-media bucket exists
 - **Firebase**: Service account key configured
@@ -153,8 +153,8 @@ FIREBASE_PROJECT_ID=your_firebase_project_id
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYour Firebase Private Key Here\n-----END PRIVATE KEY-----\n"
 FIREBASE_CLIENT_EMAIL=your_firebase_service_account_email@your_project.iam.gserviceaccount.com
 
-# Database Configuration (Neon Postgres)
-DATABASE_URL=postgresql://username:password@host:port/database
+# Database Configuration (Firebase Firestore)
+# Uses existing Firebase project - no additional configuration needed
 
 # Redis Configuration (Upstash)
 REDIS_URL=redis://username:password@host:port
@@ -249,10 +249,10 @@ cp .env.production backup-env-$(date +%Y%m%d)
    nslookup api.mehko.ai
    ```
 
-3. **Database connection issues**:
+3. **Firebase connection issues**:
    ```bash
-   # Test database connection
-   docker-compose exec fastapi-worker python -c "import psycopg2; print('DB OK')"
+   # Test Firebase connection
+   docker-compose exec fastapi-worker python -c "from firebase_admin import firestore; print('Firebase OK')"
    ```
 
 ### Performance Optimization
