@@ -1,0 +1,19 @@
+{
+    "profile": {
+        "name": "MEHKO AI",
+        "stylizedName": "<strong>MEHKO AI</strong>",
+        "logoUrl": "images/svg/logo.svg",
+        "profilePictureUrl": "images/pictures/avatar.jpg",
+        "role": "Permit Guide"
+    },
+    "status": {
+        "visible": true,
+        "available": true,
+        "message": "Now accepting applications"
+    },
+    "preloader": {
+        "enabled": false,
+        "title": "Loading...",
+        "subtitle": ""
+    }
+}
