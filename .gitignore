@@ -97,7 +97,7 @@ temp/
 *.7z
 
 # Build output
-dist/
+# dist/  # Commented out to allow dist/ in Git for deployment
 dist-*/
 
 # ===== TESTING =====
