@@ -1,0 +1,1040 @@
+{
+  "id": "publications_permitapp152.pdf",
+  "title": "Health Permit Application",
+  "type": "existing_acroform",
+  "appId": "san_diego_county_mehko",
+  "stepId": "permit_application_form",
+  "fields": [
+    {
+      "id": "of Vending MachinesN\u00famero de maquinas",
+      "label": "of Vending Machines/N\u00famero de maquinas",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Men Stalls",
+      "label": "Men Stalls",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Group1",
+      "label": "Group1",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Preferred Language",
+      "label": "Preferred Language ",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Secondary Preferred Language",
+      "label": "Secondary Preferred Language",
+      "type": "radio",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "number prep areas",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "number of employees",
+      "label": "number of employees",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email",
+      "label": "Check if same as owner/Marque aqui SI es la mismo del due\u00f1o",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Preferred Language Other",
+      "label": "Chinese \u2013 Cantonese",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Preferred Secondary Language Other",
+      "label": "Chinese \u2013 Cantonese",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Assumed Business Date Month",
+      "label": "Assumed Business Date/Fecha de inicio",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Street Name and Suite",
+      "label": "Street Name and Suite",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Name",
+      "label": "Billing Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Applicant Name",
+      "label": "Applicant Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Phone",
+      "label": "Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Email",
+      "label": "Billing Email",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Phone",
+      "label": "Billing Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Home Phone #",
+      "label": "Billing Home Phone #",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Fax",
+      "label": "Billing Fax",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Mobile Phone",
+      "label": "Billing Mobile Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Street",
+      "label": "Billing Street",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Street Name",
+      "label": "Billing Street Name",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing City",
+      "label": "Billing City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Billing Zip Code",
+      "label": "Billing Zip Code",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Partnership",
+      "label": "Partnership",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Email",
+      "label": "Partnership/Sociedad",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Phone",
+      "label": "Owner Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Home Phone",
+      "label": "Owner Home Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Fax",
+      "label": "Owner Fax",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Mobile Phone",
+      "label": "Owner Mobile Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Street #",
+      "label": "Owner Street #",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Street Name & Suite",
+      "label": "Owner Street Name & Suite",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner City",
+      "label": "Owner City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Zip Code",
+      "label": "Owner Zip Code",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Non-Profit",
+      "label": "Non-Profit",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Shared Outdoor Dining",
+      "label": "Shared Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sole and Covered Outdoor Dining",
+      "label": "Sole and Covered Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Shared and Covered Outdoor Dining",
+      "label": "Shared and Covered Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "None Outdoor Dining",
+      "label": "None Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "N/A Outdoor Dining",
+      "label": "N/A Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Outdoor Dining Seating Capacity",
+      "label": "Outdoor Dining Seating Capacity",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Outdoor Dining Sq Ftg",
+      "label": "Outdoor Dining Sq Ftg",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sole Outdoor Dining",
+      "label": "Sole Outdoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Shared Indoor Dining",
+      "label": "Shared Indoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "N/A Indoor Dining",
+      "label": "N/A Indoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sole Indoor Dining",
+      "label": "Sole Indoor Dining",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indoor Dining Sq Ftg",
+      "label": "Indoor Dining Sq Ftg",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Restroom Common Use Public and Employee",
+      "label": "Restroom Common Use Public and Employee",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Restroom Employee Only",
+      "label": "Restroom Employee Only",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Restroom Shared Public and Employee",
+      "label": "Restroom Shared Public and Employee",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Restroom Separate Public/Separate Employee",
+      "label": "Restroom Separate Public/Separate Employee",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Restroom Common Use Public/Separate Employee",
+      "label": "Restroom Common Use Public/Separate Employee",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Men Urinals",
+      "label": "Men Urinals",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Women Stalls",
+      "label": "Women Stalls",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Year Building was Built",
+      "label": "Year Building was Built",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check if same as owner Billing",
+      "label": "Check if same as owner Billing",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check if same as owner Applicant",
+      "label": "Check if same as owner Applicant",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Food Facility",
+      "label": "Food Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mobile Food",
+      "label": "Mobile Food",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PoolBody of Water",
+      "label": "Pool/Body of Water",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Massage Establishment",
+      "label": "Massage Establishment",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public Housing",
+      "label": "Public Housing",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Body Art Facility",
+      "label": "Body Art Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ResortEntertainment Complex",
+      "label": "Resort/Entertainment Complex",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Seasonal Organized Camp",
+      "label": "Seasonal Organized Camp",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Annual Organized Camp",
+      "label": "Annual Organized Camp",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Class B Cottage Food Operation",
+      "label": "Class B Cottage Food Operation",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Charitable Feeding Food Facility",
+      "label": "Charitable Feeding Food Facility",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Business Name DBA",
+      "label": "Business Name (DBA",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Day",
+      "label": "Day/D\u00eda",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Year",
+      "label": "Year/A\u00f1o",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Days and Hours of Operation",
+      "label": "Days and Hours of Operation",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Home Phone",
+      "label": "Home Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mobile Phone",
+      "label": "Mobile Phone",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Street Number",
+      "label": "Street Number",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "City",
+      "label": "City",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Zip Code",
+      "label": "Zip Code",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Sole Owner",
+      "label": "Sole Owner",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Corporation",
+      "label": "Corporation",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Owner Name",
+      "label": "Partnership/Sociedad",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "List of Partners or Officers",
+      "label": "List of Partners or Officers",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "square footage",
+      "label": "square footage",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indoor Dining Seating Capacity",
+      "label": "undefined",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Unisex Rooms",
+      "label": "Unisex Rooms",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Drive Thru Yes",
+      "label": "Drive Thru Yes",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Drive Thru No",
+      "label": "Drive Thru No",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Yes mobile one location",
+      "label": "Yes/Si",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "No mobile multiple locations",
+      "label": "No (If no, please provide a list of locations/Si es NO  por favor incluya una lista GH las XELFDFLyQHV",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate  of Mobile Units In addition to the sink cart",
+      "label": "Indicate # of Mobile Units (In addition to the sink cart)/ Numero GH 8QLGDGHV M\u00f3viles  $SDUWH GHO sink PyYLEOH",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Indicate Number of Housing Units",
+      "label": "Indicate # of Housing Units/N\u00famero GH XQLGDGHV",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Name of Management Company",
+      "label": "Name of Management Company/1RPEUH GH OD FRPSDxtD DGPLQLVWUDGRUD(if applicable/si es aplicable",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Contact Name1",
+      "label": "Primary Contact Name/1RPEUH GHO contacto principal",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "housing phone number",
+      "label": "Phone #/N\u00famero GH tel\u00e9fono",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "housing email",
+      "label": "Email/Correo electr\u00f3nico",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "number of pools",
+      "label": "Bodies of Water/Cuerpos de agua: # of Pool(s",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of Spas",
+      "label": "Spa(s",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of Waders",
+      "label": "of Wader(s",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of Spray Grounds",
+      "label": "of Spray Ground(s",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Number of Other",
+      "label": "Other",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "If any body of water indoors, specify which one",
+      "label": "If any body of water indoors, specify which one",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Apartment Complex",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Bath House",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Bed & Breakfast",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Campground",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "County/Private Club",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Government/Municipal/County Agency",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Health/Swim Club",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "HOA",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Hotel/Motel",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mobile Home Park",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Public Park",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Resort Entertainment Complex",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "School/College/University",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Shopping mall",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Waterpark/Theme Park",
+      "label": "Facility Type",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Name of Management Company1",
+      "label": "Name of Management Company/1RPEUH GH OD FRPSDxtD DGPLQLVWUDGRUD(if applicable/si es aplicable",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Primary Contact Name2",
+      "label": "Primary Contact Name/Nombre GH contacto principal",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "pool phone number",
+      "label": "Phone #/N\u00famero GH tel\u00e9fono",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "pool email",
+      "label": "Email/Correo electr\u00f3nico",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Key",
+      "label": "Key/Llave",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Lockbox",
+      "label": "Lockbox/Caja de seguridad",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "on-site contact",
+      "label": "Access for Inspection/Acceso para inspecci\u00f3n",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Onsite Contact name",
+      "label": "On-site Contact/Contacto en el sitio: Name/Nombre",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "on-site contact phone number",
+      "label": "Phone Number/N\u00famero de tel\u00e9fono",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Tattooing",
+      "label": "Tattooing",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Permanent Cosmetics",
+      "label": "Permanent Cosmetics",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Body Piercing",
+      "label": "Body Piercing",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Branding",
+      "label": "Branding",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Mobile Body Art",
+      "label": "Mobile Body Art",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Authorized Signature",
+      "label": "Authorized Signature/Firma",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date Signed",
+      "label": "Date/Fecha",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print Name",
+      "label": "Print Name/Nombre",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Title",
+      "label": "Title/Titulo",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Email Application",
+      "label": "Email Application",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "New",
+      "label": "New",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Change of Owner",
+      "label": "Change of Owner",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Update Record",
+      "label": "Update Record",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Exempt",
+      "label": "Exempt",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "New Permit Number Row",
+      "label": "New Permit #_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Previous Permit  or Plan Check Row",
+      "label": "Previous Permit # or Plan Check #_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Record Permit Type Row",
+      "label": "Record Permit Type Row",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Units Row",
+      "label": "Units_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Decal Number Row",
+      "label": "Decal Number Row",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Processing Clerk Row",
+      "label": "Processing Clerk_Row_1",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "YES MEHKO permit",
+      "label": "YES MEHKO permit",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Apartment",
+      "label": "Apartment",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Hotel or Motel",
+      "label": "Hotel or Motel",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "existing_pdf_fields"
+}

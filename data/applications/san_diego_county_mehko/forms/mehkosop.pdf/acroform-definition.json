@@ -1,0 +1,11 @@
+{
+  "id": "mehkosop.pdf",
+  "title": "Standard Operating Procedures (SOP)",
+  "type": "template",
+  "appId": "san_diego_county_mehko",
+  "stepId": "sop_form",
+  "fields": [],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp.",
+  "source": "auto_generated_template",
+  "note": "This is a basic template. Use the Field Mapper to add form fields."
+}

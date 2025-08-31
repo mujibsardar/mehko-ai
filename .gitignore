@@ -68,9 +68,13 @@ generated/
 firebase-adminsdk-*.json
 serviceAccountKey.json
 
-# Application files
-applications/**/form.pdf
-applications/**/meta.json
+# Application files - INCLUDED in Git for MVP
+# applications/**/form.pdf
+# applications/**/meta.json
+
+# Explicitly include data directory PDFs and metadata
+!data/**/*.pdf
+!data/**/*.json
 
 agent-output/*
 agent-output/
@@ -84,8 +88,8 @@ temp/
 # Service PIDs
 .service-pids
 
-# Large binary files
-*.pdf
+# Large binary files (excluding data directory PDFs)
+# *.pdf  # Commented out to allow data directory PDFs
 *.zip
 *.tar.gz
 *.tgz
