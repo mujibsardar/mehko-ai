@@ -19,25 +19,28 @@ const AI_SERVER_URL = process.env.AI_SERVER_URL || "http://ai-server:3000";
 
 const proxy = httpProxy.createProxyServer({});
 
-// tiny helper
-async function forwardRequest(target, req, res) {
-  proxy.web(req, res, { target }, (err) => {
-    console.error("Proxy error:", err?.message || err);
-    res.status(502).json({ error: "Bad gateway", detail: err?.message || String(err) });
-  });
+// tiny proxy helper with optional prefix rewrite
+function proxyTo(target, rewriteRe) {
+  return (req, res) => {
+    if (rewriteRe) req.url = req.url.replace(rewriteRe, "") || "/";
+    proxy.web(req, res, { target, changeOrigin: true }, (err) => {
+      console.error("Proxy error:", err?.message || err);
+      res.status(502).json({ error: "Bad gateway", detail: err?.message || String(err) });
+    });
+  };
 }
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
 // AI server proxies
-app.use("/api/ai-chat", async (req, res) => forwardRequest(AI_SERVER_URL, req, res));
-app.use("/api/ai-analyze-pdf", async (req, res) => forwardRequest(AI_SERVER_URL, req, res));
-app.use("/api/form-fields", async (req, res) => forwardRequest(AI_SERVER_URL, req, res));
-app.use("/api/fill-pdf", async (req, res) => forwardRequest(AI_SERVER_URL, req, res));
+app.use("/api/ai-chat",          proxyTo(AI_SERVER_URL,   /^\/api\/ai-chat/));
+app.use("/api/ai-analyze-pdf",   proxyTo(AI_SERVER_URL,   /^\/api\/ai-analyze-pdf/));
+app.use("/api/form-fields",      proxyTo(AI_SERVER_URL,   /^\/api\/form-fields/));
+app.use("/api/fill-pdf",         proxyTo(AI_SERVER_URL,   /^\/api\/fill-pdf/));
 
 // FastAPI proxies
-app.use("/api/apps", async (req, res) => forwardRequest(FASTAPI_URL, req, res));
-app.use("/api/process-county", async (req, res) => forwardRequest(FASTAPI_URL, req, res));
+app.use("/api/apps",             proxyTo(FASTAPI_URL,     /^\/api\/apps/));
+app.use("/api/process-county",   proxyTo(FASTAPI_URL,     /^\/api\/process-county/));
 
 // serve static SPA
 app.use(express.static(path.join(__dirname, "..", "dist")));
