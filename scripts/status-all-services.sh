@@ -67,21 +67,15 @@ if check_port_status 8000 "Python FastAPI" "http://localhost:8000/health"; then
 fi
 echo ""
 
-# Check Node.js server
-echo -e "${YELLOW}🟢 Node.js Server (AI Chat & API)${NC}"
+# Check AI Chat service (now part of Python backend)
+echo -e "${YELLOW}🤖 AI Chat Service (Python Backend)${NC}"
 echo "----------------------------------------"
-if check_port_status 3000 "Node.js Server" "http://localhost:3000/api/ai-chat"; then
-    NODE_PID=$(lsof -Pi :3000 -sTCP:LISTEN -t 2>/dev/null | head -1)
-    get_uptime "$NODE_PID"
-fi
-echo ""
-
-# Check API Gateway
-echo -e "${YELLOW}🌐 API Gateway (Unified Frontend)${NC}"
-echo "----------------------------------------"
-if check_port_status 3001 "API Gateway" "http://localhost:3001/health"; then
-    GATEWAY_PID=$(lsof -Pi :3001 -sTCP:LISTEN -t 2>/dev/null | head -1)
-    get_uptime "$GATEWAY_PID"
+if curl -s --max-time 5 "http://localhost:8000/api/ai-status" > /dev/null 2>&1; then
+    echo -e "   Status: ${GREEN}✓ Running${NC}"
+    echo -e "   Endpoint: ${CYAN}http://localhost:8000/api/ai-chat${NC}"
+    echo -e "   Backend: ${CYAN}Python FastAPI${NC}"
+else
+    echo -e "   Status: ${RED}✗ Not accessible${NC}"
 fi
 echo ""
 
@@ -99,11 +93,17 @@ echo -e "${YELLOW}🔧 Additional Services${NC}"
 echo "----------------------------------------"
 
 # Check if MongoDB/Firebase is accessible (if applicable)
-echo -e "${CYAN}📊 Database Connection${NC}"
-if curl -s --max-time 5 "http://localhost:3000/api/ai-chat" > /dev/null 2>&1; then
+echo -e "${CYAN}📊 Backend Services${NC}"
+if curl -s --max-time 5 "http://localhost:8000/api/ai-chat" > /dev/null 2>&1; then
     echo -e "   AI Chat API: ${GREEN}✓ Accessible${NC}"
 else
     echo -e "   AI Chat API: ${RED}✗ Not accessible${NC}"
+fi
+
+if curl -s --max-time 5 "http://localhost:8000/api/apps" > /dev/null 2>&1; then
+    echo -e "   Apps API: ${GREEN}✓ Accessible${NC}"
+else
+    echo -e "   Apps API: ${RED}✗ Not accessible${NC}"
 fi
 
 # Check environment variables

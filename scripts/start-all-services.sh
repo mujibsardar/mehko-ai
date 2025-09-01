@@ -24,12 +24,10 @@ check_port() {
 
 # Check if ports are available
 echo -e "${YELLOW}🔍 Checking port availability...${NC}"
-if ! check_port 8000; then exit 1; fi  # Python FastAPI (PDF service)
-if ! check_port 3000; then exit 1; fi  # Node.js server (AI chat)
-if ! check_port 3001; then exit 1; fi  # API Gateway (unified frontend)
+if ! check_port 8000; then exit 1; fi  # Python FastAPI (unified backend)
 if ! check_port 5173; then exit 1; fi  # React dev server (frontend)
 echo -e "${GREEN}✅ All ports are available${NC}"
-echo -e "${BLUE}💡 Note: Frontend now configured to use API Gateway on port 3001${NC}"
+echo -e "${BLUE}💡 Note: Single-server architecture - all backend services on Python (port 8000)${NC}"
 echo ""
 
 # Start Python FastAPI server
@@ -55,31 +53,17 @@ pip install -r requirements.txt
 cd ..
 
 # Start FastAPI server in background with logging
-echo -e "${GREEN}🚀 Starting FastAPI server on port 8000...${NC}"
+echo -e "${GREEN}🚀 Starting unified Python backend on port 8000...${NC}"
+echo -e "${BLUE}   • AI Chat & Analysis${NC}"
+echo -e "${BLUE}   • PDF Processing${NC}"
+echo -e "${BLUE}   • Admin Functions${NC}"
+echo -e "${BLUE}   • Form Management${NC}"
 # Start uvicorn from the project root, specifying the python directory for module resolution
 (cd python && source .venv/bin/activate && uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 1 --limit-concurrency 100 --limit-max-requests 1000 > ../logs/fastapi.log 2>&1) &
 PYTHON_PID=$!
 
 # Wait a moment for Python server to start
 sleep 5
-
-# Start Node.js server
-echo -e "${YELLOW}🟢 Starting Node.js server...${NC}"
-echo -e "${GREEN}🚀 Starting Node.js server on port 3000...${NC}"
-node server.js > logs/node.log 2>&1 &
-NODE_PID=$!
-
-# Wait a moment for Node server to start
-sleep 2
-
-# Start API Gateway
-echo -e "${YELLOW}🌐 Starting API Gateway...${NC}"
-echo -e "${GREEN}🚀 Starting API Gateway on port 3001...${NC}"
-node scripts/api-gateway.js > logs/gateway.log 2>&1 &
-GATEWAY_PID=$!
-
-# Wait a moment for Gateway to start
-sleep 2
 
 # Start React dev server
 echo -e "${YELLOW}⚛️  Starting React dev server...${NC}"
@@ -103,18 +87,11 @@ else
     echo -e "${RED}❌ Python FastAPI server failed to start${NC}"
 fi
 
-# Check Node server (assuming it has a health endpoint or just check if port is listening)
-if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null; then
-    echo -e "${GREEN}✅ Node.js server is running on port 3000${NC}"
+# Check AI Chat endpoint
+if curl -s http://localhost:8000/api/ai-status > /dev/null; then
+    echo -e "${GREEN}✅ AI Chat service is running${NC}"
 else
-    echo -e "${RED}❌ Node.js server failed to start${NC}"
-fi
-
-# Check API Gateway
-if curl -s http://localhost:3001/health > /dev/null; then
-    echo -e "${GREEN}✅ API Gateway is running on http://localhost:3001${NC}"
-else
-    echo -e "${RED}❌ API Gateway failed to start${NC}"
+    echo -e "${RED}❌ AI Chat service failed to start${NC}"
 fi
 
 # Check React dev server
@@ -131,16 +108,14 @@ echo -e "${BLUE}💡 Use './scripts/watch-logs.sh' to monitor the logs${NC}"
 echo -e "${BLUE}💡 Use './scripts/stop-all-services.sh' to stop all services${NC}"
 echo ""
 echo -e "${BLUE}📱 Services running:${NC}"
-echo -e "  • Python FastAPI: ${GREEN}http://localhost:8000${NC}"
-echo -e "  • Node.js Server: ${GREEN}http://localhost:3000${NC}"
-echo -e "  • API Gateway:    ${GREEN}http://localhost:3001${NC}"
+echo -e "  • Python Backend: ${GREEN}http://localhost:8000${NC} (AI, PDF, Admin, Forms)"
 echo -e "  • React App:      ${GREEN}http://localhost:5173${NC}"
 echo ""
 echo -e "${YELLOW}💡 To restart all services, run: ${NC}./scripts/restart-all-services.sh"
 echo -e "${YELLOW}💡 To watch logs, run: ${NC}./scripts/watch-logs.sh"
-echo -e "${YELLOW}💡 Or manually kill PIDs: ${NC}Python: $PYTHON_PID, Node: $NODE_PID, React: $REACT_PID"
+echo -e "${YELLOW}💡 Or manually kill PIDs: ${NC}Python: $PYTHON_PID, React: $REACT_PID"
 echo ""
-echo -e "${GREEN}🚀 You're all set! Happy coding! 🚀${NC}"
+echo -e "${GREEN}🚀 Single-server architecture is running! 🚀${NC}"
 
 # Save PIDs to a file for easy stopping
-echo "$PYTHON_PID $NODE_PID $GATEWAY_PID $REACT_PID" > temp/.service-pids
+echo "$PYTHON_PID $REACT_PID" > temp/.service-pids

@@ -24,17 +24,7 @@ if [ ! -f "temp/.service-pids" ]; then
         echo -e "${YELLOW}   PID: $PYTHON_PID${NC}"
     fi
     
-    if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        echo -e "${YELLOW}🟢 Found service running on port 3000 (Node.js)${NC}"
-        NODE_PID=$(lsof -ti:3000)
-        echo -e "${YELLOW}   PID: $NODE_PID${NC}"
-    fi
-    
-    if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        echo -e "${YELLOW}🌐 Found service running on port 3001 (API Gateway)${NC}"
-        GATEWAY_PID=$(lsof -ti:3001)
-        echo -e "${YELLOW}   PID: $GATEWAY_PID${NC}"
-    fi
+    # Note: Node.js and API Gateway are no longer used in single-server architecture
     
     if lsof -Pi :5173 -sTCP:LISTEN -t >/dev/null 2>&1; then
         echo -e "${YELLOW}⚛️  Found service running on port 5173 (React)${NC}"
@@ -42,7 +32,7 @@ if [ ! -f "temp/.service-pids" ]; then
         echo -e "${YELLOW}   PID: $REACT_PID${NC}"
     fi
     
-    if [ -z "$PYTHON_PID" ] && [ -z "$NODE_PID" ] && [ -z "$GATEWAY_PID" ] && [ -z "$REACT_PID" ]; then
+    if [ -z "$PYTHON_PID" ] && [ -z "$REACT_PID" ]; then
         echo -e "${GREEN}✅ No services found running on expected ports.${NC}"
         exit 0
     fi
