@@ -544,6 +544,8 @@ export default function DashboardApp() {
           >
             <BreadcrumbBar />
 
+
+
             {selectedApplications.length === 0 || !activeApplication ? (
               <ApplicationCardGrid
                 onApplicationSelect={handleApplicationSelect}

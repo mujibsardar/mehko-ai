@@ -14,8 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3001;
-const FASTAPI_URL = process.env.FASTAPI_URL || "http://fastapi-worker:8000";
-const AI_SERVER_URL = process.env.AI_SERVER_URL || "http://ai-server:3000";
+// For local development, always use localhost URLs
+const FASTAPI_URL = process.env.FASTAPI_URL || "http://127.0.0.1:8000";
+const AI_SERVER_URL = process.env.AI_SERVER_URL || "http://127.0.0.1:3000";
 
 const proxy = httpProxy.createProxyServer({});
 

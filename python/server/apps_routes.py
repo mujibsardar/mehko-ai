@@ -302,6 +302,20 @@ async def process_county_application(request: Request):
         raise HTTPException(500, f"Failed to process county application: {str(e)}")
 
 # --- Form assets (new format only) ---
+# serve the actual PDF (GET endpoint must come before POST to avoid conflicts)
+@router.get("/{app}/forms/{form}/pdf")
+def download_pdf(app: str, form: str, inline: bool = False):
+    p = form_dir(app, form) / "form.pdf"
+    if not p.exists():
+        raise HTTPException(404, f"missing PDF at {p}")
+    disposition = "inline" if inline else "attachment"
+    return FileResponse(
+        path=str(p),
+        media_type="application/pdf",
+        filename=f"{app}_{form}.pdf",
+        headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}.pdf"'},
+    )
+
 @router.post("/{app}/forms/{form}/pdf")
 async def upload_pdf(app: str, form: str, file: UploadFile = File(...)):
     ensure_dir(form_dir(app, form))
@@ -393,19 +407,7 @@ def get_pdf_text(app: str, form: str):
     pages = [doc[i].get_text("text") for i in range(len(doc))]
     return {"pages": pages, "chars": sum(len(t) for t in pages)}
 
-# serve the actual PDF
-@router.get("/{app}/forms/{form}/pdf")
-def download_pdf(app: str, form: str, inline: bool = False):
-    p = form_dir(app, form) / "form.pdf"
-    if not p.exists():
-        raise HTTPException(404, f"missing PDF at {p}")
-    disposition = "inline" if inline else "attachment"
-    return FileResponse(
-        path=str(p),
-        media_type="application/pdf",
-        filename=f"{app}_{form}.pdf",
-        headers={"Content-Disposition": f'{disposition}; filename="{app}_{form}.pdf"'},
-    )
+
 
 # serve AcroForm PDF
 @router.get("/{app}/forms/{form}/acroform-pdf")

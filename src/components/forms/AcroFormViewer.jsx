@@ -34,10 +34,10 @@ const AcroFormViewer = ({
         setError(null);
 
         try {
-            // Simplified: Just show the regular PDF directly
-            setPdfUrl(`${API_BASE}/apps/${app}/forms/${form}/pdf?inline=true`);
+            // Set the PDF URL for inline viewing
+            const testUrl = `${API_BASE}/apps/${app}/forms/${form}/pdf?inline=true`;
+            setPdfUrl(testUrl);
             setIsAcroFormAvailable(false);
-            console.log("PDF Viewer: Showing form.pdf directly");
         } catch (err) {
             console.error("Failed to load PDF:", err);
             setError("Failed to load the form. Please try again.");
@@ -57,14 +57,29 @@ const AcroFormViewer = ({
 
     const handleIframeLoad = () => {
         if (iframeRef.current) {
+            // Remove any existing listeners to prevent duplicates
+            window.removeEventListener('message', handleMessage);
             // Listen for messages from the PDF viewer
-            window.addEventListener('message', (event) => {
-                if (event.data.type === 'form-field-changed') {
-                    handleFormFieldChange(event.data.fieldName, event.data.value);
-                }
-            });
+            window.addEventListener('message', handleMessage);
         }
     };
+
+    const handleMessage = (event) => {
+        try {
+            if (event.data && event.data.type === 'form-field-changed') {
+                handleFormFieldChange(event.data.fieldName, event.data.value);
+            }
+        } catch (error) {
+            console.warn('Error handling iframe message:', error);
+        }
+    };
+
+    // Cleanup event listener on unmount
+    useEffect(() => {
+        return () => {
+            window.removeEventListener('message', handleMessage);
+        };
+    }, []);
 
     const downloadFilledPdf = async () => {
         try {
@@ -140,6 +155,10 @@ const AcroFormViewer = ({
                         className="pdf-iframe"
                         title="PDF Form"
                         onLoad={handleIframeLoad}
+                        onError={() => {
+                            console.error("PDF iframe failed to load");
+                            setError("Failed to load the PDF form. Please check your connection and try again.");
+                        }}
                     />
                 )}
             </div>
