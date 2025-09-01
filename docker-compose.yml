@@ -34,7 +34,7 @@ services:
     expose:
       - "8000"
     healthcheck:
-      test: [ "CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health || exit 1" ]
+      test: [ "CMD-SHELL", "python3 - <<'PY'\nimport urllib.request,sys\nu=urllib.request.urlopen('http://127.0.0.1:8000/health'); sys.exit(0 if u.status==200 else 1)\nPY" ]
       interval: 10s
       timeout: 3s
       retries: 5

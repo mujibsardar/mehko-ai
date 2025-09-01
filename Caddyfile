@@ -9,10 +9,11 @@ api.mehko.ai {
     format json
   }
 
+  # Health endpoint served by Caddy itself
   @health path /health
-  # header is separate from respond in Caddy
   header @health Content-Type application/json
   respond @health "{\"ok\":true}" 200
 
-  reverse_proxy http://fastapi-worker:8000
+  # All API routes go to Python FastAPI (single backend)
+  reverse_proxy mehko-fastapi-worker:8000
 }

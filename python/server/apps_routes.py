@@ -48,6 +48,25 @@ def list_apps() -> List[str]:
         return []
     return sorted([p.name for p in APPS.iterdir() if p.is_dir()])
 
+@router.get("/{app}/forms")
+def list_forms(app: str) -> List[str]:
+    """List all available forms for a given application."""
+    app_path = app_dir(app)
+    if not app_path.exists():
+        raise HTTPException(404, f"Application '{app}' not found")
+    
+    forms_path = app_path / "forms"
+    if not forms_path.exists():
+        return []
+    
+    # Return all form directories that contain a form.pdf file
+    forms = []
+    for form_dir in forms_path.iterdir():
+        if form_dir.is_dir() and (form_dir / "form.pdf").exists():
+            forms.append(form_dir.name)
+    
+    return sorted(forms)
+
 @router.post("")
 async def create_app(request: Request, app: str = Form(None)):
     # Accept JSON {"app":...}, multipart form app=..., or ?app=...

@@ -17,6 +17,7 @@ import useProgress from "../../hooks/useProgress";
 import useAllApplicationsProgress from "../../hooks/useAllApplicationsProgress";
 import { InterviewView } from "../overlay/Interview";
 import { pinApplication, unpinApplication } from "../../firebase/userData";
+import useAvailableForms from "../../hooks/useAvailableForms";
 
 export default function DashboardApp() {
   const { applications: pinnedApplications, loading } = usePinnedApplications();
@@ -57,6 +58,33 @@ export default function DashboardApp() {
   const activeApplication =
     selectedApplications.find((c) => c.id === activeApplicationId) || null;
 
+  // Fetch available forms for the active application
+  const { forms: availableForms, loading: formsLoading } = useAvailableForms(activeApplicationId);
+
+  // Function to get the correct form name for a step
+  const getCorrectFormName = (step) => {
+    if (!step.formId || !availableForms.length) {
+      return step.formId; // Fallback to original formId
+    }
+
+    // If the step's formId exists in available forms, use it
+    if (availableForms.includes(step.formId)) {
+      return step.formId;
+    }
+
+    // If not, try to find a form that matches the step's formId (case-insensitive)
+    const matchingForm = availableForms.find(form =>
+      form.toLowerCase() === step.formId.toLowerCase()
+    );
+
+    if (matchingForm) {
+      return matchingForm;
+    }
+
+    // If still no match, use the first available form (fallback)
+    return availableForms[0] || step.formId;
+  };
+
   // Debug logging to help identify the issue
   useEffect(() => {
     if (activeApplication) {
@@ -69,6 +97,17 @@ export default function DashboardApp() {
       });
     }
   }, [activeApplication]);
+
+  // Debug logging for forms
+  useEffect(() => {
+    if (activeApplicationId && availableForms.length > 0) {
+      console.log("DashboardApp Debug - Available Forms:", {
+        appId: activeApplicationId,
+        availableForms: availableForms,
+        formsLoading: formsLoading
+      });
+    }
+  }, [activeApplicationId, availableForms, formsLoading]);
 
   // progress
   const { completedSteps, markStepComplete, markStepIncomplete } = useProgress(
@@ -423,9 +462,9 @@ export default function DashboardApp() {
           }}
         >
           <InterviewView
-            key={`${activeApplication.id}:${step.formId}`}
+            key={`${activeApplication.id}:${getCorrectFormName(step)}`}
             app={activeApplication.id}
-            form={step.formId}
+            form={getCorrectFormName(step)}
             application={activeApplication}
             step={step}
           />
