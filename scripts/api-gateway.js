@@ -43,8 +43,19 @@ app.use("/api/process-county", async (req, res) => forwardRequest(FASTAPI_URL, r
 app.use(express.static(path.join(__dirname, "..", "dist")));
 
 // Express 5: use '/*' (not '*')
-app.get("/*", (_req, res) => {
-  res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+// CRASHES - NOT NEEDED
+// app.get("/*", (_req, res) => {
+//   res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
+// });
+
+// SUBSTITUTE FOR ABOVE
+// serve static SPA
+const distDir = path.join(__dirname, "..", "dist");
+app.use(express.static(distDir));
+
+// Catch-all for NON-API routes (Express 5-safe)
+app.get(/^(?!\/api(\/|$)).*/, (_req, res) => {
+  res.sendFile(path.join(distDir, "index.html"));
 });
 
 app.listen(PORT, () => {
