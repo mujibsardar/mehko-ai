@@ -3,12 +3,20 @@
 
 import { API_BASE } from '../lib/apiBase.js';
 
-// Base URLs - Using the centralized API base configuration
+const PYTHON_API_BASE =
+  (import.meta?.env?.VITE_PYTHON_API || '').trim() ||
+  (API_BASE || '').trim() ||
+  'http://127.0.0.1:8000';
+
+const NODE_API_BASE =
+  (import.meta?.env?.VITE_NODE_API || '').trim() ||
+  (API_BASE || '').trim() ||
+  'http://127.0.0.1:3001';
+
 export const API_CONFIG = {
-  // Use the centralized API base for all endpoints
-  PYTHON_API: API_BASE,
-  NODE_API: API_BASE,
-  DEFAULT_API: API_BASE
+  PYTHON_API: PYTHON_API_BASE,
+  NODE_API: NODE_API_BASE,
+  DEFAULT_API: PYTHON_API_BASE,
 };
 
 // Specific endpoint builders

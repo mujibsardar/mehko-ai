@@ -54,7 +54,7 @@ fi
 
 # Check if monitoring is already running
 if [ -f "$MONITORING_PID_FILE" ]; then
-    local pid=$(cat "$MONITORING_PID_FILE")
+    pid=$(cat "$MONITORING_PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
         echo -e "${YELLOW}⚠️ AI monitoring is already running (PID: $pid)${NC}"
         echo -e "${YELLOW}To restart, run: ./scripts/stop-ai-monitoring.sh first${NC}"
