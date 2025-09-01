@@ -61,7 +61,6 @@ services:
     volumes:
       - ./data:/app/data:ro
       - ./config:/app/config:ro
-
   # FastAPI Worker (Python)
   fastapi-worker:
     build:
@@ -70,17 +69,32 @@ services:
     container_name: mehko-fastapi-worker
     restart: unless-stopped
     environment:
-      - PYTHONPATH=/app
+      - PYTHONPATH=/app/python
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
       - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+    command: uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 2
+    expose:
+      - "8000"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python - <<'PY'
+
+            import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')
+
+            PY"
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 5
     networks:
       - mehko-network
     volumes:
       - ./data:/app/data:ro
       - ./config:/app/config:ro
       - pdf_cache:/app/temp
-
 volumes:
   caddy_data:
   caddy_config:
