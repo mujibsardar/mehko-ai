@@ -1,5 +1,20 @@
 # 📚 **MEHKO AI Documentation**
 
+## 🚨 **CRITICAL NOTICE FOR ALL AI AGENTS**
+
+**⚠️ MAJOR ARCHITECTURAL CHANGE IN PROGRESS**
+
+We are consolidating from **dual-server architecture** to **single Python backend only**. 
+
+**🔴 IMMEDIATE ACTION REQUIRED**: 
+- **Read** `BACKEND_CONSOLIDATION_GUIDE.md` **FIRST** before any development work
+- **Stop using** Node.js server (Port 3000) and API Gateway (Port 3001)
+- **All new development** must target Python backend (Port 8000)
+
+**📖 READ THIS FIRST**: [BACKEND_CONSOLIDATION_GUIDE.md](BACKEND_CONSOLIDATION_GUIDE.md)
+
+---
+
 Welcome to the MEHKO AI system documentation! This directory contains comprehensive guides and references for developers, administrators, and AI assistants working with the system.
 
 ## 🏗️ **System Architecture Overview**
@@ -16,6 +31,7 @@ The MEHKO AI system uses a **dual-server architecture**:
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
+| **[BACKEND_CONSOLIDATION_GUIDE.md](BACKEND_CONSOLIDATION_GUIDE.md)** | **🚨 CRITICAL: Backend consolidation to Python-only** | **ALL AI agents - READ FIRST!** |
 | **[AI_ASSISTANT_ONBOARDING.md](AI_ASSISTANT_ONBOARDING.md)** | Complete system overview and architecture guide | **New AI assistants** - Start here! |
 | **[testing-guide.md](testing-guide.md)** | Testing setup and workflow | Developers and QA teams |
 
