@@ -101,14 +101,8 @@ else
     update_verification_result "services" "python_server" "failed" "Python FastAPI server is not responding on port 8000"
 fi
 
-# Check Node.js server (Port 3000)
-if curl -s "http://localhost:3000/health" >/dev/null 2>&1; then
-    log "INFO" "✅ Node.js server (Port 3000): RUNNING"
-    update_verification_result "services" "nodejs_server" "passed" "Node.js server is running on port 3000"
-else
-    log "ERROR" "❌ Node.js server (Port 3000): NOT RUNNING"
-    update_verification_result "services" "nodejs_server" "failed" "Node.js server is not responding on port 3000"
-fi
+# Note: Node.js server removed in single-server migration
+# All functionality now handled by Python FastAPI server on port 8000
 
 # Check React frontend (Port 5173)
 if curl -s "http://localhost:5173" >/dev/null 2>&1; then
@@ -161,7 +155,7 @@ for dir in "${CRITICAL_DIRS[@]}"; do
 done
 
 # Check critical files exist
-CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py" "server.js")
+CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py")
 for file in "${CRITICAL_FILES[@]}"; do
     if [ -f "$file" ]; then
         log "INFO" "✅ File $file: EXISTS"

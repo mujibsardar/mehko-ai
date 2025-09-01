@@ -118,25 +118,25 @@ echo ""
 echo -e "${YELLOW}🏗️  ARCHITECTURE KNOWLEDGE TESTS${NC}"
 echo -e "${YELLOW}================================${NC}"
 
-# Test 1: Dual-server architecture understanding
+# Test 1: Single-server architecture understanding
 run_knowledge_test \
-    "dual_server_architecture" \
-    "AI understands dual-server architecture (Python + Node.js)" \
-    "grep -q 'TWO separate servers' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "single_server_architecture" \
+    "AI understands single-server architecture (Python FastAPI only)" \
+    "grep -q 'single.*server' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q 'Python.*FastAPI.*port.*8000' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # Test 2: Port assignments knowledge
 run_knowledge_test \
     "port_assignments" \
     "AI knows correct server port assignments" \
-    "grep -q 'Port 8000' docs/AI_ASSISTANT_ONBOARDING.md && grep -q 'Python.*FastAPI' docs/AI_ASSISTANT_ONBOARDING.md && grep -q 'Port 3000' docs/AI_ASSISTANT_ONBOARDING.md && grep -q 'Node.js' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "grep -q 'Port 8000' docs/PRODUCTION_SERVER_AI_GUIDE.md && grep -q 'Python.*FastAPI' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # Test 3: Service responsibilities understanding
 run_knowledge_test \
     "service_responsibilities" \
-    "AI understands service separation of concerns" \
-    "grep -q 'PDF processing.*storage.*form management' docs/AI_ASSISTANT_ONBOARDING.md && grep -q 'AI services.*Firebase sync.*admin functions' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "AI understands unified service responsibilities" \
+    "grep -q 'AI.*chat.*PDF.*analysis.*admin.*forms' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q 'unified.*backend' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # 2. DATA FLOW KNOWLEDGE TESTS
@@ -237,18 +237,18 @@ run_knowledge_test \
     "grep -q 'GET /apps/{app}/forms/{form}/pdf' docs/AI_ASSISTANT_ONBOARDING.md" \
     "true"
 
-# Test 14: Node.js server endpoints
+# Test 14: Python server endpoints (unified)
 run_knowledge_test \
-    "nodejs_server_endpoints" \
-    "AI knows Node.js server handles AI and admin endpoints" \
-    "grep -q 'POST /api/ai-analyze-pdf' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "python_unified_endpoints" \
+    "AI knows Python server handles all endpoints including AI and admin" \
+    "grep -q 'POST /api/ai-analyze-pdf' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q '/api/ai-chat' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # Test 15: Frontend API configuration
 run_knowledge_test \
     "frontend_api_config" \
-    "AI knows frontend uses different servers for different services" \
-    "grep -q 'Update API configuration in.*src/config/api.js' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "AI knows frontend uses single Python server for all services" \
+    "grep -q 'VITE_API_URL.*8000' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q 'single.*server' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "false"
 
 # 6. WORKFLOW KNOWLEDGE TESTS
@@ -293,11 +293,11 @@ run_knowledge_test \
     "grep -q 'PDF steps require field definitions to render' docs/AI_ASSISTANT_ONBOARDING.md" \
     "true"
 
-# Test 20: Server separation constraint
+# Test 20: Unified server architecture constraint
 run_knowledge_test \
-    "server_separation_constraint" \
-    "AI knows not to mix server responsibilities" \
-    "grep -q 'Each server has distinct responsibilities' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "unified_server_architecture" \
+    "AI knows all services are handled by single Python server" \
+    "grep -q 'unified.*backend' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q 'single.*server' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # Test 21: Documentation maintenance requirement
@@ -314,11 +314,11 @@ echo ""
 echo -e "${YELLOW}🚨 COMMON PITFALLS KNOWLEDGE TESTS${NC}"
 echo -e "${YELLOW}====================================${NC}"
 
-# Test 22: Single server assumption pitfall
+# Test 22: Single server architecture understanding
 run_knowledge_test \
-    "single_server_assumption_pitfall" \
-    "AI knows not to assume single server architecture" \
-    "grep -q 'COMMON ROOKIE MISTAKES' docs/AI_ASSISTANT_ONBOARDING.md" \
+    "single_server_architecture_understanding" \
+    "AI knows the system now uses single server architecture" \
+    "grep -q 'single.*server' docs/PRODUCTION_SERVER_AI_GUIDE.md || grep -q 'unified.*backend' docs/PRODUCTION_SERVER_AI_GUIDE.md" \
     "true"
 
 # Test 23: Frontend data source pitfall

@@ -4,6 +4,9 @@
 # This script ensures AI agents can safely work with the codebase
 # while maintaining integrity and preventing corruption
 #
+# Architecture: Single-server (Python FastAPI on port 8000)
+# Migration completed: December 2024 - Node.js server removed
+#
 # Usage:
 #   ./scripts/ai-safety-protocol.sh                    # Pre-flight validation + AI mode
 #   ./scripts/ai-safety-protocol.sh --post-flight      # Post-flight validation + cleanup
@@ -317,7 +320,7 @@ test_mode_validation() {
     done
     
     # Check critical files exist
-    CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py" "server.js")
+    CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py")
     for file in "${CRITICAL_FILES[@]}"; do
         if [ -f "$file" ]; then
             log "INFO" "✅ File $file: EXISTS"
