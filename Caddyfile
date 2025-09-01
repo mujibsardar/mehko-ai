@@ -2,21 +2,17 @@
   email admin@mehko.ai
 }
 
-(api_common) {
+api.mehko.ai {
   encode zstd gzip
   log {
     output stdout
     format json
   }
-}
-
-{$DOMAIN} {
-  import api_common
 
   @health path /health
+  # header is separate from respond in Caddy
   header @health Content-Type application/json
   respond @health "{\"ok\":true}" 200
 
-  # Send everything else to the API Gateway
-  reverse_proxy api-gateway:3001
+  reverse_proxy http://api-gateway:3001
 }
