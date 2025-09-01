@@ -116,25 +116,25 @@ main() {
         log "WARN" "⚠️  Caddy health check failed"
     fi
     
-    # Check API Gateway health
-    if curl -f http://localhost:3001/health > /dev/null 2>&1; then
-        log "INFO" "✅ API Gateway is healthy"
-    else
-        log "WARN" "⚠️  API Gateway health check failed"
-    fi
-    
-    # Check AI Server health
-    if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-        log "INFO" "✅ AI Server is healthy"
-    else
-        log "WARN" "⚠️  AI Server health check failed"
-    fi
-    
-    # Check FastAPI health
+    # Check FastAPI unified backend health
     if curl -f http://localhost:8000/health > /dev/null 2>&1; then
-        log "INFO" "✅ FastAPI Worker is healthy"
+        log "INFO" "✅ FastAPI unified backend is healthy"
     else
-        log "WARN" "⚠️  FastAPI Worker health check failed"
+        log "WARN" "⚠️  FastAPI unified backend health check failed"
+    fi
+    
+    # Check AI service health
+    if curl -f http://localhost:8000/api/ai-status > /dev/null 2>&1; then
+        log "INFO" "✅ AI service is healthy"
+    else
+        log "WARN" "⚠️  AI service health check failed"
+    fi
+    
+    # Check apps API health
+    if curl -f http://localhost:8000/api/apps > /dev/null 2>&1; then
+        log "INFO" "✅ Apps API is healthy"
+    else
+        log "WARN" "⚠️  Apps API health check failed"
     fi
     
     # PHASE 5: Post-deployment
@@ -178,8 +178,8 @@ show_help() {
     echo ""
     echo -e "${BLUE}What it does:${NC}"
     echo "  • Builds React frontend"
-    echo "  • Builds and starts Docker containers"
-    echo "  • Performs health checks"
+    echo "  • Builds and starts Docker containers (single FastAPI backend)"
+    echo "  • Performs health checks on unified backend"
     echo "  • Provides deployment status"
     echo ""
 }
