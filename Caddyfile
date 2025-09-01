@@ -1,78 +1,22 @@
-# MEHKO AI API Reverse Proxy Configuration
-# This file configures Caddy to handle SSL termination and route requests to appropriate services
-
-# Main API domain
-api.mehko.ai {
-    # Enable automatic HTTPS
-    tls {
-        on_demand
-    }
-
-    # Health check endpoint
-    @health {
-        path /health
-    }
-    respond @health 200 {
-        body "OK"
-        header Content-Type "text/plain"
-    }
-
-    # API routes - route to API Gateway
-    @api {
-        path /api/*
-    }
-    reverse_proxy @api api-gateway:3001 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-
-    # AI chat routes - route directly to AI Server
-    @ai {
-        path /ai-chat/*
-    }
-    reverse_proxy @ai ai-server:3000 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-
-    # PDF processing routes - route directly to FastAPI
-    @pdf {
-        path /apps/*
-        path /fill-overlay
-        path /extract-pdf-content
-    }
-    reverse_proxy @pdf fastapi-worker:8000 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-
-    # Default route - serve static files from API Gateway
-    reverse_proxy api-gateway:3001 {
-        header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
-        header_up X-Forwarded-Proto {scheme}
-    }
-
-    # Logging
-    log {
-        output file /var/log/caddy/api.mehko.ai.log
-        format json
-    }
+{
+  email admin@mehko.ai
 }
 
-# Redirect www to non-www
-www.api.mehko.ai {
-    redir https://api.mehko.ai{uri} permanent
+(api_common) {
+  encode zstd gzip
+  log {
+    output stdout
+    format json
+  }
 }
 
-# HTTP to HTTPS redirect (fallback)
-:80 {
-    redir https://{host}{uri} permanent
+{$DOMAIN} {
+  import api_common
+
+  @health path /health
+  header @health Content-Type application/json
+  respond @health "{\"ok\":true}" 200
+
+  # Send everything else to the API Gateway
+  reverse_proxy api-gateway:3001
 }
