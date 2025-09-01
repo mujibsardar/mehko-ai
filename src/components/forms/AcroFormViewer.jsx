@@ -35,7 +35,7 @@ const AcroFormViewer = ({
 
         try {
             // Set the PDF URL for inline viewing
-            const testUrl = `${API_BASE}/apps/${app}/forms/${form}/pdf?inline=true`;
+            const testUrl = `${API_BASE}/api/apps/${app}/forms/${form}/pdf?inline=true`;
             setPdfUrl(testUrl);
             setIsAcroFormAvailable(false);
         } catch (err) {
@@ -83,7 +83,7 @@ const AcroFormViewer = ({
 
     const downloadFilledPdf = async () => {
         try {
-            const response = await fetch(`${API_BASE}/apps/${app}/forms/${form}/fill`, {
+            const response = await fetch(`${API_BASE}/api/apps/${app}/forms/${form}/fill`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",

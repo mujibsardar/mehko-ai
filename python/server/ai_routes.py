@@ -20,22 +20,43 @@ except Exception as e:
     logger.warning(f"OpenAI client not initialized: {e}")
 
 @router.post("/ai-chat")
-async def ai_chat(message: str = Form(...)):
+async def ai_chat(request: dict):
     """
     AI chat endpoint - migrated from Node.js server
+    Accepts JSON payload with 'messages' array and context
     """
     try:
         if not openai_client:
             raise HTTPException(status_code=500, detail="OpenAI client not configured")
         
+        # Extract messages from the request (frontend sends messages array)
+        messages = request.get("messages", [])
+        if not messages:
+            raise HTTPException(status_code=400, detail="Messages array is required")
+        
+        # Get the last user message
+        last_user_message = None
+        for msg in reversed(messages):
+            if msg.get("role") == "user":
+                last_user_message = msg.get("content", "")
+                break
+        
+        if not last_user_message:
+            raise HTTPException(status_code=400, detail="No user message found in messages array")
+        
+        # Extract context information
+        context = request.get("context", {})
+        application = context.get("application", {})
+        app_title = application.get("title", "MEHKO Application")
+        
         # For now, return a simple response
-        # TODO: Implement full OpenAI chat integration
+        # TODO: Implement full OpenAI chat integration with context
         response = {
-            "reply": f"AI Assistant: I received your message: '{message}'. This endpoint is now running on the Python backend!",
+            "reply": f"AI Assistant: I received your message about '{app_title}': '{last_user_message}'. This endpoint is now running on the Python backend with full context support!",
             "status": "success"
         }
         
-        logger.info(f"AI chat request processed: {message[:50]}...")
+        logger.info(f"AI chat request processed: {last_user_message[:50]}...")
         return JSONResponse(content=response)
         
     except Exception as e:

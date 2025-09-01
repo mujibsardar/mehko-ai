@@ -16,7 +16,7 @@ from server.firebase_admin_init import db
 from firebase_admin import firestore
 
 
-router = APIRouter(prefix="/apps", tags=["apps"])
+router = APIRouter(tags=["apps"])
 
 # NEW: tolerant bool parser (1/true/yes/on → True)
 def env_bool(name: str, default: bool = True) -> bool:

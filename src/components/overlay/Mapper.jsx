@@ -207,7 +207,7 @@ export default function Mapper() {
       const fd = new FormData();
       fd.append("overlay_json", JSON.stringify(overlayToSave));
 
-      const r = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`, {
+      const r = await fetch(`${API}/api/apps/${normalizedApp}/forms/${normalizedForm}/template`, {
         method: "POST",
         body: fd,
       });
@@ -296,7 +296,7 @@ export default function Mapper() {
   // Load template
   useEffect(() => {
     (async () => {
-      const res = await fetch(`${API}/apps/${normalizedApp}/forms/${normalizedForm}/template`);
+      const res = await fetch(`${API}/api/apps/${normalizedApp}/forms/${normalizedForm}/template`);
       const tpl = await res.json();
       const fields = Array.isArray(tpl?.fields)
         ? tpl.fields.map((f) => ({ ...f, rect: rectPtToPx(f.rect) }))

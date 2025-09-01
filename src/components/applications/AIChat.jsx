@@ -107,7 +107,7 @@ export default function AIChat({
         if (step.type === "pdf" && step.formId) {
           try {
             const r = await fetch(
-              `${API_APP}/apps/${application.id}/forms/${step.formId}/template`
+              `${API_APP}/api/apps/${application.id}/forms/${step.formId}/template`
             );
 
             // Check if response is ok before trying to parse JSON
@@ -167,7 +167,7 @@ export default function AIChat({
         if (step.type === "pdf" && step.formId) {
           // text
           try {
-            const url = `${API_APP}/apps/${encodeURIComponent(
+            const url = `${API_APP}/api/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/text`;
             console.log(`Fetching PDF text from: ${url}`);
@@ -198,10 +198,10 @@ export default function AIChat({
           // links
           linkMap[step.formId] = {
             title: step.title || step.formId,
-            url: `${API_APP}/apps/${encodeURIComponent(
+            url: `${API_APP}/api/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/pdf?inline=0`,
-            previewBase: `${API_APP}/apps/${encodeURIComponent(
+            previewBase: `${API_APP}/api/apps/${encodeURIComponent(
               application.id
             )}/forms/${encodeURIComponent(step.formId)}/preview-page?page=`,
           };

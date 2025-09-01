@@ -142,7 +142,7 @@ export function InterviewView({ app, form, application, step }) {
 
     const fd = new FormData();
     fd.append("answers_json", JSON.stringify(values));
-    const r = await fetch(`${API}/apps/${app}/forms/${form}/fill`, {
+    const r = await fetch(`${API}/api/apps/${app}/forms/${form}/fill`, {
       method: "POST",
       body: fd,
     });

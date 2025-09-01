@@ -268,7 +268,7 @@ export default function Admin() {
           const formData = new FormData();
           formData.append("pdf", _file);
           formData.append("formId", stepData.formId);
-          const uploadResponse = await fetch(`${API}/apps/${appId}/forms/${stepData.formId}/upload`, {
+          const uploadResponse = await fetch(`${API}/api/apps/${appId}/forms/${stepData.formId}/upload`, {
             method: "POST",
             body: formData,
           });
