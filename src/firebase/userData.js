@@ -36,6 +36,12 @@ export async function loadPdfFormData(userId, applicationId, formId) {
 }
 
 export async function pinApplication(userId, applicationId, source = "form") {
+  // Validate inputs before proceeding
+  if (!userId || !applicationId) {
+    console.warn("pinApplication: Missing required parameters", { userId, applicationId });
+    return;
+  }
+  
   const ref = doc(db, "users", userId, "pinnedApplications", applicationId);
   await setDoc(
     ref,
@@ -48,6 +54,12 @@ export async function pinApplication(userId, applicationId, source = "form") {
 }
 
 export async function unpinApplication(userId, applicationId) {
+  // Validate inputs before proceeding
+  if (!userId || !applicationId) {
+    console.warn("unpinApplication: Missing required parameters", { userId, applicationId });
+    return;
+  }
+  
   const ref = doc(db, "users", userId, "pinnedApplications", applicationId);
   await deleteDoc(ref);
 }

@@ -109,6 +109,20 @@ export default function AIChat({
             const r = await fetch(
               `${API_APP}/apps/${application.id}/forms/${step.formId}/template`
             );
+
+            // Check if response is ok before trying to parse JSON
+            if (!r.ok) {
+              console.warn(`Form template not found for ${step.formId} (${r.status}) - this is normal if the form hasn't been uploaded yet`);
+              continue;
+            }
+
+            // Check content type to ensure we're getting JSON
+            const contentType = r.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+              console.warn(`Form template for ${step.formId} returned non-JSON content (${contentType}) - skipping`);
+              continue;
+            }
+
             const j = await r.json();
             map[step.formId] = j.fields || [];
           } catch (err) {
@@ -159,6 +173,13 @@ export default function AIChat({
             console.log(`Fetching PDF text from: ${url}`);
             const r = await fetch(url);
             if (r.ok) {
+              // Check content type to ensure we're getting JSON
+              const contentType = r.headers.get('content-type');
+              if (!contentType || !contentType.includes('application/json')) {
+                console.warn(`PDF text for ${step.formId} returned non-JSON content (${contentType}) - skipping`);
+                continue;
+              }
+
               const j = await r.json();
               textMap[step.formId] = Array.isArray(j.pages)
                 ? j.pages.join("\n\n---\n\n")

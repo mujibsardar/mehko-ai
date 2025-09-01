@@ -154,7 +154,10 @@ export default function DashboardApp() {
     setActiveApplicationId(application.id);
     setActiveSection("overview");
     setCurrentStepId(null);
-    pinApplication(user?.uid, application.id);
+    // Only pin application if user is logged in
+    if (user?.uid) {
+      pinApplication(user.uid, application.id);
+    }
   };
   const handleApplicationSwitch = (applicationId) => {
     setActiveApplicationId(applicationId);
@@ -169,7 +172,10 @@ export default function DashboardApp() {
       setActiveSection("overview");
       setCurrentStepId(null);
     }
-    unpinApplication(user?.uid, applicationId);
+    // Only unpin application if user is logged in
+    if (user?.uid) {
+      unpinApplication(user.uid, applicationId);
+    }
   };
   const onStepSelect = (id) => {
     setActiveSection("steps");
