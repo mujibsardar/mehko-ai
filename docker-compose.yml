@@ -16,52 +16,9 @@ services:
     networks:
       - mehko-network
     depends_on:
-      - api-gateway
-      - ai-server
       - fastapi-worker
 
-  # API Gateway (Node.js)
-  api-gateway:
-    build:
-      context: .
-      dockerfile: Dockerfile.api-gateway
-    container_name: mehko-api-gateway
-    restart: unless-stopped
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - PORT=3001
-      - FASTAPI_URL=http://fastapi-worker:8000
-      - AI_SERVER_URL=http://ai-server:3000
-    networks:
-      - mehko-network
-    depends_on:
-      - fastapi-worker
-      - ai-server
-    volumes:
-      - ./dist:/app/dist:ro
-
-  # AI Server (Node.js)
-  ai-server:
-    build:
-      context: .
-      dockerfile: Dockerfile.ai-server
-    container_name: mehko-ai-server
-    restart: unless-stopped
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/serviceAccountKey.json
-    networks:
-      - mehko-network
-    volumes:
-      - ./data:/app/data:ro
-      - ./config:/app/config:ro
-      - ./config/serviceAccountKey.json:/app/config/serviceAccountKey.json:ro
-  # FastAPI Worker (Python)
+  # FastAPI Worker (Python) - UNIFIED BACKEND
   fastapi-worker:
     build:
       context: .
@@ -70,23 +27,16 @@ services:
     restart: unless-stopped
     environment:
       - PYTHONPATH=/app/python
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
       - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/serviceAccountKey.json
     command: uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 2
     expose:
       - "8000"
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "python - <<'PY'
-
-            import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')
-
-            PY"
-        ]
-      interval: 20s
-      timeout: 5s
+      test: [ "CMD-SHELL", "curl -fsS http://127.0.0.1:8000/health || exit 1" ]
+      interval: 10s
+      timeout: 3s
       retries: 5
     networks:
       - mehko-network
@@ -95,6 +45,7 @@ services:
       - ./config:/app/config:ro
       - ./config/serviceAccountKey.json:/app/config/serviceAccountKey.json:ro
       - pdf_cache:/app/temp
+
 volumes:
   caddy_data:
   caddy_config:

@@ -14,5 +14,5 @@ api.mehko.ai {
   header @health Content-Type application/json
   respond @health "{\"ok\":true}" 200
 
-  reverse_proxy http://api-gateway:3001
+  reverse_proxy http://fastapi-worker:8000
 }
