@@ -54,13 +54,13 @@ services:
       - PORT=3000
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
-      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/serviceAccountKey.json
     networks:
       - mehko-network
     volumes:
       - ./data:/app/data:ro
       - ./config:/app/config:ro
+      - ./config/serviceAccountKey.json:/app/config/serviceAccountKey.json:ro
   # FastAPI Worker (Python)
   fastapi-worker:
     build:
@@ -71,8 +71,7 @@ services:
     environment:
       - PYTHONPATH=/app/python
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
-      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - FIREBASE_SERVICE_ACCOUNT_PATH=/app/config/serviceAccountKey.json
     command: uvicorn server.main:app --host 0.0.0.0 --port 8000 --workers 2
     expose:
       - "8000"
@@ -94,6 +93,7 @@ services:
     volumes:
       - ./data:/app/data:ro
       - ./config:/app/config:ro
+      - ./config/serviceAccountKey.json:/app/config/serviceAccountKey.json:ro
       - pdf_cache:/app/temp
 volumes:
   caddy_data:
