@@ -1,16 +1,14 @@
 // API Configuration
 // This file centralizes all API endpoints and configuration
 
-const isDevelopment = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV; // Fixed to handle undefined NODE_ENV
+import { API_BASE } from '../lib/apiBase.js';
 
-// Base URLs - Temporarily using direct connections while API Gateway is fixed
+// Base URLs - Using the centralized API base configuration
 export const API_CONFIG = {
-  // Direct backend connections (temporary)
-  PYTHON_API: isDevelopment ? 'http://127.0.0.1:8000' : '/api',
-  NODE_API: isDevelopment ? 'http://localhost:3000' : '/api',
-
-  // Default API (temporarily using Node.js for AI endpoints)
-  DEFAULT_API: isDevelopment ? 'http://localhost:3000' : '/api'
+  // Use the centralized API base for all endpoints
+  PYTHON_API: API_BASE,
+  NODE_API: API_BASE,
+  DEFAULT_API: API_BASE
 };
 
 // Specific endpoint builders

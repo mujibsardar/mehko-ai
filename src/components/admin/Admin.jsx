@@ -8,9 +8,10 @@ import {
   getDocs,
   collection,
 } from "firebase/firestore";
+import { buildApiUrl } from "../../lib/apiBase";
 
 import "./Admin.scss";
-const API = "/api/apps";
+const API = buildApiUrl("/apps");
 export default function Admin() {
   const { user, loading, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState("apps"); // "apps" | "reports" | "import"

@@ -1,6 +1,8 @@
+import { buildApiUrl } from '../lib/apiBase.js';
+
 export async function saveProgress(applicationId, formData, userId = null) {
   try {
-    const res = await fetch("/api/save-progress", {
+    const res = await fetch(buildApiUrl("/save-progress"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

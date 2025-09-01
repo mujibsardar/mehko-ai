@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "./AIFieldMapper.scss";
 import { ENDPOINTS } from "../../config/api";
+import { buildApiUrl } from "../../lib/apiBase";
 const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState([]);
@@ -17,7 +18,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
   }, [app, form]);
   const loadExistingOverlay = async () => {
     try {
-      const response = await fetch(`/api/apps/${app}/forms/${form}/template`);
+      const response = await fetch(buildApiUrl(`/apps/${app}/forms/${form}/template`));
       const data = await response.json();
       setOverlay(data);
     } catch (_err) {
@@ -134,7 +135,7 @@ const AIFieldMapper = ({ app, form, onMappingComplete }) => {
       // Save the new overlay
       const formData = new FormData();
       formData.append("overlay_json", JSON.stringify(newOverlay));
-      const response = await fetch(`/api/apps/${app}/forms/${form}/template`, {
+      const response = await fetch(buildApiUrl(`/apps/${app}/forms/${form}/template`), {
         method: "POST",
         body: formData,
       });

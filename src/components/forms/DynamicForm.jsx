@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { ENDPOINTS } from "../../config/api";
+import { buildApiUrl } from "../../lib/apiBase";
 import {
   saveFormData,
   loadFormData,
@@ -87,7 +88,7 @@ export default function DynamicForm({
 
   const handleDownload = async () => {
     try {
-      const res = await fetch("/api/fill-pdf", {
+      const res = await fetch(buildApiUrl("/fill-pdf"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ applicationId, formName, formData }),

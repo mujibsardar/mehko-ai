@@ -5,6 +5,7 @@ import useProgress from "../../hooks/useProgress";
 import ReportButton from "../generic/ReportButton";
 import ReportIssueModal from "../modals/ReportIssueModal";
 import SubStepActions from "./SubStepActions";
+import { buildApiUrl } from "../../lib/apiBase";
 
 // Helper function to render markdown-like formatting
 const renderMarkdown = (text) => {
@@ -67,7 +68,7 @@ function InfoStep({
 
     try {
       const response = await fetch(
-        `/api/apps/${applicationId}/forms/${step.formId}/pdf`
+        buildApiUrl(`/apps/${applicationId}/forms/${step.formId}/pdf`)
       );
       if (!response.ok) throw new Error("Failed to download PDF");
 
