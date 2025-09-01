@@ -43,7 +43,7 @@ const formatAIResponse = (text) => {
     // Clean up numbered lists
     .replace(/(\d+\.)\s+/g, '\n$1 ') // Ensure proper spacing for numbered lists
     // Clean up bullet points (but don't over-process)
-    .replace(/(^|\n)([•\*\-])\s*/g, '$1$2 ') // Ensure proper spacing for bullets
+    .replace(/(^|\n)([•*-])\s*/g, '$1$2 ') // Ensure proper spacing for bullets
     .trim();
 
   return formatted;

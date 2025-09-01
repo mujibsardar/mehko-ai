@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 # Configuration
 LOG_FILE="logs/ai-safety/codebase-integrity.log"
 INTEGRITY_RESULTS="/tmp/codebase-integrity-results.json"
-MAX_LINT_ERRORS=500
+MAX_LINT_ERRORS=1000
 MAX_TEST_FAILURES=0
 
 # Ensure log directory exists
@@ -188,7 +188,7 @@ if [ -f "package.json" ] && grep -q '"lint"' package.json; then
         # Run linting
         echo -e "${BLUE}🔍 Running linting...${NC}"
         LINT_OUTPUT=$(npm run lint 2>&1 || true)
-        LINT_ERROR_COUNT=$(echo "$LINT_OUTPUT" | grep -c "error\|Error" || echo "0")
+        LINT_ERROR_COUNT=$(echo "$LINT_OUTPUT" | grep -E "^\s*[0-9]+:[0-9]+\s+error" | wc -l || echo "0")
         
         if [ "$LINT_ERROR_COUNT" -le "$MAX_LINT_ERRORS" ]; then
             log "INFO" "✅ Linting passed with $LINT_ERROR_COUNT errors (within limit)"

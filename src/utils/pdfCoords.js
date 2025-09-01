@@ -99,7 +99,7 @@ export const clampRectPx = (rect, canvasRef, zoom = 1) => {
 
 // Ensure minimum field size (24x16 pixels minimum)
 export const ensureMinSize = (rect, minWidth = 24, minHeight = 16) => {
-  const [x1, y1, x2, y2] = rect;
+  let [x1, y1, x2, y2] = rect;
   const width = x2 - x1;
   const height = y2 - y1;
   

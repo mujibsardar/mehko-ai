@@ -18,6 +18,8 @@ export default [
       "python/**/.venv/**",
       "python/**/__pycache__/**",
       "seed/**",
+      "temp/**",
+      "logs/**",
     ],
   },
   {
@@ -52,6 +54,7 @@ export default [
         performance: "readonly",
         setImmediate: "readonly",
         MessageChannel: "readonly",
+        location: "readonly",
         // Node.js globals
         process: "readonly",
         Buffer: "readonly",
