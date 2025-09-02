@@ -6,8 +6,7 @@ api.mehko.ai {
   encode zstd gzip
 
   # Route ALL /api/* to FastAPI; handle_path already strips /api
-  @api path /api/*
-  handle_path @api {
+  handle_path /api/* {
     reverse_proxy fastapi-worker:8000
   }
 
