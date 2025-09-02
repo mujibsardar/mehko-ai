@@ -9,13 +9,19 @@ const PYTHON_API_BASE =
   (API_BASE || '').trim() ||
   'http://127.0.0.1:8000';
 
+// Check if we're in local development (no Caddy proxy)
+const isLocalDev = PYTHON_API_BASE.includes('127.0.0.1') || PYTHON_API_BASE.includes('localhost');
+
 export const API_CONFIG = {
   PYTHON_API: PYTHON_API_BASE,
   DEFAULT_API: PYTHON_API_BASE,
 };
 
 // Specific endpoint builders
-export const buildEndpoint = (base, path) => `${base}${path}`;
+export const buildEndpoint = (base, path) => {
+  // Always use the full path - Caddy handles /api prefix stripping
+  return `${base}${path}`;
+};
 
 // Common endpoints - ALL NOW USE PYTHON BACKEND
 export const ENDPOINTS = {

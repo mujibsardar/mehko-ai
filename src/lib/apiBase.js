@@ -3,7 +3,7 @@
 
 export const API_BASE =
   import.meta.env.VITE_API_URL ||
-  (location.hostname === 'localhost' ? 'http://127.0.0.1:8000' : 'https://api.mehko.ai');
+  (location.hostname === 'localhost' ? 'http://localhost' : 'https://api.mehko.ai');
 
 // Helper function to build API URLs
 export const buildApiUrl = (path) => {

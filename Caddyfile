@@ -2,6 +2,31 @@
   email admin@mehko.ai
 }
 
+# Local development
+localhost:80, 127.0.0.1:80 {
+  encode zstd gzip
+
+  # Route ALL /api/* to FastAPI; handle_path already strips /api
+  handle_path /api/* {
+    reverse_proxy fastapi-worker:8000
+  }
+
+  # Caddy's own health (only for non-API paths)
+  @caddy_health path /health
+  respond @caddy_health 200
+
+  # Default: reject anything else on this host (safety)
+  handle {
+    respond 404
+  }
+
+  log {
+    output stdout
+    format json
+  }
+}
+
+# Production
 api.mehko.ai {
   encode zstd gzip
 
