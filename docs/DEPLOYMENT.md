@@ -19,9 +19,9 @@ This guide walks you through deploying MEHKO AI to production using:
 │  ┌─────────────────────────┐ │ ┌─────────────────────────────┐ │
 │  │ mehko.ai               │ │ │ Caddy (Reverse Proxy)      │ │
 │  │ React SPA (Static)     │ │ │ ├─ api.mehko.ai            │ │
-│  │ Build: /dist/          │ │ │ ├─ Node AI Server (3000)   │ │
-│  │ CDN: Cloudflare        │ │ │ ├─ Python FastAPI (8000)   │ │
-│  │                        │ │ │ └─ API Gateway (3001)      │ │
+│  │ Build: /dist/          │ │ │ └─ Python FastAPI (8000)   │ │
+│  │ CDN: Cloudflare        │ │ │    (All backend services)  │ │
+│  │                        │ │ │                             │ │
 │  └─────────────────────────┘ │ └─────────────────────────────┘ │
 │                              │                                 │
 │  Database: Firebase Firestore (existing)                      │
@@ -144,9 +144,8 @@ This guide walks you through deploying MEHKO AI to production using:
 # Domain Configuration
 DOMAIN=api.mehko.ai
 
-# Node.js Services
-NODE_ENV=production
-PORT=3001
+# Python FastAPI Services
+PYTHON_ENV=production
 
 # OpenAI Configuration
 OPENAI_API_KEY=your_openai_api_key_here
@@ -170,7 +169,7 @@ FIREBASE_CLIENT_EMAIL=your_firebase_service_account_email@your_project.iam.gserv
 ```
 
 ### Docker Compose (docker-compose.yml)
-- **4 services**: Caddy, API Gateway, AI Server, FastAPI Worker
+- **2 services**: Caddy (reverse proxy), FastAPI Worker (all backend services)
 - **Automatic restart**: All services restart on failure
 - **Health checks**: Built-in health monitoring
 - **Volume mounts**: Persistent data and configuration

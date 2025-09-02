@@ -16,7 +16,7 @@
 **📚 Required reading:** `AI_INSTRUCTIONS.md` | `.cursor/rules/README.md`
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docker.com/)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org/)
 [![React](https://img.shields.io/badge/React-18+-61dafb.svg)](https://reactjs.org/)
 
@@ -37,8 +37,8 @@ MEHKO AI is a comprehensive web application that helps entrepreneurs navigate th
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React Frontend │    │  Node.js Server │    │ Python FastAPI  │
-│   (Port 5173)   │◄──►│   (Port 3000)   │◄──►│   (Port 8000)   │
+│   React Frontend │    │  Caddy Reverse  │    │ Python FastAPI  │
+│   (Port 5173)   │◄──►│   Proxy (80/443)│◄──►│   (Port 8000)   │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
          │                       │                       │
@@ -53,8 +53,9 @@ MEHKO AI is a comprehensive web application that helps entrepreneurs navigate th
 
 ### **Prerequisites**
 
-- **Node.js** 18+ and **npm**
-- **Python** 3.8+
+- **Docker** and **Docker Compose**
+- **Node.js** 18+ and **npm** (for React development)
+- **Python** 3.8+ (for local development)
 - **Firebase** project with Firestore enabled
 - **OpenAI API** key for AI agent functionality
 
@@ -90,21 +91,23 @@ FIREBASE_CLIENT_EMAIL=your_client_email
 ### **3. Start All Services**
 
 ```bash
-# Start all services (Python, Node.js, React)
-./scripts/start-all-services.sh
+# Start all services (Docker Compose + React)
+docker-compose up -d
+./scripts/dev.sh
 
 # Monitor logs in separate terminals
-./scripts/watch-logs.sh
+./scripts/docker-logs.sh
 
 # Stop all services
-./scripts/stop-all-services.sh
+docker-compose down
 ```
 
 ### **4. Access Applications**
 
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
+- **Frontend**: http://localhost:5173 (React dev server)
+- **Backend API**: http://localhost/api (via Caddy reverse proxy)
+- **API Docs**: http://localhost/api/docs (via Caddy reverse proxy)
+- **Health Check**: http://localhost/health
 
 ## 📁 **Project Structure**
 
@@ -227,7 +230,7 @@ Generated applications include:
 
 - **OpenAI GPT-4** - Content generation and analysis
 - **Puppeteer** - Web scraping and automation
-- **Node.js** - Script execution and automation
+- **Python Scripts** - Automation and data processing
 
 ### **Data & Storage**
 

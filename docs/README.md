@@ -2,16 +2,18 @@
 
 ## 🚨 **CRITICAL NOTICE FOR ALL AI AGENTS**
 
-**✅ SINGLE-SERVER ARCHITECTURE COMPLETED**
+**✅ CLEAN ARCHITECTURE COMPLETED**
 
-We have successfully consolidated from **dual-server architecture** to **single Python backend only**. 
+We have successfully consolidated to a **clean, modern architecture** using Docker Compose. 
 
-**🔴 IMMEDIATE ACTION REQUIRED**: 
-- **Read** `BACKEND_CONSOLIDATION_GUIDE.md` **FIRST** before any development work
-- **All backend services** now run on Python FastAPI (Port 8000)
-- **Node.js server and API Gateway** have been **REMOVED**
+**🎯 CURRENT ARCHITECTURE**: 
+- **Caddy** (reverse proxy) - ports 80/443
+- **FastAPI** (Python backend) - port 8000 (internal)
+- **React** (frontend) - port 5173 (dev server)
+- **No Node.js server** - completely removed
+- **No separate API gateway** - Caddy handles routing
 
-**📖 READ THIS FIRST**: [BACKEND_CONSOLIDATION_GUIDE.md](BACKEND_CONSOLIDATION_GUIDE.md)
+**📖 READ THIS FIRST**: [AI_HANDOFF_CLEANUP.md](../AI_HANDOFF_CLEANUP.md)
 
 ---
 
@@ -19,10 +21,10 @@ Welcome to the MEHKO AI system documentation! This directory contains comprehens
 
 ## 🏗️ **System Architecture Overview**
 
-The MEHKO AI system uses a **dual-server architecture**:
+The MEHKO AI system uses a **clean, modern architecture**:
 
-- **🐍 Python FastAPI Server (Port 8000)**: PDF processing, storage, and form management
-- **🟢 Node.js Server (Port 3000)**: AI services, Firebase sync, and admin functions
+- **🌐 Caddy Reverse Proxy (Port 80/443)**: Routes API requests to backend
+- **🐍 Python FastAPI Server (Port 8000)**: All backend services (AI, PDF processing, Firebase sync)
 - **⚛️ React Frontend (Port 5173)**: User interface and PDF form rendering
 
 ## 📋 **Documentation Index**

@@ -14,12 +14,12 @@ MEHKO AI is a **multi-service microservices application** with the following com
 ┌─────────────────────────────────────────────────────────────────┐
 │                        MEHKO AI Application                    │
 ├─────────────────────────────────────────────────────────────────┤
-│  Frontend Layer  │  API Gateway  │  Backend Services          │
-│  ┌─────────────┐ │ ┌───────────┐ │ ┌─────────────┐ ┌─────────┐ │
-│  │ React SPA   │ │ │Node.js    │ │ │Python      │ │Node.js  │ │
-│  │ (Port 5173) │ │ │Gateway    │ │ │FastAPI     │ │AI      │ │
-│  │             │ │ │(Port 3001)│ │ │(Port 8000) │ │Server  │ │
-│  └─────────────┘ │ └───────────┘ │ └─────────────┘ │(Port 3000)│ │
+│  Frontend Layer  │  Reverse Proxy  │  Backend Services        │
+│  ┌─────────────┐ │ ┌─────────────┐ │ ┌─────────────────────┐ │
+│  │ React SPA   │ │ │   Caddy     │ │ │   Python FastAPI    │ │
+│  │ (Port 5173) │ │ │(Port 80/443)│ │ │   (Port 8000)       │ │
+│  │             │ │ │             │ │ │   All Services      │ │
+│  └─────────────┘ │ └─────────────┘ │ └─────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
