@@ -1,70 +1,27 @@
-# MEHKO AI Agent
+# Scripts
 
-## Overview
+Essential scripts for MEHKO AI development and deployment.
 
-The MEHKO AI Agent automatically crawls county government websites and generates complete MEHKO application JSON files.
+## Development
+- `dev.sh` - Start development environment (Docker + React)
+- `docker-logs.sh` - Watch Docker Compose logs
 
-## Setup
+## Deployment
+- `deploy.sh` - Deploy to production
 
-### 1. Install Dependencies
+## Data Management
+- `clear-all-counties.mjs` - Clear all county data
+- `clear-form-data.mjs` - Clear form data
+- `seedApplications.js` - Seed application data
+- `set-admin-role.mjs` - Set admin roles
 
-```bash
-npm install
-```
+## Testing
+- `test-*.mjs` - Various test scripts
 
-### 2. Set OpenAI API Key
+## Git
+- `git-all.sh` - Stage and commit all changes
+- `git-merge-main.sh` - Merge to main branch
 
-Create a `.env` file in your project root:
-
-```bash
-# Create .env file
-echo "OPENAI_API_KEY=your_actual_api_key_here" > .env
-```
-
-Or manually create `.env` with:
-
-```
-OPENAI_API_KEY=your_actual_api_key_here
-```
-
-**Note**: The `.env` file is already in `.gitignore` for security.
-
-## Usage
-
-### Basic Usage
-
-```bash
-node scripts/mehko-agent.mjs "https://county-website-url.com/mehko"
-```
-
-### Example
-
-```bash
-node scripts/mehko-agent.mjs "https://www.ocgov.com/gov/health/eh/food/home-kitchen"
-```
-
-## What It Does
-
-1. **🕷️ Crawls** the county website
-2. **🤖 Uses AI** to extract and structure information
-3. **📄 Generates** complete JSON application file
-4. **💰 Cost-effective** (~$0.06-0.12 per county)
-
-## Output
-
-Creates a file like `generated_orange_county_mehko.json` in the `generated/` directory.
-
-## Integration
-
-After generation, use the add-county script to add it to your manifest:
-
-```bash
-# The script automatically looks in the generated/ directory
-node scripts/add-county.mjs generated_san_diego_mehko.json
-```
-
-## Requirements
-
-- OpenAI API key
-- Node.js with ES modules support
-- Internet connection for web crawling
+## AI Safety
+- `ai-safety-pre-commit.sh` - Pre-commit safety checks
+- `ai-safety-protocol.sh` - AI safety protocol
