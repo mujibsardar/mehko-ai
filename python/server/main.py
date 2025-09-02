@@ -26,12 +26,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Unified routers for all services
-app.include_router(apps_router, prefix="/api/apps")      # /api/apps/...
-app.include_router(overlay_router, prefix="/api")        # /api/fill-pdf, etc.
-app.include_router(pdf_router, prefix="/api")            # /api/extract-pdf-content
-app.include_router(ai_router, prefix="/api")             # /api/ai-chat, /api/ai-analyze-pdf, etc.
-app.include_router(admin_router, prefix="/api")          # /api/admin/process-county, etc.
+# Unified routers for all services (Caddy strips /api prefix)
+app.include_router(apps_router, prefix="/apps")          # /apps/... (after Caddy strips /api)
+app.include_router(overlay_router, prefix="")            # /fill-pdf, etc. (after Caddy strips /api)
+app.include_router(pdf_router, prefix="")                # /extract-pdf-content (after Caddy strips /api)
+app.include_router(ai_router, prefix="")                 # /ai-chat, /ai-analyze-pdf, etc. (after Caddy strips /api)
+app.include_router(admin_router, prefix="")              # /admin/process-county, etc. (after Caddy strips /api)
 
 @app.get("/health")
 def health():

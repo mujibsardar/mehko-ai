@@ -4,16 +4,24 @@
 
 api.mehko.ai {
   encode zstd gzip
+
+  # Caddy's own health (optional)
+  @caddy_health path /health
+  respond @caddy_health 200
+
+  # Route ALL /api/* to FastAPI; handle_path already strips /api
+  @api path /api/*
+  handle_path @api {
+    reverse_proxy fastapi-worker:8000
+  }
+
+  # Default: reject anything else on this host (safety)
+  handle {
+    respond 404
+  }
+
   log {
     output stdout
     format json
   }
-
-  # Health endpoint served by Caddy itself
-  @health path /health
-  header @health Content-Type application/json
-  respond @health "{\"ok\":true}" 200
-
-  # All API routes go to Python FastAPI (single backend)
-  reverse_proxy mehko-fastapi-worker:8000
 }
