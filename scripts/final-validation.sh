@@ -130,7 +130,7 @@ run_final_validation \
 run_final_validation \
     "critical_files_integrity" \
     "Critical project files are present and accessible" \
-    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ] && [ -f 'server.js' ] && [ -f 'AI_INSTRUCTIONS.md' ]" \
+    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ] && [ -f 'AI_INSTRUCTIONS.md' ]" \
     "true"
 
 # Test 3: AI safety infrastructure integrity

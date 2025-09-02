@@ -429,7 +429,7 @@ else
 fi
 
 # Check for empty critical files
-CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py" "server.js")
+CRITICAL_FILES=("package.json" "python/requirements.txt" "python/server/main.py")
 EMPTY_CRITICAL_FILES=0
 for file in "${CRITICAL_FILES[@]}"; do
     if [ -f "$file" ] && [ ! -s "$file" ]; then

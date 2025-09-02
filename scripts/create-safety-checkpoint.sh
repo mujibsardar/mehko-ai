@@ -123,7 +123,6 @@ CRITICAL_FILES=(
     "package.json"
     "python/requirements.txt"
     "python/server/main.py"
-    "server.js"
     "src/App.jsx"
     "data/manifest.json"
     ".cursor/rules/README.md"
@@ -172,14 +171,8 @@ cat > "$CHECKPOINT_DIR/$CHECKPOINT_NAME/service-status.json" << EOF
             "port": 8000,
             "status": "$(curl -s "http://localhost:8000/health" >/dev/null 2>&1 && echo "running" || echo "not_running")"
         },
-        "node_server": {
-            "port": 3000,
-            "status": "$(curl -s "http://localhost:3000/health" >/dev/null 2>&1 && echo "running" || echo "not_running")"
-        },
-        "api_gateway": {
-            "port": 3001,
-            "status": "$(curl -s "http://localhost:3001/health" >/dev/null 2>&1 && echo "running" || echo "not_running")"
-        }
+
+
     }
 }
 EOF

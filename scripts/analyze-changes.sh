@@ -277,20 +277,20 @@ if curl -s "http://localhost:8000/health" >/dev/null 2>&1; then
 fi
 
 # Node.js server
-NODE_STATUS="not_running"
-if curl -s "http://localhost:3000/health" >/dev/null 2>&1; then
-    NODE_STATUS="running"
+FASTAPI_STATUS="not_running"
+if curl -s "http://localhost:8000/health" >/dev/null 2>&1; then
+    FASTAPI_STATUS="running"
 fi
 
-# API Gateway
-GATEWAY_STATUS="not_running"
-if curl -s "http://localhost:3001/health" >/dev/null 2>&1; then
-    GATEWAY_STATUS="running"
+# Caddy Reverse Proxy
+CADDY_STATUS="not_running"
+if curl -s "http://localhost/health" >/dev/null 2>&1; then
+    CADDY_STATUS="running"
 fi
 
 echo -e "  • Python server (8000): $PYTHON_STATUS"
 echo -e "  • Node.js server (3000): $NODE_STATUS"
-echo -e "  • API Gateway (3001): $GATEWAY_STATUS"
+echo -e "  • Caddy reverse proxy: $CADDY_STATUS"
 
 # Add to report
 cat >> "$SERVICE_CHANGES_REPORT" << EOF
@@ -300,7 +300,7 @@ cat >> "$SERVICE_CHANGES_REPORT" << EOF
 |---------|------|--------|
 | Python FastAPI | 8000 | \`$PYTHON_STATUS\` |
 | Node.js Server | 3000 | \`$NODE_STATUS\` |
-| API Gateway | 3001 | \`$GATEWAY_STATUS\` |
+| Caddy Reverse Proxy | 80/443 | \`$CADDY_STATUS\` |
 
 ## Service Health Checks
 EOF
@@ -317,8 +317,8 @@ for service in "python" "node" "gateway"; do
             name="Node.js Server"
             ;;
         "gateway")
-            port=3001
-            name="API Gateway"
+            port=80
+            name="Caddy Reverse Proxy"
             ;;
     esac
     

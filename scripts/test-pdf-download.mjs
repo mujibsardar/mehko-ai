@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
 async function testPdfDownload() {
-  const baseUrl = "http://localhost:3000"; // Adjust if your server runs on different port
+  const baseUrl = "http://localhost"; // Docker with Caddy
   const testUrl = `${baseUrl}/api/apps/los_angeles_mehko/forms/MEHKO_SOP-English/pdf`;
   
   console.log("Testing PDF download endpoint...");

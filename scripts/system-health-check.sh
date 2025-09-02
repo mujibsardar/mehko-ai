@@ -132,15 +132,15 @@ run_health_check \
 # Test 2: Node.js server health
 run_health_check \
     "nodejs_server_health" \
-    "Node.js server is responding" \
-    "curl -s 'http://localhost:3000/health' >/dev/null" \
+    "FastAPI server is responding" \
+    "curl -s 'http://localhost:8000/health' >/dev/null" \
     "critical"
 
-# Test 3: API Gateway health
+# Test 3: Caddy reverse proxy health
 run_health_check \
-    "api_gateway_health" \
-    "API Gateway is responding" \
-    "curl -s 'http://localhost:3001/health' >/dev/null" \
+    "caddy_health" \
+    "Caddy reverse proxy is responding" \
+    "curl -s 'http://localhost/health' >/dev/null" \
     "critical"
 
 # Test 4: React dev server health
@@ -196,7 +196,7 @@ run_health_check \
 run_health_check \
     "critical_files_exist" \
     "Critical project files exist" \
-    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ] && [ -f 'server.js' ]" \
+    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ]" \
     "critical"
 
 # Test 10: Log directories accessible
@@ -252,7 +252,7 @@ run_health_check \
 run_health_check \
     "port_availability_check" \
     "Required ports are available" \
-    "! lsof -Pi :8000,3000,3001,5173 -sTCP:LISTEN -t >/dev/null 2>&1 || echo 'Ports in use by our services'" \
+    "! lsof -Pi :8000,3000,5173,80,443 -sTCP:LISTEN -t >/dev/null 2>&1 || echo 'Ports in use by our services'" \
     "warning"
 
 # Test 16: Internet connectivity

@@ -190,7 +190,7 @@ run_quality_test \
 run_quality_test \
     "critical_files" \
     "Critical project files exist" \
-    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ] && [ -f 'server.js' ]" \
+    "[ -f 'package.json' ] && [ -f 'python/server/main.py' ]" \
     "true"
 
 # Test 10: Documentation structure

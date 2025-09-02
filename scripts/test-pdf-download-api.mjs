@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
 async function testPdfDownloadAPI() {
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "http://localhost"; // Docker with Caddy
   const testData = {
     url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     appId: "test_county_mehko",

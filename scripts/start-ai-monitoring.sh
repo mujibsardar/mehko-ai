@@ -148,9 +148,9 @@ log "INFO" "🔧 Starting service monitoring..."
             echo "$(date): Python server not responding" >> "logs/ai-safety/ai-development-$(cat "$AI_MODE_FLAG").log" 2>/dev/null || true
         fi
         
-        # Check Node.js server
-        if curl -s "http://localhost:3000/health" >/dev/null 2>&1; then
-            echo "$(date): Node.js server healthy" >> "logs/ai-safety/ai-development-$(cat "$AI_MODE_FLAG").log" 2>/dev/null || true
+        # Check FastAPI server
+        if curl -s "http://localhost:8000/health" >/dev/null 2>&1; then
+            echo "$(date): FastAPI server healthy" >> "logs/ai-safety/ai-development-$(cat "$AI_MODE_FLAG").log" 2>/dev/null || true
         else
             log "WARN" "⚠️ Node.js server not responding"
             echo "$(date): Node.js server not responding" >> "logs/ai-safety/ai-development-$(cat "$AI_MODE_FLAG").log" 2>/dev/null || true
