@@ -14,6 +14,8 @@ const Sidebar = ({
   selectedStepId,
   allProgress = {}, // Updated to receive all progress data
   getProgressPercentage, // Function to calculate progress percentage
+  mobileOpen = false, // Mobile sidebar state
+  onMobileClose, // Function to close mobile sidebar
 }) => {
   const {
     collapsedApps,
@@ -28,13 +30,32 @@ const Sidebar = ({
   const { isAdmin } = useAuth();
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-header">
         <h3>Your Applications</h3>
         {isAdmin && (
           <div className="admin-indicator">
             <span className="admin-badge">👑</span>
           </div>
+        )}
+        {/* Mobile close button */}
+        {mobileOpen && onMobileClose && (
+          <button
+            className="mobile-close-btn"
+            onClick={onMobileClose}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              fontSize: '18px',
+              cursor: 'pointer',
+              padding: '4px',
+              borderRadius: '4px',
+              color: '#6b7280'
+            }}
+            title="Close menu"
+          >
+            ✕
+          </button>
         )}
       </div>
 
@@ -67,7 +88,13 @@ const Sidebar = ({
             <div
               key={application.id}
               className="sidebar-item-wrapper"
-              onClick={() => onSelect(application.id)}
+              onClick={() => {
+                onSelect(application.id);
+                // Close mobile sidebar when selecting an application
+                if (mobileOpen && onMobileClose) {
+                  onMobileClose();
+                }
+              }}
             >
               <div className={`sidebar-item ${isActive ? "active" : ""}`}>
                 <div className="sidebar-app-title">{application.title}</div>

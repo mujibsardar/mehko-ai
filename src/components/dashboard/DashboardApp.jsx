@@ -37,6 +37,9 @@ export default function DashboardApp() {
       ? window.matchMedia("(min-width: 1200px)").matches
       : true
   );
+  
+  // Mobile sidebar state
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -46,6 +49,13 @@ export default function DashboardApp() {
     setWide(mq.matches);
     return () => mq.removeEventListener?.("change", fn);
   }, []);
+  
+  // Close mobile sidebar when switching to wide view
+  useEffect(() => {
+    if (wide && mobileSidebarOpen) {
+      setMobileSidebarOpen(false);
+    }
+  }, [wide, mobileSidebarOpen]);
 
   // seed pinned apps
   useEffect(() => {
@@ -550,6 +560,42 @@ export default function DashboardApp() {
     <>
       <Header />
       <div className="app-wrapper">
+        {/* Mobile menu button */}
+        {!wide && (
+          <button
+            className="mobile-menu-button"
+            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+            style={{
+              position: 'fixed',
+              top: '80px',
+              left: '12px',
+              zIndex: 1001,
+              padding: '8px 12px',
+              background: '#10b981',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            ☰ Menu
+          </button>
+        )}
+        
+        {/* Mobile overlay */}
+        {!wide && (
+          <div 
+            className={`mobile-overlay ${mobileSidebarOpen ? 'active' : ''}`}
+            onClick={() => setMobileSidebarOpen(false)}
+          />
+        )}
+        
         {/* Left navigation */}
         <Sidebar
           applications={selectedApplications}
@@ -562,6 +608,8 @@ export default function DashboardApp() {
           selectedStepId={currentStepId}
           allProgress={allProgress}
           getProgressPercentage={getProgressPercentage}
+          mobileOpen={mobileSidebarOpen}
+          onMobileClose={() => setMobileSidebarOpen(false)}
         />
 
         {/* Main + AI right panel */}
@@ -574,6 +622,13 @@ export default function DashboardApp() {
             gap: 16,
             // ensure the grid itself is tall enough to make the aside fill
             minHeight: "calc(100vh - 90px)",
+            
+            // Mobile responsive adjustments
+            ...(wide ? {} : {
+              gap: 12,
+              minHeight: "auto",
+              paddingTop: "60px" // Space for mobile menu button
+            })
           }}
         >
           {/* Main content */}
