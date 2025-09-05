@@ -161,6 +161,9 @@ test.describe('Dashboard', () => {
     const removeButton = page.locator('.remove-btn');
     
     if (await removeButton.isVisible()) {
+      // Ensure element is in viewport and stable for mobile
+      await removeButton.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500); // Wait for scroll to complete
       await removeButton.click();
       
       // Verify application is removed from sidebar using specific selector
