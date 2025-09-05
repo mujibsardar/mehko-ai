@@ -1974,34 +1974,30 @@
       {
         "id": "sop_form",
         "title": "Standard Operating Procedures (SOP)",
-        "type": "pdf",
-        "formId": "BERKELEY_MEHKO_SOP",
-        "pdfUrl": "Contact Berkeley EHD for form",
-        "appId": "city_of_berkeley_mehko",
+        "type": "info",
         "action_required": true,
-        "fill_pdf": true,
-        "content": "**What to do:** Complete the MEHKO SOP covering menu, prep, cooling/holding, cleaning, and sanitation.\n\n**Why it matters:** Shows how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Contact Berkeley Environmental Health at (510) 981-5310 to request the SOP form.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "fill_pdf": false,
+        "content": "**What to do:** Please reach out to City of Berkeley Environmental Health Division to obtain the MEHKO SOP form.\n\n**Contact Information:**\n- **Phone:** (510) 981-5310\n- **Department:** City of Berkeley Environmental Health Division\n- **Website:** City of Berkeley Food Safety Program page",
         "searchTerms": [
           "Berkeley MEHKO SOP form",
           "Berkeley MEHKO Standard Operating Procedures",
           "City of Berkeley home kitchen SOP"
-        ]
+        ],
+        "appId": "city_of_berkeley_mehko"
       },
       {
         "id": "permit_application_form",
         "title": "Health Permit Application",
-        "type": "pdf",
-        "formId": "BERKELEY_MEHKO_PermitApplication",
-        "pdfUrl": "Contact Berkeley EHD for form",
-        "appId": "city_of_berkeley_mehko",
+        "type": "info",
         "action_required": true,
-        "fill_pdf": true,
-        "content": "**What to do:** Complete the City of Berkeley MEHKO Health Permit Application.\n\n**Why it matters:** This is the formal request to operate.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Contact Berkeley Environmental Health at (510) 981-5310 to request the application form.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+        "fill_pdf": false,
+        "content": "**What to do:** Please reach out to City of Berkeley Environmental Health Division to obtain the MEHKO Health Permit Application.\n\n**Contact Information:**\n- **Phone:** (510) 981-5310\n- **Department:** City of Berkeley Environmental Health Division\n- **Website:** City of Berkeley Food Safety Program page",
         "searchTerms": [
           "Berkeley MEHKO permit application",
           "Berkeley Environmental Health MEHKO application",
           "Berkeley home kitchen permit form"
-        ]
+        ],
+        "appId": "city_of_berkeley_mehko"
       },
       {
         "id": "submit_application",
