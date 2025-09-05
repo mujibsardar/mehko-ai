@@ -114,7 +114,7 @@ test.describe('Dashboard', () => {
       
       // Verify Los Angeles County application using actual content
       await expect(page.locator('text=Los Angeles County MEHKO')).toBeVisible();
-      await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week; max $100,000 annual gross sales. LA County (excludes Pasadena, Long Beach, Vernon). Initial $597 review fee is currently subsidized; annual health permit ~$347.')).toBeVisible();
+      await expect(page.locator('text=Home-based restaurant permit for up to 30 meals/day or 90 meals/week, max $100,000 annual sales. Covers all of LA County except Pasadena, Long Beach, and Vernon. Fees: $597 application review (one-time; currently subsidized for first 1,000 through 6/30/2026) + $347 annual health permit.')).toBeVisible();
       await expect(page.locator('text=Source: publichealth.lacounty.gov')).toBeVisible();
     } else {
       console.log('No application cards found - mock data may not be working');
