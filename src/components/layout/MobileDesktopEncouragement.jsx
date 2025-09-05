@@ -1,0 +1,145 @@
+import { useState, useEffect } from 'react';
+import { useWindow } from '../../providers/WindowProvider';
+import './MobileDesktopEncouragement.scss';
+
+export default function MobileDesktopEncouragement({ skipDelay = false }) {
+  const windowContext = useWindow();
+  const [isVisible, setIsVisible] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
+
+  // Fallback for when context is not available (e.g., in tests)
+  const isMobileLayout = windowContext?.isMobileLayout || (() => {
+    // Check for mobile layout using multiple methods
+    if (typeof window !== 'undefined') {
+      // Method 1: Check window width
+      if (window.innerWidth < 768) {
+        return true;
+      }
+
+      // Method 2: Check for dev tools device emulation
+      if (window.matchMedia && window.matchMedia('(max-width: 767px)').matches) {
+        return true;
+      }
+
+      // Method 3: Check for mobile user agent (fallback)
+      if (navigator.userAgent && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+      }
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobileAndShow = () => {
+      // Debug logging for mobile detection
+      console.log('MobileDesktopEncouragement debug:');
+      console.log('- window.innerWidth:', window.innerWidth);
+      console.log('- window.matchMedia(max-width: 767px):', window.matchMedia ? window.matchMedia('(max-width: 767px)').matches : 'not supported');
+      console.log('- navigator.userAgent:', navigator.userAgent);
+      console.log('- windowContext:', windowContext);
+      console.log('- isMobileLayout():', isMobileLayout());
+      console.log('- skipDelay:', skipDelay);
+
+      // Check if user has previously dismissed this message
+      const dismissed = localStorage.getItem('mobile-desktop-encouragement-dismissed');
+      console.log('- dismissed from localStorage:', dismissed);
+
+      if (dismissed === 'true') {
+        setIsDismissed(true);
+        return;
+      }
+
+      // Show message only on mobile layout
+      if (isMobileLayout()) {
+        console.log('✅ Mobile layout detected, showing message');
+        if (skipDelay) {
+          setIsVisible(true);
+        } else {
+          // Add a small delay to ensure the page has loaded
+          const timer = setTimeout(() => {
+            setIsVisible(true);
+          }, 1000);
+          return () => clearTimeout(timer);
+        }
+      } else {
+        console.log('❌ Not mobile layout, not showing message');
+        setIsVisible(false);
+      }
+    };
+
+    // Check immediately
+    checkMobileAndShow();
+
+    // Also listen for window resize events
+    const handleResize = () => {
+      checkMobileAndShow();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMobileLayout, skipDelay]);
+
+  const handleDismiss = () => {
+    setIsVisible(false);
+    setIsDismissed(true);
+    localStorage.setItem('mobile-desktop-encouragement-dismissed', 'true');
+  };
+
+  const handleTryDesktop = () => {
+    // Open current URL in new tab with desktop user agent hint
+    const currentUrl = window.location.href;
+    window.open(currentUrl, '_blank');
+  };
+
+  if (!isVisible || isDismissed) {
+    return null;
+  }
+
+  return (
+    <div className="mobile-desktop-encouragement">
+      <div className="encouragement-content">
+        <div className="encouragement-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
+          </svg>
+        </div>
+
+        <div className="encouragement-text">
+          <h3>💻 Better Experience on Desktop</h3>
+          <p>
+            For the best MEHKO application experience with full features,
+            we recommend using a desktop or laptop computer.
+          </p>
+          <div className="encouragement-actions">
+            <button
+              onClick={handleTryDesktop}
+              className="btn-try-desktop"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15,3 21,3 21,9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+              Open in Desktop
+            </button>
+            <button
+              onClick={handleDismiss}
+              className="btn-dismiss"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+              Continue on Mobile
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

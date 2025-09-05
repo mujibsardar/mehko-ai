@@ -10,6 +10,7 @@ import { AuthModalProvider } from "./providers/AuthModalProvider";
 
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
+import MobileDesktopEncouragement from "./components/layout/MobileDesktopEncouragement.jsx";
 import "./styles/overlay.css";
 import "./styles/app.scss";
 
@@ -20,11 +21,12 @@ createRoot(document.getElementById("root")).render(
         <WindowProvider>
           <BrowserRouter>
             <AuthProvider>
-              <AuthModalProvider>
-                <Preloader>
-                  <App />
-                </Preloader>
-              </AuthModalProvider>
+                          <AuthModalProvider>
+              <Preloader>
+                <App />
+                <MobileDesktopEncouragement />
+              </Preloader>
+            </AuthModalProvider>
             </AuthProvider>
           </BrowserRouter>
         </WindowProvider>
