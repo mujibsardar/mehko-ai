@@ -1,0 +1,157 @@
+{
+    "_NOTE": "PDF URLs need to be updated with actual working URLs from Contra Costa County website",
+    "id": "contra_costa_county_mehko",
+    "title": "Contra Costa County MEHKO",
+    "description": "Home-based restaurant permit for up to 30 meals/day or 90 meals/week; max $100,000 annual sales. Two-year pilot approved June 20, 2024; permits began July 1, 2024. Fees (effective 6/24/2025): Initial permit $847; annual renewal $565. Certain foods prohibited (e.g., raw oysters, raw milk; no HACCP items).",
+    "rootDomain": "cchealth.org",
+    "supportTools": {
+        "aiEnabled": true,
+        "commentsEnabled": true
+    },
+    "steps": [
+        {
+            "id": "planning_overview",
+            "title": "Plan Your MEHKO",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Confirm you can run a MEHKO at home and understand limits.\n\n**Why it matters:** You must operate within MEHKO rules to be approved and stay compliant.\n\n**What you need:**\n- ☐ Residence in Contra Costa County\n- ☐ Menu and daily/weekly production plan\n- ☐ Basic kitchen setup meeting food safety practices\n\n**Where/how:** Visit Contra Costa Health's Home Kitchens page for program overview and FAQs.\n\n**Cost & time:** $0 · 10–30 minutes planning\n\n**Ready when:** You can state your daily/weekly meal volume and that it fits MEHKO limits (30/day, 90/week).",
+            "searchTerms": [
+                "Contra Costa MEHKO meal limits",
+                "Contra Costa MEHKO rules",
+                "Contra Costa home kitchen operations"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "approvals_training",
+            "title": "Approvals & Training",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Get your Certified Food Protection Manager (CFPM) credential; helpers get Food Handler cards.\n\n**Why it matters:** Operator must hold a food safety manager certificate; all food workers need Food Handler cards.\n\n**What you need:**\n- ☐ CFPM certificate (ANSI-CFP recognized)\n- ☐ Food Handler cards for helpers\n- ☐ Landlord/HOA OK and city business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; use county page for training links and workshop signups.\n\n**Cost & time:** ~$60–$90 · 1–2 days total (study + exam)\n\n**Ready when:** You have a CFPM certificate PDF and any property/business approvals.",
+            "searchTerms": [
+                "Contra Costa Food Safety Manager certificate",
+                "Contra Costa food handler card",
+                "Contra Costa MEHKO workshop"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "prepare_docs",
+            "title": "Prepare Required Documents",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- ☐ SOP form — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 5: Health Permit Application\n- ☐ CFPM certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for email submission or drop-off.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+            "searchTerms": [
+                "Contra Costa MEHKO application documents",
+                "Contra Costa MEHKO forms",
+                "Contra Costa SOP template"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "sop_form",
+            "title": "Standard Operating Procedures (SOP)",
+            "type": "pdf",
+            "formId": "CONTRA_COSTA_MEHKO_SOP_ENGLISH",
+            "pdfUrl": "https://www.cchealth.org/home/showpublisheddocument/30192/638542180607400000",
+            "appId": "contra_costa_county_mehko",
+            "action_required": true,
+            "fill_pdf": true,
+            "content": "**What to do:** Complete the MEHKO SOP covering menu, prep, storage, service, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Prep/cooking/cooling/holding details (same-day service required)\n- ☐ Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Complete the SOP form in this step.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete and consistent with your operation (note prohibited items like raw oysters, raw milk; no HACCP items).",
+            "searchTerms": [
+                "Contra Costa MEHKO SOP form",
+                "Contra Costa food safety SOP",
+                "MEHKO SOP Contra Costa County"
+            ]
+        },
+        {
+            "id": "permit_application_form",
+            "title": "Health Permit Application",
+            "type": "pdf",
+            "formId": "CONTRA_COSTA_MEHKO_PERMIT_APPLICATION_REV",
+            "pdfUrl": "https://www.cchealth.org/home/showpublisheddocument/30194/638749559563870000",
+            "appId": "contra_costa_county_mehko",
+            "action_required": true,
+            "fill_pdf": true,
+            "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- ☐ Owner/site information and contact details\n- ☐ CFPM certificate details\n- ☐ SOP — go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step. Submit by email or in person per instructions.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and matches your SOP (note: permits expire end of February each year).",
+            "searchTerms": [
+                "Contra Costa MEHKO permit application",
+                "Contra Costa home kitchen permit form",
+                "Contra Costa Environmental Health MEHKO application"
+            ]
+        },
+        {
+            "id": "submit_application",
+            "title": "Submit Application & Pay Fees",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The county processes your permit after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Application — go to Step 5: Health Permit Application\n- ☐ Completed SOP — go to Step 4: Standard Operating Procedures (SOP)\n- ☐ CFPM certificate\n- ☐ Payment method\n\n**Where/how:** Email your packet to Contra Costa Environmental Health or submit in person at 2120 Diamond Blvd, Suite 100, Concord. Visit the Environmental Health fee page for amounts and payment options.\n\n**Cost & time:** Initial permit $847; annual renewal $565 · 10–20 minutes to submit\n\n**Ready when:** County confirms receipt and payment.",
+            "searchTerms": [
+                "Contra Costa MEHKO fees 2025",
+                "Contra Costa Environmental Health payments",
+                "Submit MEHKO application Contra Costa"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "inspection",
+            "title": "Schedule & Pass Inspection",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Coordinate a home kitchen inspection with Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- ☐ Kitchen set up per your SOP (same-day prep/cook/serve)\n- ☐ Thermometer, sanitizer, handwash setup\n- ☐ Required equipment functional\n\n**Where/how:** The department will provide scheduling details after application review.\n\n**Cost & time:** Included in permit fee · 1–2 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+            "searchTerms": [
+                "Contra Costa MEHKO inspection checklist",
+                "Home kitchen inspection Contra Costa",
+                "Environmental Health inspection MEHKO"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "receive_permit",
+            "title": "Receive Permit",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it posted.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- ☐ Final approval notice\n- ☐ Permit document (expires end of February)\n\n**Where/how:** Issued by Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after application fee) · a few days after approval\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+            "searchTerms": [
+                "Contra Costa MEHKO permit issuance",
+                "Contra Costa permit expiration February",
+                "MEHKO permit status Contra Costa"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "operate_comply",
+            "title": "Operate & Stay Compliant",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Follow your SOP and MEHKO limits; renew annually.\n\n**Why it matters:** Staying within rules protects customers and your permit.\n\n**What you need:**\n- ☐ Meal logs under 30/day and 90/week; sales ≤ $100,000/yr\n- ☐ Temperature & cleaning records\n- ☐ Renewal reminder before end of February\n\n**Where/how:** Keep simple records; update SOP if menu/operations change.\n\n**Cost & time:** Renewal $565 (current) · ongoing\n\n**Ready when:** You track meals/sales, keep records, and schedule renewal on time.",
+            "searchTerms": [
+                "Contra Costa MEHKO meal limits 30 90",
+                "Contra Costa MEHKO sales cap $100,000",
+                "Contra Costa MEHKO renewal"
+            ],
+            "appId": "contra_costa_county_mehko"
+        },
+        {
+            "id": "contact",
+            "title": "Contact Info",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** County staff can help with specific questions about your application.\n\n**What you need:**\n- ☐ Phone or email for questions\n- ☐ Office hours and location\n- ☐ Website for more resources\n\n**Where/how:** Contra Costa Environmental Health, 2120 Diamond Blvd, Suite 100, Concord, CA 94520. Phone: (925) 608-5500. Email: cocoeh@cchealth.org. Office hours: Mon–Fri 7:30am–4:30pm (lunch 12–1); field/plan review available 7:30–9am.\n\n**Cost & time:** $0 · varies by question\n\n**Ready when:** You have the information you need to proceed.",
+            "searchTerms": [
+                "Contra Costa Environmental Health contact",
+                "Contra Costa MEHKO phone number",
+                "Contra Costa MEHKO office hours"
+            ],
+            "appId": "contra_costa_county_mehko"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "FOOD_FACILITY_PERMIT_APPLICATION",
+  "title": "Health Permit Application",
+  "type": "pdf",
+  "appId": "san_benito_county_mehko",
+  "stepId": "permit_application_form",
+  "pdfUrl": "https://hhsa.cosb.us/wp-content/uploads/2025/08/Food-Facility-Permit-Application.pdf",
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}

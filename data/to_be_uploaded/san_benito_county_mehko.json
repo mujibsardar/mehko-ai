@@ -1,0 +1,156 @@
+{
+    "id": "san_benito_county_mehko",
+    "title": "San Benito County MEHKO",
+    "description": "Home-based restaurant permit in San Benito County for up to 30 meals/day or 60 meals/week, max $50,000 annual sales. Fees billed hourly at $110 for annual permit and plan check. Key limits include same-day prep/serve, no outdoor advertising, and 1 full-time employee max.",
+    "rootDomain": "cosb.us",
+    "supportTools": {
+        "aiEnabled": true,
+        "commentsEnabled": true
+    },
+    "steps": [
+        {
+            "id": "planning_overview",
+            "title": "Plan Your MEHKO",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Confirm your home and menu fit San Benito County MEHKO limits.\n\n**Why it matters:** Approval depends on staying within county and state rules.\n\n**What you need:**\n- ☐ Residence in San Benito County\n- ☐ Menu and daily/weekly production plan (≤30/day, ≤60/week)\n- ☐ Basic kitchen setup and safe food practices\n\n**Where/how:** Review county MEHKO info and limits; visit the Environmental Health page.\n\n**Cost & time:** $0 · 10–30 minutes planning\n\n**Ready when:** You can state your meal volume fits county limits.",
+            "searchTerms": [
+                "San Benito County MEHKO meal limits",
+                "San Benito County MEHKO rules 2025",
+                "San Benito County Environmental Health MEHKO"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "approvals_training",
+            "title": "Approvals & Training",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Get Certified Food Protection Manager (Food Safety Manager) and Food Handler cards for helpers.\n\n**Why it matters:** Required for safe operation and permitting.\n\n**What you need:**\n- ☐ Food Safety Manager certificate (ANSI-CFP recognized)\n- ☐ Food Handler cards for helpers (if any)\n- ☐ Landlord/HOA OK or city business license if applicable\n\n**Where/how:** Take an ANSI-approved Food Manager course/exam; keep PDFs ready for submission. Visit the county site for program details.\n\n**Cost & time:** ~$60–$90 · 1–2 days total (study + exam)\n\n**Ready when:** You have a Food Safety Manager certificate PDF and any needed approvals.",
+            "searchTerms": [
+                "San Benito Food Manager certification",
+                "San Benito County Food Handler card",
+                "San Benito County MEHKO training requirements"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "prepare_docs",
+            "title": "Prepare Required Documents",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Gather everything you'll submit.\n\n**Why it matters:** Incomplete packets delay review and inspection.\n\n**What you need:**\n- ☐ SOP form — go to Step 3: Standard Operating Procedures (SOP)\n- ☐ Health Permit Application — go to Step 4: Health Permit Application\n- ☐ Food Safety Manager certificate (from Step 2: Approvals & Training)\n- ☐ Government ID and basic business info\n\n**Where/how:** Keep files as PDFs/photos for upload or printing; use county forms.\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** All docs are completed, signed, and saved as PDFs.",
+            "searchTerms": [
+                "San Benito County MEHKO forms",
+                "San Benito MEHKO SOP requirements",
+                "San Benito Environmental Health applications"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "sop_form",
+            "title": "Standard Operating Procedures (SOP)",
+            "type": "pdf",
+            "formId": "MICROENTERPRISE_HOME_KITCHEN_OPERATION_APPLICATION",
+            "pdfUrl": "https://hhsa.cosb.us/wp-content/uploads/2025/08/Microenterprise-Home-Kitchen-Operation-Application.pdf",
+            "appId": "san_benito_county_mehko",
+            "action_required": true,
+            "fill_pdf": true,
+            "content": "**What to do:** Complete the San Benito County MHKO SOP form (menu, prep, storage, sanitation, delivery).\n\n**Why it matters:** Shows the county how you'll keep food safe at home.\n\n**What you need:**\n- ☐ Menu and ingredients list\n- ☐ Cooking/cooling/holding methods and equipment\n- ☐ Cleaning & sanitizing plan; handwashing setup\n\n**Where/how:** Fill the SOP in this step; attach requested items (menu, water/septic info if applicable).\n\n**Cost & time:** $0 · 30–60 minutes\n\n**Ready when:** SOP is complete, initialed where required, and matches your operation.",
+            "searchTerms": [
+                "San Benito County MHKO SOP PDF",
+                "San Benito MEHKO application form",
+                "San Benito home kitchen SOP template"
+            ]
+        },
+        {
+            "id": "permit_application_form",
+            "title": "Health Permit Application",
+            "type": "pdf",
+            "formId": "FOOD_FACILITY_PERMIT_APPLICATION",
+            "pdfUrl": "https://hhsa.cosb.us/wp-content/uploads/2025/08/Food-Facility-Permit-Application.pdf",
+            "appId": "san_benito_county_mehko",
+            "action_required": true,
+            "fill_pdf": true,
+            "content": "**What to do:** Fill the San Benito County Food Facility Permit Application for your MHKO.\n\n**Why it matters:** This is your official request for a one-year MEHKO health permit.\n\n**What you need:**\n- ☐ Owner/contact info and home kitchen address\n- ☐ Food Safety Manager certificate details\n- ☐ SOP — go to Step 3: Standard Operating Procedures (SOP)\n\n**Where/how:** Complete the application in this step; have it ready for submission with your SOP.\n\n**Cost & time:** $0 to fill · 15–30 minutes\n\n**Ready when:** Application is complete and consistent with your SOP.",
+            "searchTerms": [
+                "San Benito Food Facility Permit Application",
+                "San Benito County health permit MEHKO",
+                "San Benito MEHKO permit form"
+            ]
+        },
+        {
+            "id": "submit_application",
+            "title": "Submit Application & Pay Fees",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Submit your packet and pay fees.\n\n**Why it matters:** Review begins after complete submission and payment.\n\n**What you need:**\n- ☐ Completed Health Permit Application — go to Step 4: Health Permit Application\n- ☐ Completed SOP — go to Step 3: Standard Operating Procedures (SOP)\n- ☐ Food Safety Manager certificate\n- ☐ Payment method\n\n**Where/how:** Submit to Environmental Health, 351 Tres Pinos Rd, Ste C-1, Hollister, CA 95023. You can inquire via EnvironmentalHealth@sanbenitocountyca.gov or (831) 636-4035. Credit cards accepted (2.25% fee) and e-check ($1.25).\n\n**Cost & time:** Annual permit & plan check billed at $110/hour · 10–20 minutes to submit\n\n**Ready when:** County confirms receipt and takes payment.",
+            "searchTerms": [
+                "San Benito MEHKO fee $110 per hour",
+                "San Benito Environmental Health payment options",
+                "San Benito MEHKO submit application"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "inspection",
+            "title": "Schedule & Pass Inspection",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Coordinate a home kitchen inspection once your application is under review.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- ☐ Kitchen set up per SOP (thermometer, sanitizer, handwash station)\n- ☐ Equipment working and clean\n- ☐ Records/logs ready if requested\n\n**Where/how:** Environmental Health will provide scheduling details after you apply.\n\n**Cost & time:** Included in hourly fees · 1–2 hours on site\n\n**Ready when:** You pass or complete any corrections.",
+            "searchTerms": [
+                "San Benito MEHKO inspection checklist",
+                "San Benito Environmental Health home kitchen inspection",
+                "MEHKO inspection preparation San Benito"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "receive_permit",
+            "title": "Receive Your Permit",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Obtain and keep your MEHKO permit on site.\n\n**Why it matters:** A valid permit (one calendar year) is required to operate.\n\n**What you need:**\n- ☐ Final approval notice\n- ☐ Printed or digital permit\n\n**Where/how:** Issued by Environmental Health after approval.\n\n**Cost & time:** No extra cost beyond fees paid · a few days after approval\n\n**Ready when:** Permit is in hand and displayed during operation.",
+            "searchTerms": [
+                "San Benito MEHKO permit validity one year",
+                "San Benito County MEHKO permit issued",
+                "San Benito Environmental Health permit status"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "operate_comply",
+            "title": "Operate & Stay Compliant",
+            "type": "info",
+            "action_required": true,
+            "fill_pdf": false,
+            "content": "**What to do:** Follow your SOP and county rules.\n\n**Why it matters:** Staying within limits protects customers and your permit.\n\n**What you need:**\n- ☐ Track meals (≤30/day, ≤60/week) and sales (≤$50,000/year)\n- ☐ Temperature & cleaning records\n- ☐ Update SOP and notify county if your procedures/menu change\n\n**Where/how:** Keep records simple; contact Environmental Health with changes.\n\n**Cost & time:** Renewal billed hourly ($110/hr) · ongoing\n\n**Ready when:** You're operating within limits and set a reminder to renew annually.",
+            "searchTerms": [
+                "San Benito MEHKO weekly meal limit 60",
+                "San Benito MEHKO sales limit $50,000",
+                "San Benito County MEHKO compliance rules"
+            ],
+            "appId": "san_benito_county_mehko"
+        },
+        {
+            "id": "contact",
+            "title": "Contact Info",
+            "type": "info",
+            "action_required": false,
+            "fill_pdf": false,
+            "content": "**What to do:** Reach out to Environmental Health with questions.\n\n**Why it matters:** Staff can answer San Benito-specific requirements and fees.\n\n**What you need:**\n- ☐ Phone and email\n- ☐ Office address and hours\n- ☐ Website for forms/resources\n\n**Where/how:** San Benito County Environmental Health, 351 Tres Pinos Rd, Suite C-1, Hollister, CA 95023. Hours: Mon–Fri 8am–5pm. Phone: (831) 636-4035. Email: EnvironmentalHealth@sanbenitocountyca.gov. Visit the Environmental Health page.\n\n**Cost & time:** $0 · depends on your question\n\n**Ready when:** You have the info needed to proceed.",
+            "searchTerms": [
+                "San Benito Environmental Health contact",
+                "San Benito MEHKO phone number",
+                "San Benito County MEHKO office hours"
+            ],
+            "appId": "san_benito_county_mehko"
+        }
+    ]
+}

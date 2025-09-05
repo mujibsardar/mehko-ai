@@ -1,0 +1,231 @@
+{
+  "id": "FOOD_FACILITY_PERMIT_APPLICATION",
+  "title": "Health Permit Application",
+  "fields": [
+    {
+      "id": "NUMBER OF FOOD PREP UNITS",
+      "label": "NUMBER OF FOOD PREP UNITS",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "VEHICLE LIC",
+      "label": "VEHICLE LIC",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "OTHER",
+      "label": "OTHER",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "PERMIT FEE",
+      "label": "PERMIT FEE",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "ASSIGNED PERMIT",
+      "label": "ASSIGNED PERMIT",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Print",
+      "label": "Print",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text3",
+      "label": "Text3",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text4",
+      "label": "Text4",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text5",
+      "label": "Text5",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text6",
+      "label": "Text6",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text7",
+      "label": "Text7",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text8",
+      "label": "Text8",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text9",
+      "label": "Text9",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text10",
+      "label": "Text10",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text11",
+      "label": "Text11",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text12",
+      "label": "Text12",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text13",
+      "label": "Text13",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text14",
+      "label": "Text14",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text15",
+      "label": "Text15",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text16",
+      "label": "Text16",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text17",
+      "label": "Text17",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text18",
+      "label": "Text18",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text19",
+      "label": "Text19",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text20",
+      "label": "Text20",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text21",
+      "label": "Text21",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Date23_af_date",
+      "label": "Date23_af_date",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box24",
+      "label": "Check Box24",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box25",
+      "label": "Check Box25",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text26",
+      "label": "Text26",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Text27",
+      "label": "Text27",
+      "type": "text",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box28",
+      "label": "Check Box28",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    },
+    {
+      "id": "Check Box29",
+      "label": "Check Box29",
+      "type": "checkbox",
+      "page": 0,
+      "required": false
+    }
+  ],
+  "createdAt": "Sentinel: Value used to set a document field to the server timestamp."
+}
