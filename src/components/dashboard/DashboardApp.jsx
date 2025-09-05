@@ -37,7 +37,7 @@ export default function DashboardApp() {
       ? window.matchMedia("(min-width: 1200px)").matches
       : true
   );
-  
+
   // Mobile sidebar state
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
@@ -49,7 +49,7 @@ export default function DashboardApp() {
     setWide(mq.matches);
     return () => mq.removeEventListener?.("change", fn);
   }, []);
-  
+
   // Close mobile sidebar when switching to wide view
   useEffect(() => {
     if (wide && mobileSidebarOpen) {
@@ -587,15 +587,15 @@ export default function DashboardApp() {
             ☰ Menu
           </button>
         )}
-        
+
         {/* Mobile overlay */}
         {!wide && (
-          <div 
+          <div
             className={`mobile-overlay ${mobileSidebarOpen ? 'active' : ''}`}
             onClick={() => setMobileSidebarOpen(false)}
           />
         )}
-        
+
         {/* Left navigation */}
         <Sidebar
           applications={selectedApplications}
@@ -622,7 +622,7 @@ export default function DashboardApp() {
             gap: 16,
             // ensure the grid itself is tall enough to make the aside fill
             minHeight: "calc(100dvh - 90px)",
-            
+
             // Mobile responsive adjustments
             ...(wide ? {} : {
               gap: 12,
@@ -649,7 +649,7 @@ export default function DashboardApp() {
                 <MobileTabs />
 
                 {activeSection === "overview" && (
-                  <div style={{ display: "grid", gap: 12 }}>
+                  <div style={{ display: "grid", gap: 24 }}>
                     <ApplicationOverview application={activeApplication} />
                     {steps.length > 0 && (
                       <button
@@ -662,17 +662,36 @@ export default function DashboardApp() {
                           setCurrentStepId(targetStepId);
                         }}
                         style={{
-                          padding: "10px 14px",
-                          border: "1px solid #ccc",
-                          borderRadius: 8,
+                          padding: "14px 24px",
+                          border: "none",
+                          borderRadius: 12,
                           width: "fit-content",
-                          background: "#f7f7f7",
+                          background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                          color: "white",
                           cursor: "pointer",
+                          fontSize: "16px",
+                          fontWeight: "600",
+                          boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)",
+                          transition: "all 0.2s ease",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.target.style.transform = "translateY(-2px)";
+                          e.target.style.boxShadow = "0 6px 20px rgba(16, 185, 129, 0.4)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.target.style.transform = "translateY(0)";
+                          e.target.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.3)";
+                        }}
+                        onMouseDown={(e) => {
+                          e.target.style.transform = "translateY(0)";
                         }}
                       >
                         {completedSteps.length > 0
                           ? "Continue Application →"
-                          : "Start application →"}
+                          : "Start Application →"}
                       </button>
                     )}
                   </div>
