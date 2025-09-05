@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../../firebase/firebase";
 import useAuth from "../../hooks/useAuth";
 import {
@@ -9,6 +10,7 @@ import {
   collection,
 } from "firebase/firestore";
 import { buildApiUrl } from "../../lib/apiBase";
+import ReportsViewer from "./ReportsViewer";
 
 import "./Admin.scss";
 const API = buildApiUrl("/apps");
@@ -314,18 +316,19 @@ export default function Admin() {
       pushStatus(`Error saving application: ${error.message}`);
     }
   };
-  const deleteApp = async (id) => {
-    if (!confirm("Are you sure you want to delete this application?")) return;
-    try {
-      // Delete from Firestore
-      await setDoc(doc(db, "applications", id), { deleted: true });
-      pushStatus("Application deleted");
-      loadApps();
-      if (selectedAppId === id) newApp();
-    } catch (error) {
-      pushStatus(`Error deleting application: ${error.message}`);
-    }
-  };
+  // Delete functionality removed for safety - incomplete implementation
+  // const deleteApp = async (id) => {
+  //   if (!confirm("Are you sure you want to delete this application?")) return;
+  //   try {
+  //     // Delete from Firestore
+  //     await setDoc(doc(db, "applications", id), { deleted: true });
+  //     pushStatus("Application deleted");
+  //     loadApps();
+  //     if (selectedAppId === id) newApp();
+  //   } catch (error) {
+  //     pushStatus(`Error deleting application: ${error.message}`);
+  //   }
+  // };
   return (
     <div className="admin-dashboard">
       {/* Header */}
@@ -335,14 +338,14 @@ export default function Admin() {
             <h1>Admin Dashboard</h1>
             <p>Manage applications and forms</p>
           </div>
-                  <div className="header-right">
-          <a href="/dashboard" className="back-to-dashboard-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"></path>
-            </svg>
-            Back to User Dashboard
-          </a>
-        </div>
+          <div className="header-right">
+            <a href="/dashboard" className="back-to-dashboard-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"></path>
+              </svg>
+              Back to User Dashboard
+            </a>
+          </div>
         </div>
       </header>
       {/* Navigation Tabs */}
@@ -398,15 +401,6 @@ export default function Admin() {
                     <div className="app-steps">
                       {app.steps?.length || 0} steps
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteApp(app.id);
-                      }}
-                      className="btn-delete"
-                    >
-                      Delete
-                    </button>
                   </div>
                 ))}
               </div>

@@ -2283,34 +2283,30 @@
       {
         "id": "sop_form",
         "title": "Standard Operating Procedures (SOP)",
-        "type": "pdf",
-        "formId": "AMADOR_MEHKO_SOP",
-        "pdfUrl": "https://www.amadorgov.org/departments/environmental-health/food-program/food-facilities",
-        "appId": "amador_county_mehko",
+        "type": "info",
         "action_required": true,
-        "fill_pdf": true,
-        "content": "**What to do:** Fill the MEHKO SOP covering menu, preparation, storage, and sanitation.\n\n**Why it matters:** This shows the county how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu/ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** If a MEHKO SOP form isn't posted, request it from Environmental Health and complete it.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+        "fill_pdf": false,
+        "content": "**What to do:** Please reach out to Amador County Environmental Health to obtain the MEHKO SOP form.\n\n**Contact Information:**\n- **Phone:** (209) 223-6439\n- **Department:** Amador County Environmental Health\n- **Address:** 810 Court Street, Jackson, CA 95642\n- **Website:** Amador County Environmental Health page",
         "searchTerms": [
           "Amador County MEHKO SOP form",
           "Amador Environmental Health SOP template",
           "home kitchen SOP Amador County"
-        ]
+        ],
+        "appId": "amador_county_mehko"
       },
       {
         "id": "permit_application_form",
         "title": "Health Permit Application",
-        "type": "pdf",
-        "formId": "AMADOR_MEHKO_PERMIT_APPLICATION",
-        "pdfUrl": "https://www.amadorgov.org/departments/environmental-health/food-program/food-facilities",
-        "appId": "amador_county_mehko",
+        "type": "info",
         "action_required": true,
-        "fill_pdf": true,
-        "content": "**What to do:** Complete the county Health Permit Application for a Microenterprise Home Kitchen Operation.\n\n**Why it matters:** This is the official request to operate a MEHKO.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** If the MEHKO application isn't posted, request it from Environmental Health and complete it.\n\n**Cost & time:** Fee varies \u00b7 15\u201330 minutes to fill\n\n**Ready when:** Application is complete and matches your SOP.",
+        "fill_pdf": false,
+        "content": "**What to do:** Please reach out to Amador County Environmental Health to obtain the MEHKO Health Permit Application.\n\n**Contact Information:**\n- **Phone:** (209) 223-6439\n- **Department:** Amador County Environmental Health\n- **Address:** 810 Court Street, Jackson, CA 95642\n- **Website:** Amador County Environmental Health page",
         "searchTerms": [
           "Amador County MEHKO permit application",
           "Amador County Environmental Health application packet",
           "MEHKO forms Amador County"
-        ]
+        ],
+        "appId": "amador_county_mehko"
       },
       {
         "id": "submit_application",

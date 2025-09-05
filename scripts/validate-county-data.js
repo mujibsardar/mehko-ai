@@ -101,13 +101,14 @@ class CountyValidator {
       return;
     }
 
-    // Check for at least one info and one pdf step
+    // Check for at least one info step
     const stepTypes = data.steps.map(s => s.type);
     if (!stepTypes.includes('info')) {
       this.error('At least one step must have type "info"');
     }
+    // PDF step is optional - some counties may not have accessible PDFs
     if (!stepTypes.includes('pdf')) {
-      this.error('At least one step must have type "pdf"');
+      this.warning('No PDF steps found - this is acceptable if forms must be requested from the county');
     }
 
     this.success('JSON structure validation passed');
