@@ -232,6 +232,9 @@ test.describe('Dashboard', () => {
     // Navigate to dashboard
     await page.goto('/dashboard');
     
+    // Wait for applications to load
+    await page.waitForTimeout(3000);
+    
     // Verify mobile layout elements
     await expect(page.locator('.application-card-grid')).toBeVisible();
     
