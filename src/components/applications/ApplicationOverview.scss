@@ -13,6 +13,8 @@
     align-items: flex-start;
     gap: 20px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 50; // Lower than main header (z-index: 100) to prevent overlap
 
     .header-content {
       flex: 1;

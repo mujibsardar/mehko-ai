@@ -123,8 +123,8 @@ function SubStepActions({
       // Use searchTerms for better AI context if available
       const aiContext =
         step?.searchTerms &&
-        Array.isArray(step.searchTerms) &&
-        step.searchTerms.length > 0
+          Array.isArray(step.searchTerms) &&
+          step.searchTerms.length > 0
           ? step.searchTerms.join(", ")
           : subStepText;
       onCommentRequest({
@@ -236,6 +236,11 @@ function SubStepActions({
       });
     }
   };
+  // Don't render anything if user is not logged in
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="sub-step-actions">
       {/* Action Icons */}
