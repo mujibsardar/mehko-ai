@@ -1,0 +1,156 @@
+{
+  "id": "city_of_berkeley_mehko",
+  "title": "City of Berkeley MEHKO",
+  "description": "Operate a Microenterprise Home Kitchen in Berkeley. Limits: up to 30 meals/day OR 90 meals/week, \u2264$100,000 gross/year. Annual MEHKO permit fee varies (contact EHD for current fee).",
+  "rootDomain": "berkeleyca.gov",
+  "supportTools": {
+    "aiEnabled": true,
+    "commentsEnabled": true
+  },
+  "steps": [
+    {
+      "id": "planning_overview",
+      "title": "Plan Your MEHKO",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Review Berkeley's MEHKO rules and basic limits.\n\n**Why it matters:** Knowing the limits prevents delays and denials.\n\n**What you need:**\n- \u2610 Understand meal and revenue caps (30/day OR 90/week, \u2264$100,000/year)\n- \u2610 Draft menu and service model\n- \u2610 Kitchen setup that meets safety basics\n\n**Where/how:** Visit Berkeley's Food Safety & Inspection page and the BMC MHKO section.\n\n**Cost & time:** $0 \u00b7 15\u201330 minutes\n\n**Ready when:** You understand limits and feasibility for your home.",
+      "searchTerms": [
+        "Berkeley MEHKO overview",
+        "Berkeley Microenterprise Home Kitchen rules",
+        "BMC 11.28.370 MHKO"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "approvals_training",
+      "title": "Approvals & Training",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Obtain CFPM certification and any property/business approvals.\n\n**Why it matters:** Required before your permit can be issued.\n\n**What you need:**\n- \u2610 CFPM (ANSI-CFP) certificate\n- \u2610 Food Handler cards for any helpers\n- \u2610 Landlord/HOA OK if applicable\n- \u2610 City business license if required\n\n**Where/how:** Take an ANSI-approved CFPM course; check City business licensing.\n\n**Cost & time:** ~$60\u2013$200 \u00b7 1\u20132 days total\n\n**Ready when:** You have a CFPM certificate and any needed approvals.",
+      "searchTerms": [
+        "Berkeley CFPM course",
+        "Berkeley business license home business",
+        "food safety manager certification Berkeley"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "prepare_docs",
+      "title": "Prepare Required Documents",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Gather the documents you'll submit with your application.\n\n**Why it matters:** Incomplete submissions delay approval and inspection.\n\n**What you need:**\n- \u2610 SOP form \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 Health Permit Application \u2014 go to Step 5: Health Permit Application\n- \u2610 CFPM certificate (from Step 2: Approvals & Training)\n- \u2610 Government ID and basic business info\n\n**Where/how:** Organize files (PDFs/photos) for upload or printing.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** All documents are filled/signed and stored as PDFs.",
+      "searchTerms": [
+        "Berkeley MEHKO SOP requirements",
+        "Berkeley MEHKO application documents",
+        "Berkeley Home Kitchen Operations forms"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "sop_form",
+      "title": "Standard Operating Procedures (SOP)",
+      "type": "pdf",
+      "formId": "BERKELEY_MEHKO_SOP",
+      "pdfUrl": "Contact Berkeley EHD for form",
+      "appId": "city_of_berkeley_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the MEHKO SOP covering menu, prep, cooling/holding, cleaning, and sanitation.\n\n**Why it matters:** Shows how you will keep food safe at home.\n\n**What you need:**\n- \u2610 Menu and ingredients list\n- \u2610 Prep/cooking/cooling/holding details\n- \u2610 Cleaning/sanitizing plan; handwashing setup\n\n**Where/how:** Contact Berkeley Environmental Health at (510) 981-5310 to request the SOP form.\n\n**Cost & time:** $0 \u00b7 30\u201360 minutes\n\n**Ready when:** SOP is complete and consistent with your operation.",
+      "searchTerms": [
+        "Berkeley MEHKO SOP form",
+        "Berkeley MEHKO Standard Operating Procedures",
+        "City of Berkeley home kitchen SOP"
+      ]
+    },
+    {
+      "id": "permit_application_form",
+      "title": "Health Permit Application",
+      "type": "pdf",
+      "formId": "BERKELEY_MEHKO_PermitApplication",
+      "pdfUrl": "Contact Berkeley EHD for form",
+      "appId": "city_of_berkeley_mehko",
+      "action_required": true,
+      "fill_pdf": true,
+      "content": "**What to do:** Complete the City of Berkeley MEHKO Health Permit Application.\n\n**Why it matters:** This is the formal request to operate.\n\n**What you need:**\n- \u2610 Owner contact and site address\n- \u2610 CFPM certificate details\n- \u2610 SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n\n**Where/how:** Contact Berkeley Environmental Health at (510) 981-5310 to request the application form.\n\n**Cost & time:** $0 to fill \u00b7 15\u201330 minutes\n\n**Ready when:** Application is complete and matches your SOP.",
+      "searchTerms": [
+        "Berkeley MEHKO permit application",
+        "Berkeley Environmental Health MEHKO application",
+        "Berkeley home kitchen permit form"
+      ]
+    },
+    {
+      "id": "submit_application",
+      "title": "Submit Application & Fees",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Submit the completed forms and pay required fees.\n\n**Why it matters:** The city processes your permit after complete submission and payment.\n\n**What you need:**\n- \u2610 Completed Application \u2014 go to Step 5: Health Permit Application\n- \u2610 Completed SOP \u2014 go to Step 4: Standard Operating Procedures (SOP)\n- \u2610 CFPM certificate\n- \u2610 Payment method for fees\n\n**Where/how:** Submit to Berkeley Environmental Health; contact (510) 981-5310 for submission methods.\n\n**Cost & time:** Contact EHD for current fee \u00b7 10\u201320 minutes\n\n**Ready when:** City confirms receipt and payment.",
+      "searchTerms": [
+        "Berkeley MEHKO application fee",
+        "Berkeley Environmental Health submission",
+        "Berkeley MEHKO payment methods"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "inspection",
+      "title": "Schedule & Pass Inspection",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Coordinate a home kitchen inspection with Berkeley Environmental Health.\n\n**Why it matters:** Passing inspection is required before operating.\n\n**What you need:**\n- \u2610 Kitchen ready per your SOP\n- \u2610 Thermometer, sanitizer, handwash setup\n- \u2610 All required equipment functional\n\n**Where/how:** The department will provide scheduling details after application approval.\n\n**Cost & time:** Included in application fee \u00b7 1\u20132 hours on site\n\n**Ready when:** You receive a pass and any corrections are resolved.",
+      "searchTerms": [
+        "Berkeley MEHKO inspection checklist",
+        "Berkeley Home Kitchen inspection preparation",
+        "Berkeley Environmental Health inspection MEHKO"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "receive_permit",
+      "title": "Receive Permit",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Get your MEHKO permit after passing inspection and keep it on hand.\n\n**Why it matters:** You must have a valid permit to operate.\n\n**What you need:**\n- \u2610 Final approval notice\n- \u2610 Permit document\n\n**Where/how:** Issued by Berkeley Environmental Health after inspection approval.\n\n**Cost & time:** $0 (after application fee) \u00b7 timeline varies by case\n\n**Ready when:** You have the permit and any conditions noted by the inspector.",
+      "searchTerms": [
+        "Berkeley MEHKO permit issuance",
+        "Berkeley permit processing timeline",
+        "Berkeley Environmental Health permit status"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "operate_comply",
+      "title": "Operate & Stay Compliant",
+      "type": "info",
+      "action_required": true,
+      "fill_pdf": false,
+      "content": "**What to do:** Follow your SOP and MEHKO limits; renew as required.\n\n**Why it matters:** Staying within rules protects customers and your permit status.\n\n**What you need:**\n- \u2610 Daily/weekly meal logs under limits\n- \u2610 Temperature & cleaning records\n- \u2610 Permit renewal reminder\n\n**Where/how:** Keep simple records; contact the department if your menu or volume changes.\n\n**Cost & time:** Renewal fees apply \u00b7 ongoing\n\n**Ready when:** You track meals, keep records, and schedule renewal on time.",
+      "searchTerms": [
+        "Berkeley MEHKO meal tracking requirements",
+        "Berkeley MEHKO renewal process",
+        "Berkeley Home Kitchen Operations compliance"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    },
+    {
+      "id": "contact",
+      "title": "Contact Info",
+      "type": "info",
+      "action_required": false,
+      "fill_pdf": false,
+      "content": "**What to do:** Use the contact information below for questions and assistance.\n\n**Why it matters:** City staff can help with specific questions about your application.\n\n**What you need:**\n- \u2610 Phone number for questions\n- \u2610 Office hours and location\n- \u2610 Website for additional resources\n\n**Where/how:** Contact Berkeley Environmental Health using the information below.\n\n**Cost & time:** $0 \u00b7 varies by question complexity\n\n**Ready when:** You have the information you need to proceed.\n\n**Contact Information:**\n- **Phone:** (510) 981-5310\n- **Department:** City of Berkeley Environmental Health Division\n- **Website:** City of Berkeley Food Safety Program page",
+      "searchTerms": [
+        "Berkeley Environmental Health contact",
+        "Berkeley MEHKO program phone",
+        "Berkeley Home Kitchen Operations office"
+      ],
+      "appId": "city_of_berkeley_mehko"
+    }
+  ]
+}

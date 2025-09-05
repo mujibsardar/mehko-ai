@@ -8,4 +8,4 @@ echo "Press Ctrl+C to stop"
 echo ""
 
 # Follow logs from all services
-docker-compose logs -f
+docker compose logs -f

@@ -7,9 +7,9 @@ echo "🚀 Starting MEHKO AI development environment..."
 echo ""
 
 # Check if Docker Compose is running
-if ! docker-compose ps | grep -q "Up"; then
+if ! docker compose ps | grep -q "Up"; then
     echo "🐳 Starting Docker Compose services..."
-    docker-compose up -d
+    docker compose up -d
     echo "✅ Docker services started"
     echo ""
 fi
