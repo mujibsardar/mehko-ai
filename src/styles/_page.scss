@@ -4,8 +4,7 @@ body {
     width: 100%;
     background-color: $loader-background-color;
     @include media-breakpoint-up($sidebar-min-breakpoint) {
-        position: fixed!important;
-        overflow-y: hidden!important;
+        overflow-y: auto!important;
     }
 }
 

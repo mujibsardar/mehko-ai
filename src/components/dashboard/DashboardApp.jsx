@@ -621,7 +621,7 @@ export default function DashboardApp() {
               activeApplication && wide ? "1fr 380px" : "1fr",
             gap: 16,
             // ensure the grid itself is tall enough to make the aside fill
-            minHeight: "calc(100vh - 90px)",
+            minHeight: "calc(100dvh - 90px)",
             
             // Mobile responsive adjustments
             ...(wide ? {} : {
@@ -634,7 +634,7 @@ export default function DashboardApp() {
           {/* Main content */}
           <main
             className="main-content"
-            style={{ minWidth: 0, width: "100%", overflow: "auto" }}
+            style={{ minWidth: 0, minHeight: 0, width: "100%", overflow: "auto" }}
           >
             <BreadcrumbBar />
 
@@ -749,7 +749,7 @@ export default function DashboardApp() {
                 paddingLeft: 12,
                 position: "sticky",
                 // Full height column
-                height: "calc(100vh - 90px)",
+                height: "calc(100dvh - 90px)",
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
