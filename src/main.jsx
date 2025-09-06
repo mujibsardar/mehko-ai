@@ -11,6 +11,7 @@ import { AuthModalProvider } from "./providers/AuthModalProvider";
 import App from "./App.jsx";
 import Preloader from "./components/Preloader.jsx";
 import MobileDesktopEncouragement from "./components/layout/MobileDesktopEncouragement.jsx";
+import Footer from "./components/layout/Footer.jsx";
 import "./styles/overlay.css";
 import "./styles/app.scss";
 
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")).render(
               <Preloader>
                 <App />
                 <MobileDesktopEncouragement />
+                <Footer />
               </Preloader>
             </AuthModalProvider>
             </AuthProvider>
