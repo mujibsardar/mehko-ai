@@ -31,8 +31,20 @@ async def ai_chat(request: dict):
         if not openai_client:
             raise HTTPException(status_code=500, detail="OpenAI client not configured")
         
-        # Extract messages from the request (frontend sends messages array)
-        messages = request.get("messages", [])
+        # Extract and sanitize messages from the request
+        if not isinstance(request, dict):
+            raise HTTPException(status_code=400, detail="Invalid request payload")
+
+        raw_messages = request.get("messages", [])
+        if not isinstance(raw_messages, list):
+            raw_messages = []
+        # Drop null/invalid entries and coerce to minimal shape
+        messages = []
+        for m in raw_messages:
+            if isinstance(m, dict):
+                role = m.get("role") or ("assistant" if m.get("sender") == "ai" else "user")
+                content = m.get("content") or m.get("text") or ""
+                messages.append({"role": role, "content": content})
         if not messages:
             raise HTTPException(status_code=400, detail="Messages array is required")
         
@@ -46,25 +58,62 @@ async def ai_chat(request: dict):
         if not last_user_message:
             raise HTTPException(status_code=400, detail="No user message found in messages array")
         
-        # Extract full context information (same as Node.js version)
-        context = request.get("context", {})
+        # Extract full context information with safe defaults
+        context = request.get("context") or {}
+        if not isinstance(context, dict):
+            context = {}
         application = context.get("application", {})
+        if not isinstance(application, dict):
+            application = {}
+
         steps = context.get("steps", [])
+        if not isinstance(steps, list):
+            steps = []
+        # Keep only dict steps to avoid attribute errors
+        steps = [s for s in steps if isinstance(s, dict)]
+
         current_step = context.get("currentStep", {})
+        if not isinstance(current_step, dict):
+            current_step = {}
         completed_step_ids = context.get("completedStepIds", [])
         form_data = context.get("formData", {})
         pdf_text = context.get("pdfText", {})
-        selected_form = context.get("selectedForm")
+        selected_form = context.get("selectedForm") or None
         comments = context.get("comments", [])
         overlays = context.get("overlays", {})
+        if not isinstance(overlays, dict):
+            overlays = {}
+        # Normalize overlays values to lists
+        overlays = {str(k): (v if isinstance(v, list) else []) for k, v in overlays.items()}
+
+        # Normalize list/dict types to prevent attribute errors
+        if not isinstance(steps, list): steps = []
+        if not isinstance(completed_step_ids, list): completed_step_ids = []
+        if not isinstance(form_data, dict): form_data = {}
+        if not isinstance(pdf_text, dict): pdf_text = {}
+        if not isinstance(comments, list): comments = []
+        if not isinstance(overlays, dict): overlays = {}
         
         # Build form field information (same logic as Node.js)
         form_sections = []
         for step_id, fields in overlays.items():
-            step = next((s for s in steps if s.get("id") == step_id), None)
-            if step and fields:
-                form_sections.append(f"Step: {step.get('title', 'Unknown')} ({step.get('formName', 'Unknown PDF')})\nFields:\n" + 
-                                   "\n".join([f"- {field}" for field in fields]))
+            # Find step by id or _id safely
+            step = next((s for s in steps if (s.get("id") == step_id or s.get("_id") == step_id)), None)
+            if isinstance(step, dict) and isinstance(fields, list) and len(fields) > 0:
+                field_lines = []
+                for f in fields:
+                    try:
+                        # If fields are dicts, prefer their id/label; else cast to str
+                        if isinstance(f, dict):
+                            label = f.get("label") or f.get("id") or str(f)
+                            field_lines.append(f"- {label}")
+                        else:
+                            field_lines.append(f"- {str(f)}")
+                    except Exception:
+                        field_lines.append("- (unreadable field)")
+                form_sections.append(
+                    f"Step: {step.get('title', 'Unknown')} ({step.get('formName', 'Unknown PDF')})\nFields:\n" + "\n".join(field_lines)
+                )
         
         # Enhanced system prompt with full context (same as Node.js version)
         system_prompt = f"""
@@ -121,10 +170,9 @@ FORM-SPECIFIC CONTEXT:
         
         # Add conversation history
         for msg in messages:
-            openai_messages.append({
-                "role": msg.get("role", "user"),
-                "content": msg.get("content", "")
-            })
+            role = msg.get("role", "user") if isinstance(msg, dict) else "user"
+            content = msg.get("content", "") if isinstance(msg, dict) else ""
+            openai_messages.append({"role": role, "content": content})
         
         # Call OpenAI API
         try:

@@ -23,11 +23,7 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Mock window.open
-const mockOpen = vi.fn();
-Object.defineProperty(window, 'open', {
-  value: mockOpen,
-});
+// No window.open usage anymore
 
 describe('MobileDesktopEncouragement', () => {
   beforeEach(() => {
@@ -38,7 +34,7 @@ describe('MobileDesktopEncouragement', () => {
 
   it('should not render when not on mobile layout', () => {
     mockIsMobileLayout.mockReturnValue(false);
-    
+
     const { container } = render(<MobileDesktopEncouragement />);
     expect(container.firstChild).toBeNull();
   });
@@ -46,7 +42,7 @@ describe('MobileDesktopEncouragement', () => {
   it('should not render when previously dismissed', () => {
     mockIsMobileLayout.mockReturnValue(true);
     localStorageMock.getItem.mockReturnValue('true');
-    
+
     const { container } = render(<MobileDesktopEncouragement />);
     expect(container.firstChild).toBeNull();
   });
@@ -58,12 +54,12 @@ describe('MobileDesktopEncouragement', () => {
       configurable: true,
       value: 500,
     });
-    
+
     mockIsMobileLayout.mockReturnValue(true);
     localStorageMock.getItem.mockReturnValue(null);
-    
+
     render(<MobileDesktopEncouragement skipDelay={true} />);
-    
+
     // The component should render immediately since we're mocking mobile layout
     expect(screen.getByText('💻 Better Experience on Desktop')).toBeInTheDocument();
     expect(screen.getByText('For the best MEHKO application experience with full features, we recommend using a desktop or laptop computer.')).toBeInTheDocument();
@@ -76,40 +72,17 @@ describe('MobileDesktopEncouragement', () => {
       configurable: true,
       value: 500,
     });
-    
+
     mockIsMobileLayout.mockReturnValue(true);
     localStorageMock.getItem.mockReturnValue(null);
-    
+
     render(<MobileDesktopEncouragement skipDelay={true} />);
-    
+
     const dismissButton = screen.getByText('Continue on Mobile');
     fireEvent.click(dismissButton);
-    
+
     expect(localStorageMock.setItem).toHaveBeenCalledWith('mobile-desktop-encouragement-dismissed', 'true');
   });
 
-  it('should handle try desktop button click', () => {
-    // Mock window.innerWidth to be mobile size
-    Object.defineProperty(window, 'innerWidth', {
-      writable: true,
-      configurable: true,
-      value: 500,
-    });
-    
-    mockIsMobileLayout.mockReturnValue(true);
-    localStorageMock.getItem.mockReturnValue(null);
-    
-    // Mock window.location.href
-    Object.defineProperty(window, 'location', {
-      value: { href: 'http://localhost:3000/dashboard' },
-      writable: true,
-    });
-    
-    render(<MobileDesktopEncouragement skipDelay={true} />);
-    
-    const tryDesktopButton = screen.getByText('Open in Desktop');
-    fireEvent.click(tryDesktopButton);
-    
-    expect(mockOpen).toHaveBeenCalledWith('http://localhost:3000/dashboard', '_blank');
-  });
+  // 'Open in Desktop' has been removed; no action to test here
 });

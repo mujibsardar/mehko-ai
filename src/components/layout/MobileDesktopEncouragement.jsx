@@ -88,12 +88,6 @@ export default function MobileDesktopEncouragement({ skipDelay = false }) {
     localStorage.setItem('mobile-desktop-encouragement-dismissed', 'true');
   };
 
-  const handleTryDesktop = () => {
-    // Open current URL in new tab with desktop user agent hint
-    const currentUrl = window.location.href;
-    window.open(currentUrl, '_blank');
-  };
-
   if (!isVisible || isDismissed) {
     return null;
   }
@@ -101,14 +95,6 @@ export default function MobileDesktopEncouragement({ skipDelay = false }) {
   return (
     <div className="mobile-desktop-encouragement">
       <div className="encouragement-content">
-        <div className="encouragement-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-            <line x1="8" y1="21" x2="16" y2="21" />
-            <line x1="12" y1="17" x2="12" y2="21" />
-          </svg>
-        </div>
-
         <div className="encouragement-text">
           <h3>💻 Better Experience on Desktop</h3>
           <p>
@@ -116,17 +102,6 @@ export default function MobileDesktopEncouragement({ skipDelay = false }) {
             we recommend using a desktop or laptop computer.
           </p>
           <div className="encouragement-actions">
-            <button
-              onClick={handleTryDesktop}
-              className="btn-try-desktop"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                <polyline points="15,3 21,3 21,9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-              Open in Desktop
-            </button>
             <button
               onClick={handleDismiss}
               className="btn-dismiss"
