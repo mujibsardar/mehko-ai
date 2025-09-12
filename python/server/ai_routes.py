@@ -151,15 +151,22 @@ Community Insights:
             form_step = next((s for s in steps if s.get("formId") == selected_form.get("formId")), None)
             if form_step:
                 step_index = next((i for i, s in enumerate(steps) if s.get("id") == form_step.get("id")), -1) + 1
-                pdf_content = selected_form.get('pdfContent', 'No content available')
-                if pdf_content and len(pdf_content) > 500:
+                pdf_content = selected_form.get('pdfContent', 'No content available') or ''
+                if len(pdf_content) > 500:
                     pdf_content = pdf_content[:500] + "..."
+                field_count = selected_form.get('fieldCount')
+                field_names_sample = selected_form.get('fieldNamesSample') or []
+                page_summaries = selected_form.get('pageSummaries') or []
                 
                 system_prompt += f"""
 
 FORM-SPECIFIC CONTEXT:
 - Selected Form: {selected_form.get('title', 'Unknown')} (Step {step_index})
 - Form ID: {selected_form.get('formId', 'unknown')}
+- Field Count: {field_count if isinstance(field_count, int) else 'unknown'}
+- Sample Field Names: {', '.join(field_names_sample) if field_names_sample else 'n/a'}
+- Page Summaries (first up to 5 pages, ~400 chars each):
+{chr(10).join([f"[Page {i+1}] {p}" for i,p in enumerate(page_summaries)]) if page_summaries else 'n/a'}
 - PDF Content: {pdf_content}
 """
 

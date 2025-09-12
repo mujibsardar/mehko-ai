@@ -68,6 +68,7 @@ export default function AIChat({
   const [formDataMap, setFormDataMap] = useState({}); // {formId: {...answers}}
 
   const [pdfText, setPdfText] = useState({});
+  const [pdfPages, setPdfPages] = useState({}); // {formId: [page1, page2, ...]}
   const [pdfLinks, setPdfLinks] = useState({});
 
   // UI state for collapsible sections
@@ -162,6 +163,7 @@ export default function AIChat({
     (async () => {
       if (!application?.steps) return;
       const textMap = {};
+      const pagesMap = {};
       const linkMap = {};
       for (const step of application.steps) {
         if (step.type === "pdf" && step.formId) {
@@ -181,8 +183,10 @@ export default function AIChat({
               }
 
               const j = await r.json();
-              textMap[step.formId] = Array.isArray(j.pages)
-                ? j.pages.join("\n\n---\n\n")
+              const pagesArr = Array.isArray(j.pages) ? j.pages : [];
+              pagesMap[step.formId] = pagesArr;
+              textMap[step.formId] = pagesArr.length
+                ? pagesArr.join("\n\n---\n\n")
                 : "";
               console.log(`Successfully loaded text for form: ${step.formId}`);
             } else {
@@ -209,6 +213,7 @@ export default function AIChat({
       }
 
       setPdfText(textMap);
+      setPdfPages(pagesMap);
       setPdfLinks(linkMap);
     })();
   }, [application?.id, application?.steps]);
@@ -306,7 +311,8 @@ Ask me anything or pick a quick task above!`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: next.map((m) => ({
+          // keep only last 20 messages to keep payload small
+          messages: next.slice(-20).map((m) => ({
             role: m.sender === "ai" ? "assistant" : "user",
             content: m.text,
           })),
@@ -324,12 +330,26 @@ Ask me anything or pick a quick task above!`,
             comments: application.comments || [],
             overlays: overlayMap,
             formData: formDataMap,
-            pdfText, // full extracted text
+            pdfText, // full extracted text (joined)
             pdfLinks, // {formId: {title,url,previewBase}}
-            selectedForm: formContext ? {
-              ...formContext,
-              pdfContent: pdfText[formContext.formId] || null
-            } : null,
+            selectedForm: formContext ? (() => {
+              const formId = formContext.formId;
+              const fields = Array.isArray(overlayMap[formId]) ? overlayMap[formId] : [];
+              const fieldNamesSample = fields
+                .slice(0, 20)
+                .map((f) => f?.label || f?.id || f?.name)
+                .filter(Boolean);
+              const pagesArr = Array.isArray(pdfPages[formId]) ? pdfPages[formId] : [];
+              const pageSummaries = pagesArr.slice(0, 5).map((p) => (p || "").slice(0, 400));
+              const pdfContentTrunc = (pdfText[formId] || "").slice(0, 2000);
+              return {
+                ...formContext,
+                fieldCount: fields.length || 0,
+                fieldNamesSample,
+                pageSummaries,
+                pdfContent: pdfContentTrunc,
+              };
+            })() : null,
             // IMPORTANT: Application workflow instructions
             workflow: {
               description: "This is a MEHKO application tracking system. Users fill out PDF forms directly in the dashboard for most steps, then download completed forms to print and sign if needed. The app provides interactive form completion and tracks progress.",
